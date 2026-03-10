@@ -1,4 +1,4 @@
-# Decision Errors {#sec-foundations-decision-errors}
+# Entscheidungsfehler {#sec-foundations-decision-errors}
 
 ```{r}
 #| include: false
@@ -6,22 +6,22 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-Using data to make inferential decisions about larger populations is not a perfect process.
-As seen in [Chapter -@sec-foundations-randomization], a small p-value typically leads the researcher to a decision to reject the null claim or hypothesis.
-Sometimes, however, data can produce a small p-value when the null hypothesis is actually true and the data are just inherently variable.
-Here we describe the errors which can arise in hypothesis testing, how to define and quantify the different errors, and suggestions for mitigating errors if possible.
+Die Verwendung von Daten zur Treffen von Inferenzentscheidungen über größere Grundgesamtheiten ist kein perfekter Prozess.
+Wie in [Kapitel -@sec-foundations-randomization] gezeigt, führt ein kleiner p-Wert typischerweise dazu, dass der Forscher die Nullhypothese ablehnt.
+Manchmal können Daten jedoch einen kleinen p-Wert erzeugen, wenn die Nullhypothese tatsächlich wahr ist und die Daten einfach eine hohe Variabilität aufweisen.
+Hier beschreiben wir die Fehler, die bei Hypothesentests auftreten können, wie die verschiedenen Fehlertypen definiert und quantifiziert werden und welche Möglichkeiten es gibt, Fehler nach Möglichkeit zu vermeiden.
 :::
 
 \index{decision errors}
 
-Hypothesis tests are not flawless.
-Just think of the court system: innocent people are sometimes wrongly convicted and the guilty sometimes walk free.
-Similarly, data can point to the wrong conclusion.
-However, what distinguishes statistical hypothesis tests from a court system is that our framework allows us to quantify and control how often the data lead us to the incorrect conclusion.
+Hypothesentests sind nicht fehlerfrei.
+Denken Sie nur an das Rechtssystem: Unschuldige werden manchmal fälschlicherweise verurteilt, und Schuldige kommen manchmal frei.
+Ebenso können Daten zu falschen Schlussfolgerungen führen.
+Was statistische Hypothesentests jedoch vom Rechtssystem unterscheidet, ist, dass unser Rahmen es uns ermöglicht, zu quantifizieren und zu kontrollieren, wie oft Daten zu einer falschen Schlussfolgerung führen.
 
-In a hypothesis test, there are two competing hypotheses: the null and the alternative.
-We make a statement about which one might be true, but we might choose incorrectly.
-There are four possible scenarios in a hypothesis test, which are summarized in @tbl-fourHTScenarios.
+Bei einem Hypothesentest gibt es zwei konkurrierende Hypothesen: die Null- und die Alternativhypothese.
+Wir treffen eine Aussage darüber, welche wahr sein könnte, aber wir könnten falsch liegen.
+Es gibt vier mögliche Szenarien bei einem Hypothesentest, die in @tbl-fourHTScenarios zusammengefasst sind.
 
 ```{r}
 #| label: tbl-fourHTScenarios
@@ -41,9 +41,9 @@ ht_scenarios |>
   column_spec(2:3, width = "12em")
 ```
 
-A **Type I error**\index{Type I error} is rejecting the null hypothesis when $H_0$ is actually true.
-Since we rejected the null hypothesis in the sex discrimination and opportunity cost studies, it is possible that we made a Type I error in one or both of those studies.
-A **Type II error**\index{Type II error} is failing to reject the null hypothesis when the alternative is actually true.
+Ein **Fehler 1. Art**\index{Type I error} liegt vor, wenn die Nullhypothese abgelehnt wird, obwohl $H_0$ tatsächlich wahr ist.
+Da wir die Nullhypothese in den Studien zur Geschlechtsdiskriminierung und zu den Opportunitätskosten abgelehnt haben, ist es möglich, dass wir in einer oder beiden Studien einen Fehler 1. Art begangen haben.
+Ein **Fehler 2. Art**\index{Type II error} liegt vor, wenn die Nullhypothese nicht abgelehnt wird, obwohl die Alternativhypothese tatsächlich wahr ist.
 
 ```{r}
 #| include: false
@@ -51,59 +51,59 @@ terms_chp_14 <- c("Type I error", "Type II error")
 ```
 
 ::: {.workedexample data-latex=""}
-In a US court, the defendant is either innocent $(H_0)$ or guilty $(H_A).$ What does a Type I error represent in this context?
-What does a Type II error represent?
-@tbl-fourHTScenarios may be useful.
+Vor einem US-amerikanischen Gericht ist der Angeklagte entweder unschuldig $(H_0)$ oder schuldig $(H_A).$ Was stellt in diesem Kontext ein Fehler 1. Art dar?
+Was stellt ein Fehler 2. Art dar?
+@tbl-fourHTScenarios könnte dabei hilfreich sein.
 
 ------------------------------------------------------------------------
 
-If the court makes a Type I error, this means the defendant is innocent $(H_0$ true) but wrongly convicted.
-A Type II error means the court failed to reject $H_0$ (i.e., failed to convict the person) when they were in fact guilty $(H_A$ true).
+Begeht das Gericht einen Fehler 1. Art, bedeutet das, dass der Angeklagte unschuldig ist $(H_0$ wahr), aber fälschlicherweise verurteilt wird.
+Ein Fehler 2. Art bedeutet, dass das Gericht $H_0$ nicht ablehnen konnte (d. h. die Person nicht verurteilte), obwohl sie tatsächlich schuldig war $(H_A$ wahr).
 :::
 
 ::: {.guidedpractice data-latex=""}
-Consider the opportunity cost study where we concluded students were less likely to make a DVD purchase if they were reminded that money not spent now could be spent later.
-What would a Type I error represent in this context?[^14-foundations-errors-1]
+Betrachten Sie die Studie zu den Opportunitätskosten, bei der wir zu dem Schluss kamen, dass Studierende weniger wahrscheinlich einen DVD-Kauf tätigten, wenn sie daran erinnert wurden, dass nicht jetzt ausgegebenes Geld später ausgegeben werden könnte.
+Was würde in diesem Kontext ein Fehler 1. Art darstellen?[^14-foundations-errors-1]
 :::
 
-[^14-foundations-errors-1]: Making a Type I error in this context would mean that reminding students that money not spent now can be spent later does not affect their buying habits, despite the strong evidence (the data suggesting otherwise) found in the experiment.
-    Notice that this does *not* necessarily mean something was wrong with the data or that we made a computational mistake.
-    Sometimes data simply point us to the wrong conclusion, which is why scientific studies are often repeated to check initial findings.
+[^14-foundations-errors-1]: Ein Fehler 1. Art in diesem Kontext würde bedeuten, dass das Erinnern der Studierenden daran, dass nicht jetzt ausgegebenes Geld später ausgegeben werden kann, ihre Kaufgewohnheiten nicht beeinflusst, obwohl die im Experiment gefundenen starken Belege (die Daten, die das Gegenteil nahelegen) dagegen sprechen.
+    Beachten Sie, dass dies *nicht* notwendigerweise bedeutet, dass mit den Daten etwas nicht stimmte oder dass wir einen Rechenfehler gemacht haben.
+    Manchmal führen Daten uns einfach zur falschen Schlussfolgerung, weshalb wissenschaftliche Studien oft wiederholt werden, um erste Erkenntnisse zu überprüfen.
 
 ::: {.workedexample data-latex=""}
-How could we reduce the Type I error rate in US courts?
-What influence would this have on the Type II error rate?
+Wie könnten wir die Rate der Fehler 1. Art vor US-amerikanischen Gerichten reduzieren?
+Welchen Einfluss hätte dies auf die Rate der Fehler 2. Art?
 
 ------------------------------------------------------------------------
 
-To lower the Type I error rate, we might raise our standard for conviction from "beyond a reasonable doubt" to "beyond a conceivable doubt" so fewer people would be wrongly convicted.
-However, this would also make it more difficult to convict the people who are actually guilty, so we would make more Type II errors.
+Um die Rate der Fehler 1. Art zu senken, könnten wir unseren Standard für eine Verurteilung von „über jeden vernünftigen Zweifel hinaus" auf „über jeden denkbaren Zweifel hinaus" anheben, sodass weniger Menschen fälschlicherweise verurteilt werden.
+Dies würde es jedoch auch schwieriger machen, tatsächlich schuldige Personen zu verurteilen, weshalb wir mehr Fehler 2. Art begehen würden.
 :::
 
 ::: {.guidedpractice data-latex=""}
-How could we reduce the Type II error rate in US courts?
-What influence would this have on the Type I error rate?[^14-foundations-errors-2]
+Wie könnten wir die Rate der Fehler 2. Art vor US-amerikanischen Gerichten reduzieren?
+Welchen Einfluss hätte dies auf die Rate der Fehler 1. Art?[^14-foundations-errors-2]
 :::
 
-[^14-foundations-errors-2]: To lower the Type II error rate, we want to convict more guilty people.
-    We could lower the standards for conviction from "beyond a reasonable doubt" to "beyond a little doubt".
-    Lowering the bar for guilt will also result in more wrongful convictions, raising the Type I error rate.
+[^14-foundations-errors-2]: Um die Rate der Fehler 2. Art zu senken, wollen wir mehr schuldige Personen verurteilen.
+    Wir könnten die Verurteilungsstandards von „über jeden vernünftigen Zweifel hinaus" auf „über einen kleinen Zweifel hinaus" senken.
+    Das Senken der Beweislast für Schuld führt auch zu mehr ungerechtfertigten Verurteilungen und erhöht damit die Rate der Fehler 1. Art.
 
 \index{decision errors}
 
-The example and guided practice above provide an important lesson: if we reduce how often we make one type of error, we generally make more of the other type.
+Das obige Beispiel und die geführte Übung vermitteln eine wichtige Lektion: Wenn wir die Häufigkeit eines Fehlertyps reduzieren, begehen wir in der Regel mehr des anderen Typs.
 
-## Discernibility level
+## Signifikanzniveau
 
-The **discernibility level**\index{discernibility level}\index{significance level} provides the cutoff for the p-value which will lead to a decision of "reject the null hypothesis." Choosing a discernibility level for a test is important in many contexts, and the traditional level is 0.05.
-However, it is sometimes helpful to adjust the discernibility level based on the application.
-We may select a level that is smaller or larger than 0.05 depending on the consequences of any conclusions reached from the test.
+Das **Signifikanzniveau**\index{discernibility level}\index{significance level} gibt den Grenzwert für den p-Wert an, der zur Entscheidung „Nullhypothese ablehnen" führt. Die Wahl eines Signifikanzniveaus für einen Test ist in vielen Kontexten wichtig, und das traditionelle Niveau beträgt 0,05.
+Es kann jedoch manchmal hilfreich sein, das Signifikanzniveau je nach Anwendungsfall anzupassen.
+Wir können ein Niveau wählen, das je nach den Konsequenzen der aus dem Test gezogenen Schlussfolgerungen kleiner oder größer als 0,05 ist.
 
-If making a Type I error is dangerous or especially costly, we should choose a small discernibility level (e.g., 0.01 or 0.001).
-If we want to be very cautious about rejecting the null hypothesis, we demand very strong evidence favoring the alternative $H_A$ before we would reject $H_0.$
+Wenn ein Fehler 1. Art gefährlich oder besonders kostspielig ist, sollten wir ein kleines Signifikanzniveau wählen (z. B. 0,01 oder 0,001).
+Wenn wir sehr vorsichtig mit der Ablehnung der Nullhypothese sein wollen, fordern wir sehr starke Belege zugunsten der Alternative $H_A$, bevor wir $H_0$ ablehnen würden.
 
-If a Type II error is relatively more dangerous or much more costly than a Type I error, then we should choose a higher discernibility level (e.g., 0.10).
-Here we want to be cautious about failing to reject $H_0$ when the null is actually false.
+Wenn ein Fehler 2. Art relativ gefährlicher oder viel kostspieliger ist als ein Fehler 1. Art, sollten wir ein höheres Signifikanzniveau wählen (z. B. 0,10).
+Hier wollen wir vorsichtig sein, $H_0$ nicht abzulehnen, wenn die Nullhypothese tatsächlich falsch ist.
 
 ```{r}
 #| include: false
@@ -111,81 +111,81 @@ terms_chp_14 <- c(terms_chp_14, "discernibility level", "significance level")
 ```
 
 ::: {.tip data-latex=""}
-**Discernibility levels should reflect consequences of errors.**
+**Signifikanzniveaus sollten die Konsequenzen von Fehlern widerspiegeln.**
 
-The discernibility level selected for a test should reflect the real-world consequences associated with making a Type I or Type II error.
+Das für einen Test gewählte Signifikanzniveau sollte die realen Konsequenzen eines Fehlers 1. oder 2. Art widerspiegeln.
 :::
 
-## Two-sided hypotheses {#sec-two-sided-hypotheses}
+## Zweiseitige Hypothesen {#sec-two-sided-hypotheses}
 
 \index{hypothesis testing}
 
-In [Chapter -@sec-foundations-randomization] we explored whether women were discriminated against and whether a simple trick could make students a little thriftier.
-In these two case studies, we have actually ignored some possibilities:
+In [Kapitel -@sec-foundations-randomization] haben wir untersucht, ob Frauen diskriminiert wurden und ob ein einfacher Trick Studierende etwas sparsamer machen könnte.
+In diesen beiden Fallstudien haben wir tatsächlich einige Möglichkeiten außer Acht gelassen:
 
--   What if *men* are actually discriminated against?
--   What if the money trick actually makes students *spend more*?
+-   Was, wenn *Männer* tatsächlich diskriminiert werden?
+-   Was, wenn der Geldtrick Studierende dazu bringt, *mehr* auszugeben?
 
-These possibilities weren't considered in our original hypotheses or analyses.
-The disregard of the extra alternatives may have seemed natural since the data pointed in the directions in which we framed the problems.
-However, there are two dangers if we ignore possibilities that disagree with our data or that conflict with our world view:
+Diese Möglichkeiten wurden in unseren ursprünglichen Hypothesen oder Analysen nicht berücksichtigt.
+Die Vernachlässigung der zusätzlichen Alternativen mag natürlich erschienen sein, da die Daten in die Richtungen zeigten, in denen wir die Probleme formuliert haben.
+Es gibt jedoch zwei Gefahren, wenn wir Möglichkeiten ignorieren, die unseren Daten widersprechen oder mit unserer Weltsicht in Konflikt stehen:
 
-1.  Framing an alternative hypothesis simply to match the direction that the data point will generally inflate the Type I error rate.
-    After all the work we have done (and will continue to do) to rigorously control the error rates in hypothesis tests, careless construction of the alternative hypotheses can disrupt that hard work.
+1.  Die Formulierung einer Alternativhypothese, die einfach der Richtung entspricht, in die die Daten zeigen, erhöht in der Regel die Rate der Fehler 1. Art.
+    Nach all der Arbeit, die wir geleistet haben (und weiterhin leisten werden), um die Fehlerquoten bei Hypothesentests streng zu kontrollieren, kann eine unvorsichtige Konstruktion der Alternativhypothesen diese harte Arbeit zunichte machen.
 
-2.  If we only use alternative hypotheses that agree with our worldview, then we are going to be subjecting ourselves to **confirmation bias**\index{confirmation bias}, which means we are looking for data that supports our ideas.
-    That's not very scientific, and we can do better!
+2.  Wenn wir nur Alternativhypothesen verwenden, die mit unserer Weltsicht übereinstimmen, unterwerfen wir uns einem **Bestätigungsfehler**\index{confirmation bias}, d. h., wir suchen nach Daten, die unsere Ideen unterstützen.
+    Das ist nicht sehr wissenschaftlich, und wir können es besser machen!
 
-The original hypotheses we have seen are called **one-sided hypothesis tests**\index{one-sided hypothesis test} because they only explored one direction of possibilities.
-Such hypotheses are appropriate when we are exclusively interested in the single direction, but usually we want to consider all possibilities.
-To do so, let's learn about **two-sided hypothesis tests**\index{two-sided hypothesis test} in the context of a new study that examines the impact of using blood thinners on patients who have undergone CPR.
+Die ursprünglichen Hypothesen, die wir gesehen haben, werden als **einseitige Hypothesentests**\index{one-sided hypothesis test} bezeichnet, weil sie nur eine Richtung der Möglichkeiten untersucht haben.
+Solche Hypothesen sind angemessen, wenn wir ausschließlich an der einzelnen Richtung interessiert sind, aber in der Regel wollen wir alle Möglichkeiten berücksichtigen.
+Dazu lernen wir **zweiseitige Hypothesentests**\index{two-sided hypothesis test} im Kontext einer neuen Studie kennen, die die Auswirkungen der Verwendung von Blutverdünnern auf Patienten untersucht, die eine kardiopulmonale Reanimation (CPR) erhalten haben.
 
 ```{r}
 #| include: false
 terms_chp_14 <- c(terms_chp_14, "confirmation bias", "one-sided hypothesis test", "two-sided hypothesis test")
 ```
 
-Cardiopulmonary resuscitation (CPR) is a procedure used on individuals suffering a heart attack when other emergency resources are unavailable.
-This procedure is helpful in providing some blood circulation to keep a person alive, but CPR chest compression can also cause internal injuries.
-Internal bleeding and other injuries that can result from CPR complicate additional treatment efforts.
-For instance, blood thinners may be used to help release a clot that is causing the heart attack once a patient arrives in the hospital.
-However, blood thinners negatively affect internal injuries.
+Die kardiopulmonale Reanimation (CPR) ist ein Verfahren, das bei Personen angewendet wird, die einen Herzanfall erleiden, wenn keine anderen Notfallressourcen verfügbar sind.
+Dieses Verfahren hilft, einen gewissen Blutkreislauf aufrechtzuerhalten, um eine Person am Leben zu erhalten, aber CPR-Brustkompressionen können auch innere Verletzungen verursachen.
+Innere Blutungen und andere durch CPR verursachte Verletzungen erschweren weitere Behandlungsbemühungen.
+Zum Beispiel können Blutverdünner eingesetzt werden, um ein Blutgerinnsel zu lösen, das den Herzanfall verursacht, sobald ein Patient ins Krankenhaus kommt.
+Blutverdünner wirken sich jedoch negativ auf innere Verletzungen aus.
 
-Here we consider an experiment with patients who underwent CPR for a heart attack and were subsequently admitted to a hospital.
-Each patient was randomly assigned to either receive a blood thinner (treatment group) or not receive a blood thinner (control group).
-The outcome variable of interest was whether the patient survived for at least 24 hours.
+Hier betrachten wir ein Experiment mit Patienten, die CPR bei einem Herzanfall erhalten haben und anschließend in ein Krankenhaus eingeliefert wurden.
+Jedem Patienten wurde zufällig entweder ein Blutverdünner (Behandlungsgruppe) oder kein Blutverdünner (Kontrollgruppe) zugewiesen.
+Die interessierende Ergebnisvariable war, ob der Patient mindestens 24 Stunden überlebt hatte.
 [@Bottiger:2001]
 
 ::: {.data data-latex=""}
-The [`cpr`](http://openintrostat.github.io/openintro/reference/cpr.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`cpr`](http://openintrostat.github.io/openintro/reference/cpr.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ::: {.workedexample data-latex=""}
-Form hypotheses for this study in plain and statistical language.
-Let $p_C$ represent the true survival rate of people who do not receive a blood thinner (corresponding to the control group) and $p_T$ represent the survival rate for people receiving a blood thinner (corresponding to the treatment group).
+Formulieren Sie Hypothesen für diese Studie in gewöhnlicher und statistischer Sprache.
+Sei $p_C$ die tatsächliche Überlebensrate von Personen, die keinen Blutverdünner erhalten (entsprechend der Kontrollgruppe), und $p_T$ die Überlebensrate für Personen, die einen Blutverdünner erhalten (entsprechend der Behandlungsgruppe).
 
 ------------------------------------------------------------------------
 
-We want to understand whether blood thinners are helpful or harmful.
-We'll consider both of these possibilities using a two-sided hypothesis test.
+Wir wollen verstehen, ob Blutverdünner hilfreich oder schädlich sind.
+Wir werden beide Möglichkeiten mit einem zweiseitigen Hypothesentest untersuchen.
 
--   $H_0:$ Blood thinners do not have an overall survival effect, i.e., the survival proportions are the same in each group.
+-   $H_0:$ Blutverdünner haben keinen allgemeinen Überlebenseffekt, d. h., die Überlebensanteile sind in jeder Gruppe gleich.
     $p_T - p_C = 0.$
 
--   $H_A:$ Blood thinners have an impact on survival, either positive or negative, but not zero.
+-   $H_A:$ Blutverdünner haben einen Einfluss auf das Überleben, entweder positiv oder negativ, aber nicht null.
     $p_T - p_C \neq 0.$
 
-Note that if we had done a one-sided hypothesis test, the resulting hypotheses would have been:
+Beachten Sie, dass bei einem einseitigen Hypothesentest die resultierenden Hypothesen wie folgt gewesen wären:
 
--   $H_0:$ Blood thinners do not have a positive overall survival effect, i.e., the survival proportions for the blood thinner group is the same or lower than the control group.
+-   $H_0:$ Blutverdünner haben keinen positiven allgemeinen Überlebenseffekt, d. h., die Überlebensanteile für die Blutverdünnergruppe sind gleich oder niedriger als die der Kontrollgruppe.
     $p_T - p_C \leq 0.$
 
--   $H_A:$ Blood thinners have a positive impact on survival.
+-   $H_A:$ Blutverdünner haben einen positiven Einfluss auf das Überleben.
     $p_T - p_C > 0.$
 :::
 
-There were 50 patients in the experiment who did not receive a blood thinner and 40 patients who did.
-The study results are shown in @tbl-cpr-summary.
+An dem Experiment nahmen 50 Patienten teil, die keinen Blutverdünner erhielten, und 40 Patienten, die einen erhielten.
+Die Studienergebnisse sind in @tbl-cpr-summary dargestellt.
 
 ```{r}
 #| label: tbl-cpr-summary
@@ -215,19 +215,19 @@ cpr |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-What is the observed survival rate in the control group?
-And in the treatment group?
-Also, provide a point estimate $(\hat{p}_T - \hat{p}_C)$ for the true difference in population survival proportions across the two groups: $p_T - p_C.$[^14-foundations-errors-3]
+Wie hoch ist die beobachtete Überlebensrate in der Kontrollgruppe?
+Und in der Behandlungsgruppe?
+Geben Sie außerdem eine Punktschätzung $(\hat{p}_T - \hat{p}_C)$ für den wahren Unterschied in den Überlebensanteilen der Grundgesamtheit zwischen den beiden Gruppen an: $p_T - p_C.$[^14-foundations-errors-3]
 :::
 
-[^14-foundations-errors-3]: Observed control survival rate: $\hat{p}_C = \frac{11}{50} = 0.22.$ Treatment survival rate: $\hat{p}_T = \frac{14}{40} = 0.35.$ Observed difference: $\hat{p}_T - \hat{p}_C = 0.35 - 0.22 = 0.13.$
+[^14-foundations-errors-3]: Beobachtete Überlebensrate der Kontrolle: $\hat{p}_C = \frac{11}{50} = 0{,}22.$ Überlebensrate der Behandlung: $\hat{p}_T = \frac{14}{40} = 0{,}35.$ Beobachteter Unterschied: $\hat{p}_T - \hat{p}_C = 0{,}35 - 0{,}22 = 0{,}13.$
 
-According to the point estimate, for patients who have undergone CPR outside of the hospital, an additional 13% of these patients survive when they are treated with blood thinners.
-However, we wonder if this difference could be easily explainable by chance, if the treatment has no effect on survival.
+Gemäß der Punktschätzung überleben bei Patienten, die außerhalb des Krankenhauses CPR erhalten haben, zusätzliche 13 % dieser Patienten, wenn sie mit Blutverdünnern behandelt werden.
+Wir fragen uns jedoch, ob dieser Unterschied leicht durch den Zufall erklärt werden könnte, wenn die Behandlung keinen Einfluss auf das Überleben hat.
 
-As we did in past studies, we will simulate what type of differences we might see from chance alone under the null hypothesis.
-By randomly assigning each of the patient's files to a "simulated treatment" or "simulated control" allocation, we get a new grouping.
-If we repeat this simulation 1,000 times, we can build a **null distribution**\index{null distribution} of the differences shown in @fig-CPR-study-right-tail.
+Wie in früheren Studien werden wir simulieren, welche Art von Unterschieden wir allein durch den Zufall unter der Nullhypothese erwarten würden.
+Indem wir die Patientenakten zufällig einer „simulierten Behandlung" oder „simulierten Kontrolle" zuweisen, erhalten wir eine neue Gruppierung.
+Wenn wir diese Simulation 1.000 Mal wiederholen, können wir eine **Nullverteilung**\index{null distribution} der in @fig-CPR-study-right-tail gezeigten Unterschiede aufbauen.
 
 ```{r}
 #| include: false
@@ -275,14 +275,14 @@ cpr_tail <- cpr_rand_dist |>
   pull()
 ```
 
-The right tail area is `r cpr_tail`.
-(Note: it is only a coincidence that we also have $\hat{p}_T - \hat{p}_C=0.13.)$ However, contrary to how we calculated the p-value in previous studies, the p-value of this test is not actually the tail area we calculated, i.e., it's not `r cpr_tail`!
+Die Fläche des rechten Schwanzes beträgt `r cpr_tail`.
+(Hinweis: Es ist nur ein Zufall, dass wir auch $\hat{p}_T - \hat{p}_C=0{,}13$ haben.) Im Gegensatz zur Berechnung des p-Werts in früheren Studien ist der p-Wert dieses Tests jedoch nicht die berechnete Schwanzfläche, d. h., er beträgt nicht `r cpr_tail`!
 
-The p-value is defined as the probability we observe a result at least as favorable to the alternative hypothesis as the observed difference.
-In this case, any differences less than or equal to -0.13 would also provide equally strong evidence favoring the alternative hypothesis as a difference of +0.13 did.
-A difference of -0.13 would correspond to 13% higher survival rate in the control group than the treatment group.
-In @fig-CPR-study-p-value we have also shaded these differences in the left tail of the distribution.
-These two shaded tails provide a visual representation of the p-value for a two-sided test.
+Der p-Wert ist definiert als die Wahrscheinlichkeit, ein Ergebnis zu beobachten, das mindestens so günstig für die Alternativhypothese ist wie der beobachtete Unterschied.
+In diesem Fall würden auch Unterschiede kleiner oder gleich -0,13 gleich starke Belege zugunsten der Alternativhypothese liefern wie ein Unterschied von +0,13.
+Ein Unterschied von -0,13 würde einer 13 % höheren Überlebensrate in der Kontrollgruppe als in der Behandlungsgruppe entsprechen.
+In @fig-CPR-study-p-value haben wir auch diese Unterschiede im linken Schwanz der Verteilung hervorgehoben.
+Diese zwei hervorgehobenen Schwänze bieten eine visuelle Darstellung des p-Werts für einen zweiseitigen Test.
 
 ```{r}
 #| label: fig-CPR-study-p-value
@@ -311,59 +311,59 @@ cpr_rand_dist |>
   gghighlight(stat >= 0.13 | stat <= -0.13)
 ```
 
-For a two-sided test, take the single tail (in this case, 0.131) and double it to get the p-value: 0.262.
-Since this p-value is larger than 0.05, we do not reject the null hypothesis.
-That is, we do not find convincing evidence that the blood thinner has any influence on survival of patients who undergo CPR prior to arriving at the hospital.
+Bei einem zweiseitigen Test nehmen wir den einzelnen Schwanz (in diesem Fall 0,131) und verdoppeln ihn, um den p-Wert zu erhalten: 0,262.
+Da dieser p-Wert größer als 0,05 ist, lehnen wir die Nullhypothese nicht ab.
+Das heißt, wir finden keine überzeugenden Belege dafür, dass der Blutverdünner einen Einfluss auf das Überleben von Patienten hat, die vor der Einlieferung ins Krankenhaus CPR erhalten haben.
 
 ::: {.important data-latex=""}
-**Default to a two-sided test.**
+**Standardmäßig einen zweiseitigen Test verwenden.**
 
-We want to be rigorous and keep an open mind when we analyze data and evidence.
-Use a one-sided hypothesis test only if you truly have interest in only one direction.
+Wir wollen bei der Analyse von Daten und Belegen rigoros sein und einen offenen Geist bewahren.
+Verwenden Sie einen einseitigen Hypothesentest nur, wenn Sie wirklich ausschließlich an einer Richtung interessiert sind.
 :::
 
 ::: {.important data-latex=""}
-**Computing a p-value for a two-sided test.**
+**Berechnung eines p-Werts für einen zweiseitigen Test.**
 
-First compute the p-value for one tail of the distribution, then double that value to get the two-sided p-value.
-That's it!
+Berechnen Sie zunächst den p-Wert für einen Schwanz der Verteilung und verdoppeln Sie dann diesen Wert, um den zweiseitigen p-Wert zu erhalten.
+Das ist alles!
 :::
 
 \vspace{-3mm}
 
 ::: {.workedexample data-latex=""}
-Consider the situation of the medical consultant.
-Now that you know about one-sided and two-sided tests, which type of test do you think is more appropriate?
+Betrachten Sie die Situation des medizinischen Beraters.
+Jetzt, da Sie über einseitige und zweiseitige Tests Bescheid wissen: Welchen Typ halten Sie für angemessener?
 
 ------------------------------------------------------------------------
 
-The setting has been framed in the context of the consultant being helpful (which is what led us to a one-sided test originally), but what if the consultant actually performed *worse* than the average?
-Would we care?
-More than ever!
-Since it turns out that we care about a finding in either direction, we should run a two-sided test.
-The p-value for the two-sided test is double that of the one-sided test, here the simulated p-value would be 0.2444.
+Die Situation wurde im Kontext des hilfreich agierenden Beraters formuliert (was uns ursprünglich zu einem einseitigen Test geführt hat), aber was, wenn der Berater tatsächlich *schlechter* als der Durchschnitt abschnitt?
+Würde uns das interessieren?
+Mehr denn je!
+Da sich herausstellt, dass uns ein Befund in beide Richtungen interessiert, sollten wir einen zweiseitigen Test durchführen.
+Der p-Wert für den zweiseitigen Test ist das Doppelte des einseitigen Tests; hier würde der simulierte p-Wert 0,2444 betragen.
 :::
 
 \vspace{-5mm}
 
-Generally, to find a two-sided p-value we double the single tail area, which remains a reasonable approach even when the distribution is asymmetric.
-However, the approach can result in p-values larger than 1 when the point estimate is very near the mean in the null distribution; in such cases, we write that the p-value is 1.
-Also, very large p-values computed in this way (e.g., 0.85), may also be slightly inflated.
-Typically, we do not worry too much about the precision of very large p-values because they lead to the same analysis conclusion, even if the value is slightly off.
+Im Allgemeinen verdoppeln wir bei einem zweiseitigen p-Wert die einzelne Schwanzfläche, was ein vernünftiger Ansatz bleibt, auch wenn die Verteilung asymmetrisch ist.
+Dieser Ansatz kann jedoch zu p-Werten größer als 1 führen, wenn die Punktschätzung sehr nahe am Mittelwert der Nullverteilung liegt; in solchen Fällen schreiben wir, dass der p-Wert 1 beträgt.
+Auch sehr große p-Werte, die auf diese Weise berechnet werden (z. B. 0,85), können leicht überschätzt sein.
+Typischerweise machen wir uns nicht allzu viele Gedanken über die Genauigkeit sehr großer p-Werte, da sie zur gleichen Analyseschlussfolgerung führen, auch wenn der Wert leicht abweicht.
 
-## Controlling the Type I error rate
+## Kontrolle der Rate der Fehler 1. Art
 
-Now that we understand the difference between one-sided and two-sided tests, we must recognize when to use each type of test.
-Because of the result of increased error rates, it is never okay to change two-sided tests to one-sided tests after observing the data.
-We explore the consequences of ignoring this advice in the next example.
+Jetzt, da wir den Unterschied zwischen einseitigen und zweiseitigen Tests verstehen, müssen wir erkennen, wann wir welchen Typ verwenden sollten.
+Aufgrund der erhöhten Fehlerraten ist es niemals in Ordnung, zweiseitige Tests nach der Beobachtung der Daten in einseitige Tests umzuwandeln.
+Die Konsequenzen der Missachtung dieses Rates werden im nächsten Beispiel untersucht.
 
 ::: {.workedexample data-latex=""}
-Using $\alpha=0.05,$ we show that freely switching from two-sided tests to one-sided tests will lead us to make twice as many Type I errors as intended.
+Mit $\alpha=0{,}05$ zeigen wir, dass ein freies Wechseln von zweiseitigen zu einseitigen Tests dazu führt, dass wir doppelt so viele Fehler 1. Art machen wie beabsichtigt.
 
 ------------------------------------------------------------------------
 
-Suppose we are interested in finding any difference from 0.
-We've created a smooth-looking **null distribution** representing differences due to chance below.
+Angenommen, wir sind daran interessiert, irgendeinen Unterschied von 0 zu finden.
+Wir haben unten eine glatt aussehende **Nullverteilung** erstellt, die die durch den Zufall entstehenden Unterschiede darstellt.
 
 ```{r}
 #| label: type1ErrorDoublingExampleFigure
@@ -382,62 +382,62 @@ arrows(2, 0.17, 1.9, 0.08, length = 0.07, lwd = 1.5)
 text(2.08, 0.21, "5%", cex = 1.2)
 ```
 
-First, suppose the sample difference was larger than 0.
-In a one-sided test, we would set $H_A:$ difference $> 0.$ If the observed difference falls in the upper 5% of the distribution, we would reject $H_0$ since the p-value would just be the single tail.
-Thus, if $H_0$ is true, we incorrectly reject $H_0$ about 5% of the time when the sample mean is above the null value, as shown above.
+Angenommen zunächst, der Stichprobenunterschied war größer als 0.
+Bei einem einseitigen Test würden wir $H_A:$ Unterschied $> 0$ festlegen. Wenn der beobachtete Unterschied in die oberen 5 % der Verteilung fällt, würden wir $H_0$ ablehnen, da der p-Wert nur der einzelne Schwanz wäre.
+Wenn $H_0$ also wahr ist, lehnen wir $H_0$ fälschlicherweise etwa 5 % der Zeit ab, wenn das Stichprobenmittel über dem Nullwert liegt, wie oben gezeigt.
 
-Then, suppose the sample difference was smaller than 0.
-In a one-sided test, we would set $H_A:$ difference $< 0.$ If the observed difference falls in the lower 5% of the figure, we would reject $H_0.$ That is, if $H_0$ is true, then we would observe this situation about 5% of the time.
+Angenommen dann, der Stichprobenunterschied war kleiner als 0.
+Bei einem einseitigen Test würden wir $H_A:$ Unterschied $< 0$ festlegen. Wenn der beobachtete Unterschied in die unteren 5 % der Abbildung fällt, würden wir $H_0$ ablehnen. Das heißt, wenn $H_0$ wahr ist, würden wir diese Situation etwa 5 % der Zeit beobachten.
 
-By examining these two scenarios, we can determine that we will make a Type I error $5\%+5\%=10\%$ of the time if we are allowed to swap to the "best" one-sided test for the data.
-This is twice the error rate we prescribed with our discernibility level: $\alpha=0.05$!
+Indem wir diese beiden Szenarien untersuchen, können wir feststellen, dass wir einen Fehler 1. Art $5\%+5\%=10\%$ der Zeit begehen, wenn wir den „besten" einseitigen Test für die Daten wechseln dürfen.
+Das ist doppelt so hoch wie die Fehlerrate, die wir mit unserem Signifikanzniveau vorgeschrieben haben: $\alpha=0{,}05$!
 :::
 
 ::: {.important data-latex=""}
-**Hypothesis tests should be set up *before* seeing the data.**
+**Hypothesentests sollten *vor* der Betrachtung der Daten aufgestellt werden.**
 
-After observing data, it is tempting to turn a two-sided test into a one-sided test.
-Avoid this temptation.
-Hypotheses should be set up *before* observing the data.
+Nach der Beobachtung von Daten ist es verlockend, einen zweiseitigen Test in einen einseitigen Test umzuwandeln.
+Vermeiden Sie diese Versuchung.
+Hypothesen sollten *vor* der Beobachtung der Daten aufgestellt werden.
 :::
 
 \index{hypothesis testing}
 
-## Power {#sec-pow}
+## Teststärke {#sec-pow}
 
-Although we won't go into extensive detail here, power is an important topic for follow-up consideration after understanding the basics of hypothesis testing.
-A good power analysis is a vital preliminary step to any study as it will inform whether the data you collect are sufficient for being able to conclude your research broadly.
+Obwohl wir hier nicht im Detail darauf eingehen werden, ist die Teststärke ein wichtiges Thema für weiterführende Überlegungen nach dem Verständnis der Grundlagen des Hypothesentestens.
+Eine gute Teststärkenanalyse ist ein wichtiger vorbereitender Schritt für jede Studie, da sie darüber informiert, ob die gesammelten Daten ausreichen, um Ihre Forschung allgemein zu belegen.
 
-Often times in experiment planning, there are two competing considerations:
+Bei der Planung eines Experiments gibt es oft zwei konkurrierende Überlegungen:
 
--   We want to collect enough data that we can detect important effects.
--   Collecting data can be expensive, and, in experiments involving people, there may be some risk to patients.
+-   Wir wollen genügend Daten sammeln, um wichtige Effekte erkennen zu können.
+-   Das Sammeln von Daten kann kostspielig sein, und bei Experimenten mit Menschen kann es für die Patienten mit einem gewissen Risiko verbunden sein.
 
-When planning a study, we want to know how likely we are to detect an effect we care about.
-In other words, if there is a real effect, and that effect is large enough that it has practical value, then what is the probability that we detect that effect?
-This probability is called the **power**\index{power}, and we can compute it for different sample sizes or different effect sizes.
+Bei der Planung einer Studie möchten wir wissen, wie wahrscheinlich es ist, einen Effekt zu erkennen, der uns wichtig ist.
+Mit anderen Worten: Wenn es einen realen Effekt gibt, und dieser Effekt groß genug ist, um praktischen Wert zu haben, mit welcher Wahrscheinlichkeit erkennen wir diesen Effekt?
+Diese Wahrscheinlichkeit wird als **Teststärke**\index{power} bezeichnet, und wir können sie für verschiedene Stichprobengrößen oder verschiedene Effektgrößen berechnen.
 
 ::: {.important data-latex=""}
-**Power.**
+**Teststärke.**
 
-The power of the test is the probability of rejecting the null claim when the alternative claim is true.
+Die Teststärke ist die Wahrscheinlichkeit, die Nullhypothese abzulehnen, wenn die Alternativhypothese wahr ist.
 
-How easy it is to detect the effect depends on both how big the effect is (e.g., how good the medical treatment is) as well as the sample size.
+Wie leicht ein Effekt erkannt werden kann, hängt sowohl davon ab, wie groß der Effekt ist (z. B. wie gut die medizinische Behandlung ist), als auch von der Stichprobengröße.
 :::
 
-We think of power as the probability that you will become rich and famous from your science.
-In order for your science to make a splash, you need to have good ideas!
-That is, you won't become famous if you happen to find a single Type I error which rejects the null hypothesis.
-Instead, you'll become famous if your science is very good and important (that is, if the alternative hypothesis is true).
-The better your science is (i.e., the better the medical treatment), the larger the *effect size* and the easier it will be for you to convince people of your work.
+Wir betrachten die Teststärke als die Wahrscheinlichkeit, dass Sie durch Ihre Wissenschaft reich und berühmt werden.
+Damit Ihre Wissenschaft Aufsehen erregt, brauchen Sie gute Ideen!
+Das heißt, Sie werden nicht berühmt, wenn Sie zufällig einen einzelnen Fehler 1. Art finden, der die Nullhypothese ablehnt.
+Stattdessen werden Sie berühmt, wenn Ihre Wissenschaft sehr gut und wichtig ist (d. h., wenn die Alternativhypothese wahr ist).
+Je besser Ihre Wissenschaft ist (d. h. je besser die medizinische Behandlung), desto größer ist die *Effektgröße* und desto leichter wird es für Sie sein, andere von Ihrer Arbeit zu überzeugen.
 
-Not only does your science need to be solid, but you also need to have evidence (i.e., data) that shows the effect.
-A few observations (e.g., $n = 2)$ is unlikely to be convincing because of well known ideas of natural variability.
-Indeed, the larger the dataset which provides evidence for your scientific claim, the more likely you are to convince the community that your idea is correct.
+Nicht nur muss Ihre Wissenschaft solide sein, sondern Sie brauchen auch Belege (d. h. Daten), die den Effekt zeigen.
+Wenige Beobachtungen (z. B. $n = 2)$ sind kaum überzeugend, wegen allgemein bekannter Ideen natürlicher Variabilität.
+Tatsächlich gilt: Je größer der Datensatz, der Belege für Ihre wissenschaftliche Behauptung liefert, desto wahrscheinlicher ist es, dass Sie die Gemeinschaft davon überzeugen, dass Ihre Idee richtig ist.
 
-Although a full discussion of relative power is beyond the scope of this text, you might be interested to know that, often, paired t-tests (discussed in @sec-mathpaired) are more powerful than independent t-tests (discussed in @sec-math2samp) because the pairing reduces the inherent variability across observations.
-Additionally, because the median is almost always more variable than the mean, tests based on the mean are more powerful than tests based on the median.
-That is to say, reducing variability (done in different ways depending on the experimental design and set-up of the analysis) makes a test more powerful in such that the data are more likely to reject the null hypothesis.
+Obwohl eine vollständige Diskussion der relativen Teststärke den Rahmen dieses Textes übersteigt, könnten Sie daran interessiert sein zu wissen, dass gepaarte t-Tests (diskutiert in @sec-mathpaired) oft mächtiger sind als unabhängige t-Tests (diskutiert in @sec-math2samp), weil die Paarung die inhärente Variabilität über Beobachtungen hinweg reduziert.
+Darüber hinaus sind, da der Median fast immer variabler ist als der Mittelwert, Tests auf Basis des Mittelwerts mächtiger als Tests auf Basis des Medians.
+Das bedeutet, dass die Reduzierung der Variabilität (je nach Versuchsdesign und Analyseaufbau auf unterschiedliche Weise erreicht) einen Test mächtiger macht, in dem Sinne, dass die Daten eher die Nullhypothese ablehnen.
 
 ```{r}
 #| include: false
@@ -446,20 +446,20 @@ terms_chp_14 <- c(terms_chp_14, "power")
 
 \clearpage
 
-## Chapter review {#sec-chp15-review}
+## Kapitelzusammenfassung {#sec-chp15-review}
 
-### Summary
+### Zusammenfassung
 
-Although hypothesis testing provides a strong framework for making decisions based on data, as the analyst, you need to understand how and when the process can go wrong.
-That is, always keep in mind that the conclusion to a hypothesis test may not be right!
-Sometimes when the null hypothesis is true, we will accidentally reject it and commit a Type I error; sometimes when the alternative hypothesis is true, we will fail to reject the null hypothesis and commit a Type II error.
-The power of the test quantifies how likely it is to obtain data which will reject the null hypothesis when indeed the alternative is true; the power of the test is increased when larger sample sizes are taken.
+Obwohl das Hypothesentesten einen starken Rahmen für datenbasierte Entscheidungen bietet, müssen Sie als Analyst verstehen, wie und wann der Prozess schief gehen kann.
+Das heißt, denken Sie immer daran, dass die Schlussfolgerung eines Hypothesentests möglicherweise nicht korrekt ist!
+Manchmal werden wir die Nullhypothese versehentlich ablehnen, wenn sie wahr ist, und damit einen Fehler 1. Art begehen; manchmal werden wir die Nullhypothese nicht ablehnen, wenn die Alternativhypothese wahr ist, und damit einen Fehler 2. Art begehen.
+Die Teststärke quantifiziert, wie wahrscheinlich es ist, Daten zu erhalten, die die Nullhypothese ablehnen, wenn die Alternative tatsächlich wahr ist; die Teststärke wird erhöht, wenn größere Stichproben genommen werden.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-14.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe werden in @tbl-terms-chp-14 vorgestellt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-14
@@ -470,9 +470,9 @@ make_terms_table(terms_chp_14)
 
 \clearpage
 
-## Exercises {#sec-chp14-exercises}
+## Übungen {#sec-chp14-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-14].
+Antworten auf Übungen mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-14].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_14-ex-foundations-errors.qmd >}}
