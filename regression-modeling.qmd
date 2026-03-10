@@ -1,10 +1,10 @@
-# Regression modeling {#sec-model .unnumbered}
+# Regressionsmodellierung {#sec-model .unnumbered}
 
-Among the most ubiquitous methods used to model a response variable given one or more predictor variables is regression. Linear regression is most commonly used when the response variable is numeric (and even better, continuous); logistic regression is used when the response variable is binary.
+Zu den am häufigsten verwendeten Methoden zur Modellierung einer Zielvariablen in Abhängigkeit von einer oder mehreren Prädiktorvariablen gehört die Regression. Die lineare Regression wird am häufigsten verwendet, wenn die Zielvariable numerisch (und noch besser, stetig) ist; die logistische Regression wird verwendet, wenn die Zielvariable binär ist.
 
-- In [Chapter -@sec-model-slr] you are introduced to finding a best fit line using a least squares method. Additionally, the correlation and coefficient of determination are presented as a way to describe the strength of the linear model.
-- In [Chapter -@sec-model-mlr] the linear model is expanded to include multiple predictor variables in a single model. We discuss the benefits as well as the pitfalls that can arise when using multiple predictors.
-- In [Chapter -@sec-model-logistic] the response variable is constrained to be binary which changes the entire structure and produces the logistic regression model. The similarities between the regression models (namely, linear combinations of the predictors) are presented. Additionally, you see that the logistic regression predictions are now probabilities.
-- [Chapter -@sec-model-application] includes an application on the Houses for sale case study where the topics from this part of the book are fully developed.
+- In [Chapter -@sec-model-slr] werden Sie in das Finden einer bestmöglichen Ausgleichsgeraden mithilfe der Methode der kleinsten Quadrate eingeführt. Zusätzlich werden die Korrelation und das Bestimmtheitsmaß als Möglichkeit zur Beschreibung der Stärke des linearen Modells vorgestellt.
+- In [Chapter -@sec-model-mlr] wird das lineare Modell erweitert, um mehrere Prädiktorvariablen in einem einzigen Modell zu berücksichtigen. Wir erörtern die Vorteile sowie die Fallstricke, die beim Einsatz mehrerer Prädiktoren auftreten können.
+- In [Chapter -@sec-model-logistic] ist die Zielvariable auf binäre Werte beschränkt, was die gesamte Struktur verändert und das logistische Regressionsmodell ergibt. Die Gemeinsamkeiten zwischen den Regressionsmodellen (nämlich lineare Kombinationen der Prädiktoren) werden dargestellt. Zusätzlich sehen Sie, dass die Vorhersagen der logistischen Regression nun Wahrscheinlichkeiten sind.
+- [Chapter -@sec-model-application] enthält eine Anwendung zur Fallstudie „Häuser zum Verkauf", in der die Themen aus diesem Teil des Buches vollständig entwickelt werden.
 
-Later on in the textbook, in the [Inferential modeling](https://openintro-ims2.netlify.app/inferential-modeling) part, we will consider how a regression model built on a sample may or may not describe a particular population of interest.
+Im späteren Teil des Lehrbuchs, im Teil [Inferential modeling](https://openintro-ims2.netlify.app/inferential-modeling), werden wir untersuchen, ob ein auf einer Stichprobe aufgebautes Regressionsmodell eine bestimmte Grundgesamtheit von Interesse beschreibt oder nicht.

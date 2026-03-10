@@ -1,4 +1,4 @@
-# References {#sec-references}
+# Literaturverzeichnis {#sec-references}
 
 ::: {#refs}
 :::
