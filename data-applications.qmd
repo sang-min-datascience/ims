@@ -1,35 +1,35 @@
-# Applications: Data {#sec-data-applications}
+# Anwendungen: Daten {#sec-data-applications}
 
 ```{r}
 #| include: false
 source("_common.R")
 ```
 
-## Case study: Olympic 1500m {#sec-case-study-paralympics}
+## Fallstudie: Olympische 1500m {#sec-case-study-paralympics}
 
-While many of you may be glued to the Olympic Games every four years (or every two years if you fancy both summer and winter sports), the Paralympic Games are less popular than the Olympic Games, even if they hold the same competitive thrills.
+Während viele von Ihnen alle vier Jahre an den Olympischen Spielen hängen (oder alle zwei Jahre, wenn Sie sowohl Sommer- als auch Wintersport mögen), sind die Paralympics weniger beliebt als die Olympischen Spiele, auch wenn sie denselben sportlichen Nervenkitzel bieten.
 
-The Paralympic Games began as a way to support soldiers who had been wounded in World War II as a way to help them rehabilitate.
-The first Paralympic Games were held in Rome, Italy in 1960.
-Since 1988 (Seoul, South Korea), the Paralympic Games have been held a few weeks later than the Olympic Games in the same city, in both the summer and winter.
+Die Paralympics begannen als eine Möglichkeit, Soldaten zu unterstützen, die im Zweiten Weltkrieg verwundet worden waren, um ihnen bei der Rehabilitation zu helfen.
+Die ersten Paralympics fanden 1960 in Rom, Italien, statt.
+Seit 1988 (Seoul, Südkorea) werden die Paralympics einige Wochen nach den Olympischen Spielen in derselben Stadt abgehalten, sowohl im Sommer als auch im Winter.
 
-In this case study we introduce a dataset comparing Olympic and Paralympic gold medal finishers in the 1500m running competition (the Olympic "mile", if a bit shorter than a full mile).
-The goal of the case study is to walk you through what a data scientist does when they first get a hold of a dataset.
-We also provide some "foreshadowing" of concepts and techniques we'll introduce in the next few chapters on exploratory data analysis.
-Last, we introduce [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox) and discuss the importance of understanding the impact of multiple variables in an analysis.
+In dieser Fallstudie stellen wir einen Datensatz vor, der olympische und paralympische Goldmedaillengewinner im 1500-m-Lauf vergleicht (die olympische „Meile", auch wenn sie etwas kürzer als eine volle Meile ist).
+Das Ziel der Fallstudie ist es, Sie durch das zu führen, was ein Datenwissenschaftler tut, wenn er zum ersten Mal einen Datensatz in die Hand bekommt.
+Wir geben auch einen „Ausblick" auf Konzepte und Techniken, die wir in den nächsten Kapiteln zur explorativen Datenanalyse vorstellen werden.
+Abschließend stellen wir [Simpsons Paradoxon](https://en.wikipedia.org/wiki/Simpson%27s_paradox) vor und diskutieren die Bedeutung des Verständnisses der Auswirkung mehrerer Variablen in einer Analyse.
 
 ::: {.data data-latex=""}
-The [`paralympic_1500`](http://openintrostat.github.io/openintro/reference/paralympic_1500.html) data can be found in the [openintro](http://openintrostat.github.io/openintro/) R package.
+Die Daten [`paralympic_1500`](http://openintrostat.github.io/openintro/reference/paralympic_1500.html) befinden sich im R-Paket [openintro](http://openintrostat.github.io/openintro/).
 :::
 
-@tbl-paralympic-df-tail shows the last five rows from the dataset, which are the five most recent 1500m races.
-Notice that there are racers from both the Men's and Women's divisions as well as those of varying visual impairment (T11, T12, T13, and Olympic).
-The T11 athletes have almost complete visual impairment, run with a black-out blindfold, and are allowed to run with a guide-runner.
-T12 and T13 athletes have some visual impairment, and the visual acuity of Olympic runners is not determined.
+@tbl-paralympic-df-tail zeigt die letzten fünf Zeilen des Datensatzes, nämlich die fünf aktuellsten 1500-m-Rennen.
+Beachten Sie, dass es Läufer aus der Männer- und der Frauenstaffel sowie solche mit unterschiedlichen Sehbeeinträchtigungen (T11, T12, T13 und Olympisch) gibt.
+Die T11-Athleten haben eine nahezu vollständige Sehbehinderung, laufen mit einer undurchsichtigen Augenbinde und dürfen mit einem Begleitläufer laufen.
+T12- und T13-Athleten haben eine teilweise Sehbehinderung, und die Sehschärfe olympischer Läufer wird nicht bestimmt.
 
-When you encounter a new dataset, taking a peek at the last few rows as we did in @tbl-paralympic-df-tail should be instinctual.
-It can be helpful to look at the first few rows of the data as well to get a sense of other aspects of the data which may not be apparent in the last few rows.
-@tbl-paralympic-df-head shows the top five rows of the `paralympic_1500` dataset, which reveals that for at least the first five Olympiads, there were no runners in the Women's division or in the Paralympics.
+Wenn Sie auf einen neuen Datensatz stoßen, sollte es selbstverständlich sein, einen Blick auf die letzten Zeilen zu werfen, wie wir es in @tbl-paralympic-df-tail getan haben.
+Es kann auch hilfreich sein, sich die ersten Zeilen der Daten anzusehen, um sich ein Bild von anderen Aspekten der Daten zu machen, die in den letzten Zeilen möglicherweise nicht erkennbar sind.
+@tbl-paralympic-df-head zeigt die ersten fünf Zeilen des `paralympic_1500`-Datensatzes, aus denen hervorgeht, dass es zumindest bei den ersten fünf Olympiaden keine Läuferinnen in der Frauenstaffel oder bei den Paralympics gab.
 
 ```{r}
 #| label: tbl-paralympic-df-tail
@@ -83,24 +83,24 @@ paralympic_1500 |>
   column_spec(10, width = "4em")
 ```
 
-At this stage it's also useful to think about how the data were collected, as that will inform the scope of any inference you can make based on your analysis of the data.
+An diesem Punkt ist es auch nützlich, darüber nachzudenken, wie die Daten gesammelt wurden, da dies den Umfang der Schlussfolgerungen bestimmt, die Sie auf der Grundlage Ihrer Datenanalyse ziehen können.
 
 ::: {.guidedpractice data-latex=""}
-Do these data come from an observational study or an experiment?[^03-data-applications-1]
+Stammen diese Daten aus einer Beobachtungsstudie oder einem Experiment?[^03-data-applications-1]
 :::
 
-[^03-data-applications-1]: This is an observational study.
-    Researchers collected data on past gold medal race times in both Olympic and Paralympic Games.
+[^03-data-applications-1]: Dies ist eine Beobachtungsstudie.
+    Forscher sammelten Daten über vergangene Goldmedaillen-Rennzeiten bei den Olympischen und Paralympischen Spielen.
 
 ::: {.guidedpractice data-latex=""}
-There are `r nrow(paralympic_1500)` rows and `r ncol(paralympic_1500)` columns in the dataset.
-What does each row and each column represent?[^03-data-applications-2]
+Der Datensatz hat `r nrow(paralympic_1500)` Zeilen und `r ncol(paralympic_1500)` Spalten.
+Was stellt jede Zeile und jede Spalte dar?[^03-data-applications-2]
 :::
 
-[^03-data-applications-2]: Each row represents a 1500m gold medal race and each column represents a variable containing information on each race.
+[^03-data-applications-2]: Jede Zeile stellt ein 1500-m-Goldmedaillenrennen dar und jede Spalte stellt eine Variable mit Informationen zu jedem Rennen dar.
 
-Once you've identified the rows and columns, it's useful to review the data dictionary to learn about what each column in the dataset represents.
-The data dictionary is provided in @tbl-paralympic-var-def.
+Nachdem Sie die Zeilen und Spalten identifiziert haben, ist es sinnvoll, das Datenwörterbuch zu überprüfen, um zu erfahren, was jede Spalte im Datensatz darstellt.
+Das Datenwörterbuch ist in @tbl-paralympic-var-def angegeben.
 
 ```{r}
 #| label: tbl-paralympic-var-def
@@ -132,37 +132,37 @@ paralympic_var_def |>
   column_spec(2, width = "30em")
 ```
 
-We now have a better sense of what each column represents, but we do not yet know much about the characteristics of each of the variables.
+Wir haben nun ein besseres Verständnis davon, was jede Spalte darstellt, aber wir wissen noch nicht viel über die Eigenschaften jeder der Variablen.
 
 ::: {.workedexample data-latex=""}
-Determine whether each variable in the `paralympic_1500` dataset is numerical or categorical.
-For numerical variables, further classify them as continuous or discrete.
-For categorical variables, determine if the variable is ordinal.
+Bestimmen Sie, ob jede Variable im `paralympic_1500`-Datensatz numerisch oder kategorial ist.
+Klassifizieren Sie numerische Variablen weiter als stetig oder diskret.
+Bestimmen Sie für kategoriale Variablen, ob die Variable ordinal ist.
 
 ------------------------------------------------------------------------
 
-The numerical variables in the dataset are `year` (discrete), and `time_min` (continuous).
-The categorical variables are `city`, `country_of_games`, `division`, `type`, `name`, and `country_of_athlete`.
-The `time` variable is trickier to classify -- we can think of it as numerical, but it is classified as categorical.
-The categorical classification is due to the colon `:` which separates the minutes from the seconds.
-Sometimes the data dictionary (presented in @tbl-paralympic-var-def) isn't sufficient for a complete analysis, and we need to go back to the data source and try to understand the data better before we can proceed with the analysis meaningfully.
+Die numerischen Variablen im Datensatz sind `year` (diskret) und `time_min` (stetig).
+Die kategorialen Variablen sind `city`, `country_of_games`, `division`, `type`, `name` und `country_of_athlete`.
+Die Variable `time` ist schwieriger zu klassifizieren – wir können sie als numerisch betrachten, aber sie wird als kategorial eingestuft.
+Die kategoriale Klassifizierung ist auf den Doppelpunkt `:` zurückzuführen, der Minuten von Sekunden trennt.
+Manchmal reicht das Datenwörterbuch (dargestellt in @tbl-paralympic-var-def) für eine vollständige Analyse nicht aus, und wir müssen zur Datenquelle zurückkehren und versuchen, die Daten besser zu verstehen, bevor wir sinnvoll mit der Analyse fortfahren können.
 :::
 
-Next, let's try to get to know each variable a little bit better.
-For categorical variables, this involves figuring out what their levels are and how commonly represented they are in the data.
-@fig-paralympic-cat shows the distributions of two of the categorical variables in this dataset.
-We can see that the United States has hosted the Games most often, but runners from Great Britain and Kenya have won the 1500m most often.
-There are a large number of countries who have had a single gold medal winner of the 1500m.
-Similarly, there are a large number of countries who have hosted the Games only once.
-Over the last century, the name describing the country for athletes from one particular region has changed and includes Russian Federation, Unified Team, and Russian Paralympic Committee.
-Both of the visualizations are bar plots, which you will learn more about in @sec-explore-categorical.
+Als nächstes wollen wir versuchen, jede Variable etwas besser kennen zu lernen.
+Bei kategorialen Variablen geht es darum, herauszufinden, welche Ausprägungen sie haben und wie häufig sie in den Daten vertreten sind.
+@fig-paralympic-cat zeigt die Verteilungen von zwei der kategorialen Variablen in diesem Datensatz.
+Wir können sehen, dass die Vereinigten Staaten die Spiele am häufigsten ausgerichtet haben, aber Läufer aus Großbritannien und Kenia haben die 1500 m am häufigsten gewonnen.
+Es gibt eine große Anzahl von Ländern, die nur einen einzigen Goldmedaillengewinner über 1500 m hatten.
+Ebenso gibt es eine große Anzahl von Ländern, die die Spiele nur einmal ausgerichtet haben.
+Im letzten Jahrhundert hat sich die Bezeichnung des Landes für Athleten aus einer bestimmten Region geändert und umfasst nun Russische Föderation, Vereintes Team und Russisches Paralympisches Komitee.
+Beide Visualisierungen sind Balkendiagramme, über die Sie mehr in @sec-explore-categorical erfahren werden.
 
-Similarly, we can examine the distributions of the numerical variables as well.
-We already know that the 1500m times are mostly between 3.5min and 4.5min, based on @tbl-paralympic-df-tail and @tbl-paralympic-df-head.
-We can break down the 1500m time by division and type of race.
-@tbl-paralympic-summary shows the mean, minimum, and maximum 1500m times broken down by division and race type.
-Recall that the Men's Olympic division has taken place since 1896, whereas the Men's Paralympic division has happened only since 1960.
-The maximum race time, therefore, should be taken into context in terms of the year of the Games.
+Ebenso können wir die Verteilungen der numerischen Variablen untersuchen.
+Wir wissen bereits, dass die 1500-m-Zeiten basierend auf @tbl-paralympic-df-tail und @tbl-paralympic-df-head hauptsächlich zwischen 3,5 min und 4,5 min liegen.
+Wir können die 1500-m-Zeit nach Staffel und Renntyp aufschlüsseln.
+@tbl-paralympic-summary zeigt den Mittelwert, das Minimum und das Maximum der 1500-m-Zeiten aufgeschlüsselt nach Staffel und Renntyp.
+Erinnern Sie sich, dass die olympische Männerstaffel seit 1896 stattfindet, während die paralympische Männerstaffel erst seit 1960 stattfindet.
+Die maximale Rennzeit sollte daher im Kontext des Jahres der Spiele betrachtet werden.
 
 ```{r}
 #| label: fig-paralympic-cat
@@ -241,11 +241,11 @@ paralympic_1500 |>
   )
 ```
 
-**Fun fact!**
-Sometimes playing around with the dataset will uncover interesting elements about the context in which the data were collected.
-A scatterplot of the Men's 1500m broken down by race type shows that, in each given year, the Olympic runner is substantially faster than the Paralympic runners, with one exception.
-In the Rio de Janeiro 2016 Games, the [T13 gold medal athlete ran faster (3:48.29) than the Olympic gold medal athlete (3:50.00)](https://www.paralympic.org/news/remarkable-finish-1500m-rio-2016) (see @fig-paralympic-rio).
-In fact, some internet sleuthing tells you that the *top four* T13 finishers all finished the 1500m under 3:50.00!
+**Interessanter Fakt!**
+Manchmal werden beim Erkunden des Datensatzes interessante Elemente über den Kontext aufgedeckt, in dem die Daten gesammelt wurden.
+Ein Streudiagramm der Männer-1500 m aufgeschlüsselt nach Renntyp zeigt, dass der olympische Läufer in jedem gegebenen Jahr wesentlich schneller ist als die paralympischen Läufer – mit einer Ausnahme.
+Bei den Spielen in Rio de Janeiro 2016 [lief der T13-Goldmedaillenathlet schneller (3:48,29) als der olympische Goldmedaillenathlet (3:50,00)](https://www.paralympic.org/news/remarkable-finish-1500m-rio-2016) (siehe @fig-paralympic-rio).
+Tatsächlich zeigt eine kurze Internetrecherche, dass die *vier besten* T13-Finisher alle die 1500 m unter 3:50,00 abschlossen!
 
 ```{r}
 #| label: fig-paralympic-rio
@@ -278,19 +278,19 @@ paralympic_1500 |>
   )
 ```
 
-So far we examined aspects of some of the individual variables, and we have broken down the 1500m race times in terms of division and race type.
-You might have already wondered how the race times vary across year.
-The `paralymic_1500` dataset will provide us with an ability to explore an important statistical concept, Simpson's paradox.
+Bisher haben wir Aspekte einiger einzelner Variablen untersucht und die 1500-m-Rennzeiten nach Staffel und Renntyp aufgeschlüsselt.
+Sie haben sich vielleicht bereits gefragt, wie die Rennzeiten über die Jahre variieren.
+Der Datensatz `paralymic_1500` bietet uns die Möglichkeit, ein wichtiges statistisches Konzept zu erkunden: Simpsons Paradoxon.
 
-## Simpson's paradox
+## Simpsons Paradoxon
 
-Simpson's paradox \index{Simpson's paradox} is a description of three (or more) variables.
-The paradox happens when a third variable reverses the relationship between the first two variables.
+Simpsons Paradoxon \index{Simpson's paradox} beschreibt eine Situation mit drei (oder mehr) Variablen.
+Das Paradoxon tritt auf, wenn eine dritte Variable die Beziehung zwischen den ersten beiden Variablen umkehrt.
 
-Let's start by considering how the 1500m gold medal race times have changed over year.
-@fig-paralympic-ungrouped shows a scatterplot describing 1500m race times and year for Men's Olympic and Paralympic (T11) athletes with a line of best fit (to the entire dataset) superimposed (see @sec-model-slr where we will present fitting a line to a scatterplot).
-Notice that the line of best fit shows a *positive* relationship between race time and year.
-That is, for later years, the predicted gold medal time is higher than in earlier years.
+Betrachten wir zunächst, wie sich die 1500-m-Goldmedaillen-Rennzeiten über die Jahre verändert haben.
+@fig-paralympic-ungrouped zeigt ein Streudiagramm, das die 1500-m-Rennzeiten und Jahre für olympische und paralympische (T11) Männerathleten beschreibt, mit einer eingezeichneten Regressionsgeraden (für den gesamten Datensatz) (siehe @sec-model-slr, wo wir das Anpassen einer Gerade an ein Streudiagramm vorstellen).
+Beachten Sie, dass die Regressionsgerade eine *positive* Beziehung zwischen Rennzeit und Jahr zeigt.
+Das heißt, in späteren Jahren ist die vorhergesagte Goldmedaillenzeit höher als in früheren Jahren.
 
 ```{r}
 #| label: fig-paralympic-ungrouped
@@ -314,10 +314,10 @@ paralympic_1500 |>
   )
 ```
 
-Of course, both your eye and your intuition are likely telling you that it wouldn't make any sense to try to model all of the athletes together.
-Instead, a separate model should be run for each of the two types of Games: Olympic and Paralympic (T11).
-@fig-paralympic-grouped shows a scatterplot describing 1500m race times and year for Men's Olympic and Paralympic (T11) athletes with a line of best fit superimposed separately for each of the two types of races.
-Notice that within each type of race, the relationship between 1500m race time and year is now *negative*.
+Natürlich sagen Ihnen sowohl Ihr Auge als auch Ihre Intuition, dass es keinen Sinn ergibt, alle Athleten zusammen zu modellieren.
+Stattdessen sollte für jeden der beiden Spieltypen – Olympisch und Paralympisch (T11) – ein separates Modell erstellt werden.
+@fig-paralympic-grouped zeigt ein Streudiagramm, das die 1500-m-Rennzeiten und Jahre für olympische und paralympische (T11) Männerathleten beschreibt, mit einer jeweils separat für die beiden Renntypen eingezeichneten Regressionsgeraden.
+Beachten Sie, dass die Beziehung zwischen der 1500-m-Rennzeit und dem Jahr innerhalb jedes Renntyps nun *negativ* ist.
 
 ```{r}
 #| label: fig-paralympic-grouped
@@ -353,41 +353,41 @@ paralympic_1500 |>
 ```
 
 ::: {.important data-latex=""}
-**Simpson's paradox.**
+**Simpsons Paradoxon.**
 
-Simpson's paradox happens when an association or relationship between two variables in one direction (e.g., positive) reverses (e.g., becomes negative) when a third variable is considered.
+Simpsons Paradoxon tritt auf, wenn eine Assoziation oder Beziehung zwischen zwei Variablen in einer Richtung (z. B. positiv) sich umkehrt (z. B. negativ wird), wenn eine dritte Variable berücksichtigt wird.
 :::
 
-Simpson's paradox was seen in the 1500m race data because the aggregate data showed a positive relationship (positive slope) between year and race time but a negative relationship (negative slope) between year and race time when broken down by the type of race.
+Simpsons Paradoxon zeigte sich in den 1500-m-Renndaten, da die aggregierten Daten eine positive Beziehung (positive Steigung) zwischen Jahr und Rennzeit zeigten, aber eine negative Beziehung (negative Steigung) zwischen Jahr und Rennzeit, wenn nach Renntyp aufgeschlüsselt wurde.
 
-Simpson's paradox is observed with categorical data and with numeric data.
-Often the paradox happens because the third variable (here, race type) is imbalanced.
-There are either more observations in one group or the observations happen at different intervals across the two groups.
-In the 1500m data, we saw that the T11 runners had fewer observations and their times were both generally slower and more recent than the Olympic runners.
+Simpsons Paradoxon wird sowohl bei kategorialen als auch bei numerischen Daten beobachtet.
+Häufig tritt das Paradoxon auf, weil die dritte Variable (hier der Renntyp) unausgewogen ist.
+Es gibt entweder mehr Beobachtungen in einer Gruppe oder die Beobachtungen finden in unterschiedlichen Intervallen in den beiden Gruppen statt.
+In den 1500-m-Daten sahen wir, dass die T11-Läufer weniger Beobachtungen hatten und ihre Zeiten im Allgemeinen sowohl langsamer als auch aktueller waren als die der olympischen Läufer.
 
-In the 1500m analysis, it would be most prudent to report the trends separately for the Olympic and the T11 athletes.
-However, in other situations, it might be better to aggregate the data and report the overall trend.
-Many additional examples of Simpson's paradox and a further exploration is given in @Witmer:2021.
+Bei der 1500-m-Analyse wäre es am sinnvollsten, die Trends für die olympischen und die T11-Athleten getrennt zu berichten.
+In anderen Situationen könnte es jedoch besser sein, die Daten zu aggregieren und den Gesamttrend zu berichten.
+Viele weitere Beispiele für Simpsons Paradoxon und eine weitergehende Erkundung finden sich in @Witmer:2021.
 
-In this case study, we introduced you to the very first steps a data scientist takes when they start working with a new dataset.
-In the next few chapters, we will introduce exploratory data analysis, and you'll learn more about the various types of data visualizations and summary statistics you can make to get to know your data better.
+In dieser Fallstudie haben wir Sie in die ersten Schritte eingeführt, die ein Datenwissenschaftler unternimmt, wenn er mit einem neuen Datensatz arbeitet.
+In den nächsten Kapiteln werden wir die explorative Datenanalyse vorstellen, und Sie werden mehr über die verschiedenen Arten von Datenvisualisierungen und deskriptive Statistiken erfahren, die Sie erstellen können, um Ihre Daten besser kennenzulernen.
 
-Before you move on, we encourage you to think about whether the following questions can be answered with this dataset, and if yes, how you might go about answering them?
-It's okay if your answer is "I'm not sure", we simply want to get your exploratory juices flowing to prime you for what's to come!
+Bevor Sie weitermachen, möchten wir Sie ermutigen, darüber nachzudenken, ob die folgenden Fragen mit diesem Datensatz beantwortet werden können, und wenn ja, wie Sie dabei vorgehen würden.
+Es ist in Ordnung, wenn Ihre Antwort „Ich bin nicht sicher" lautet – wir möchten lediglich Ihren Erkundungsdrang wecken, um Sie auf das Kommende vorzubereiten!
 
-1.  Has there ever been a year when a visually impaired Paralympic gold medal athlete beat the Olympic gold medal athlete?
-2.  When comparing the Paralympic and Olympic 1500m gold medal athletes, does Simpson's paradox hold in the Women's division?
-3.  Is there a biological boundary which establishes a time under which no human could run 1500m?
+1.  Gab es je ein Jahr, in dem ein sehbehinderter paralympischer Goldmedaillenathlet den olympischen Goldmedaillenathlet übertroffen hat?
+2.  Gilt Simpsons Paradoxon auch in der Frauenstaffel beim Vergleich der paralympischen und olympischen 1500-m-Goldmedaillenathletinnen?
+3.  Gibt es eine biologische Grenze, die eine Zeit festlegt, unter der kein Mensch die 1500 m laufen könnte?
 
 \clearpage
 
-## Interactive R tutorials {#sec-data-tutorials}
+## Interaktive R-Tutorials {#sec-data-tutorials}
 
-Navigate the concepts you've learned in this part in R using the following self-paced tutorials.
-All you need is your browser to get started!
+Erkunden Sie die in diesem Teil gelernten Konzepte in R mit den folgenden Selbstlern-Tutorials.
+Alles, was Sie brauchen, ist Ihr Browser, um loszulegen!
 
 ::: {.alltutorials data-latex=""}
-[Tutorial 1: Introduction to data](https://openintrostat.github.io/ims-tutorials/01-data/)
+[Tutorial 1: Einführung in Daten](https://openintrostat.github.io/ims-tutorials/01-data/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintrostat.github.io/ims-tutorials/01-data>
@@ -395,7 +395,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 1 - Lesson 1: Language of data](https://openintro.shinyapps.io/ims-01-data-01/)
+[Tutorial 1 - Lektion 1: Sprache der Daten](https://openintro.shinyapps.io/ims-01-data-01/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-01-data-01>
@@ -403,7 +403,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 1 - Lesson 2: Types of studies](https://openintro.shinyapps.io/ims-01-data-02/)
+[Tutorial 1 - Lektion 2: Arten von Studien](https://openintro.shinyapps.io/ims-01-data-02/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-01-data-02>
@@ -411,7 +411,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 1 - Lesson 3: Sampling strategies and experimental design](https://openintro.shinyapps.io/ims-01-data-03/)
+[Tutorial 1 - Lektion 3: Stichprobenstrategien und Versuchsplanung](https://openintro.shinyapps.io/ims-01-data-03/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-01-data-03>
@@ -419,7 +419,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 1 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-01-data-04/)
+[Tutorial 1 - Lektion 4: Fallstudie](https://openintro.shinyapps.io/ims-01-data-04/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-01-data-04>
@@ -427,20 +427,20 @@ All you need is your browser to get started!
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of tutorials supporting this book at\
+Sie können auch die vollständige Liste der Tutorials zu diesem Buch hier aufrufen\
 <https://openintrostat.github.io/ims-tutorials>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of tutorials supporting this book [here](https://openintrostat.github.io/ims-tutorials).
+Sie können auch die vollständige Liste der Tutorials zu diesem Buch [hier](https://openintrostat.github.io/ims-tutorials) aufrufen.
 :::
 
-## R labs {#sec-data-labs}
+## R-Labore {#sec-data-labs}
 
-Further apply the concepts you've learned in this part in R with computational labs that walk you through a data analysis case study.
+Wenden Sie die in diesem Teil gelernten Konzepte weiter in R an, mit Rechenlaboren, die Sie durch eine Datenanalyse-Fallstudie führen.
 
 ::: {.singlelab data-latex=""}
-[Intro to R - Birth rates](https://www.openintro.org/go?id=ims-r-lab-intro-to-r)
+[Einführung in R - Geburtenraten](https://www.openintro.org/go?id=ims-r-lab-intro-to-r)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://www.openintro.org/go?id=ims-r-lab-intro-to-r>
@@ -448,10 +448,10 @@ Further apply the concepts you've learned in this part in R with computational l
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of labs supporting this book at\
+Sie können auch die vollständige Liste der Labore zu diesem Buch hier aufrufen\
 <https://www.openintro.org/go?id=ims-r-labs>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of labs supporting this book [here](https://www.openintro.org/go?id=ims-r-labs).
+Sie können auch die vollständige Liste der Labore zu diesem Buch [hier](https://www.openintro.org/go?id=ims-r-labs) aufrufen.
 :::
