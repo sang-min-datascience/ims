@@ -1,4 +1,4 @@
-# Hello data {#sec-data-hello}
+# Hallo Daten {#sec-data-hello}
 
 ```{r}
 #| include: false
@@ -7,10 +7,10 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-Scientists seek to answer questions using rigorous methods and careful observations.
-These observations -- collected from the likes of field notes, surveys, and experiments -- form the backbone of a statistical investigation and are called **data**.
-Statistics is the study of how best to collect, analyze, and draw conclusions from data.
-In this first chapter, we focus on both the properties of data and on the collection of data.
+Wissenschaftler versuchen, Fragen mit strengen Methoden und sorgfältigen Beobachtungen zu beantworten.
+Diese Beobachtungen -- gesammelt aus Feldnotizen, Umfragen und Experimenten -- bilden das Rückgrat einer statistischen Untersuchung und werden als **Daten** bezeichnet.
+Statistik ist die Wissenschaft, wie man Daten am besten sammelt, analysiert und Schlussfolgerungen daraus zieht.
+In diesem ersten Kapitel konzentrieren wir uns sowohl auf die Eigenschaften von Daten als auch auf die Datenerhebung.
 :::
 
 ```{r}
@@ -18,35 +18,35 @@ In this first chapter, we focus on both the properties of data and on the collec
 terms_chp_1 <- c("data")
 ```
 
-## Case study: Using stents to prevent strokes {#sec-case-study-stents-strokes}
+## Fallstudie: Einsatz von Stents zur Schlaganfallprävention {#sec-case-study-stents-strokes}
 
-In this section we introduce a classic challenge in statistics: evaluating the efficacy of a medical treatment.
-Terms in this section, and indeed much of this chapter, will all be revisited later in the text.
-The plan for now is simply to get a sense of the role statistics can play in practice.
+In diesem Abschnitt stellen wir eine klassische Herausforderung in der Statistik vor: die Bewertung der Wirksamkeit einer medizinischen Behandlung.
+Begriffe in diesem Abschnitt, und tatsächlich in weiten Teilen dieses Kapitels, werden später im Text wieder aufgegriffen.
+Der Plan ist zunächst nur, ein Gefühl für die Rolle zu bekommen, die Statistik in der Praxis spielen kann.
 
-An experiment is designed to study the effectiveness of stents in treating patients at risk of stroke [@chimowitz2011stenting].
-Stents are small mesh tubes that are placed inside narrow or weak arteries to assist in patient recovery after cardiac events and reduce the risk of an additional heart attack or death.
+Ein Experiment wurde entwickelt, um die Wirksamkeit von Stents bei der Behandlung von Patienten mit Schlaganfallrisiko zu untersuchen [@chimowitz2011stenting].
+Stents sind kleine Gitterröhrchen, die in enge oder schwache Arterien eingesetzt werden, um die Erholung von Patienten nach Herzereignissen zu unterstützen und das Risiko eines weiteren Herzinfarkts oder Todes zu reduzieren.
 
-Many doctors have hoped that there would be similar benefits for patients at risk of stroke.
-We start by writing the principal question the researchers hope to answer:
+Viele Ärzte haben gehofft, dass es ähnliche Vorteile für Patienten mit Schlaganfallrisiko geben würde.
+Wir beginnen mit der Formulierung der Hauptfrage, die die Forscher zu beantworten hoffen:
 
-> Does the use of stents reduce the risk of stroke?
+> Verringert der Einsatz von Stents das Schlaganfallrisiko?
 
-The researchers who asked this question conducted an experiment with 451 at-risk patients.
-Each volunteer patient was randomly assigned to one of two groups:
+Die Forscher, die diese Frage stellten, führten ein Experiment mit 451 gefährdeten Patienten durch.
+Jeder freiwillige Patient wurde zufällig einer von zwei Gruppen zugewiesen:
 
--   **Treatment group**. Patients in the treatment group received a stent and medical management. The medical management included medications, management of risk factors, and help in lifestyle modification.
--   **Control group**. Patients in the control group received the same medical management as the treatment group, but they did not receive stents.
+-   **Behandlungsgruppe**. Patienten in der Behandlungsgruppe erhielten einen Stent und medizinische Betreuung. Die medizinische Betreuung umfasste Medikamente, das Management von Risikofaktoren und Hilfe bei der Lebensstiländerung.
+-   **Kontrollgruppe**. Patienten in der Kontrollgruppe erhielten die gleiche medizinische Betreuung wie die Behandlungsgruppe, erhielten jedoch keine Stents.
 
-Researchers randomly assigned 224 patients to the treatment group and 227 to the control group.
-In this study, the control group provides a reference point against which we can measure the medical impact of stents in the treatment group.
+Die Forscher wiesen zufällig 224 Patienten der Behandlungsgruppe und 227 der Kontrollgruppe zu.
+In dieser Studie bildet die Kontrollgruppe einen Referenzpunkt, anhand dessen wir die medizinische Wirkung der Stents in der Behandlungsgruppe messen können.
 
-Researchers studied the effect of stents at two time points: 30 days after enrollment and 365 days after enrollment.
-The results of 5 patients are summarized in @tbl-stentStudyResultsDF.
-Patient outcomes are recorded as `stroke` or `no event`, representing whether the patient had a stroke during that time period.
+Die Forscher untersuchten die Wirkung der Stents zu zwei Zeitpunkten: 30 Tage nach der Aufnahme und 365 Tage nach der Aufnahme.
+Die Ergebnisse von 5 Patienten sind in @tbl-stentStudyResultsDF zusammengefasst.
+Patientenergebnisse werden als `stroke` oder `no event` aufgezeichnet und geben an, ob der Patient in diesem Zeitraum einen Schlaganfall hatte.
 
 ::: {.data data-latex=""}
-The [`stent30`](http://openintrostat.github.io/openintro/reference/stent30.html) data and [`stent365`](http://openintrostat.github.io/openintro/reference/stent365.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`stent30`](http://openintrostat.github.io/openintro/reference/stent30.html) und [`stent365`](http://openintrostat.github.io/openintro/reference/stent365.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -78,12 +78,12 @@ stent |>
   column_spec(1:4, width = "8em")
 ```
 
-It would be difficult to answer a question on the impact of stents on the occurrence of strokes for **all** study patients using these *individual* observations.
-This question is better addressed by performing a statistical data analysis of *all* observations.
-@tbl-stentStudyResultsDFsummary summarizes the raw data in a more helpful way.
-In this table, we can quickly see what happened over the entire study.
-For instance, to identify the number of patients in the treatment group who had a stroke within 30 days after the treatment, we look in the leftmost column (30 days), at the intersection of treatment and stroke: 33.
-To identify the number of control patients who did not have a stroke after 365 days after receiving treatment, we look at the rightmost column (365 days), at the intersection of control and no event: 199.
+Es wäre schwierig, eine Frage zur Wirkung von Stents auf das Auftreten von Schlaganfällen bei **allen** Studienpatienten anhand dieser *einzelnen* Beobachtungen zu beantworten.
+Diese Frage wird besser durch eine statistische Datenanalyse *aller* Beobachtungen beantwortet.
+@tbl-stentStudyResultsDFsummary fasst die Rohdaten auf eine hilfreichere Weise zusammen.
+In dieser Tabelle können wir schnell erkennen, was über die gesamte Studie hinweg geschehen ist.
+Um beispielsweise die Anzahl der Patienten in der Behandlungsgruppe zu ermitteln, die innerhalb von 30 Tagen nach der Behandlung einen Schlaganfall erlitten, schauen wir in die linke Spalte (30 Tage), am Schnittpunkt von Behandlung und Schlaganfall: 33.
+Um die Anzahl der Kontrollpatienten zu ermitteln, die 365 Tage nach der Behandlung keinen Schlaganfall hatten, schauen wir in die rechte Spalte (365 Tage), am Schnittpunkt von Kontrolle und kein Ereignis: 199.
 
 ```{r}
 #| label: tbl-stentStudyResultsDFsummary
@@ -113,65 +113,65 @@ stent |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Of the 224 patients in the treatment group, 45 had a stroke by the end of the first year.
-Using these two numbers, compute the proportion of patients in the treatment group who had a stroke by the end of their first year.
-(Note: answers to all Guided Practice exercises are provided in footnotes!)[^01-data-hello-1]
+Von den 224 Patienten in der Behandlungsgruppe hatten 45 bis zum Ende des ersten Jahres einen Schlaganfall.
+Berechnen Sie mit diesen beiden Zahlen den Anteil der Patienten in der Behandlungsgruppe, die bis zum Ende ihres ersten Jahres einen Schlaganfall hatten.
+(Hinweis: Antworten auf alle Geführten Übungen finden sich in Fußnoten!)[^01-data-hello-1]
 :::
 
-[^01-data-hello-1]: The proportion of the 224 patients who had a stroke within 365 days: $45/224 = 0.20.$
+[^01-data-hello-1]: Der Anteil der 224 Patienten, die innerhalb von 365 Tagen einen Schlaganfall hatten: $45/224 = 0.20.$
 
-We can compute summary statistics from the table to give us a better idea of how the impact of the stent treatment differed between the two groups.
-A **summary statistic** is a single number summarizing data from a sample.\index{summary statistic}
-For instance, the primary results of the study after 1 year could be described by two summary statistics: the proportion of people who had a stroke in the treatment and control groups.
+Wir können aus der Tabelle Kennzahlen berechnen, um uns ein besseres Bild davon zu machen, wie sich die Wirkung der Stentbehandlung zwischen den beiden Gruppen unterschied.
+Eine **Kennzahl** ist eine einzelne Zahl, die Daten aus einer Stichprobe zusammenfasst.\index{summary statistic}
+Beispielsweise könnten die wichtigsten Ergebnisse der Studie nach 1 Jahr durch zwei Kennzahlen beschrieben werden: der Anteil der Personen, die in der Behandlungs- und der Kontrollgruppe einen Schlaganfall erlitten.
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "summary statistic")
 ```
 
--   Proportion who had a stroke in the treatment (stent) group: $45/224 = 0.20 = 20\%.$
--   Proportion who had a stroke in the control group: $28/227 = 0.12 = 12\%.$
+-   Anteil mit Schlaganfall in der Behandlungsgruppe (Stent): $45/224 = 0.20 = 20\%.$
+-   Anteil mit Schlaganfall in der Kontrollgruppe: $28/227 = 0.12 = 12\%.$
 
-These two summary statistics are useful in looking for differences in the groups, and we are in for a surprise: an additional 8% of patients in the treatment group had a stroke!
-This is important for two reasons.
-First, it is contrary to what doctors expected, which was that stents would *reduce* the rate of strokes.
-Second, it leads to a statistical question: do the data show a "real" difference between the groups?
+Diese zwei Kennzahlen sind nützlich bei der Suche nach Unterschieden zwischen den Gruppen, und wir erleben eine Überraschung: Zusätzliche 8% der Patienten in der Behandlungsgruppe erlitten einen Schlaganfall!
+Dies ist aus zwei Gründen wichtig.
+Erstens widerspricht es dem, was Ärzte erwartet hatten, nämlich dass Stents die Schlaganfallrate *reduzieren* würden.
+Zweitens wirft es eine statistische Frage auf: Zeigen die Daten einen „echten" Unterschied zwischen den Gruppen?
 
 \clearpage
 
-This second question is subtle.
-Suppose you flip a coin 100 times.
-While the chance a coin lands heads in any given coin flip is 50%, we probably won't observe exactly 50 heads.
-This type of variation is part of almost any type of data generating process.
-It is possible that the 8% difference in the stent study is due to this natural variation.
-However, the larger the difference we observe (for a particular sample size), the less believable it is that the difference is due to chance.
-So, what we are really asking is the following: if in fact stents have no effect, how likely is it that we observe such a large difference?
+Diese zweite Frage ist subtil.
+Angenommen, Sie werfen eine Münze 100 Mal.
+Obwohl die Wahrscheinlichkeit, dass eine Münze bei einem bestimmten Wurf Kopf zeigt, 50% beträgt, werden wir wahrscheinlich nicht genau 50 Mal Kopf beobachten.
+Diese Art von Variation ist Teil fast jedes datenerzeugenden Prozesses.
+Es ist möglich, dass der 8%-Unterschied in der Stentstudie auf diese natürliche Variation zurückzuführen ist.
+Je größer der Unterschied, den wir beobachten (bei einer bestimmten Stichprobengröße), desto unwahrscheinlicher ist es jedoch, dass der Unterschied auf den Zufall zurückzuführen ist.
+Was wir also wirklich fragen, ist Folgendes: Wie wahrscheinlich ist es, einen so großen Unterschied zu beobachten, wenn Stents tatsächlich keine Wirkung haben?
 
-While we do not yet have statistical tools to fully address this question on our own, we can comprehend the conclusions of the published analysis: there was compelling evidence of harm by stents in this study of stroke patients.
+Obwohl wir noch nicht über die statistischen Werkzeuge verfügen, um diese Frage vollständig zu beantworten, können wir die Schlussfolgerungen der veröffentlichten Analyse nachvollziehen: Es gab überzeugende Hinweise auf einen Schaden durch Stents in dieser Studie mit Schlaganfallpatienten.
 
-**Be careful:** Do not generalize the results of this study to all patients and all stents.
-This study looked at patients with very specific characteristics who volunteered to be a part of this study and who may not be representative of all stroke patients.
-In addition, there are many types of stents, and this study only considered the self-expanding Wingspan stent (Boston Scientific).
-However, this study does leave us with an important lesson: we should keep our eyes open for surprises.
+**Vorsicht:** Verallgemeinern Sie die Ergebnisse dieser Studie nicht auf alle Patienten und alle Stents.
+Diese Studie betrachtete Patienten mit sehr spezifischen Merkmalen, die sich freiwillig für diese Studie gemeldet haben und möglicherweise nicht repräsentativ für alle Schlaganfallpatienten sind.
+Darüber hinaus gibt es viele Arten von Stents, und diese Studie betrachtete nur den selbstexpandierenden Wingspan-Stent (Boston Scientific).
+Diese Studie hinterlässt uns jedoch eine wichtige Erkenntnis: Wir sollten die Augen offen halten für Überraschungen.
 
-## Data basics {#sec-data-basics}
+## Datengrundlagen {#sec-data-basics}
 
-Effective presentation and description of data is a first step in most analyses.
-This section introduces one structure for organizing data as well as some terminology that will be used throughout this book.
+Die effektive Präsentation und Beschreibung von Daten ist ein erster Schritt bei den meisten Analysen.
+Dieser Abschnitt stellt eine Struktur zur Organisation von Daten sowie einige Begriffe vor, die im gesamten Buch verwendet werden.
 
-### Observations, variables, and data matrices
+### Beobachtungen, Variablen und Datenmatrizen
 
-@tbl-loan50-df displays six rows of a dataset for 50 randomly sampled loans offered through Lending Club, which is a peer-to-peer lending company.
-This dataset will be referred to as `loan50`.
+@tbl-loan50-df zeigt sechs Zeilen eines Datensatzes für 50 zufällig ausgewählte Kredite, die über Lending Club, ein Peer-to-Peer-Kreditunternehmen, angeboten wurden.
+Dieser Datensatz wird als `loan50` bezeichnet.
 
 ::: {.data data-latex=""}
-The [`loan50`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`loan50`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-Each row in the table represents a single loan.
-The formal name for a row is a \index{case}**case** or \index{observation}**observation** or \index{unit of observation}**unit of observation**.
-The columns represent characteristics of each loan, where each column is referred to as a \index{variable}**variable**.
-For example, the first row represents a loan of \$22,000 with an interest rate of 10.90%, where the borrower is based in New Jersey (NJ) and has an income of \$59,000.
+Jede Zeile in der Tabelle repräsentiert einen einzelnen Kredit.
+Die formale Bezeichnung für eine Zeile ist ein \index{case}**Fall** oder eine \index{observation}**Beobachtung** oder eine \index{unit of observation}**Beobachtungseinheit**.
+Die Spalten repräsentieren Eigenschaften jedes Kredits, wobei jede Spalte als \index{variable}**Variable** bezeichnet wird.
+Beispielsweise repräsentiert die erste Zeile einen Kredit von \$22,000 mit einem Zinssatz von 10,90%, wobei der Kreditnehmer in New Jersey (NJ) ansässig ist und ein Einkommen von \$59,000 hat.
 
 ```{r}
 #| include: false
@@ -179,16 +179,16 @@ terms_chp_1 <- c(terms_chp_1, "case", "unit of observation", "observation", "var
 ```
 
 ::: {.guidedpractice data-latex=""}
-What is the grade of the first loan in @tbl-loan50-df?
-And what is the home ownership status of the borrower for that first loan?
-Reminder: for these Guided Practice questions, you can check your answer in the footnote.[^01-data-hello-2]
+Was ist die Note des ersten Kredits in @tbl-loan50-df?
+Und wie ist der Wohneigentumsstatus des Kreditnehmers für diesen ersten Kredit?
+Erinnerung: Bei diesen Geführten Übungsfragen können Sie Ihre Antwort in der Fußnote überprüfen.[^01-data-hello-2]
 :::
 
-[^01-data-hello-2]: The loan's grade is B, and the borrower rents their residence.
+[^01-data-hello-2]: Die Note des Kredits ist B, und der Kreditnehmer mietet seine Unterkunft.
 
-In practice, it is especially important to ask clarifying questions to ensure important aspects of the data are understood.
-For instance, it is always important to be sure we know what each variable means and its units of measurement.
-Descriptions of the variables in the `loan50` dataset are given in @tbl-loan-50-variables.
+In der Praxis ist es besonders wichtig, klärende Fragen zu stellen, um sicherzustellen, dass wichtige Aspekte der Daten verstanden werden.
+Zum Beispiel ist es immer wichtig, sicherzustellen, dass wir wissen, was jede Variable bedeutet und welche Maßeinheiten sie hat.
+Beschreibungen der Variablen im `loan50`-Datensatz sind in @tbl-loan-50-variables angegeben.
 
 ```{r}
 #| label: tbl-loan50-df
@@ -236,38 +236,38 @@ loan50_var_def |>
   column_spec(2, width = "30em")
 ```
 
-The data in @tbl-loan50-df represent a \index{data frame}**data frame**, which is a convenient and common way to organize data, especially if collecting data in a spreadsheet.
-A data frame where each row is a unique case (observational unit), each column is a variable, and each cell is a single value is commonly referred to as \index{tidy data}**tidy data** [@wickham2014].
+Die Daten in @tbl-loan50-df repräsentieren einen \index{data frame}**Datenrahmen**, der eine praktische und gebräuchliche Methode zur Organisation von Daten darstellt, insbesondere beim Erfassen von Daten in einer Tabellenkalkulation.
+Ein Datenrahmen, bei dem jede Zeile ein eindeutiger Fall (Beobachtungseinheit) ist, jede Spalte eine Variable und jede Zelle einen einzelnen Wert enthält, wird allgemein als \index{tidy data}**aufgeräumte Daten** bezeichnet [@wickham2014].
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "data frame", "tidy data")
 ```
 
-When recording data, use a tidy data frame unless you have a very good reason to use a different structure.
-This structure allows new cases to be added as rows or new variables as new columns and facilitates visualization, summarization, and other statistical analyses.
+Verwenden Sie beim Erfassen von Daten einen aufgeräumten Datenrahmen, sofern Sie keinen sehr guten Grund haben, eine andere Struktur zu verwenden.
+Diese Struktur ermöglicht es, neue Fälle als Zeilen oder neue Variablen als neue Spalten hinzuzufügen, und erleichtert die Visualisierung, Zusammenfassung und andere statistische Analysen.
 
 ::: {.guidedpractice data-latex=""}
-The grades for assignments, quizzes, and exams in a course are often recorded in a gradebook that takes the form of a data frame.
-How might you organize a course's grade data using a data frame?
-Describe the observational units and variables.[^01-data-hello-3]
+Die Noten für Hausaufgaben, Tests und Prüfungen in einem Kurs werden häufig in einem Notenbuch erfasst, das die Form eines Datenrahmens hat.
+Wie würden Sie die Notendaten eines Kurses mit einem Datenrahmen organisieren?
+Beschreiben Sie die Beobachtungseinheiten und Variablen.[^01-data-hello-3]
 :::
 
-[^01-data-hello-3]: There are multiple strategies that can be followed.
-    One common strategy is to have each student represented by a row, and then add a column for each assignment, quiz, or exam.
-    Under this setup, it is easy to review a single line to understand the grade history of a student.
-    There should also be columns to include student information, such as one column to list student names.
+[^01-data-hello-3]: Es gibt mehrere mögliche Strategien.
+    Eine gängige Strategie besteht darin, jeden Schüler durch eine Zeile darzustellen und dann eine Spalte für jede Hausaufgabe, jeden Test oder jede Prüfung hinzuzufügen.
+    Bei dieser Einrichtung ist es einfach, eine einzelne Zeile zu überprüfen, um die Notenhistorie eines Schülers zu verstehen.
+    Es sollte auch Spalten geben, die Schülerinformationen enthalten, z. B. eine Spalte zur Auflistung von Schülernamen.
 
 ::: {.guidedpractice data-latex=""}
-We consider data for 3,142 counties in the United States, which includes the name of each county, the state where it resides, its population in 2017, the population change from 2010 to 2017, poverty rate, and nine additional characteristics.
-How might these data be organized in a data frame?[^01-data-hello-4]
+Wir betrachten Daten für 3.142 Landkreise in den Vereinigten Staaten, die den Namen jedes Landkreises, den Bundesstaat, in dem er liegt, seine Bevölkerung im Jahr 2017, die Bevölkerungsveränderung von 2010 bis 2017, die Armutsquote und neun weitere Merkmale umfassen.
+Wie könnten diese Daten in einem Datenrahmen organisiert werden?[^01-data-hello-4]
 :::
 
-[^01-data-hello-4]: Each county may be viewed as a case, and there are eleven pieces of information recorded for each case.
-    A table with 3,142 rows and 14 columns could hold these data, where each row represents a county and each column represents a particular piece of information.
+[^01-data-hello-4]: Jeder Landkreis kann als Fall betrachtet werden, und es werden elf Informationen für jeden Fall aufgezeichnet.
+    Eine Tabelle mit 3.142 Zeilen und 14 Spalten könnte diese Daten aufnehmen, wobei jede Zeile einen Landkreis und jede Spalte ein bestimmtes Informationselement repräsentiert.
 
-The data described in the Guided Practice above represents the `county` dataset, which is shown as a data frame in @tbl-county-df.
-The variables as well as the variables in the dataset that did not fit in @tbl-county-df are described in @tbl-county-variables.
+Die in der Geführten Übung oben beschriebenen Daten repräsentieren den `county`-Datensatz, der als Datenrahmen in @tbl-county-df dargestellt wird.
+Die Variablen sowie die Variablen im Datensatz, die nicht in @tbl-county-df passten, sind in @tbl-county-variables beschrieben.
 
 ```{r}
 #| label: tbl-county-df
@@ -323,45 +323,45 @@ county_var_def |>
 ```
 
 ::: {.data data-latex=""}
-The [`county`](http://openintrostat.github.io/usdata/reference/county.html) data can be found in the [**usdata**](http://openintrostat.github.io/usdata) R package.
+Die Daten [`county`](http://openintrostat.github.io/usdata/reference/county.html) sind im R-Paket [**usdata**](http://openintrostat.github.io/usdata) zu finden.
 :::
 
-### Types of variables {#sec-variable-types}
+### Arten von Variablen {#sec-variable-types}
 
-Examine the `unemployment_rate`, `pop2017`, `state`, and `median_edu` variables in the `county` dataset.
-Each of these variables is inherently different from the other three, yet some share certain characteristics.
+Betrachten Sie die Variablen `unemployment_rate`, `pop2017`, `state` und `median_edu` im `county`-Datensatz.
+Jede dieser Variablen unterscheidet sich grundlegend von den anderen dreien, dennoch teilen einige bestimmte Merkmale.
 
-First consider `unemployment_rate`, which is said to be a \index{variable!numerical}**numerical** variable since it can take a wide range of numerical values, and it is sensible to add, subtract, or take averages with those values.
-On the other hand, we would not classify a variable reporting telephone area codes as numerical since the average, sum, and difference of area codes does not have any clear meaning.
-Instead, we would consider area codes as a categorical variable.
+Betrachten wir zunächst `unemployment_rate`, das als \index{variable!numerical}**numerische** Variable bezeichnet wird, da es einen weiten Bereich numerischer Werte annehmen kann und es sinnvoll ist, diese Werte zu addieren, subtrahieren oder Mittelwerte zu bilden.
+Andererseits würden wir eine Variable, die Telefonvorwahlnummern angibt, nicht als numerisch klassifizieren, da der Durchschnitt, die Summe und die Differenz von Vorwahlnummern keine klare Bedeutung haben.
+Stattdessen würden wir Vorwahlnummern als kategoriale Variable betrachten.
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "numerical")
 ```
 
-The `pop2017` variable is also numerical, although it seems to be a little different than `unemployment_rate`.
-This variable of the population count can only take whole non-negative numbers (0, 1, 2, ...).
-For this reason, the population variable is said to be **discrete**\index{variable!discrete} since it can only take numerical values with jumps.
-On the other hand, the unemployment rate variable is said to be **continuous**\index{variable!continuous}.
+Die Variable `pop2017` ist ebenfalls numerisch, obwohl sie sich etwas von `unemployment_rate` zu unterscheiden scheint.
+Diese Variable für die Bevölkerungsanzahl kann nur ganze nicht-negative Zahlen (0, 1, 2, ...) annehmen.
+Aus diesem Grund wird die Bevölkerungsvariable als **diskret**\index{variable!discrete} bezeichnet, da sie nur numerische Werte mit Sprüngen annehmen kann.
+Die Arbeitslosenquotenvariable hingegen wird als **stetig**\index{variable!continuous} bezeichnet.
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "discrete", "continuous")
 ```
 
-The variable `state` can take up to 51 values after accounting for Washington, DC: Alabama, Alaska, ..., and Wyoming.
-Because the responses themselves are categories, `state` is called a **categorical**\index{variable!categorical} variable, and the possible values (states) are called the variable's **levels**\index{variable!levels} (e.g., District of Columbia, Alabama, Alaska, etc.) .
+Die Variable `state` kann bis zu 51 Werte annehmen, wenn Washington, DC berücksichtigt wird: Alabama, Alaska, ..., und Wyoming.
+Da die Antworten selbst Kategorien sind, wird `state` als **kategorial**\index{variable!categorical} bezeichnet, und die möglichen Werte (Bundesstaaten) werden als **Ausprägungen**\index{variable!levels} der Variablen bezeichnet (z. B. District of Columbia, Alabama, Alaska usw.) .
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "categorical", "level")
 ```
 
-Finally, consider the `median_edu` variable, which describes the median education level of county residents and takes values `below_hs`, `hs_diploma`, `some_college`, or `bachelors` in each county.
-This variable seems to be a hybrid: it is a categorical variable, but the levels have a natural ordering.
-A variable with these properties is called an **ordinal**\index{variable!ordinal} variable, while a regular categorical variable without this type of special ordering is called a **nominal**\index{variable!nominal} variable.
-To simplify analyses, any categorical variable in this book will be treated as a nominal (unordered) categorical variable (see @fig-variables).
+Betrachten wir schließlich die Variable `median_edu`, die das mittlere Bildungsniveau der Landkreisbewohner beschreibt und die Werte `below_hs`, `hs_diploma`, `some_college` oder `bachelors` in jedem Landkreis annimmt.
+Diese Variable scheint ein Hybrid zu sein: Sie ist eine kategoriale Variable, aber die Ausprägungen haben eine natürliche Reihenfolge.
+Eine Variable mit diesen Eigenschaften wird als **ordinal**\index{variable!ordinal} bezeichnet, während eine reguläre kategoriale Variable ohne diese Art von spezieller Reihenfolge als **nominal**\index{variable!nominal} bezeichnet wird.
+Um Analysen zu vereinfachen, wird jede kategoriale Variable in diesem Buch als nominale (ungeordnete) kategoriale Variable behandelt (siehe @fig-variables).
 
 ```{r}
 #| include: false
@@ -409,51 +409,51 @@ par(par_og) # restore original par
 ```
 
 ::: {.workedexample data-latex=""}
-Data were collected about students in a statistics course.
-Three variables were recorded for each student: number of siblings, student height, and whether the student had previously taken a statistics course.
-Classify each of the variables as continuous numerical, discrete numerical, or categorical.
+Es wurden Daten über Studenten in einem Statistikkurs erhoben.
+Für jeden Studenten wurden drei Variablen aufgezeichnet: Anzahl der Geschwister, Körpergröße des Studenten und ob der Student zuvor einen Statistikkurs belegt hatte.
+Klassifizieren Sie jede der Variablen als stetig numerisch, diskret numerisch oder kategorial.
 
 ------------------------------------------------------------------------
 
-The number of siblings and student height represent numerical variables.
-Because the number of siblings is a count, it is discrete.
-Height varies continuously, so it is a continuous numerical variable.
-The last variable classifies students into two categories -- those who have and those who have not taken a statistics course -- which makes this variable categorical.
+Die Anzahl der Geschwister und die Körpergröße des Studenten sind numerische Variablen.
+Da die Anzahl der Geschwister eine Zählung ist, ist sie diskret.
+Die Körpergröße variiert stetig, daher ist sie eine stetig numerische Variable.
+Die letzte Variable klassifiziert Studenten in zwei Kategorien -- diejenigen, die einen Statistikkurs belegt haben, und diejenigen, die keinen belegt haben -- was diese Variable kategorial macht.
 :::
 
 ::: {.guidedpractice data-latex=""}
-An experiment is evaluating the effectiveness of a new drug in treating migraines.
-A `group` variable is used to indicate the experiment group for each patient: treatment or control.
-The `num_migraines` variable represents the number of migraines the patient experienced during a 3-month period.
-Classify each variable as either numerical or categorical?[^01-data-hello-5]
+Ein Experiment bewertet die Wirksamkeit eines neuen Medikaments bei der Behandlung von Migräne.
+Eine Variable `group` wird verwendet, um die Experimentgruppe für jeden Patienten anzugeben: Behandlung oder Kontrolle.
+Die Variable `num_migraines` gibt die Anzahl der Migräneanfälle an, die der Patient in einem Zeitraum von 3 Monaten erlebt hat.
+Klassifizieren Sie jede Variable als numerisch oder kategorial.[^01-data-hello-5]
 :::
 
-[^01-data-hello-5]: The `group` variable can take just one of two group names, making it categorical.
-    The `num_migraines` variable describes a count of the number of migraines, which is an outcome where basic arithmetic is sensible, which means this is a numerical outcome; more specifically, since it represents a count, `num_migraines` is a discrete numerical variable.
+[^01-data-hello-5]: Die Variable `group` kann nur einen von zwei Gruppennamen annehmen, was sie kategorial macht.
+    Die Variable `num_migraines` beschreibt eine Zählung der Anzahl von Migräneanfällen, was ein Ergebnis ist, bei dem grundlegende Arithmetik sinnvoll ist, was bedeutet, dass dies ein numerisches Ergebnis ist; genauer gesagt ist `num_migraines`, da es eine Zählung darstellt, eine diskret numerische Variable.
 
-### Relationships between variables {#sec-variable-relations}
+### Beziehungen zwischen Variablen {#sec-variable-relations}
 
-Many analyses are motivated by a researcher looking for a relationship between two or more variables.
-A social scientist may like to answer some of the following questions:
+Viele Analysen werden von Forschern motiviert, die nach einer Beziehung zwischen zwei oder mehr Variablen suchen.
+Ein Sozialwissenschaftler möchte vielleicht einige der folgenden Fragen beantworten:
 
-> Does a higher-than-average increase in county population tend to correspond to counties with higher or lower median household incomes?
+> Entspricht ein überdurchschnittlicher Anstieg der Landkreisbevölkerung tendenziell Landkreisen mit höherem oder niedrigerem mittleren Haushaltseinkommen?
 
-> If homeownership in one county is lower than the national average, will the percent of housing units that are in multi-unit structures in that county tend to be above or below the national average?
+> Wenn das Wohneigentum in einem Landkreis unter dem nationalen Durchschnitt liegt, wird der Prozentsatz der Wohneinheiten in Mehrfamilienhäusern in diesem Landkreis dann über oder unter dem nationalen Durchschnitt liegen?
 
-> How much can the median education level explain the median household income for counties in the US?
+> Wie gut kann das mittlere Bildungsniveau das mittlere Haushaltseinkommen für Landkreise in den USA erklären?
 
-To answer these questions, data must be collected, such as the `county` dataset shown in @tbl-county-df.
-Examining \index{summary statistic}**summary statistics** can provide numerical insights about the specifics of each of these questions.
-Alternatively, graphs can be used to visually explore the data, potentially providing more insight than a summary statistic.
+Um diese Fragen zu beantworten, müssen Daten gesammelt werden, wie z. B. der `county`-Datensatz in @tbl-county-df.
+Die Untersuchung von \index{summary statistic}**Kennzahlen** kann numerische Einblicke in die Besonderheiten jeder dieser Fragen liefern.
+Alternativ können Grafiken verwendet werden, um die Daten visuell zu erkunden, was möglicherweise mehr Einblick bietet als eine Kennzahl.
 
 \clearpage
 
-\index{scatterplot}**Scatterplots** are one type of graph used to study the relationship between two numerical variables.
-@fig-county-multi-unit-homeownership displays the relationship between the variables `homeownership` and `multi_unit`, which is the percent of housing units that are in multi-unit structures (e.g., apartments, condos).
-Each point on the plot represents a single county.
-For instance, the highlighted dot corresponds to County 413 in the `county` dataset: Chattahoochee County, Georgia, which has 39.4% of housing units that are in multi-unit structures and a homeownership rate of 31.3%.
-The scatterplot suggests a relationship between the two variables: counties with a higher rate of housing units that are in multi-unit structures tend to have lower homeownership rates.
-We might brainstorm as to why this relationship exists and investigate each idea to determine which are the most reasonable explanations.
+\index{scatterplot}**Streudiagramme** sind eine Art von Grafik, die zur Untersuchung der Beziehung zwischen zwei numerischen Variablen verwendet wird.
+@fig-county-multi-unit-homeownership zeigt die Beziehung zwischen den Variablen `homeownership` und `multi_unit`, die den Prozentsatz der Wohneinheiten in Mehrfamilienhäusern (z. B. Wohnungen, Eigentumswohnungen) darstellt.
+Jeder Punkt im Diagramm repräsentiert einen einzelnen Landkreis.
+Beispielsweise entspricht der hervorgehobene Punkt dem Landkreis 413 im `county`-Datensatz: Chattahoochee County, Georgia, das 39,4% Wohneinheiten in Mehrfamilienhäusern und eine Wohneigentumsquote von 31,3% hat.
+Das Streudiagramm legt eine Beziehung zwischen den beiden Variablen nahe: Landkreise mit einem höheren Anteil an Wohneinheiten in Mehrfamilienhäusern tendieren zu niedrigeren Wohneigentumsquoten.
+Wir könnten Brainstorming betreiben, warum diese Beziehung besteht, und jede Idee untersuchen, um festzustellen, welche die vernünftigsten Erklärungen sind.
 
 ```{r}
 #| label: fig-county-multi-unit-homeownership
@@ -500,8 +500,8 @@ ggplot(county, aes(x = multi_unit, y = homeownership)) +
   scale_y_continuous(labels = percent_format(scale = 1))
 ```
 
-The multi-unit and homeownership rates are said to be associated because the plot shows a discernible pattern.
-When two variables show some connection with one another, they are called **associated**\index{association} variables.
+Die Mehrfamilienhaus- und Wohneigentumsquoten gelten als assoziiert, weil das Diagramm ein erkennbares Muster zeigt.
+Wenn zwei Variablen eine Verbindung zueinander zeigen, werden sie als **assoziierte**\index{association} Variablen bezeichnet.
 
 ```{r}
 #| include: false
@@ -509,22 +509,22 @@ terms_chp_1 <- c(terms_chp_1, "associated")
 ```
 
 ::: {.guidedpractice data-latex=""}
-Examine the variables in the `loan50` dataset, which are described in @tbl-loan-50-variables.
-Create two questions about possible relationships between variables in `loan50` that are of interest to you.[^01-data-hello-6]
+Untersuchen Sie die Variablen im `loan50`-Datensatz, die in @tbl-loan-50-variables beschrieben sind.
+Formulieren Sie zwei Fragen zu möglichen Beziehungen zwischen Variablen in `loan50`, die Sie interessieren.[^01-data-hello-6]
 :::
 
-[^01-data-hello-6]: Two example questions: (1) What is the relationship between loan amount and total income?
-    (2) If someone's income is above the average, will their interest rate tend to be above or below the average?
+[^01-data-hello-6]: Zwei Beispielfragen: (1) Wie ist die Beziehung zwischen Kreditbetrag und Gesamteinkommen?
+    (2) Wenn das Einkommen einer Person überdurchschnittlich ist, wird ihr Zinssatz tendenziell über oder unter dem Durchschnitt liegen?
 
 ::: {.workedexample data-latex=""}
-This example examines the relationship between the percent change in population from 2010 to 2017 and median household income for counties, which is visualized as a scatterplot in @fig-county-pop-change-med-hh-income.
-Are these variables associated?
+Dieses Beispiel untersucht die Beziehung zwischen der prozentualen Bevölkerungsveränderung von 2010 bis 2017 und dem mittleren Haushaltseinkommen für Landkreise, die als Streudiagramm in @fig-county-pop-change-med-hh-income visualisiert wird.
+Sind diese Variablen assoziiert?
 
 ------------------------------------------------------------------------
 
-The larger the median household income for a county, the higher the population growth observed for the county.
-While it isn't true that every county with a higher median household income has a higher population growth, the trend in the plot is evident.
-Since there is some relationship between the variables, they are associated.
+Je höher das mittlere Haushaltseinkommen eines Landkreises, desto höher ist das beobachtete Bevölkerungswachstum des Landkreises.
+Obwohl es nicht stimmt, dass jeder Landkreis mit einem höheren mittleren Haushaltseinkommen ein höheres Bevölkerungswachstum hat, ist der Trend im Diagramm offensichtlich.
+Da eine gewisse Beziehung zwischen den Variablen besteht, sind sie assoziiert.
 :::
 
 ```{r}
@@ -574,16 +574,16 @@ ggplot(county, aes(x = median_hh_income, y = pop_change)) +
   scale_y_continuous(labels = percent_format(scale = 1), limits = c(-40, 40))
 ```
 
-Because there is a downward trend in @fig-county-multi-unit-homeownership -- counties with more housing units that are in multi-unit structures are associated with lower homeownership -- these variables are said to be **negatively associated**\index{association}.
-A **positive association**\index{association} is shown in the relationship between the `median_hh_income` and `pop_change` variables in @fig-county-pop-change-med-hh-income, where counties with higher median household income tend to have higher rates of population growth.
+Da in @fig-county-multi-unit-homeownership ein Abwärtstrend zu beobachten ist -- Landkreise mit mehr Wohneinheiten in Mehrfamilienhäusern sind mit niedrigeren Wohneigentumsquoten assoziiert -- werden diese Variablen als **negativ assoziiert**\index{association} bezeichnet.
+Eine **positive Assoziation**\index{association} zeigt sich in der Beziehung zwischen den Variablen `median_hh_income` und `pop_change` in @fig-county-pop-change-med-hh-income, wobei Landkreise mit höherem mittleren Haushaltseinkommen tendenziell höhere Bevölkerungswachstumsraten aufweisen.
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "positive association", "negative association")
 ```
 
-If two variables are not associated, then they are said to be **independent**\index{independence}\index{independent}.
-That is, two variables are independent if there is no evident relationship between the two.
+Wenn zwei Variablen nicht assoziiert sind, werden sie als **unabhängig**\index{independence}\index{independent} bezeichnet.
+Das heißt, zwei Variablen sind unabhängig, wenn keine offensichtliche Beziehung zwischen den beiden besteht.
 
 ```{r}
 #| include: false
@@ -591,24 +591,24 @@ terms_chp_1 <- c(terms_chp_1, "independent")
 ```
 
 ::: {.important data-latex=""}
-**Associated or independent, not both.**
+**Assoziiert oder unabhängig, nicht beides.**
 
-A pair of variables are either related in some way (associated) or not (independent).
-No pair of variables is both associated and independent.
+Ein Variablenpaar ist entweder in gewisser Weise verwandt (assoziiert) oder nicht (unabhängig).
+Kein Variablenpaar ist sowohl assoziiert als auch unabhängig.
 :::
 
-### Explanatory and response variables
+### Erklärende und Antwortvariablen
 
-When we ask questions about the relationship between two variables, we sometimes also want to determine if the change in one variable causes a change in the other.
-Consider the following rephrasing of an earlier question about the `county` dataset:
+Wenn wir Fragen über die Beziehung zwischen zwei Variablen stellen, möchten wir manchmal auch bestimmen, ob die Veränderung einer Variablen eine Veränderung der anderen verursacht.
+Betrachten Sie die folgende Umformulierung einer früheren Frage zum `county`-Datensatz:
 
-> If there is an increase in the median household income in a county, does this drive an increase in its population?
+> Wenn das mittlere Haushaltseinkommen in einem Landkreis steigt, treibt dies auch einen Anstieg seiner Bevölkerung an?
 
-In this question, we are asking whether one variable affects another.
-If this is our underlying belief, then *median household income* is the **explanatory variable**\index{explanatory variable}\index{variable!explanatory}, and the *population change* is the **response variable**\index{response variable}\index{variable!response} in the hypothesized relationship.[^01-data-hello-7]
+In dieser Frage fragen wir, ob eine Variable eine andere beeinflusst.
+Wenn dies unsere zugrunde liegende Annahme ist, ist das *mittlere Haushaltseinkommen* die **erklärende Variable**\index{explanatory variable}\index{variable!explanatory}, und die *Bevölkerungsveränderung* ist die **Antwortvariable**\index{response variable}\index{variable!response} in der hypothetischen Beziehung.[^01-data-hello-7]
 
-[^01-data-hello-7]: In some disciplines, it's customary to refer to the explanatory variable as the **independent variable**\index{variable!independent}\index{independent variable} and the response variable as the **dependent variable**\index{variable!dependent}\index{dependent variable}.
-    However, this becomes confusing since a *pair* of variables might be independent or dependent, so we avoid this language.
+[^01-data-hello-7]: In einigen Disziplinen ist es üblich, die erklärende Variable als **unabhängige Variable**\index{variable!independent}\index{independent variable} und die Antwortvariable als **abhängige Variable**\index{variable!dependent}\index{dependent variable} zu bezeichnen.
+    Dies wird jedoch verwirrend, da ein *Paar* von Variablen unabhängig oder abhängig sein kann, weshalb wir diese Terminologie vermeiden.
 
 ```{r}
 #| include: false
@@ -616,41 +616,41 @@ terms_chp_1 <- c(terms_chp_1, "explanatory variable", "response variable", "depe
 ```
 
 ::: {.important data-latex=""}
-**Explanatory and response variables.**
+**Erklärende und Antwortvariablen.**
 
-When we suspect one variable might causally affect another, we label the first variable the explanatory variable and the second the response variable.
-We also use the terms **explanatory** and **response** to describe variables where the **response** might be predicted using the **explanatory** even if there is no causal relationship.
+Wenn wir vermuten, dass eine Variable eine andere kausal beeinflussen könnte, bezeichnen wir die erste Variable als erklärende Variable und die zweite als Antwortvariable.
+Wir verwenden auch die Begriffe **erklärend** und **Antwort**, um Variablen zu beschreiben, bei denen die **Antwort** mithilfe der **erklärenden** Variable vorhergesagt werden könnte, auch wenn keine kausale Beziehung besteht.
 
-<center>explanatory variable $\rightarrow$ *might affect* $\rightarrow$ response variable</center>
+<center>erklärende Variable $\rightarrow$ *könnte beeinflussen* $\rightarrow$ Antwortvariable</center>
 
-<br> For many pairs of variables, there is no hypothesized relationship, and these labels would not be applied to either variable in such cases.
+<br> Für viele Variablenpaare gibt es keine hypothetische Beziehung, und diese Bezeichnungen würden in solchen Fällen auf keine der Variablen angewendet.
 :::
 
-Bear in mind that the act of labeling the variables in this way does nothing to guarantee that a causal relationship exists.
-A formal evaluation to check whether one variable causes a change in another requires an experiment.
+Beachten Sie, dass das Bezeichnen der Variablen auf diese Weise nichts dazu beiträgt, das Bestehen einer kausalen Beziehung zu garantieren.
+Eine formale Bewertung, ob eine Variable eine Veränderung in einer anderen verursacht, erfordert ein Experiment.
 
-### Observational studies and experiments
+### Beobachtungsstudien und Experimente
 
-There are two primary types of data collection: experiments and observational studies.
+Es gibt zwei primäre Arten der Datenerhebung: Experimente und Beobachtungsstudien.
 
-When researchers want to evaluate the effect of particular traits, treatments, or conditions, they conduct an **experiment**\index{experiment}\index{study!experiment}.
-For instance, we may suspect drinking a high-calorie energy drink will improve performance in a race.
-To check if there really is a causal relationship between the explanatory variable (whether the runner drank an energy drink or not) and the response variable (the race time), researchers identify a sample of individuals and split them into groups.
-The individuals in each group are *assigned* a treatment.
-When individuals are randomly assigned to a group, the experiment is called a **randomized experiment**\index{study!randomized experiment}\index{randomized experiment}.
-Random assignment organizes the participants in a study into groups that are roughly equal on all aspects, thus allowing us to control for any confounding variables that might affect the outcome (e.g., fitness level, racing experience, etc.). (See @sec-principles-experimental-design for more information on confounding variables.)
-For example, each runner in the experiment could be randomly assigned, perhaps by flipping a coin, into one of two groups: the first group receives a **placebo**\index{placebo} (fake treatment, in this case a no-calorie drink) and the second group receives the high-calorie energy drink.
-See the case study in @sec-case-study-stents-strokes for another example of an experiment, though that study did not employ a placebo.
+Wenn Forscher die Wirkung bestimmter Merkmale, Behandlungen oder Bedingungen bewerten wollen, führen sie ein **Experiment**\index{experiment}\index{study!experiment} durch.
+Zum Beispiel könnten wir vermuten, dass das Trinken eines kalorienreichen Energydrinks die Leistung in einem Rennen verbessern wird.
+Um zu überprüfen, ob wirklich eine kausale Beziehung zwischen der erklärenden Variablen (ob der Läufer einen Energydrink getrunken hat oder nicht) und der Antwortvariablen (die Rennzeit) besteht, identifizieren Forscher eine Stichprobe von Personen und teilen sie in Gruppen auf.
+Den Personen in jeder Gruppe wird eine Behandlung *zugewiesen*.
+Wenn Personen zufällig einer Gruppe zugewiesen werden, wird das Experiment als **randomisiertes Experiment**\index{study!randomized experiment}\index{randomized experiment} bezeichnet.
+Die Zufallszuweisung ordnet die Teilnehmer einer Studie in Gruppen ein, die in allen Aspekten ungefähr gleich sind, und ermöglicht es uns so, alle Störvariablen zu kontrollieren, die das Ergebnis beeinflussen könnten (z. B. Fitnessniveau, Rennerfahrung usw.). (Weitere Informationen zu Störvariablen finden Sie in @sec-principles-experimental-design.)
+Zum Beispiel könnte jeder Läufer im Experiment zufällig, vielleicht durch Münzwurf, einer von zwei Gruppen zugewiesen werden: Die erste Gruppe erhält ein **Placebo**\index{placebo} (Scheinbehandlung, in diesem Fall ein kalorienfreies Getränk) und die zweite Gruppe erhält den kalorienreichen Energydrink.
+Weitere Informationen zu einem Experiment finden Sie in der Fallstudie in @sec-case-study-stents-strokes, obwohl diese Studie kein Placebo verwendet hat.
 
 ```{r}
 #| include: false
 terms_chp_1 <- c(terms_chp_1, "experiment", "randomized experiment", "placebo")
 ```
 
-Researchers perform an **observational study**\index{study!observational}\index{observational study} when they collect data in a way that does not directly interfere with how the data arise.
-For instance, researchers may collect information via surveys, review medical or company records, or follow a **cohort**\index{cohort}\index{study!cohort} of many similar individuals to form hypotheses about why certain diseases might develop.
-In each of these situations, researchers merely observe the data that arise.
-In general, observational studies can provide evidence of a naturally occurring association between variables, but they cannot by themselves show a causal connection as they do not offer a mechanism for controlling for confounding variables. (See @sec-principles-experimental-design for more information on confounding variables.)
+Forscher führen eine **Beobachtungsstudie**\index{study!observational}\index{observational study} durch, wenn sie Daten auf eine Weise sammeln, die nicht direkt in die Entstehung der Daten eingreift.
+Zum Beispiel können Forscher Informationen über Umfragen sammeln, medizinische oder Unternehmensunterlagen prüfen oder eine **Kohorte**\index{cohort}\index{study!cohort} vieler ähnlicher Personen verfolgen, um Hypothesen darüber zu bilden, warum bestimmte Krankheiten entstehen könnten.
+In jeder dieser Situationen beobachten Forscher lediglich die entstehenden Daten.
+Im Allgemeinen können Beobachtungsstudien Belege für eine natürlich vorkommende Assoziation zwischen Variablen liefern, aber sie können für sich allein keine kausale Verbindung belegen, da sie keinen Mechanismus zur Kontrolle von Störvariablen bieten. (Weitere Informationen zu Störvariablen finden Sie in @sec-principles-experimental-design.)
 
 ```{r}
 #| include: false
@@ -658,30 +658,30 @@ terms_chp_1 <- c(terms_chp_1, "observational study", "cohort")
 ```
 
 ::: {.important data-latex=""}
-**Association** $\neq$ **Causation.**
+**Assoziation** $\neq$ **Kausalität.**
 
-In general, association does not imply causation.
-An advantage of a randomized experiment is that it is easier to establish causal relationships with such a study.
-The main reason for this is that observational studies do not control for confounding variables, and hence establishing causal relationships with observational studies requires advanced statistical methods (that are beyond the scope of this book).
-We revisit ideas of confounding when we discuss experiments in @sec-principles-experimental-design.
+Im Allgemeinen impliziert Assoziation keine Kausalität.
+Ein Vorteil eines randomisierten Experiments besteht darin, dass mit einer solchen Studie kausale Beziehungen leichter nachgewiesen werden können.
+Der Hauptgrund dafür ist, dass Beobachtungsstudien keine Störvariablen kontrollieren und daher die Feststellung kausaler Beziehungen mit Beobachtungsstudien fortgeschrittene statistische Methoden erfordert (die über den Umfang dieses Buches hinausgehen).
+Wir greifen das Thema Konfundierung wieder auf, wenn wir Experimente in @sec-principles-experimental-design besprechen.
 :::
 
 \vspace{10mm}
 
-## Chapter review {#sec-chp1-review}
+## Kapitelzusammenfassung {#sec-chp1-review}
 
-### Summary
+### Zusammenfassung
 
-This chapter introduced you to the world of data.
-Data can be organized in many ways but tidy data, where each row represents an observation and each column represents a variable, lends itself most easily to statistical analysis.
-Many of the ideas from this chapter will be revisited as we move on to doing end-to-end data analyses.
-In the next chapter you're going to learn about how we can design studies to collect the data we need to make conclusions with the desired scope of inference.
+Dieses Kapitel hat Sie in die Welt der Daten eingeführt.
+Daten können auf viele Arten organisiert werden, aber aufgeräumte Daten, bei denen jede Zeile eine Beobachtung und jede Spalte eine Variable repräsentiert, eignen sich am besten für statistische Analysen.
+Viele der Ideen aus diesem Kapitel werden wieder aufgegriffen, wenn wir zu vollständigen Datenanalysen übergehen.
+Im nächsten Kapitel erfahren Sie, wie wir Studien entwerfen können, um die Daten zu sammeln, die wir benötigen, um Schlussfolgerungen mit dem gewünschten Schlussfolgerungsbereich zu ziehen.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-1.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-1 aufgeführt.
+Wenn Sie sich nicht sicher sind, was einige dieser Begriffe bedeuten, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-1
@@ -692,9 +692,9 @@ make_terms_table(terms_chp_1)
 
 \clearpage
 
-## Exercises {#sec-chp1-exercises}
+## Aufgaben {#sec-chp1-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-01].
+Antworten auf ungerade nummerierte Aufgaben finden sich im [Anhang -@sec-exercise-solutions-01].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_01-ex-data-hello.qmd >}}
