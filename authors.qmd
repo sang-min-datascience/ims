@@ -1,4 +1,4 @@
-# Authors {.unnumbered .unlisted}
+# Autoren {.unnumbered .unlisted}
 
 \vspace{-5mm}
 
@@ -13,12 +13,12 @@ Duke University, Posit, PBC.\
 [mine\@openintro.org](mailto:mine@openintro.org){.email}
 :::
 
-Mine Çetinkaya-Rundel is Professor of the Practice at the Department of Statistical Science at Duke University and Developer Educator at Posit.
-Mine's work focuses on innovation in statistics and data science pedagogy, with an emphasis on computing, reproducible research, student-centered learning, and open-source education as well as pedagogical approaches for enhancing retention of women and under-represented minorities in STEM.
-Mine works on integrating computation into the undergraduate statistics curriculum, using reproducible research methodologies and analysis of real and complex datasets.
-She also organizes [ASA DataFest](https://ww2.amstat.org/education/datafest/), an annual two-day competition in which teams of undergraduate students work to reveal insights into a rich and complex dataset.
-Mine has been working on the [OpenIntro](https://www.openintro.org/) project since its founding and as part of this project she co-authored four open-source introductory statistics textbooks (including this one!).
-She is also the creator and maintainer of [datasciencebox.org](https://datasciencebox.org/) and she teaches the popular Statistics with R MOOC on Coursera.
+Mine Çetinkaya-Rundel ist Professorin für die Praxis am Institut für Statistikwissenschaften der Duke University und Developer Educator bei Posit.
+Mines Arbeit konzentriert sich auf Innovation in der Statistik- und Datenwissenschaftspädagogik, mit Schwerpunkt auf Computing, reproduzierbarer Forschung, schülerorientiertem Lernen und Open-Source-Bildung sowie auf pädagogischen Ansätzen zur Verbesserung der Bindung von Frauen und unterrepräsentierten Minderheiten in MINT-Fächern.
+Mine arbeitet daran, Computation in das Statistikstudium auf Bachelor-Ebene zu integrieren, unter Verwendung von Methoden der reproduzierbaren Forschung und der Analyse realer und komplexer Datensätze.
+Sie organisiert auch den [ASA DataFest](https://ww2.amstat.org/education/datafest/), einen jährlichen zweitägigen Wettbewerb, bei dem Teams von Studierenden Einblicke in einen umfangreichen und komplexen Datensatz gewinnen.
+Mine arbeitet seit der Gründung am [OpenIntro](https://www.openintro.org/)-Projekt mit und hat im Rahmen dieses Projekts vier Open-Source-Einführungs-Statistiklehrbücher mitgeschrieben (einschließlich dieses hier!).
+Sie ist auch die Erstellerin und Maintainerin von [datasciencebox.org](https://datasciencebox.org/) und lehrt den beliebten MOOC „Statistics with R" auf Coursera.
 \newline
 
 <br>
@@ -34,9 +34,9 @@ Pomona College\
 [jo.hardin\@pomona.edu](mailto:jo.hardin@pomona.edu){.email}
 :::
 
-Jo Hardin is Professor of Mathematics and Statistics at Pomona College.
-She collaborates with molecular biologists to create novel statistical methods for analyzing high throughput data.
-She has also worked extensively in statistics and data science education, facilitating modern curricula for higher education instructors.
-She was a co-author on the [2014 ASA Curriculum Guidelines for Undergraduate Programs in Statistical Science](https://www.amstat.org/asa/education/Curriculum-Guidelines-for-Undergraduate-Programs-in-Statistical-Science.aspx), and she writes on the blog [teachdatascience.com](https://teachdatascience.com/).
-The best part of her job is collaborating with undergraduate students.
-In her spare time, she loves running, hiking, and jigsaw puzzles.
+Jo Hardin ist Professorin für Mathematik und Statistik am Pomona College.
+Sie arbeitet mit Molekularbiologen zusammen, um neue statistische Methoden zur Analyse von Hochdurchsatzdaten zu entwickeln.
+Sie hat auch umfangreiche Arbeit in der Statistik- und Datenwissenschaftsausbildung geleistet und moderne Lehrpläne für Hochschullehrende entwickelt.
+Sie war Mitautorin der [ASA-Lehrplanrichtlinien 2014 für Bachelor-Studiengänge in Statistikwissenschaften](https://www.amstat.org/asa/education/Curriculum-Guidelines-for-Undergraduate-Programs-in-Statistical-Science.aspx), und sie schreibt im Blog [teachdatascience.com](https://teachdatascience.com/).
+Der beste Teil ihrer Arbeit ist die Zusammenarbeit mit Studierenden im Bachelor-Bereich.
+In ihrer Freizeit liebt sie Laufen, Wandern und Puzzles.

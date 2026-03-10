@@ -1,7 +1,7 @@
 ::: welcome
 
 ::: {.content-hidden unless-format="html"}
-# Welcome to IMS2 {.unnumbered .unlisted}
+# Willkommen bei IMS2 {.unnumbered .unlisted}
 :::
 
 \chapter*{}
@@ -9,15 +9,15 @@
 \vfill
 
 ::: {.content-visible when-format="html"}
-This is the website for **Introduction to Modern Statistics**, Second Edition by Mine Çetinkaya-Rundel and Johanna Hardin.
-This website is hosted by [Netlify](https://www.netlify.com).
-Introduction to Modern Statistics, which we'll refer to as IMS going forward, is a textbook from the [OpenIntro](https://www.openintro.org/) project.
+Dies ist die Website für **Introduction to Modern Statistics**, Zweite Ausgabe von Mine Çetinkaya-Rundel und Johanna Hardin.
+Diese Website wird von [Netlify](https://www.netlify.com) gehostet.
+Introduction to Modern Statistics, das wir im Folgenden als IMS bezeichnen, ist ein Lehrbuch des [OpenIntro](https://www.openintro.org/)-Projekts.
 
-The book will always be available for free here. It is also available in PDF (for free or for the amount you choose to contribute) on Leanpub and in black&white paperback for purchase for $25.
+Das Buch ist hier immer kostenlos verfügbar. Es ist auch als PDF (kostenlos oder gegen einen frei wählbaren Beitrag) auf Leanpub sowie als Schwarz-Weiß-Taschenbuch für 25 $ erhältlich.
 <br><br>
-<a href="https://leanpub.com/imstat" target="_blank"><img src="images/_icons/file.png" width="30px">&nbsp;<strong>Download PDF</strong></a>
+<a href="https://leanpub.com/imstat" target="_blank"><img src="images/_icons/file.png" width="30px">&nbsp;<strong>PDF herunterladen</strong></a>
 <br>
-<a href="https://www.openintro.org/go?id=ims2_bw_pb&referrer=/book/ims/online"><img src="images/_icons/book.png" width="30px">&nbsp;<strong>Purchase paperback</strong></a>
+<a href="https://www.openintro.org/go?id=ims2_bw_pb&referrer=/book/ims/online"><img src="images/_icons/book.png" width="30px">&nbsp;<strong>Taschenbuch kaufen</strong></a>
 <br><br>
 :::
 
@@ -36,18 +36,18 @@ Copyright © 2024.
 Copyright $\copyright$ 2024.
 :::
 
-Second Edition.
+Zweite Ausgabe.
 
-Version date: `r format(Sys.Date(), "%B %d, %Y")`.
+Version vom: `r format(Sys.Date(), "%B %d, %Y")`.
 
-This textbook and its supplements, including slides, labs, and interactive tutorials, may be downloaded for free at\
+Dieses Lehrbuch und seine Ergänzungen, einschließlich Folien, Labore und interaktive Tutorials, können kostenlos heruntergeladen werden unter\
 [**openintro.org/book/ims**](http://openintro.org/book/ims).
 
-This textbook is a derivative of *OpenIntro Statistics* 4th Edition and *Introduction to Statistics with Randomization and Simulation* 1st Edition by Diez, Barr, and Çetinkaya-Rundel, and it's available under a Creative Commons Attribution-ShareAlike 3.0 Unported United States License.
-License details are available at the Creative Commons website:\
+Dieses Lehrbuch ist eine Ableitung von *OpenIntro Statistics* 4. Ausgabe und *Introduction to Statistics with Randomization and Simulation* 1. Ausgabe von Diez, Barr und Çetinkaya-Rundel und steht unter einer Creative Commons Attribution-ShareAlike 3.0 Unported United States-Lizenz.
+Lizenzdetails sind auf der Creative Commons-Website verfügbar:\
 [**creativecommons.org**](https://www.openintro.org/go/?id=creativecommons_org&referrer=ims1_pdf).
 
-Source files for this book can be found on GitHub at\
+Quelldateien für dieses Buch sind auf GitHub verfügbar unter\
 [github.com/openintrostat/ims](https://github.com/openintrostat/ims).
 :::
 
