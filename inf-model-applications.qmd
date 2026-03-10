@@ -1,26 +1,26 @@
-# Applications: Model and infer {#sec-inf-model-applications}
+# Anwendungen: Modell und Inferenz {#sec-inf-model-applications}
 
 ```{r}
 #| include: false
 source("_common.R")
 ```
 
-## Case study: Mario Kart {#sec-case-study-mario-cart}
+## Fallstudie: Mario Kart {#sec-case-study-mario-cart}
 
-In this case study, we consider Ebay auctions of a video game called *Mario Kart* for the Nintendo Wii.
-The outcome variable of interest is the total price of an auction, which is the highest bid plus the shipping cost.
-We will try to determine how total price is related to each characteristic in an auction while simultaneously controlling for other variables.
-For instance, all other characteristics held constant, are longer auctions associated with higher or lower prices?
-And, on average, how much more do buyers tend to pay for additional Wii wheels (plastic steering wheels that attach to the Wii controller) in auctions?
-Multiple regression will help us answer these and other questions.
+In dieser Fallstudie betrachten wir eBay-Auktionen eines Videospiels namens *Mario Kart* für die Nintendo Wii.
+Die interessierende Ergebnisvariable ist der Gesamtpreis einer Auktion, also das höchste Gebot plus die Versandkosten.
+Wir werden versuchen zu bestimmen, wie der Gesamtpreis mit den einzelnen Merkmalen einer Auktion zusammenhängt, während gleichzeitig andere Variablen kontrolliert werden.
+Zum Beispiel: Sind bei sonst gleichen Merkmalen längere Auktionen mit höheren oder niedrigeren Preisen verbunden?
+Und wie viel mehr zahlen Käufer im Durchschnitt für zusätzliche Wii-Lenkräder (Plastik-Lenkräder, die am Wii-Controller befestigt werden) in Auktionen?
+Multiple Regression wird uns helfen, diese und andere Fragen zu beantworten.
 
 ::: {.data data-latex=""}
-The [`mariokart`](http://openintrostat.github.io/openintro/reference/mariokart.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`mariokart`](http://openintrostat.github.io/openintro/reference/mariokart.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-The `mariokart` dataset includes results from 141 auctions.
-Four observations from this dataset are shown in @tbl-mariokart-data-frame, and descriptions for each variable are shown in @tbl-mariokart-var-def.
-Notice that the condition and stock photo variables are **indicator variables**\index{indicator variable}\index{variable!indicator}, similar to `bankruptcy` in the `loans` dataset from @sec-inf-model-mlr.
+Der Datensatz `mariokart` enthält Ergebnisse aus 141 Auktionen.
+Vier Beobachtungen aus diesem Datensatz sind in @tbl-mariokart-data-frame dargestellt, und Beschreibungen für jede Variable sind in @tbl-mariokart-var-def zu finden.
+Beachten Sie, dass die Variablen für den Zustand und das Stockfoto **Indikatorvariablen**\index{indicator variable}\index{variable!indicator} sind, ähnlich wie `bankruptcy` im `loans`-Datensatz aus @sec-inf-model-mlr.
 
 ```{r}
 #| label: tbl-mariokart-data-frame
@@ -68,13 +68,13 @@ mariokart_var_def |>
 
 \clearpage
 
-### Mathematical approach to linear models
+### Mathematischer Ansatz für lineare Modelle
 
-In @tbl-mariokart-model-output we fit a mathematical linear regression model with the game's condition as a predictor of auction price.
+In @tbl-mariokart-model-output haben wir ein mathematisches lineares Regressionsmodell angepasst, das den Spielzustand als Prädiktor für den Auktionspreis verwendet.
 
 $$E[\texttt{price}] = \beta_0 + \beta_1\times \texttt{cond\_new}$$
 
-Results of the model are summarized below:
+Die Ergebnisse des Modells sind nachfolgend zusammengefasst:
 
 ```{r}
 #| label: tbl-mariokart-model-output
@@ -99,26 +99,26 @@ lm(price ~ cond_new, data = mariokart) |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Write down the equation for the model, note whether the slope is statistically different from zero, and interpret the coefficient.[^27-inf-model-applications-1]
+Schreiben Sie die Gleichung des Modells auf, notieren Sie, ob die Steigung statistisch signifikant von null verschieden ist, und interpretieren Sie den Koeffizienten.[^27-inf-model-applications-1]
 :::
 
-[^27-inf-model-applications-1]: The equation for the line may be written as $\widehat{\texttt{price}} = 47.15 + 10.90\times \texttt{cond\_new}$.
-    Examining the regression output in @tbl-mariokart-model-output we can see that the p-value for `cond_new` is very close to zero, indicating there is strong evidence that the coefficient is different from zero when using this one-variable model.
-    The variable `cond_new` is a two-level categorical variable that takes value 1 when the game is new and value 0 when the game is used.
-    This means the 10.90 model coefficient predicts a price of an extra \$10.90 for those games that are new versus those that are used.
+[^27-inf-model-applications-1]: Die Gleichung für die Gerade kann als $\widehat{\texttt{price}} = 47{,}15 + 10{,}90\times \texttt{cond\_new}$ geschrieben werden.
+    Aus der Regressionsausgabe in @tbl-mariokart-model-output ist ersichtlich, dass der p-Wert für `cond_new` nahezu null ist, was auf starke Belege hindeutet, dass der Koeffizient bei Verwendung dieses Einvariablen-Modells von null verschieden ist.
+    Die Variable `cond_new` ist eine zweistufige kategoriale Variable, die den Wert 1 annimmt, wenn das Spiel neu ist, und den Wert 0, wenn das Spiel gebraucht ist.
+    Das bedeutet, dass der Modellkoeffizient von 10,90 einen Preis von zusätzlichen \$10,90 für neue im Vergleich zu gebrauchten Spielen vorhersagt.
 
-Sometimes there are underlying structures or relationships between predictor variables.
-For instance, new games sold on Ebay tend to come with more Wii wheels, which may have led to higher prices for those auctions.
-We would like to fit a model that includes all potentially important variables simultaneously, which would help us evaluate the relationship between a predictor variable and the outcome while controlling for the potential influence of other variables.
+Manchmal gibt es zugrundeliegende Strukturen oder Beziehungen zwischen Prädiktorvariablen.
+Zum Beispiel werden neue Spiele auf eBay tendenziell mit mehr Wii-Lenkrädern verkauft, was möglicherweise zu höheren Preisen bei diesen Auktionen geführt hat.
+Wir möchten ein Modell anpassen, das alle potenziell wichtigen Variablen gleichzeitig einbezieht, was uns helfen würde, die Beziehung zwischen einer Prädiktorvariable und dem Ergebnis zu bewerten und dabei den möglichen Einfluss anderer Variablen zu kontrollieren.
 
-We want to construct a model that accounts for not only the game condition but simultaneously accounts for three other variables:
+Wir möchten ein Modell erstellen, das nicht nur den Spielzustand berücksichtigt, sondern gleichzeitig auch drei andere Variablen:
 
 $$
 E[\texttt{price}] = \beta_0 + \beta_1 \times \texttt{cond\_new} + \beta_2\times \texttt{stock\_photo} + \beta_3 \times \texttt{duration} + \beta_4 \times  \texttt{wheels}
 $$
 
-@tbl-mariokart-full-model-output summarizes the full model.
-Using the output, we identify the point estimates of each coefficient and the corresponding impact (measured with information on the standard error used to compute the p-value).
+@tbl-mariokart-full-model-output fasst das vollständige Modell zusammen.
+Anhand der Ausgabe identifizieren wir die Punktschätzungen jedes Koeffizienten und die entsprechenden Auswirkungen (gemessen mit Informationen über den Standardfehler, der zur Berechnung des p-Werts verwendet wird).
 
 ```{r}
 #| label: tbl-mariokart-full-model-output
@@ -139,42 +139,42 @@ lm(price ~ cond_new + stock_photo + duration + wheels, data = mariokart) |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Write out the model's equation using the point estimates from @tbl-mariokart-full-model-output.
-How many predictors are there in the model?
-How many coefficients are estimated?[^27-inf-model-applications-2]
+Schreiben Sie die Gleichung des Modells unter Verwendung der Punktschätzungen aus @tbl-mariokart-full-model-output auf.
+Wie viele Prädiktoren hat das Modell?
+Wie viele Koeffizienten werden geschätzt?[^27-inf-model-applications-2]
 :::
 
-[^27-inf-model-applications-2]: $\widehat{\texttt{price}} = 36.21 + 5.13 \times \texttt{cond\_new} + 1.08 \times \texttt{stock\_photo} - 0.03 \times \texttt{duration} + 7.29 \times \texttt{wheels},$ with 4 predictors but 5 coefficients (including the intercept).
+[^27-inf-model-applications-2]: $\widehat{\texttt{price}} = 36{,}21 + 5{,}13 \times \texttt{cond\_new} + 1{,}08 \times \texttt{stock\_photo} - 0{,}03 \times \texttt{duration} + 7{,}29 \times \texttt{wheels},$ mit 4 Prädiktoren, aber 5 Koeffizienten (einschließlich des Achsenabschnitts).
 
 ::: {.guidedpractice data-latex=""}
-What does $\beta_4,$ the coefficient of variable $x_4$ (Wii wheels), represent?
-What is the point estimate of $\beta_4?$[^27-inf-model-applications-3]
+Was stellt $\beta_4,$ der Koeffizient der Variable $x_4$ (Wii-Lenkräder), dar?
+Was ist die Punktschätzung von $\beta_4?$[^27-inf-model-applications-3]
 :::
 
-[^27-inf-model-applications-3]: In the population of all auctions, it is the average difference in auction price for each additional Wii wheel included when holding the other variables constant.
-    The point estimate is $b_4 = 7.29$
+[^27-inf-model-applications-3]: In der Grundgesamtheit aller Auktionen ist es der durchschnittliche Unterschied im Auktionspreis für jedes zusätzliche Wii-Lenkrad, das mitgeliefert wird, wenn die anderen Variablen konstant gehalten werden.
+    Die Punktschätzung ist $b_4 = 7{,}29$
 
 ::: {.guidedpractice data-latex=""}
-Compute the residual of the first observation in @tbl-mariokart-data-frame using the equation identified in @tbl-mariokart-full-model-output.[^27-inf-model-applications-4]
+Berechnen Sie das Residuum der ersten Beobachtung in @tbl-mariokart-data-frame unter Verwendung der in @tbl-mariokart-full-model-output identifizierten Gleichung.[^27-inf-model-applications-4]
 :::
 
-[^27-inf-model-applications-4]: $e_i = y_i - \hat{y_i} = 51.55 - 49.62 = 1.93$.
+[^27-inf-model-applications-4]: $e_i = y_i - \hat{y_i} = 51{,}55 - 49{,}62 = 1{,}93$.
 
 ::: {.workedexample data-latex=""}
-In @tbl-mariokart-model-output, we estimated a coefficient for `cond_new` in of $b_1 = 10.90$ with a standard error of $SE_{b_1} = 1.26$ when using simple linear regression.
-Why might there be a difference between that estimate and the one in the multiple regression setting?
+In @tbl-mariokart-model-output schätzten wir einen Koeffizienten für `cond_new` von $b_1 = 10{,}90$ mit einem Standardfehler von $SE_{b_1} = 1{,}26$ bei Verwendung einfacher linearer Regression.
+Warum könnte es einen Unterschied zwischen dieser Schätzung und der im multiplen Regressionsmodell geben?
 
 ------------------------------------------------------------------------
 
-If we examined the data carefully, we would see that there is **multicollinearity**\index{multicollinearity} among some predictors.
-For instance, when we estimated the connection of the outcome `price` and predictor `cond_new` using simple linear regression, we were unable to control for other variables like the number of Wii wheels included in the auction.
-That model was biased by the confounding variable `wheels`.
-When we use both variables, this particular underlying and unintentional bias is reduced or eliminated (though bias from other confounding variables may still remain).
+Wenn wir die Daten sorgfältig untersuchen, würden wir sehen, dass es **Multikollinearität**\index{multicollinearity} unter einigen Prädiktoren gibt.
+Zum Beispiel waren wir, als wir die Verbindung des Ergebnisses `price` und des Prädiktors `cond_new` mit einfacher linearer Regression schätzten, nicht in der Lage, andere Variablen wie die Anzahl der Wii-Lenkräder in der Auktion zu kontrollieren.
+Dieses Modell war durch die Störvariable `wheels` verzerrt.
+Wenn wir beide Variablen verwenden, wird diese bestimmte zugrundeliegende und unbeabsichtigte Verzerrung reduziert oder eliminiert (obwohl Verzerrungen durch andere Störvariablen möglicherweise noch vorhanden sind).
 :::
 
-### Computational approach to linear models
+### Computergestützter Ansatz für lineare Modelle
 
-Previously, using a mathematical model, we investigated the coefficients associated with `cond_new` when predicting `price` in a linear model.
+Zuvor haben wir mit einem mathematischen Modell die Koeffizienten untersucht, die mit `cond_new` bei der Vorhersage von `price` in einem linearen Modell verbunden sind.
 
 ```{r}
 #| label: fig-mariokart-rand-dist
@@ -208,35 +208,35 @@ mariokart |>
 
 
 ::: {.workedexample data-latex=""}
-In @fig-mariokart-rand-dist, the red line (the observed slope) is far from the bulk of the histogram.
-Explain why the randomly permuted datasets produce slopes that are quite different from the observed slope.
+In @fig-mariokart-rand-dist liegt die rote Linie (die beobachtete Steigung) weit vom Großteil des Histogramms entfernt.
+Erklären Sie, warum die zufällig permutierten Datensätze Steigungen erzeugen, die sich deutlich von der beobachteten Steigung unterscheiden.
 
 ------------------------------------------------------------------------
 
-The null hypothesis is that, in the population, there is no linear relationship between the `price` and the `cond_new` of the *Mario Kart* games.
-When the data are randomly permuted, prices are randomly assigned to a condition (new or used), so that the null hypothesis is forced to be true, i.e., permutation is done under the assumption that no relationship between the two variables exists.
-In the actual study, the new *Mario Kart* games do actually cost more (on average) than the used games!
-So the slope describing the actual observed relationship is not one that is likely to have happened in a randomly dataset permuted under the assumption that the null hypothesis is true.
+Die Nullhypothese lautet, dass es in der Grundgesamtheit keine lineare Beziehung zwischen dem `price` und dem `cond_new` der *Mario Kart*-Spiele gibt.
+Wenn die Daten zufällig permutiert werden, werden die Preise zufällig einem Zustand (neu oder gebraucht) zugewiesen, sodass die Nullhypothese als wahr angenommen wird, d. h., die Permutation erfolgt unter der Annahme, dass keine Beziehung zwischen den beiden Variablen besteht.
+In der tatsächlichen Studie kosten neue *Mario Kart*-Spiele tatsächlich mehr (im Durchschnitt) als gebrauchte Spiele!
+Die Steigung, die die tatsächlich beobachtete Beziehung beschreibt, ist daher nicht eine, die in einem zufällig permutierten Datensatz unter der Annahme, dass die Nullhypothese wahr ist, wahrscheinlich aufgetreten wäre.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Using the histogram in @fig-mariokart-rand-dist, find the p-value and conclude the hypothesis test in the context of the problem.[^27-inf-model-applications-5]
+Bestimmen Sie anhand des Histogramms in @fig-mariokart-rand-dist den p-Wert und ziehen Sie im Kontext des Problems eine Schlussfolgerung aus dem Hypothesentest.[^27-inf-model-applications-5]
 :::
 
-[^27-inf-model-applications-5]: The observed slope is 10.9 which is nowhere near the range of values for the permuted slopes (roughly -5 to +5).
-    Because the observed slope is not a plausible value under the null distribution, the p-value is essentially zero.
-    We reject the null hypothesis and claim that there is a relationship between whether the game is new (or not) and the average predicted price of the game.
+[^27-inf-model-applications-5]: Die beobachtete Steigung beträgt 10,9, was sich nirgendwo in der Nähe des Wertebereichs der permutierten Steigungen befindet (ungefähr -5 bis +5).
+    Da die beobachtete Steigung kein plausibler Wert unter der Nullverteilung ist, ist der p-Wert im Wesentlichen null.
+    Wir lehnen die Nullhypothese ab und behaupten, dass es eine Beziehung zwischen dem Zustand des Spiels (neu oder nicht) und dem durchschnittlich vorhergesagten Preis des Spiels gibt.
 
 ::: {.guidedpractice data-latex=""}
-Is the conclusion based on the histogram of randomized slopes consistent with the conclusion obtained using the mathematical model?
-Explain.[^27-inf-model-applications-6]
+Ist die Schlussfolgerung auf Basis des Histogramms der randomisierten Steigungen konsistent mit der Schlussfolgerung, die mit dem mathematischen Modell gewonnen wurde?
+Erklären Sie.[^27-inf-model-applications-6]
 :::
 
-[^27-inf-model-applications-6]: The p-value in @tbl-mariokart-model-output is also essentially zero, so the null hypothesis is also rejected when the mathematical model approach is taken.
-    Often, the mathematical and computational approaches to inference will give quite similar answers.
+[^27-inf-model-applications-6]: Der p-Wert in @tbl-mariokart-model-output ist ebenfalls im Wesentlichen null, sodass die Nullhypothese auch beim mathematischen Modellansatz abgelehnt wird.
+    Oft werden die mathematischen und computergestützten Inferenzansätze recht ähnliche Antworten liefern.
 
-Although knowing there is a relationship between the condition of the game and its price, we might be more interested in the difference in price, here given by the slope of the linear regression line.
-That is, $\beta_1$ represents the population value for the difference in price between new *Mario Kart* games and used games.
+Obwohl wir wissen, dass es eine Beziehung zwischen dem Zustand des Spiels und seinem Preis gibt, könnten wir mehr an dem Preisunterschied interessiert sein, der hier durch die Steigung der linearen Regressionsgeraden gegeben wird.
+Das heißt, $\beta_1$ repräsentiert den Grundgesamtheitswert für den Preisunterschied zwischen neuen *Mario Kart*-Spielen und gebrauchten Spielen.
 
 ```{r}
 #| label: fig-mariokart-boot-dist
@@ -268,45 +268,45 @@ mariokart |>
 
 
 ::: {.workedexample data-latex=""}
-@fig-mariokart-boot-dist displays the slope estimates taken from bootstrap samples of the original data.
-Using the histogram, estimate the standard error of the slope.
-Is your estimate similar to the value of the standard error of the slope provided in the output of the mathematical linear model?
+@fig-mariokart-boot-dist zeigt die aus Bootstrap-Stichproben der Originaldaten entnommenen Steigungsschätzungen.
+Schätzen Sie anhand des Histogramms den Standardfehler der Steigung.
+Ist Ihre Schätzung ähnlich dem Wert des Standardfehlers der Steigung aus der mathematischen linearen Modellausgabe?
 
 ------------------------------------------------------------------------
 
-The slopes seem to vary from approximately 8 to 14.
-Using the empirical rule, we know that if a variable has a bell-shaped distribution, most of the observations will be with 2 standard errors of the center.
-Therefore, a rough approximation of the standard error is 1.5.
-The standard error given in @tbl-mariokart-model-output is 1.26 which is not too different from the value computed using the bootstrap approach.
+Die Steigungen scheinen von ungefähr 8 bis 14 zu variieren.
+Mit der empirischen Regel wissen wir, dass, wenn eine Variable eine glockenförmige Verteilung hat, die meisten Beobachtungen innerhalb von 2 Standardfehlern des Zentrums liegen werden.
+Daher ist eine grobe Annäherung des Standardfehlers 1,5.
+Der in @tbl-mariokart-model-output angegebene Standardfehler ist 1,26, was nicht allzu weit von dem mit dem Bootstrap-Ansatz berechneten Wert entfernt ist.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Use @fig-mariokart-boot-dist to create a 90% standard error bootstrap confidence interval for the true slope.
-Interpret the interval in context.[^27-inf-model-applications-7]
+Verwenden Sie @fig-mariokart-boot-dist, um ein 90%-Bootstrap-Konfidenzintervall auf Basis des Standardfehlers für die wahre Steigung zu erstellen.
+Interpretieren Sie das Intervall im Kontext.[^27-inf-model-applications-7]
 :::
 
-[^27-inf-model-applications-7]: Using the bootstrap SE method, we know the normal percentile is $z^\star = 1.645$, which gives a CI of $b_1 \pm 1.645 \cdot SE \rightarrow 10.9 \pm 1.645 \cdot 1.5 \rightarrow (8.43, 13.37).$ For games that are new, the average price is higher by between \$8.43 and \$13.37 than games that are used, with 90% confidence.
+[^27-inf-model-applications-7]: Mit der Bootstrap-SE-Methode kennen wir das Normalverteilungsquantil $z^\star = 1{,}645$, was ein KI von $b_1 \pm 1{,}645 \cdot SE \rightarrow 10{,}9 \pm 1{,}645 \cdot 1{,}5 \rightarrow (8{,}43; 13{,}37)$ ergibt. Bei neuen Spielen ist der Durchschnittspreis mit 90 % Konfidenz um zwischen \$8,43 und \$13,37 höher als bei gebrauchten Spielen.
 
 ::: {.guidedpractice data-latex=""}
-Use @fig-mariokart-boot-dist to create a 90% bootstrap percentile confidence interval for the true slope.
-Interpret the interval in context.[^27-inf-model-applications-8]
+Verwenden Sie @fig-mariokart-boot-dist, um ein 90%-Bootstrap-Perzentil-Konfidenzintervall für die wahre Steigung zu erstellen.
+Interpretieren Sie das Intervall im Kontext.[^27-inf-model-applications-8]
 :::
 
-[^27-inf-model-applications-8]: Because there were 1,000 bootstrap resamples, we look for the cutoffs which provide 50 bootstrap slopes on the left, 900 in the middle, and 50 on the right.
-    Looking at the bootstrap histogram, the rough 90% confidence interval is \$9 to \$13.10.
-    For games that are new, the average price is higher by between \$9.00 and \$13.10 than games that are used, with 90% confidence.
+[^27-inf-model-applications-8]: Da es 1.000 Bootstrap-Resamples gab, suchen wir nach den Grenzwerten, die 50 Bootstrap-Steigungen links, 900 in der Mitte und 50 rechts liefern.
+    Anhand des Bootstrap-Histogramms liegt das grobe 90%-Konfidenzintervall bei \$9 bis \$13,10.
+    Bei neuen Spielen ist der Durchschnittspreis mit 90 % Konfidenz um zwischen \$9,00 und \$13,10 höher als bei gebrauchten Spielen.
 
-### Cross-validation
+### Kreuzvalidierung
 
-In @sec-model-mlr, models were compared using $R^2_{adj}.$ In @sec-inf-model-mlr, however, a computational approach was introduced to compare models by removing chunks of data one at a time and assessing how well the variables predicted the observations that had been held out.
+In @sec-model-mlr wurden Modelle anhand von $R^2_{adj}$ verglichen. In @sec-inf-model-mlr wurde jedoch ein computergestützter Ansatz eingeführt, um Modelle zu vergleichen, indem Datenchunks nacheinander entfernt und bewertet wurden, wie gut die Variablen die zurückgehaltenen Beobachtungen vorhersagten.
 
-@fig-mariokart-cv-residuals was created by cross-validating models with the same variables as in @tbl-mariokart-model-output and @tbl-mariokart-full-model-output.
-We applied 3-fold cross-validation, so 1/3 of the data was removed while 2/3 of the observations were used to build each model (first on `cond_new` only and then on `cond_new`, `stock_photo`, `duration`, and `wheels`).
-Note that each time 1/3 of the data is removed, the resulting model will produce slightly different model coefficients.
+@fig-mariokart-cv-residuals wurde durch Kreuzvalidierung von Modellen mit denselben Variablen wie in @tbl-mariokart-model-output und @tbl-mariokart-full-model-output erstellt.
+Wir verwendeten 3-fache Kreuzvalidierung, sodass 1/3 der Daten entfernt wurde, während 2/3 der Beobachtungen zum Aufbau jedes Modells verwendet wurden (zunächst nur auf `cond_new` und dann auf `cond_new`, `stock_photo`, `duration` und `wheels`).
+Beachten Sie, dass jedes Mal, wenn 1/3 der Daten entfernt wird, das resultierende Modell leicht unterschiedliche Modellkoeffizienten erzeugt.
 
-The points in @fig-mariokart-cv-residuals represent the prediction (x-axis) and residual (y-axis) for each observation run through the cross-validated model.
-In other words, the model is built (using the other 2/3) without the observation (which is in the 1/3) being used.
-The residuals give us a sense for how well the model will do at predicting observations which were not a part of the original dataset, e.g., future studies.
+Die Punkte in @fig-mariokart-cv-residuals stellen die Vorhersage (x-Achse) und das Residuum (y-Achse) für jede Beobachtung dar, die durch das kreuzvalidierte Modell verarbeitet wurde.
+Mit anderen Worten: Das Modell wird (unter Verwendung der anderen 2/3) ohne die Beobachtung (die in dem 1/3 enthalten ist) aufgebaut.
+Die Residuen geben uns ein Gefühl dafür, wie gut das Modell bei der Vorhersage von Beobachtungen abschneidet, die nicht Teil des Originaldatensatzes waren, z. B. bei zukünftigen Studien.
 
 ```{r}
 #| label: fig-mariokart-cv-residuals
@@ -402,38 +402,38 @@ mario_CV2$pred |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-In @fig-mariokart-cv-residuals-2, note the point at roughly predicted = 50 and prediction error = 10.
-Estimate the observed and predicted value for that observation.[^27-inf-model-applications-9]
+Beachten Sie in @fig-mariokart-cv-residuals-2 den Punkt bei ungefähr Vorhersage = 50 und Vorhersagefehler = 10.
+Schätzen Sie den beobachteten und vorhergesagten Wert für diese Beobachtung.[^27-inf-model-applications-9]
 :::
 
-[^27-inf-model-applications-9]: The predicted value is roughly $\widehat{\texttt{price}} = \$50.$ The observed value is roughly $\texttt{price}_i = \$60$ riders (using $e_i = y_i - \hat{y}_i).$
+[^27-inf-model-applications-9]: Der vorhergesagte Wert beträgt ungefähr $\widehat{\texttt{price}} = \$50.$ Der beobachtete Wert beträgt ungefähr $\texttt{price}_i = \$60$ (unter Verwendung von $e_i = y_i - \hat{y}_i).$
 
 ::: {.guidedpractice data-latex=""}
-In @fig-mariokart-cv-residuals-2, for the same point at roughly predicted = 50 and prediction error = 10, describe which cross-validation fold(s) were used to build its prediction model.[^27-inf-model-applications-10]
+Beschreiben Sie für denselben Punkt bei ungefähr Vorhersage = 50 und Vorhersagefehler = 10 in @fig-mariokart-cv-residuals-2, welche Kreuzvalidierungs-Fold(s) zum Aufbau seines Vorhersagemodells verwendet wurden.[^27-inf-model-applications-10]
 :::
 
-[^27-inf-model-applications-10]: The point appears to be in fold 2, so folds 1 and 3 were used to build the prediction model.
+[^27-inf-model-applications-10]: Der Punkt scheint in Fold 2 zu sein, daher wurden Folds 1 und 3 zum Aufbau des Vorhersagemodells verwendet.
 
 ::: {.guidedpractice data-latex=""}
-By noting the spread of the cross-validated prediction errors (on the y-axis) in @fig-mariokart-cv-residuals, which model should be chosen for a final report on these data?[^27-inf-model-applications-11]
+Indem Sie die Streuung der kreuzvalidierten Vorhersagefehler (auf der y-Achse) in @fig-mariokart-cv-residuals beachten, welches Modell sollte für einen abschließenden Bericht zu diesen Daten gewählt werden?[^27-inf-model-applications-11]
 :::
 
-[^27-inf-model-applications-11]: The cross-validated residuals on `cond_new` vary roughly from -15 to 15, while the cross-validated residuals on the four predictor model vary less, roughly from -10 to 10.
-    Given the smaller residuals from the four predictor model, it seems as though the larger model is better.
+[^27-inf-model-applications-11]: Die kreuzvalidierten Residuen für `cond_new` variieren grob von -15 bis 15, während die kreuzvalidierten Residuen für das Vier-Prädiktoren-Modell weniger variieren, grob von -10 bis 10.
+    Angesichts der kleineren Residuen des Vier-Prädiktoren-Modells scheint das größere Modell besser zu sein.
 
 ::: {.guidedpractice data-latex=""}
-Using the summary statistic cross-validation sum of squared errors (CV SSE), which model should be chosen for a final report on these data?[^27-inf-model-applications-12]
+Welches Modell sollte unter Verwendung der Zusammenfassungsstatistik Kreuzvalidierungs-Quadratsumme der Fehler (CV SSE) für einen abschließenden Bericht zu diesen Daten gewählt werden?[^27-inf-model-applications-12]
 :::
 
-[^27-inf-model-applications-12]: The CV SSE is smaller (by a factor of almost two!) for the model with four predictors.
-    Using a single valued criterion (CV SSE) allows us to make a decision to choose the model with four predictors.
+[^27-inf-model-applications-12]: Die CV SSE ist kleiner (fast um den Faktor zwei!) für das Modell mit vier Prädiktoren.
+    Die Verwendung eines einzelnen Kriteriumswerts (CV SSE) ermöglicht es uns, die Entscheidung zu treffen, das Modell mit vier Prädiktoren zu wählen.
 
 \clearpage
 
-## Interactive R tutorials {#inferential-modeling-tutorials}
+## Interaktive R-Tutorials {#inferential-modeling-tutorials}
 
-Navigate the concepts you've learned in this part in R using the following self-paced tutorials.
-All you need is your browser to get started!
+Navigieren Sie die in diesem Teil erlernten Konzepte in R mithilfe der folgenden selbstgesteuerten Tutorials.
+Alles, was Sie brauchen, ist Ihr Browser, um loszulegen!
 
 ::: {.alltutorials data-latex=""}
 [Tutorial 6: Inferential modeling](https://openintrostat.github.io/ims-tutorials/06-model-infer/)
@@ -484,17 +484,17 @@ https://openintro.shinyapps.io/ims-06-model-infer-05
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of tutorials supporting this book at\
+Die vollständige Liste der Tutorials, die dieses Buch unterstützen, finden Sie unter\
 <https://openintrostat.github.io/ims-tutorials>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of tutorials supporting this book [here](https://openintrostat.github.io/ims-tutorials).
+Die vollständige Liste der Tutorials, die dieses Buch unterstützen, finden Sie [hier](https://openintrostat.github.io/ims-tutorials).
 :::
 
-## R labs
+## R-Labore
 
-Further apply the concepts you've learned in this part in R with computational labs that walk you through a data analysis case study.
+Wenden Sie die in diesem Teil erlernten Konzepte weiter in R mit computergestützten Laboren an, die Sie durch eine Datenanalyse-Fallstudie führen.
 
 ::: {.singlelab data-latex=""}
 [Multiple linear regression - Grading the professor](https://www.openintro.org/go?id=ims-r-lab-model-infer)
@@ -506,10 +506,10 @@ https://www.openintro.org/go?id=ims-r-lab-model-infer
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of labs supporting this book at\
+Die vollständige Liste der Labore, die dieses Buch unterstützen, finden Sie unter\
 <https://www.openintro.org/go?id=ims-r-labs>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of labs supporting this book [here](https://www.openintro.org/go?id=ims-r-labs).
+Die vollständige Liste der Labore, die dieses Buch unterstützen, finden Sie [hier](https://www.openintro.org/go?id=ims-r-labs).
 :::

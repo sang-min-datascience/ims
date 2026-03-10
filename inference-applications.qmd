@@ -1,4 +1,4 @@
-# Applications: Infer {#sec-inference-applications}
+# Anwendungen: Inferenz {#sec-inference-applications}
 
 ```{r}
 #| include: false
@@ -7,66 +7,66 @@ source("_common.R")
 
 \vspace{-10mm}
 
-## Recap: Computational methods {#sec-comp-methods-summary}
+## Rückblick: Computergestützte Methoden {#sec-comp-methods-summary}
 
-The computational methods we have presented are used in two settings.
-First, in many real life applications (as in those covered here), the mathematical model and computational model give identical conclusions.
-When there are no differences in conclusions, the advantage of the computational method is that it gives the analyst a good sense for the logic of the statistical inference process.
-Second, when there is a difference in the conclusions (seen primarily in methods beyond the scope of this text), it is often the case that the computational method relies on fewer technical conditions and is therefore more appropriate to use.
+Die vorgestellten computergestützten Methoden werden in zwei Situationen eingesetzt.
+Erstens liefern in vielen realen Anwendungen (wie den hier behandelten) das mathematische Modell und das computergestützte Modell identische Schlussfolgerungen.
+Wenn es keine Unterschiede in den Schlussfolgerungen gibt, ist der Vorteil der computergestützten Methode, dass sie dem Analysten ein gutes Gefühl für die Logik des statistischen Inferenzprozesses vermittelt.
+Zweitens, wenn es einen Unterschied in den Schlussfolgerungen gibt (hauptsächlich bei Methoden, die über den Umfang dieses Textes hinausgehen), ist es oft der Fall, dass die computergestützte Methode auf weniger technischen Bedingungen basiert und daher geeigneter ist.
 
-### Randomization
+### Randomisierung
 
-An important feature of randomization tests is that the data are permuted in such a way that the null hypothesis is true.
-The randomization distribution provides a distribution of the statistic of interest under the null hypothesis, which is exactly the information needed to calculate a p-value --- where the p-value is the probability of obtaining the observed data or more extreme when the null hypothesis is true.
-Although there are ways to adjust the randomization for settings other than the null hypothesis being true, they are not covered in this book and they are not used widely.
-In approaching research questions with a randomization test, be sure to ask yourself what the null hypothesis represents and how it is that permuting the data is creating different possible null data representations.
+Ein wichtiges Merkmal von Randomisierungstests ist, dass die Daten so permutiert werden, dass die Nullhypothese wahr ist.
+Die Randomisierungsverteilung liefert eine Verteilung der interessierenden Statistik unter der Nullhypothese, was genau die Information ist, die zur Berechnung eines p-Werts benötigt wird --- wobei der p-Wert die Wahrscheinlichkeit ist, die beobachteten Daten oder extremere Daten zu erhalten, wenn die Nullhypothese wahr ist.
+Obwohl es Möglichkeiten gibt, die Randomisierung für andere Einstellungen als die wahre Nullhypothese anzupassen, werden diese in diesem Buch nicht behandelt und sind nicht weit verbreitet.
+Bei der Bearbeitung von Forschungsfragen mit einem Randomisierungstest sollten Sie sich fragen, was die Nullhypothese darstellt und wie das Permutieren der Daten verschiedene mögliche Darstellungen der Nulldaten erzeugt.
 
-**Hypothesis tests.** When using a randomization test, we proceed as follows:
+**Hypothesentests.** Bei Verwendung eines Randomisierungstests gehen wir wie folgt vor:
 
--   Write appropriate hypotheses.
+-   Geeignete Hypothesen formulieren.
 
--   Compute the observed statistic of interest.
+-   Die beobachtete Statistik von Interesse berechnen.
 
--   Permute the data repeatedly, each time, recalculating the statistic of interest.
+-   Die Daten wiederholt permutieren und dabei jedes Mal die Statistik von Interesse neu berechnen.
 
--   Compute the proportion of times the permuted statistics are as extreme as or more extreme than the observed statistic, this is the p-value.
+-   Den Anteil der Male berechnen, bei denen die permutierten Statistiken genauso extrem oder extremer sind als die beobachtete Statistik; dies ist der p-Wert.
 
--   Make a conclusion based on the p-value, and write the conclusion in context and in plain language so anyone can understand the result.
+-   Eine Schlussfolgerung basierend auf dem p-Wert ziehen und die Schlussfolgerung im Kontext und in verständlicher Sprache formulieren, sodass jeder das Ergebnis verstehen kann.
 
-### Bootstrapping
+### Bootstrap
 
-Bootstrapping, in contrast to randomization tests, represents a proxy sampling of the original population.
-With bootstrapping, the analyst is not forcing the null hypothesis to be true (or false, for that matter), but instead, they are replicating the variability seen in taking repeated samples from a population.
-Because there is no underlying true (or false) null hypothesis, bootstrapping is typically used for creating confidence intervals for the parameter of interest.
-Bootstrapping can be used to test particular values of a parameter (e.g., by evaluating whether a particular value of interest is contained in the confidence interval), but generally, bootstrapping is used for interval estimation instead of testing.
+Das Bootstrapping stellt im Gegensatz zu Randomisierungstests eine Proxy-Stichprobe der ursprünglichen Grundgesamtheit dar.
+Beim Bootstrapping zwingt der Analyst die Nullhypothese nicht dazu, wahr zu sein (oder falsch, der Vollständigkeit halber), sondern repliziert stattdessen die Variabilität, die beim wiederholten Ziehen von Stichproben aus einer Grundgesamtheit entsteht.
+Da es keine zugrundeliegende wahre (oder falsche) Nullhypothese gibt, wird Bootstrapping typischerweise zur Erstellung von Konfidenzintervallen für den interessierenden Parameter verwendet.
+Bootstrapping kann verwendet werden, um bestimmte Werte eines Parameters zu testen (z. B. durch Bewertung, ob ein bestimmter interessierender Wert im Konfidenzintervall enthalten ist), aber im Allgemeinen wird Bootstrapping eher für die Intervallschätzung als für das Testen verwendet.
 
 \clearpage
 
-**Confidence intervals.** The following is how we generally computed a confidence interval using bootstrapping:
+**Konfidenzintervalle.** So haben wir im Allgemeinen ein Konfidenzintervall mit Bootstrapping berechnet:
 
--   Repeatedly resample the original data, with replacement, using the same sample size as the original data.
+-   Die Originaldaten wiederholt mit Zurücklegen resampeln, mit derselben Stichprobengröße wie die Originaldaten.
 
--   For each resample, calculate the statistic of interest.
+-   Für jedes Resample die Statistik von Interesse berechnen.
 
--   Calculate the confidence interval using one of the following methods:
+-   Das Konfidenzintervall mit einer der folgenden Methoden berechnen:
 
-    -   Bootstrap percentile interval: Obtain the endpoints representing the middle (e.g., 95%) of the bootstrapped statistics.
-        The endpoints will be the confidence interval.
+    -   Bootstrap-Perzentil-Intervall: Die Endpunkte ermitteln, die die Mitte (z. B. 95 %) der Bootstrap-Statistiken darstellen.
+        Die Endpunkte bilden das Konfidenzintervall.
 
-    -   Bootstrap standard error (SE) interval: Find the SE of the bootstrapped statistics.
-        The confidence interval will be given by the original observed statistic plus or minus some multiple (e.g., 2) of SEs.
+    -   Bootstrap-Standardfehler (SE)-Intervall: Den SE der Bootstrap-Statistiken ermitteln.
+        Das Konfidenzintervall ergibt sich aus der ursprünglich beobachteten Statistik plus/minus einem Vielfachen (z. B. 2) von SE-Werten.
 
--   Put the conclusions in context and in plain language so even non-statisticians and data scientists can understand the results.
+-   Die Schlussfolgerungen im Kontext und in verständlicher Sprache formulieren, sodass auch Nicht-Statistiker und Nicht-Datenwissenschaftler die Ergebnisse verstehen können.
 
-## Recap: Mathematical models {#sec-math-models-summary}
+## Rückblick: Mathematische Modelle {#sec-math-models-summary}
 
-The mathematical models which have been used to produce inferential analyses follow a consistent framework for different parameters of interest.
-As a way to contrast and compare the mathematical approach, we offer the following summaries in @tbl-zcompare and @tbl-tcompare.
+Die mathematischen Modelle, die zur Erzeugung inferentieller Analysen verwendet wurden, folgen einem konsistenten Rahmen für verschiedene interessierende Parameter.
+Als Möglichkeit, den mathematischen Ansatz zu kontrastieren und zu vergleichen, bieten wir die folgenden Zusammenfassungen in @tbl-zcompare und @tbl-tcompare an.
 
-### z-procedures
+### z-Verfahren
 
-Generally, when the response variable is categorical (or binary), the summary statistic is a proportion and the model used to describe the proportion is the standard normal curve (also referred to as a $z$-curve or a $z$-distribution).
-We provide @tbl-zcompare partly as a mechanism for understanding $z$-procedures and partly to highlight the extremely common usage of the $z$-distribution in practice.
+Im Allgemeinen ist, wenn die Antwortvariable kategorial (oder binär) ist, die Zusammenfassungsstatistik ein Anteil, und das Modell, das zur Beschreibung des Anteils verwendet wird, ist die Standardnormalkurve (auch als $z$-Kurve oder $z$-Verteilung bezeichnet).
+Wir stellen @tbl-zcompare teilweise als Mechanismus zum Verständnis von $z$-Verfahren und teilweise bereit, um die äußerst verbreitete Verwendung der $z$-Verteilung in der Praxis hervorzuheben.
 
 ```{r}
 #| label: tbl-zcompare
@@ -101,34 +101,34 @@ zsim_table |>
   column_spec(1, width = "10em")
 ```
 
-**Hypothesis tests.** When applying the $z$-distribution for a hypothesis test, we proceed as follows:
+**Hypothesentests.** Bei Anwendung der $z$-Verteilung für einen Hypothesentest gehen wir wie folgt vor:
 
--   Write appropriate hypotheses.
+-   Geeignete Hypothesen formulieren.
 
--   Verify conditions for using the $z$-distribution.
+-   Bedingungen für die Verwendung der $z$-Verteilung überprüfen.
 
-    -   One-sample: the observations (or differences) must be independent. The success-failure condition of at least 10 success and at least 10 failures should hold.
-    -   For a difference of proportions: each sample must separately satisfy the success-failure conditions, and the data in the groups must also be independent.
+    -   Einstichproben: Die Beobachtungen (oder Differenzen) müssen unabhängig sein. Die Erfolg-Misserfolg-Bedingung von mindestens 10 Erfolgen und mindestens 10 Misserfolgen sollte erfüllt sein.
+    -   Für eine Differenz von Anteilen: Jede Stichprobe muss die Erfolg-Misserfolg-Bedingungen separat erfüllen, und die Daten in den Gruppen müssen ebenfalls unabhängig sein.
 
--   Compute the point estimate of interest and the standard error.
+-   Die Punktschätzung von Interesse und den Standardfehler berechnen.
 
--   Compute the Z score and p-value.
+-   Den Z-Score und den p-Wert berechnen.
 
--   Make a conclusion based on the p-value, and write a conclusion in context and in plain language so anyone can understand the result.
+-   Eine Schlussfolgerung basierend auf dem p-Wert ziehen und eine Schlussfolgerung im Kontext und in verständlicher Sprache formulieren, sodass jeder das Ergebnis verstehen kann.
 
-**Confidence intervals.** Similarly, the following is how we generally computed a confidence interval using a $z$-distribution:
+**Konfidenzintervalle.** Ähnlich haben wir im Allgemeinen ein Konfidenzintervall mit einer $z$-Verteilung berechnet:
 
--   Verify conditions for using the $z$-distribution. (See above.)
--   Compute the point estimate of interest, the standard error, and $z^{\star}.$
--   Calculate the confidence interval using the general formula:\
-    point estimate $\pm\ z^{\star} SE.$
--   Put the conclusions in context and in plain language so even non-statisticians and data scientists can understand the results.
+-   Bedingungen für die Verwendung der $z$-Verteilung überprüfen. (Siehe oben.)
+-   Die Punktschätzung von Interesse, den Standardfehler und $z^{\star}$ berechnen.
+-   Das Konfidenzintervall mit der allgemeinen Formel berechnen:\
+    Punktschätzung $\pm\ z^{\star} SE.$
+-   Die Schlussfolgerungen im Kontext und in verständlicher Sprache formulieren, sodass auch Nicht-Statistiker und Nicht-Datenwissenschaftler die Ergebnisse verstehen können.
 
-### t-procedures
+### t-Verfahren
 
-With quantitative response variables, the $t$-distribution was applied as the appropriate mathematical model in three distinct settings.
-Although the three data structures are different, their similarities and differences are worth pointing out.
-We provide @tbl-tcompare partly as a mechanism for understanding $t$-procedures and partly to highlight the extremely common usage of the $t$-distribution in practice.
+Bei quantitativen Antwortvariablen wurde die $t$-Verteilung als geeignetes mathematisches Modell in drei verschiedenen Einstellungen angewendet.
+Obwohl die drei Datenstrukturen unterschiedlich sind, lohnt es sich, ihre Gemeinsamkeiten und Unterschiede herauszuarbeiten.
+Wir stellen @tbl-tcompare teilweise als Mechanismus zum Verständnis von $t$-Verfahren und teilweise bereit, um die äußerst verbreitete Verwendung der $t$-Verteilung in der Praxis hervorzuheben.
 
 ```{r}
 #| label: tbl-tcompare
@@ -166,37 +166,37 @@ tsim_table |>
 
 \clearpage
 
-**Hypothesis tests.** When applying the $t$-distribution for a hypothesis test, we proceed as follows:
+**Hypothesentests.** Bei Anwendung der $t$-Verteilung für einen Hypothesentest gehen wir wie folgt vor:
 
--   Write appropriate hypotheses.
+-   Geeignete Hypothesen formulieren.
 
--   Verify conditions for using the $t$-distribution.
+-   Bedingungen für die Verwendung der $t$-Verteilung überprüfen.
 
-    -   One-sample or differences from paired data: the observations (or differences) must be independent and nearly normal. For larger sample sizes, we can relax the nearly normal requirement, e.g., slight skew is okay for sample sizes of 15, moderate skew for sample sizes of 30, and strong skew for sample sizes of 60.
-    -   For a difference of means when the data are not paired: each sample mean must separately satisfy the one-sample conditions for the $t$-distribution, and the data in the groups must also be independent.
+    -   Einstichproben oder Differenzen aus gepaarten Daten: Die Beobachtungen (oder Differenzen) müssen unabhängig und annähernd normalverteilt sein. Bei größeren Stichprobengrößen können wir die Anforderung der annähernden Normalverteilung lockern, z. B. ist leichte Schiefe bei Stichprobengrößen von 15, moderate Schiefe bei Stichprobengrößen von 30 und starke Schiefe bei Stichprobengrößen von 60 akzeptabel.
+    -   Für eine Differenz von Mittelwerten, wenn die Daten nicht gepaart sind: Jeder Stichprobenmittelwert muss die Einstichprobenbedingungen für die $t$-Verteilung separat erfüllen, und die Daten in den Gruppen müssen ebenfalls unabhängig sein.
 
--   Compute the point estimate of interest, the standard error, and the degrees of freedom. For $df,$ use $n-1$ for one sample, and for two samples use either statistical software or the smaller of $n_1 - 1$ and $n_2 - 1.$
+-   Die Punktschätzung von Interesse, den Standardfehler und die Freiheitsgrade berechnen. Für $df$ verwenden Sie $n-1$ für eine Stichprobe, und für zwei Stichproben verwenden Sie entweder Statistiksoftware oder den kleineren Wert von $n_1 - 1$ und $n_2 - 1.$
 
--   Compute the T score and p-value.
+-   Den T-Score und den p-Wert berechnen.
 
--   Make a conclusion based on the p-value, and write a conclusion in context and in plain language so anyone can understand the result.
+-   Eine Schlussfolgerung basierend auf dem p-Wert ziehen und eine Schlussfolgerung im Kontext und in verständlicher Sprache formulieren, sodass jeder das Ergebnis verstehen kann.
 
-**Confidence intervals.** Similarly, the following is how we generally computed a confidence interval using a $t$-distribution:
+**Konfidenzintervalle.** Ähnlich haben wir im Allgemeinen ein Konfidenzintervall mit einer $t$-Verteilung berechnet:
 
--   Verify conditions for using the $t$-distribution. (See above.)
--   Compute the point estimate of interest, the standard error, the degrees of freedom, and $t^{\star}_{df}.$
--   Calculate the confidence interval using the general formula:
-    $$\mbox{point estimate } \pm\ t_{df}^{\star} SE.$$
--   Put the conclusions in context and in plain language so even non-statisticians and data scientists can understand the results.
+-   Bedingungen für die Verwendung der $t$-Verteilung überprüfen. (Siehe oben.)
+-   Die Punktschätzung von Interesse, den Standardfehler, die Freiheitsgrade und $t^{\star}_{df}$ berechnen.
+-   Das Konfidenzintervall mit der allgemeinen Formel berechnen:
+    $$\mbox{Punktschätzung } \pm\ t_{df}^{\star} SE.$$
+-   Die Schlussfolgerungen im Kontext und in verständlicher Sprache formulieren, sodass auch Nicht-Statistiker und Nicht-Datenwissenschaftler die Ergebnisse verstehen können.
 
-## Case study: Redundant adjectives {#sec-case-study-redundant-adjectives}
+## Fallstudie: Redundante Adjektive {#sec-case-study-redundant-adjectives}
 
-Take a look at the images in @fig-blue-triangle-shapes.
-How would you describe the circled item in @fig-blue-triangle-shapes-1?
-Would you call it "the triangle"?
-Or "the blue triangle"?
-How about in @fig-blue-triangle-shapes-2?
-Does your answer change?
+Schauen Sie sich die Abbildungen in @fig-blue-triangle-shapes an.
+Wie würden Sie das eingekreiste Element in @fig-blue-triangle-shapes-1 beschreiben?
+Würden Sie es „das Dreieck" nennen?
+Oder „das blaue Dreieck"?
+Wie wäre es in @fig-blue-triangle-shapes-2?
+Ändert sich Ihre Antwort?
 
 ```{r}
 #| label: fig-blue-triangle-shapes
@@ -253,16 +253,16 @@ ggplot(shapes |> filter(figure == 2), aes(x, y)) +
   annotate("point", x = 4, y = 1, shape = "circle open", color = "black", size = 40)
 ```
 
-In @fig-blue-triangle-shapes-1 the circled item is the only triangle, but in the bottom image the circled item is one of two triangles.
-While in @fig-blue-triangle-shapes-1 "the triangle" is a sufficient description for the circled item, many of us might choose to refer to it as the "blue triangle" anyway.
-In @fig-blue-triangle-shapes-1 there are two triangles, so "the triangle" is no longer sufficient, and to describe the circled item we must qualify it with the color as well, as "the blue triangle".
+In @fig-blue-triangle-shapes-1 ist das eingekreiste Element das einzige Dreieck, aber im unteren Bild ist das eingekreiste Element eines von zwei Dreiecken.
+Während in @fig-blue-triangle-shapes-1 „das Dreieck" eine ausreichende Beschreibung für das eingekreiste Element ist, würden viele von uns es dennoch als „das blaue Dreieck" bezeichnen.
+In @fig-blue-triangle-shapes-1 gibt es zwei Dreiecke, sodass „das Dreieck" nicht mehr ausreicht, und um das eingekreiste Element zu beschreiben, müssen wir es zusätzlich mit der Farbe qualifizieren, als „das blaue Dreieck".
 
-Your answers to the above questions might be different if you're answering in a different language than English.
-For example, in Spanish, the adjective comes after the noun (e.g., "el triángulo azul") therefore the incremental value of the additional adjective might be different for @fig-blue-triangle-shapes-1.
+Ihre Antworten auf die obigen Fragen könnten unterschiedlich sein, wenn Sie in einer anderen Sprache als Englisch antworten.
+Zum Beispiel kommt im Spanischen das Adjektiv nach dem Substantiv (z. B. „el triángulo azul"), daher könnte der inkrementelle Wert des zusätzlichen Adjektivs für @fig-blue-triangle-shapes-1 unterschiedlich sein.
 
-Researchers studying frequent use of redundant adjectives (e.g., referring to a single triangle as "the blue triangle") and incrementality of language processing designed an experiment where they showed the following two images to 22 native English speakers (undergraduates from University College London) and 22 native Spanish speakers (undergraduates from the Universidad de las Islas Baleares).
-They found that in both languages, the subjects used more redundant color adjectives in denser displays where it would be more efficient. [@rubio-fernandez2021]
-One of the displays from the study is shown in @fig-redundant-adjectives-blue-triangle.
+Forscher, die die häufige Verwendung redundanter Adjektive (z. B. ein einzelnes Dreieck als „das blaue Dreieck" zu bezeichnen) und die Inkrementalität der Sprachverarbeitung untersuchten, führten ein Experiment durch, bei dem sie 22 Englisch-Muttersprachlern (Studierenden der University College London) und 22 Spanisch-Muttersprachlern (Studierenden der Universidad de las Islas Baleares) die folgenden zwei Bilder zeigten.
+Sie fanden heraus, dass in beiden Sprachen die Versuchspersonen in dichteren Darstellungen, wo es effizienter wäre, mehr redundante Farbadjektive verwendeten. [@rubio-fernandez2021]
+Eine der Darstellungen aus der Studie ist in @fig-redundant-adjectives-blue-triangle zu sehen.
 
 ```{r}
 #| label: fig-redundant-adjectives-blue-triangle
@@ -275,7 +275,7 @@ One of the displays from the study is shown in @fig-redundant-adjectives-blue-tr
 knitr::include_graphics("images/redundant-adjectives-blue-triangle.png")
 ```
 
-In this case study we will examine data from redundant adjective study, which the authors have made available on Open Science Framework at [osf.io/9hw68](https://osf.io/9hw68/).
+In dieser Fallstudie werden wir Daten aus der Studie zu redundanten Adjektiven untersuchen, die die Autoren auf dem Open Science Framework unter [osf.io/9hw68](https://osf.io/9hw68/) verfügbar gemacht haben.
 
 ```{r}
 # analysis based on
@@ -301,15 +301,15 @@ redundant <- redundant_individual |>
   )
 ```
 
-@tbl-redundant-data shows the top six rows of the data.
-The full dataset has `r nrow(redundant)` rows.
-Remember that there are a total of 44 subjects in the study (22 English and 22 Spanish speakers).
-There are two rows in the dataset for each of the subjects: one representing data from when they were shown an image with 4 items on it and the other with 16 items on it.
-Each subject was asked 10 questions for each type of image (with a different layout of items on the image for each question).
-The variable of interest to us is `redundant_perc`, which gives the percentage of questions the subject used a redundant adjective to identify "the blue triangle".
-Note that the variable is "percentage", and we are interested in the average percentage.
-Therefore, we will use methods for means.
-If the variable had been "success or failure" (e.g., "used redundant or didn't"), we would have used methods for proportions.
+@tbl-redundant-data zeigt die ersten sechs Zeilen der Daten.
+Der vollständige Datensatz hat `r nrow(redundant)` Zeilen.
+Beachten Sie, dass es insgesamt 44 Versuchspersonen in der Studie gibt (22 Englisch- und 22 Spanischsprechende).
+Es gibt zwei Zeilen im Datensatz für jede der Versuchspersonen: eine, die Daten aus der Zeit darstellt, als ihnen ein Bild mit 4 Elementen gezeigt wurde, und die andere mit 16 Elementen.
+Jede Versuchsperson wurde zu jedem Bildtyp mit 10 Fragen befragt (mit einer anderen Anordnung der Elemente auf dem Bild für jede Frage).
+Die uns interessierende Variable ist `redundant_perc`, die den Prozentsatz der Fragen angibt, bei dem die Versuchsperson ein redundantes Adjektiv verwendete, um „das blaue Dreieck" zu identifizieren.
+Beachten Sie, dass die Variable „Prozentsatz" ist und wir am durchschnittlichen Prozentsatz interessiert sind.
+Daher werden wir Methoden für Mittelwerte verwenden.
+Wenn die Variable „Erfolg oder Misserfolg" gewesen wäre (z. B. „redundantes Adjektiv verwendet oder nicht"), hätten wir Methoden für Anteile verwendet.
 
 ```{r}
 #| label: tbl-redundant-data
@@ -330,14 +330,14 @@ redundant |>
   column_spec(4:5, width = "8em")
 ```
 
-### Exploratory analysis
+### Explorative Analyse
 
-In one of the images shown to the subjects, there are 4 items, and in the other, there are 16 items.
-In each of the images the circled item is the only triangle, therefore referring to it as "the blue triangle" or as "el triángulo azul" is considered redundant.
-If the subject's response was "the triangle", they were recorded to have not used a redundant adjective.
-If the response was "the blue triangle", they were recorded to have used a redundant adjective.
-@fig-reduntant-bar shows the results of the experiment.
-We can see that English speakers are more likely than Spanish speakers to use redundant adjectives, and that in both languages, subjects are more likely to use a redundant adjective when there are more items in the image (i.e., in a denser display).
+In einem der den Versuchspersonen gezeigten Bilder gibt es 4 Elemente, im anderen 16 Elemente.
+In jedem der Bilder ist das eingekreiste Element das einzige Dreieck, daher gilt das Bezeichnen als „das blaue Dreieck" oder „el triángulo azul" als redundant.
+Wenn die Antwort der Versuchsperson „das Dreieck" war, wurde aufgezeichnet, dass sie kein redundantes Adjektiv verwendet hat.
+Wenn die Antwort „das blaue Dreieck" war, wurde aufgezeichnet, dass sie ein redundantes Adjektiv verwendet hat.
+@fig-reduntant-bar zeigt die Ergebnisse des Experiments.
+Wir können sehen, dass Englischsprechende eher als Spanischsprechende redundante Adjektive verwenden und dass in beiden Sprachen die Versuchspersonen eher ein redundantes Adjektiv verwenden, wenn das Bild mehr Elemente enthält (d. h. bei einer dichteren Darstellung).
 
 ```{r}
 #| label: fig-reduntant-bar
@@ -378,7 +378,7 @@ redundant_summary |>
   theme(legend.position = c(0.9, 0.2))
 ```
 
-### Confidence interval for a single mean
+### Konfidenzintervall für einen einzelnen Mittelwert
 
 ```{r}
 xbar_eng_4 <- redundant_summary |>
@@ -387,8 +387,8 @@ xbar_eng_4 <- redundant_summary |>
   round(2)
 ```
 
-In this experiment, the average percentage of redundant adjective usage among subjects who responded in English when presented with an image with 4 items in it is `r xbar_eng_4`.
-Along with the sample average as a point estimate, however, we can construct a confidence interval for the true mean redundant adjective usage of English speakers who use redundant color adjectives when describing items in an image that is not very dense.
+In diesem Experiment beträgt der durchschnittliche Prozentsatz der Verwendung redundanter Adjektive bei Versuchspersonen, die auf Englisch antworteten, wenn ihnen ein Bild mit 4 Elementen gezeigt wurde, `r xbar_eng_4`.
+Zusammen mit dem Stichprobenmittelwert als Punktschätzung können wir jedoch ein Konfidenzintervall für den wahren mittleren Anteil der Verwendung redundanter Adjektive bei Englischsprechenden erstellen, die redundante Farbadjektive verwenden, wenn sie Elemente in einem nicht sehr dichten Bild beschreiben.
 
 ```{r}
 #| label: boot-eng-4-construct
@@ -406,10 +406,10 @@ ci_eng_4_lower <- as.numeric(ci_eng_4)[1]
 ci_eng_4_upper <- as.numeric(ci_eng_4)[2]
 ```
 
-Using a computational method, we can construct the interval via bootstrapping.
-@fig-boot-eng-4-viz shows the distribution of 1,000 bootstrapped means from this sample.
-The 95% confidence interval (that is calculated by taking the 2.5th and 97.5th percentile of the bootstrap distribution is `r round(ci_eng_4_lower,1)`% to `r round(ci_eng_4_upper,1)`%.
-Note that this interval for the true population parameter is only valid if we can assume that the sample of English speakers are representative of the population of all English speakers.
+Mit einer computergestützten Methode können wir das Intervall mittels Bootstrapping erstellen.
+@fig-boot-eng-4-viz zeigt die Verteilung von 1.000 Bootstrap-Mittelwerten aus dieser Stichprobe.
+Das 95%-Konfidenzintervall (das berechnet wird, indem das 2,5. und 97,5. Perzentil der Bootstrap-Verteilung genommen wird) beträgt `r round(ci_eng_4_lower,1)`% bis `r round(ci_eng_4_upper,1)`%.
+Beachten Sie, dass dieses Intervall für den wahren Grundgesamtheitsparameter nur gültig ist, wenn wir davon ausgehen können, dass die Stichprobe der Englischsprechenden für die Grundgesamtheit aller Englischsprechenden repräsentativ ist.
 
 ```{r}
 #| label: fig-boot-eng-4-viz
@@ -449,11 +449,11 @@ boot_eng_4 |>
   scale_x_continuous(labels = label_percent(scale = 1))
 ```
 
-Using a similar technique, we can also construct confidence intervals for the true mean redundant adjective usage percentage for English speakers who are shown dense (16 item) displays and for Spanish speakers with both types (4 and 16 items) displays.
-However, these confidence intervals are not very meaningful to compare to one another as the interpretation of the "true mean redundant adjective usage percentage" is quite an abstract concept.
-Instead, we might be more interested in comparative questions such as "Does redundant adjective usage differ between dense and sparse displays among English speakers and among Spanish speakers?" or "Does redundant adjective usage differ between English speakers and Spanish speakers?" To answer either of these questions we need to conduct a hypothesis test.
+Mit einer ähnlichen Technik können wir auch Konfidenzintervalle für den wahren mittleren Prozentsatz der Verwendung redundanter Adjektive bei Englischsprechenden, die dichte (16-Element-)Darstellungen gezeigt bekommen, und bei Spanischsprechenden mit beiden Darstellungstypen (4 und 16 Elemente) erstellen.
+Diese Konfidenzintervalle sind jedoch nicht sehr sinnvoll miteinander zu vergleichen, da die Interpretation des „wahren mittleren Prozentsatzes der Verwendung redundanter Adjektive" ein recht abstraktes Konzept ist.
+Stattdessen könnten wir an Vergleichsfragen interessiert sein, wie z. B. „Unterscheidet sich die Verwendung redundanter Adjektive zwischen dichten und spärlichen Darstellungen bei Englischsprechenden und bei Spanischsprechenden?" oder „Unterscheidet sich die Verwendung redundanter Adjektive zwischen Englisch- und Spanischsprechenden?" Um eine dieser Fragen zu beantworten, müssen wir einen Hypothesentest durchführen.
 
-### Paired mean test
+### Gepaarter Mittelwerttest
 
 ```{r}
 redundant_paired <- redundant |>
@@ -471,12 +471,12 @@ redundant_paired_mean <- redundant_paired |>
   round(2)
 ```
 
-Let's start with the following question: "Do the data provide convincing evidence of a difference in mean redundant adjective usage percentages between sparse (4 item) and dense (16 item) displays for English speakers?" Note that the English speaking participants were each evaluated on both the 4 item and the 16 item displays.
-Therefore, the variable of interest is the difference in redundant percentage.
-The statistic of interest will be the average of the differences, here $\bar{x}_{diff} =$ `r redundant_paired_mean`.
+Beginnen wir mit der folgenden Frage: „Liefern die Daten überzeugende Belege für einen Unterschied im mittleren Prozentsatz der Verwendung redundanter Adjektive zwischen spärlichen (4 Elemente) und dichten (16 Elemente) Darstellungen bei Englischsprechenden?" Beachten Sie, dass die englischsprachigen Teilnehmer jeweils sowohl die 4-Element- als auch die 16-Element-Darstellungen bewertet wurden.
+Daher ist die interessierende Variable die Differenz im Redundanzprozentsatz.
+Die interessierende Statistik ist der Mittelwert der Differenzen, hier $\bar{x}_{diff} =$ `r redundant_paired_mean`.
 
-Data from the first six English speaking participants are seen in @tbl-redundant-data-paired.
-Although the redundancy percentages seem higher in the 16 item task, a hypothesis test will tell us whether the differences observed in the data could be due to natural variability.
+Daten der ersten sechs englischsprachigen Teilnehmer sind in @tbl-redundant-data-paired zu sehen.
+Obwohl die Redundanzprozentsätze bei der 16-Element-Aufgabe höher zu sein scheinen, wird ein Hypothesentest uns sagen, ob die in den Daten beobachteten Unterschiede auf natürliche Variabilität zurückzuführen sein könnten.
 
 ```{r}
 #| label: tbl-redundant-data-paired
@@ -497,16 +497,16 @@ redundant_paired |>
   column_spec(2:4, width = "12em")
 ```
 
-We can answer the research question using a hypothesis test with the following hypotheses:
+Wir können die Forschungsfrage mit einem Hypothesentest mit folgenden Hypothesen beantworten:
 
 $$H_0: \mu_{diff} = 0$$ $$H_A: \mu_{diff} \ne 0$$
 
-where $\mu_{diff}$ is the true difference in redundancy percentages when comparing a 16 item display with a 4 item display.
-Recall that the computational method used to assess a hypothesis pertaining to the true average of a paired difference shuffles the observed percentage across the two groups (4 item vs 16 item) but **within** a single participant.
-The shuffling process allows for repeated calculations of potential sample differences under the condition that the null hypothesis is true.
+wobei $\mu_{diff}$ der wahre Unterschied in den Redundanzprozentsätzen beim Vergleich einer 16-Element-Darstellung mit einer 4-Element-Darstellung ist.
+Erinnern Sie sich, dass die computergestützte Methode zur Bewertung einer Hypothese über den wahren Mittelwert einer gepaarten Differenz den beobachteten Prozentsatz über die beiden Gruppen (4 Elemente vs. 16 Elemente) mischt, aber **innerhalb** einer einzelnen Versuchsperson.
+Der Mischprozess ermöglicht wiederholte Berechnungen möglicher Stichprobendifferenzen unter der Bedingung, dass die Nullhypothese wahr ist.
 
-@fig-eng-viz shows the distribution of 1,000 mean differences from redundancy percentages permuted across the two conditions.
-Note that the distribution is centered at 0, since the structure of randomly assigning redundancy percentages to each item display will balance the data out such that the average of any differences will be zero.
+@fig-eng-viz zeigt die Verteilung von 1.000 mittleren Differenzen aus den über die beiden Bedingungen permutierten Redundanzprozentsätzen.
+Beachten Sie, dass die Verteilung bei 0 zentriert ist, da die Struktur des zufälligen Zuweisens von Redundanzprozentsätzen zu jedem Element-Display die Daten ausgleicht, sodass der Mittelwert aller Differenzen null ist.
 
 ```{r}
 #| label: fig-eng-viz
@@ -558,18 +558,18 @@ null_eng |>
   scale_x_continuous(labels = label_percent(scale = 1))
 ```
 
-With such a small p-value, we reject the null hypothesis and conclude that the data provide convincing evidence of a difference in mean redundant adjective usage percentages across different displays for English speakers.
+Bei einem so kleinen p-Wert lehnen wir die Nullhypothese ab und schlussfolgern, dass die Daten überzeugende Belege für einen Unterschied im mittleren Prozentsatz der Verwendung redundanter Adjektive bei verschiedenen Darstellungen für Englischsprechende liefern.
 
-### Two independent means test
+### Test für zwei unabhängige Mittelwerte
 
-Finally, let's consider the question "How does redundant adjective usage differ between English speakers and Spanish speakers?" The English speakers are independent from the Spanish speakers, but since the same subjects were shown the two types of displays, we can't combine data from the two display types (4 objects and 16 objects) together while maintaining independence of observations.
-Therefore, to answer questions about language differences, we will need to conduct two hypothesis tests, one for sparse displays and the other for dense displays.
-In each of the tests, the hypotheses are as follows:
+Betrachten wir schließlich die Frage „Wie unterscheidet sich die Verwendung redundanter Adjektive zwischen Englisch- und Spanischsprechenden?" Die Englischsprechenden sind unabhängig von den Spanischsprechenden, aber da dieselben Versuchspersonen beide Darstellungstypen gezeigt bekommen haben, können wir die Daten aus den beiden Darstellungstypen (4 Objekte und 16 Objekte) nicht kombinieren und dabei die Unabhängigkeit der Beobachtungen aufrechterhalten.
+Um Fragen zu sprachlichen Unterschieden zu beantworten, müssen wir daher zwei Hypothesentests durchführen, einen für spärliche Darstellungen und einen für dichte Darstellungen.
+In jedem der Tests lauten die Hypothesen wie folgt:
 
 $$H_0: \mu_{English} = \mu_{Spanish}$$ $$H_A: \mu_{English} \ne \mu_{Spanish}$$
 
-Here, the randomization process is slightly different than the paired setting (because the English and Spanish speakers do not have a natural pairing across the two groups).
-To answer the research question using a computational method, we can use a randomization test where we permute the data across all participants under the assumption that the null hypothesis is true (no difference in mean redundant adjective usage percentages across English vs Spanish speakers).
+Hier unterscheidet sich der Randomisierungsprozess leicht von der gepaarten Einstellung (weil die Englisch- und Spanischsprechenden keine natürliche Paarung über die beiden Gruppen hinweg aufweisen).
+Um die Forschungsfrage mit einer computergestützten Methode zu beantworten, können wir einen Randomisierungstest verwenden, bei dem wir die Daten über alle Teilnehmer hinweg unter der Annahme permutieren, dass die Nullhypothese wahr ist (kein Unterschied im mittleren Prozentsatz der Verwendung redundanter Adjektive zwischen Englisch- und Spanischsprechenden).
 
 ```{r}
 # 4 item
@@ -611,8 +611,8 @@ pval_16 <- null_16 |>
   as.numeric()
 ```
 
-@fig-compare-lang-viz shows the null distributions for each of the two hypothesis tests.
-The p-value for the 4 item display comparison is very small (`r pval_4`) while the p-value for the 16 item display is much larger (`r pval_16`).
+@fig-compare-lang-viz zeigt die Nullverteilungen für jeden der beiden Hypothesentests.
+Der p-Wert für den 4-Element-Darstellungsvergleich ist sehr klein (`r pval_4`), während der p-Wert für die 16-Element-Darstellung viel größer ist (`r pval_16`).
 
 ```{r}
 #| label: fig-compare-lang-viz
@@ -684,15 +684,15 @@ null_16 |>
   scale_x_continuous(labels = label_percent(scale = 1))
 ```
 
-Based on the p-values (a measure of deviation from the null claim), we can conclude that the data provide convincing evidence of a difference in mean redundant adjective usage percentages between languages in 4 item displays (small p-value) but not in 16 item displays (not small p-value).
-The results suggests that language patterns around redundant adjective usage might be more similar for denser displays than sparser displays across English and Spanish speakers.
+Basierend auf den p-Werten (einem Maß für die Abweichung von der Nullbehauptung) können wir schlussfolgern, dass die Daten überzeugende Belege für einen Unterschied im mittleren Prozentsatz der Verwendung redundanter Adjektive zwischen Sprachen bei 4-Element-Darstellungen liefern (kleiner p-Wert), aber nicht bei 16-Element-Darstellungen (nicht kleiner p-Wert).
+Die Ergebnisse legen nahe, dass Sprachmuster rund um die Verwendung redundanter Adjektive bei dichteren Darstellungen ähnlicher sein könnten als bei spärlicheren Darstellungen bei Englisch- und Spanischsprechenden.
 
 \clearpage
 
-## Interactive R tutorials {#sec-inference-tutorials}
+## Interaktive R-Tutorials {#sec-inference-tutorials}
 
-Navigate the concepts you've learned in this part in R using the following self-paced tutorials.
-All you need is your browser to get started!
+Navigieren Sie die in diesem Teil erlernten Konzepte in R mithilfe der folgenden selbstgesteuerten Tutorials.
+Alles, was Sie brauchen, ist Ihr Browser, um loszulegen!
 
 ::: {.alltutorials data-latex=""}
 [Tutorial 5: Statistical inference](https://openintrostat.github.io/ims-tutorials/05-infer/)
@@ -776,17 +776,17 @@ https://openintro.shinyapps.io/ims-05-infer-08
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of tutorials supporting this book at\
+Die vollständige Liste der Tutorials, die dieses Buch unterstützen, finden Sie unter\
 <https://openintrostat.github.io/ims-tutorials>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of tutorials supporting this book [here](https://openintrostat.github.io/ims-tutorials).
+Die vollständige Liste der Tutorials, die dieses Buch unterstützen, finden Sie [hier](https://openintrostat.github.io/ims-tutorials).
 :::
 
-## R labs {#sec-inference-labs}
+## R-Labore {#sec-inference-labs}
 
-Further apply the concepts you've learned in this part in R with computational labs that walk you through a data analysis case study.
+Wenden Sie die in diesem Teil erlernten Konzepte weiter in R mit computergestützten Laboren an, die Sie durch eine Datenanalyse-Fallstudie führen.
 
 ::: {.singlelab data-latex=""}
 [Inference for categorical responses - Texting while driving](https://www.openintro.org/go?id=ims-r-lab-infer-1)
@@ -807,10 +807,10 @@ https://www.openintro.org/go?id=ims-r-lab-infer-2
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of labs supporting this book at\
+Die vollständige Liste der Labore, die dieses Buch unterstützen, finden Sie unter\
 <https://www.openintro.org/go?id=ims-r-labs>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of labs supporting this book [here](https://www.openintro.org/go?id=ims-r-labs).
+Die vollständige Liste der Labore, die dieses Buch unterstützen, finden Sie [hier](https://www.openintro.org/go?id=ims-r-labs).
 :::
