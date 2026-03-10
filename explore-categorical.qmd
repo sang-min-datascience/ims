@@ -1,4 +1,4 @@
-# Exploring categorical data {#sec-explore-categorical}
+# Kategoriale Daten erkunden {#sec-explore-categorical}
 
 ```{r}
 #| include: false
@@ -7,24 +7,24 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-This chapter focuses on exploring **categorical** data using summary statistics and visualizations.
-The summaries and graphs presented in this chapter are created using statistical software; however, since this might be your first exposure to the concepts, we take our time in this chapter to detail how to create them.
-Where possible, we present multivariate plots; plots that visualize the relationship between multiple variables.
-Mastery of the content presented in this chapter will be crucial for understanding the methods and techniques introduced in the rest of the book.
+Dieses Kapitel befasst sich mit der Erkundung **kategorialer** Daten mithilfe von Zusammenfassungsstatistiken und Visualisierungen.
+Die in diesem Kapitel vorgestellten Zusammenfassungen und Grafiken werden mit statistischer Software erstellt; da dies jedoch möglicherweise Ihre erste Begegnung mit diesen Konzepten ist, nehmen wir uns in diesem Kapitel die Zeit, die Erstellung im Detail zu erläutern.
+Wo immer möglich, stellen wir multivariate Grafiken vor, also Grafiken, die die Beziehung zwischen mehreren Variablen visualisieren.
+Die Beherrschung der in diesem Kapitel vorgestellten Inhalte ist entscheidend für das Verständnis der im Rest des Buches eingeführten Methoden und Techniken.
 :::
 
-In this chapter we will work with data on loans from Lending Club that you've previously seen in @sec-data-hello.
-The `loan50` dataset from @sec-data-hello represents a sample from a larger loan dataset called `loans`.
-This larger dataset contains information on 10,000 loans made through Lending Club.
-We will examine the relationship between `homeownership`, which for the `loans` data can take a value of `rent`, `mortgage` (owns but has a mortgage), or `own`, and `application_type`, which indicates whether the loan application was made with a partner or whether it was an individual application.
+In diesem Kapitel arbeiten wir mit Daten zu Krediten von Lending Club, die Sie bereits in @sec-data-hello gesehen haben.
+Der Datensatz `loan50` aus @sec-data-hello stellt eine Stichprobe aus einem größeren Kreditdatensatz namens `loans` dar.
+Dieser größere Datensatz enthält Informationen zu 10.000 über Lending Club abgeschlossenen Krediten.
+Wir untersuchen die Beziehung zwischen `homeownership`, das für die `loans`-Daten den Wert `rent`, `mortgage` (Eigentümer mit Hypothek) oder `own` annehmen kann, und `application_type`, das angibt, ob die Kreditanfrage gemeinsam mit einem Partner oder als Einzelanfrage gestellt wurde.
 
 ::: {.data data-latex=""}
-The [`loans_full_schema`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
-Based on the data in this dataset we have modified the `homeownership` and `application_type` variables.
-We will refer to this modified dataset as `loans`.
+Die Daten [`loans_full_schema`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
+Basierend auf den Daten in diesem Datensatz haben wir die Variablen `homeownership` und `application_type` modifiziert.
+Wir bezeichnen diesen modifizierten Datensatz als `loans`.
 :::
 
-## Contingency tables and bar plots
+## Kontingenztafeln und Balkendiagramme
 
 ```{r}
 loans <- loans_full_schema |>
@@ -44,16 +44,16 @@ loans_individual_rent <- loans |>
   nrow()
 ```
 
-@tbl-loan-home-app-type-totals summarizes two variables: `application_type` and `homeownership`.
-Note that loans from Lending Club are typically for small items or for cash, not for homes.
-The individuals in the dataset are taking out loans for their personal use, and we categorize them based on their `homeownership` status (which is unrelated to the purpose of the loan).
-A table that summarizes data for two categorical variables in this way is called a **contingency table**\index{contingency table}.
-Each value in the table represents the number of times a particular combination of variable outcomes occurred.
+@tbl-loan-home-app-type-totals fasst zwei Variablen zusammen: `application_type` und `homeownership`.
+Zu beachten ist, dass Kredite von Lending Club in der Regel für kleinere Anschaffungen oder als Bargeld vergeben werden, nicht für Immobilien.
+Die Personen im Datensatz nehmen Kredite für den persönlichen Gebrauch auf, und wir kategorisieren sie anhand ihres `homeownership`-Status (der nichts mit dem Kreditzweck zu tun hat).
+Eine Tabelle, die Daten für zwei kategoriale Variablen auf diese Weise zusammenfasst, wird als **Kontingenztafel**\index{contingency table} bezeichnet.
+Jeder Wert in der Tabelle steht für die Anzahl der Fälle, in denen eine bestimmte Kombination von Variablenausprägungen aufgetreten ist.
 
-For example, the value `r loans_individual_rent` corresponds to the number of loans in the dataset where the borrower rents their home and the application type was by an individual.
-Row and column totals are also included.
-The **row totals**\index{row totals} provide the total counts across each row and the **column totals**\index{column totals} down each column.
-We can also create a table that shows only the overall percentages or proportions for each combination of categories, or we can create a table for a single variable, such as the one shown in @tbl-loan-homeownership-totals for the `homeownership` variable.
+Der Wert `r loans_individual_rent` entspricht beispielsweise der Anzahl der Kredite im Datensatz, bei denen der Kreditnehmer zur Miete wohnt und die Antragsart „Einzelperson" war.
+Zeilen- und Spaltensummen sind ebenfalls enthalten.
+Die **Zeilensummen**\index{row totals} geben die Gesamtzahl der Fälle in jeder Zeile an, die **Spaltensummen**\index{column totals} entsprechend für jede Spalte.
+Wir können auch eine Tabelle erstellen, die nur die Gesamtprozentsätze oder Anteile für jede Kombination der Kategorien zeigt, oder eine Tabelle für eine einzelne Variable, wie die in @tbl-loan-homeownership-totals für die Variable `homeownership` dargestellte.
 
 ```{r}
 #| include: false
@@ -96,9 +96,9 @@ loans |>
   column_spec(1:2, width = "10em")
 ```
 
-A bar plot is a common way to display a single categorical variable.
-@fig-loan-homeownership-bar-plot-1 displays a **bar plot** of the `homeownership` variable.
-In @fig-loan-homeownership-bar-plot-2 the counts are converted into proportions, showing the proportion of observations that are in each level.
+Ein Balkendiagramm ist eine übliche Methode zur Darstellung einer einzelnen kategorialen Variable.
+@fig-loan-homeownership-bar-plot-1 zeigt ein **Balkendiagramm** der Variable `homeownership`.
+In @fig-loan-homeownership-bar-plot-2 werden die Häufigkeiten in Anteile umgerechnet, die den Anteil der Beobachtungen in jeder Ausprägung zeigen.
 
 ```{r}
 #| label: fig-loan-homeownership-bar-plot
@@ -125,21 +125,21 @@ loans |>
   labs(x = "Homeownership", y = "Proportion")
 ```
 
-## Visualizing two categorical variables
+## Visualisierung zweier kategorialer Variablen
 
-### Bar plots with two variables
+### Balkendiagramme mit zwei Variablen
 
-We can display the distributions of two categorical variables on a bar plot concurrently.
-Such plots are generally useful for visualizing the relationship between two categorical variables.
-@fig-loan-homeownership-app-type-bar-plot shows three such plots that visualize @fig-loan-homeownership-app-type-bar-plot-1 is a **stacked bar plot**\index{plot!stacked bar}\index{stacked bar plot}.
-This plot most clearly displays that loan applicants most commonly live in mortgaged homes.
-It is difficult to say, based on this plot alone, how different application types vary across the levels of homeownership.
-@fig-loan-homeownership-app-type-bar-plot-2 is a **standardized bar plot**\index{plot!standardized bar}\index{standardized bar plot} (also known as **filled bar plot**\index{plot!filled bar}\index{filled bar plot}).
-This type of visualization is helpful in understanding the fraction of individual or joint loan applications for borrowers in each level of `homeownership`.
-Additionally, since the proportions of joint and individual loans vary across the groups, we can conclude that the two variables are associated for this sample.
-Finally, @fig-loan-homeownership-app-type-bar-plot-3 is a **dodged bar plot**\index{plot!dodged bar}\index{dodged bar plot}.
-This plot most clearly displays that within each level of homeownership, individual applications are more common than joint applications.
-This plot most clearly displays that joint applications are most common among loans for applicants who live in mortgaged homes, compared to renters and owners.
+Wir können die Verteilungen zweier kategorialer Variablen gleichzeitig in einem Balkendiagramm darstellen.
+Solche Diagramme sind im Allgemeinen nützlich, um den Zusammenhang zwischen zwei kategorialen Variablen zu visualisieren.
+@fig-loan-homeownership-app-type-bar-plot zeigt drei solcher Diagramme; @fig-loan-homeownership-app-type-bar-plot-1 ist ein **gestapeltes Balkendiagramm**\index{plot!stacked bar}\index{stacked bar plot}.
+Dieses Diagramm zeigt am deutlichsten, dass Kreditantragsteller am häufigsten in Häusern mit Hypothek wohnen.
+Allein anhand dieses Diagramms lässt sich schwer erkennen, wie sich die verschiedenen Antragsarten über die Ausprägungen von `homeownership` unterscheiden.
+@fig-loan-homeownership-app-type-bar-plot-2 ist ein **standardisiertes Balkendiagramm**\index{plot!standardized bar}\index{standardized bar plot} (auch bekannt als **gefülltes Balkendiagramm**\index{plot!filled bar}\index{filled bar plot}).
+Diese Art der Visualisierung hilft dabei, den Anteil der Einzel- oder gemeinsamen Kreditanträge für Kreditnehmer in jeder Ausprägung von `homeownership` zu verstehen.
+Da die Anteile gemeinsamer und einzelner Kredite zwischen den Gruppen variieren, können wir zudem schließen, dass die beiden Variablen in dieser Stichprobe einen Zusammenhang aufweisen.
+Schließlich ist @fig-loan-homeownership-app-type-bar-plot-3 ein **nebeneinandergestelltes Balkendiagramm**\index{plot!dodged bar}\index{dodged bar plot}.
+Dieses Diagramm zeigt am deutlichsten, dass innerhalb jeder Ausprägung von `homeownership` Einzelanträge häufiger sind als gemeinsame Anträge.
+Außerdem zeigt dieses Diagramm am deutlichsten, dass gemeinsame Anträge am häufigsten bei Krediten für Antragsteller vorkommen, die in Häusern mit Hypothek wohnen, verglichen mit Mietern und Eigentümern.
 
 ```{r}
 #| include: false
@@ -180,43 +180,43 @@ ggplot(loans, aes(x = homeownership, fill = application_type)) +
 ```
 
 ::: {.workedexample data-latex=""}
-Examine the three bar plots in @fig-loan-homeownership-app-type-bar-plot.
-When is the stacked, dodged, or standardized bar plot the most useful?
+Betrachten Sie die drei Balkendiagramme in @fig-loan-homeownership-app-type-bar-plot.
+Wann ist das gestapelte, das nebeneinandergestellte oder das standardisierte Balkendiagramm am nützlichsten?
 
 ------------------------------------------------------------------------
 
-The stacked bar plot is most useful when it's reasonable to assign one variable as the explanatory variable (here `homeownership`) and the other variable as the response (here `application_type`) since we are effectively grouping by one variable first and then breaking it down by the others.
+Das gestapelte Balkendiagramm ist am nützlichsten, wenn es sinnvoll ist, eine Variable als erklärende Variable (hier `homeownership`) und die andere Variable als Antwortvariable (hier `application_type`) festzulegen, da wir zunächst nach einer Variable gruppieren und diese dann durch die anderen aufschlüsseln.
 
-Dodged bar plots are more agnostic in their display about which variable, if any, represents the explanatory and which the response variable.
-It is also easy to discern the number of cases in each of the six different group combinations.
-However, one downside is that it tends to require more horizontal space; the narrowness of Plot B compared to the other two in @fig-loan-homeownership-app-type-bar-plot makes the plot feel a bit cramped.
-Additionally, when two groups are of very different sizes, as we see in the group `own` relative to either of the other two groups, it is difficult to discern if there is an association between the variables.
+Nebeneinandergestellte Balkendiagramme sind hinsichtlich der Darstellung agnostischer in Bezug darauf, welche Variable die erklärende und welche die Antwortvariable ist.
+Außerdem lässt sich die Anzahl der Fälle in jeder der sechs verschiedenen Gruppenkombinationen leicht ablesen.
+Ein Nachteil ist jedoch, dass es tendenziell mehr horizontalen Platz benötigt; die Schmalheit von Diagramm B im Vergleich zu den anderen beiden in @fig-loan-homeownership-app-type-bar-plot lässt das Diagramm etwas beengt wirken.
+Wenn zwei Gruppen sehr unterschiedlich groß sind, wie bei der Gruppe `own` im Vergleich zu den anderen beiden Gruppen, ist es zudem schwierig zu erkennen, ob ein Zusammenhang zwischen den Variablen besteht.
 
-The standardized stacked bar plot is helpful if the primary variable in the stacked bar plot is relatively imbalanced, e.g., the category has only a third of the observations in the category, making the simple stacked bar plot less useful for checking for an association.
-The major downside of the standardized version is that we lose all sense of how many cases each of the bars represents.
+Das standardisierte gestapelte Balkendiagramm ist hilfreich, wenn die primäre Variable im gestapelten Balkendiagramm relativ unausgewogen ist, z.B. wenn eine Kategorie nur ein Drittel der Beobachtungen enthält, was das einfache gestapelte Balkendiagramm zur Überprüfung eines Zusammenhangs weniger nützlich macht.
+Der Hauptnachteil der standardisierten Version ist, dass wir jegliches Gefühl dafür verlieren, wie viele Fälle jeder Balken repräsentiert.
 :::
 
 \vspace{-5mm}
 
-### Mosaic plots
+### Mosaikplots
 
-A **mosaic plot**\index{plot!mosaic}\index{mosaic plot} is a visualization technique suitable for contingency tables that resembles a standardized stacked bar plot with the benefit that we still see the relative group sizes of the primary variable as well.
+Ein **Mosaikplot**\index{plot!mosaic}\index{mosaic plot} ist eine für Kontingenztafeln geeignete Visualisierungstechnik, die einem standardisierten gestapelten Balkendiagramm ähnelt, mit dem Vorteil, dass wir dennoch die relativen Gruppengrößen der primären Variable sehen.
 
 ```{r}
 #| include: false
 terms_chp_04 <- c(terms_chp_04, "mosaic plot")
 ```
 
-To get started in creating our first mosaic plot, we'll break a square into columns for each category of the variable, with the result shown in  @fig-loan-homeownership-type-mosaic-plot-1.
-Each column represents a level of `homeownership`, and the column widths correspond to the proportion of loans in each of those categories.
-For instance, there are fewer loans where the borrower is an owner than where the borrower has a mortgage.
-In general, mosaic plots use box *areas* to represent the number of cases in each category.
+Um mit der Erstellung unseres ersten Mosaikplots zu beginnen, unterteilen wir ein Quadrat in Spalten für jede Kategorie der Variable, mit dem in @fig-loan-homeownership-type-mosaic-plot-1 dargestellten Ergebnis.
+Jede Spalte repräsentiert eine Ausprägung von `homeownership`, und die Spaltenbreiten entsprechen dem Anteil der Kredite in jeder dieser Kategorien.
+So gibt es beispielsweise weniger Kredite, bei denen der Kreditnehmer Eigentümer ist, als solche, bei denen der Kreditnehmer eine Hypothek hat.
+Im Allgemeinen verwenden Mosaikplots Rechteck*flächen*, um die Anzahl der Fälle in jeder Kategorie darzustellen.
 
-@fig-loan-homeownership-type-mosaic-plot-2 displays the relationship between homeownership and application type.
-Each column is split proportionally to the number of loans from individual and joint borrowers.
-For example, the second column represents loans where the borrower has a mortgage, and it was divided into individual loans (upper) and joint loans (lower).
-As another example, the bottom segment of the third column represents loans where the borrower owns their home and applied jointly, while the upper segment of this column represents borrowers who are homeowners and filed individually.
-We can again use this plot to see that the `homeownership` and `application_type` variables are associated, since some columns are divided in different vertical locations than others, which was the same technique used for checking an association in the standardized stacked bar plot.
+@fig-loan-homeownership-type-mosaic-plot-2 zeigt den Zusammenhang zwischen `homeownership` und `application_type`.
+Jede Spalte ist proportional zur Anzahl der Kredite von Einzel- und gemeinsamen Kreditnehmern aufgeteilt.
+Die zweite Spalte repräsentiert beispielsweise Kredite, bei denen der Kreditnehmer eine Hypothek hat, und ist in Einzelkredite (oben) und gemeinsame Kredite (unten) unterteilt.
+Als weiteres Beispiel repräsentiert das untere Segment der dritten Spalte Kredite, bei denen der Kreditnehmer Eigentümer ist und gemeinsam beantragt hat, während das obere Segment dieser Spalte Kreditnehmer repräsentiert, die Eigentümer sind und einzeln beantragt haben.
+Wir können diesen Plot erneut verwenden, um zu erkennen, dass die Variablen `homeownership` und `application_type` einen Zusammenhang aufweisen, da einige Spalten an anderen vertikalen Stellen unterteilt sind als andere – dieselbe Technik, die zur Überprüfung eines Zusammenhangs im standardisierten gestapelten Balkendiagramm verwendet wurde.
 
 ```{r}
 #| label: fig-loan-homeownership-type-mosaic-plot
@@ -251,9 +251,9 @@ ggplot(loans) +
   guides(fill = FALSE)
 ```
 
-In @fig-loan-homeownership-type-mosaic-plot, we chose to first split by the homeowner status of the borrower.
-However, we could have instead first split by the application type, as in @fig-loan-app-type-mosaic-plot.
-Like with the bar plots, it's common to use the explanatory variable to represent the first split in a mosaic plot, and then for the response to break up each level of the explanatory variable if these labels are reasonable to attach to the variables under consideration.
+In @fig-loan-homeownership-type-mosaic-plot haben wir uns entschieden, zunächst nach dem Eigentümerstatus des Kreditnehmers aufzuteilen.
+Wir hätten jedoch auch zunächst nach dem Antragstyp aufteilen können, wie in @fig-loan-app-type-mosaic-plot.
+Wie bei den Balkendiagrammen ist es üblich, die erklärende Variable für die erste Aufteilung in einem Mosaikplot zu verwenden und dann die Antwortvariable zur Aufschlüsselung jeder Ausprägung der erklärenden Variable zu nutzen, sofern diese Bezeichnungen für die betrachteten Variablen sinnvoll sind.
 
 ```{r}
 #| label: fig-loan-app-type-mosaic-plot
@@ -277,15 +277,15 @@ ggplot(loans) +
 
 \clearpage
 
-## Row and column proportions
+## Zeilen- und Spaltenanteile
 
-In the previous sections we inspected visualizations of two categorical variables in bar plots and mosaic plots.
-However, we have not discussed how the values in the bar and mosaic plots that show proportions are calculated.
-In this section we will investigate fractional breakdown of one variable in another and we can modify our contingency table to provide such a view.
-@tbl-loan-home-app-type-row-proportions shows **row proportions**\index{row proportions} for @tbl-loan-home-app-type-totals, which are computed as the counts divided by their row totals.
-The value 3496 at the intersection of individual and rent is replaced by $3496 / 8505 = 0.411,$ i.e., 3496 divided by its row total, 8505.
-So, what does 0.411 represent?
-It corresponds to the proportion of individual applicants who rent.
+In den vorherigen Abschnitten haben wir Visualisierungen zweier kategorialer Variablen in Balkendiagrammen und Mosaikplots untersucht.
+Wir haben jedoch noch nicht besprochen, wie die Werte in den Balken- und Mosaikplots, die Anteile zeigen, berechnet werden.
+In diesem Abschnitt werden wir die anteilsmäßige Aufschlüsselung einer Variable durch eine andere untersuchen und unsere Kontingenztafel entsprechend anpassen.
+@tbl-loan-home-app-type-row-proportions zeigt **Zeilenanteile**\index{row proportions} für @tbl-loan-home-app-type-totals, die als Häufigkeiten geteilt durch ihre Zeilensummen berechnet werden.
+Der Wert 3496 am Schnittpunkt von individual und rent wird durch $3496 / 8505 = 0.411,$ ersetzt, d.h. 3496 geteilt durch seine Zeilensumme 8505.
+Was repräsentiert also 0,411?
+Es entspricht dem Anteil der Einzelantragsteller, die zur Miete wohnen.
 
 ```{r}
 #| label: tbl-loan-home-app-type-row-proportions
@@ -310,10 +310,10 @@ loans |>
   column_spec(2:5, width = "5em")
 ```
 
-A contingency table of the **column proportions**\index{column proportions} is computed in a similar way, where each is computed as the count divided by the corresponding column total.
-@tbl-loan-home-app-type-column-proportions shows such a table, and here the value 0.906 indicates that 90.6% of renters applied as individuals for the loan.
-This rate is higher compared to loans from people with mortgages (80.2%) or who own their home (86.5%).
-Because these rates vary between the three levels of `homeownership` (`rent`, `mortgage`, `own`), this provides evidence that `application_type` and `homeownership` variables may be associated.
+Eine Kontingenztafel der **Spaltenanteile**\index{column proportions} wird auf ähnliche Weise berechnet, wobei jeder Wert als Häufigkeit geteilt durch die entsprechende Spaltensumme berechnet wird.
+@tbl-loan-home-app-type-column-proportions zeigt eine solche Tabelle, wobei der Wert 0,906 anzeigt, dass 90,6 % der Mieter den Kredit als Einzelperson beantragt haben.
+Diese Rate ist höher als bei Krediten von Personen mit Hypotheken (80,2 %) oder Hauseigentümern (86,5 %).
+Da diese Raten zwischen den drei Ausprägungen von `homeownership` (`rent`, `mortgage`, `own`) variieren, liefert dies Hinweise darauf, dass die Variablen `application_type` und `homeownership` möglicherweise einen Zusammenhang aufweisen.
 
 ```{r}
 #| label: tbl-loan-home-app-type-column-proportions
@@ -338,53 +338,53 @@ loans |>
   column_spec(2:4, width = "5em")
 ```
 
-Row and column proportions can also be thought of as **conditional proportions**\index{conditional proportions} as they tell us about the proportion of observations in a given level of a categorical variable conditional on the level of another categorical variable.
+Zeilen- und Spaltenanteile können auch als **bedingte Anteile**\index{conditional proportions} betrachtet werden, da sie uns Auskunft über den Anteil der Beobachtungen in einer bestimmten Ausprägung einer kategorialen Variable geben, bedingt auf die Ausprägung einer anderen kategorialen Variable.
 
 ```{r}
 #| include: false
 terms_chp_04 <- c(terms_chp_04, "row proportions", "column proportions", "conditional proportions")
 ```
 
-We could also have checked for an association between `application_type` and `homeownership` in @tbl-loan-home-app-type-row-proportions using row proportions.
-When comparing these row proportions, we would look down columns to see if the fraction of loans where the borrower rents, has a mortgage, or owns varied across the application types.
+Wir hätten in @tbl-loan-home-app-type-row-proportions auch mithilfe der Zeilenanteile nach einem Zusammenhang zwischen `application_type` und `homeownership` suchen können.
+Beim Vergleich dieser Zeilenanteile würden wir die Spalten nach unten betrachten, um zu sehen, ob der Anteil der Kredite, bei denen der Kreditnehmer mietet, eine Hypothek hat oder Eigentümer ist, über die Antragstypen variiert.
 
 ::: {.guidedpractice data-latex=""}
-What does 0.451 represent in @tbl-loan-home-app-type-row-proportions?
-What does 0.802 represent in @tbl-loan-home-app-type-column-proportions?[^04-explore-categorical-1]
+Was repräsentiert 0,451 in @tbl-loan-home-app-type-row-proportions?
+Was repräsentiert 0,802 in @tbl-loan-home-app-type-column-proportions?[^04-explore-categorical-1]
 :::
 
-[^04-explore-categorical-1]: 0.451 represents the proportion of individual applicants who have a mortgage.
-    0.802 represents the fraction of applicants with mortgages who applied as individuals.
+[^04-explore-categorical-1]: 0,451 repräsentiert den Anteil der Einzelantragsteller, die eine Hypothek haben.
+    0,802 repräsentiert den Anteil der Antragsteller mit Hypotheken, die als Einzelpersonen beantragt haben.
 
 ::: {.guidedpractice data-latex=""}
-What does 0.122 represent in @tbl-loan-home-app-type-row-proportions?
-What does 0.135 represent in @tbl-loan-home-app-type-column-proportions?[^04-explore-categorical-2]
+Was repräsentiert 0,122 in @tbl-loan-home-app-type-row-proportions?
+Was repräsentiert 0,135 in @tbl-loan-home-app-type-column-proportions?[^04-explore-categorical-2]
 :::
 
-[^04-explore-categorical-2]: 0.122 represents the fraction of joint borrowers who own their home.
-    0.135 represents the home-owning borrowers who had a joint application for the loan.
+[^04-explore-categorical-2]: 0,122 repräsentiert den Anteil der gemeinsamen Kreditnehmer, die Eigentümer sind.
+    0,135 repräsentiert den Anteil der eigentumsbesitzenden Kreditnehmer, die einen gemeinsamen Kreditantrag gestellt haben.
 
 ::: {.workedexample data-latex=""}
-Data scientists use statistics to build email spam filters.
-By noting specific characteristics of an email, a data scientist may be able to classify some emails as spam or not spam with high accuracy.
-One such characteristic is the email format, which indicates whether an email has any HTML content, such as bolded text.
-We'll focus on email format and spam status using the dataset; these variables are summarized in a contingency table in @tbl-email-count-table.
-Which would be more helpful to someone hoping to classify email as spam or regular email for this table: row or column proportions?
+Datenwissenschaftler verwenden Statistik, um E-Mail-Spamfilter zu erstellen.
+Durch das Beachten bestimmter Merkmale einer E-Mail kann ein Datenwissenschaftler einige E-Mails mit hoher Genauigkeit als Spam oder Nicht-Spam klassifizieren.
+Ein solches Merkmal ist das E-Mail-Format, das angibt, ob eine E-Mail HTML-Inhalte enthält, wie z.B. fett gedruckten Text.
+Wir konzentrieren uns auf das E-Mail-Format und den Spam-Status mithilfe des Datensatzes; diese Variablen sind in einer Kontingenztafel in @tbl-email-count-table zusammengefasst.
+Was wäre für jemanden, der E-Mails als Spam oder normale E-Mail klassifizieren möchte, für diese Tabelle hilfreicher: Zeilen- oder Spaltenanteile?
 
 ------------------------------------------------------------------------
 
-A data scientist would be interested in how the proportion of spam changes within each email format.
-This corresponds to column proportions: the proportion of spam in plain text emails and the proportion of spam in HTML emails.
-If we generate the column proportions, we can see that a higher fraction of plain text emails are spam ($209/1195 = 17.5\%$) than compared to HTML emails ($158/2726 = 5.8\%$).
-This information on its own is insufficient to classify an email as spam or not spam, as over 80% of plain text emails are not spam.
-Yet, when we carefully combine this information with many other characteristics, we stand a reasonable chance of being able to classify some emails as spam or not spam with confidence.
-This example points out that row and column proportions are not equivalent.
-Before settling on one form for a table, it is important to consider each to ensure that the most useful table is constructed.
-However, sometimes it simply isn't clear which, if either, is more useful.
+Ein Datenwissenschaftler wäre daran interessiert, wie sich der Anteil von Spam innerhalb jedes E-Mail-Formats verändert.
+Dies entspricht den Spaltenanteilen: dem Anteil von Spam in reinen Text-E-Mails und dem Anteil von Spam in HTML-E-Mails.
+Wenn wir die Spaltenanteile berechnen, sehen wir, dass ein höherer Anteil reiner Text-E-Mails Spam ist ($209/1195 = 17.5\%$) als HTML-E-Mails ($158/2726 = 5.8\%$).
+Diese Information allein reicht nicht aus, um eine E-Mail als Spam oder Nicht-Spam zu klassifizieren, da über 80 % der reinen Text-E-Mails kein Spam sind.
+Wenn wir diese Informationen jedoch sorgfältig mit vielen anderen Merkmalen kombinieren, haben wir gute Chancen, einige E-Mails mit Zuversicht als Spam oder Nicht-Spam zu klassifizieren.
+Dieses Beispiel zeigt, dass Zeilen- und Spaltenanteile nicht gleichwertig sind.
+Bevor man sich für eine Form der Tabelle entscheidet, sollte man beide in Betracht ziehen, um sicherzustellen, dass die nützlichste Tabelle erstellt wird.
+Manchmal ist jedoch einfach nicht klar, welche – wenn überhaupt – nützlicher ist.
 :::
 
 ::: {.data data-latex=""}
-The [email](http://openintrostat.github.io/openintro/reference/email.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [email](http://openintrostat.github.io/openintro/reference/email.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -409,23 +409,23 @@ email |>
 ```
 
 ::: {.workedexample data-latex=""}
-Look back to @tbl-loan-home-app-type-row-proportions and @tbl-loan-home-app-type-column-proportions.
-Are there any obvious scenarios where one might be more useful than the other?
+Schauen Sie sich @tbl-loan-home-app-type-row-proportions und @tbl-loan-home-app-type-column-proportions noch einmal an.
+Gibt es offensichtliche Szenarien, in denen eine der beiden nützlicher sein könnte als die andere?
 
 ------------------------------------------------------------------------
 
-None that we think are obvious!
-What is distinct about the email example is that the two loan variables do not have a clear explanatory-response variable relationship that we might hypothesize.
-Usually it is most useful to "condition" on the explanatory variable.
-For instance, in the email example, the email format was seen as a possible explanatory variable of whether the message was spam, so we would find it more interesting to compute the relative frequencies (proportions) for each email format.
+Keine, die wir für offensichtlich halten!
+Was das E-Mail-Beispiel auszeichnet, ist, dass die beiden Kreditvariablen keine klare erklärender-Antwort-Variable-Beziehung aufweisen, die wir vermuten könnten.
+In der Regel ist es am nützlichsten, auf die erklärende Variable zu „konditionieren".
+Im E-Mail-Beispiel wurde das E-Mail-Format als mögliche erklärende Variable dafür angesehen, ob die Nachricht Spam ist, daher wäre es interessanter, die relativen Häufigkeiten (Anteile) für jedes E-Mail-Format zu berechnen.
 :::
 
-## Pie charts
+## Kreisdiagramme
 
-A **pie chart** is shown in @fig-loan-homeownership-pie-chart-1 alongside a bar plot representing the same information in @fig-loan-homeownership-pie-chart-2.
-Pie charts can be useful for giving a high-level overview to show how a set of cases break down.
-However, it is also difficult to decipher certain details in a pie chart.
-For example, it's not immediately obvious that there are more loans where the borrower has a mortgage than rent when looking at the pie chart, while this detail is very obvious in the bar plot.
+Ein **Kreisdiagramm** ist in @fig-loan-homeownership-pie-chart-1 dargestellt, zusammen mit einem Balkendiagramm, das dieselben Informationen in @fig-loan-homeownership-pie-chart-2 zeigt.
+Kreisdiagramme können nützlich sein, um einen groben Überblick darüber zu geben, wie sich eine Menge von Fällen aufteilt.
+Es ist jedoch auch schwierig, bestimmte Details in einem Kreisdiagramm zu entziffern.
+Es ist beispielsweise nicht sofort erkennbar, dass es mehr Kredite gibt, bei denen der Kreditnehmer eine Hypothek hat als mietet, wenn man das Kreisdiagramm betrachtet, während dieses Detail im Balkendiagramm sehr deutlich ist.
 
 ```{r}
 #| label: fig-loan-homeownership-pie-chart
@@ -462,10 +462,10 @@ loans |>
 
 \vspace{-5mm}
 
-Pie charts can work well when the goal is to visualize a categorical variable with very few levels, and especially if each level represents a simple fraction (e.g., one-half, one-quarter, etc.).
-However, they can be quite difficult to read when they are used to visualize a categorical variable with many levels.
-For example, the pie chart @fig-loan-grade-pie-chart-1 and the @fig-loan-grade-pie-chart-2 both represent the distribution of loan grades (A through G).
-In this case, it is far easier to compare the counts of each loan grade using the bar plot than the pie chart.
+Kreisdiagramme können gut funktionieren, wenn das Ziel darin besteht, eine kategoriale Variable mit sehr wenigen Ausprägungen zu visualisieren, insbesondere wenn jede Ausprägung einen einfachen Bruch darstellt (z.B. die Hälfte, ein Viertel usw.).
+Sie können jedoch recht schwer zu lesen sein, wenn sie zur Visualisierung einer kategorialen Variable mit vielen Ausprägungen verwendet werden.
+Das Kreisdiagramm @fig-loan-grade-pie-chart-1 und das @fig-loan-grade-pie-chart-2 stellen beispielsweise beide die Verteilung der Kreditklassen (A bis G) dar.
+In diesem Fall ist es weitaus einfacher, die Häufigkeiten jeder Kreditklasse mit dem Balkendiagramm zu vergleichen als mit dem Kreisdiagramm.
 
 \vspace{-5mm}
 
@@ -504,13 +504,13 @@ loans |>
 
 \vspace{-5mm}
 
-## Waffle charts
+## Waffeldiagramme
 
-Another useful technique of visualizing categorical data is a **waffle chart**.
-Waffle charts can be used to communicate the proportion of the data that falls into each level of a categorical variable.
-Just like with pie charts, they work best when the number of levels represented is low.
-However, unlike pie charts, they can make it easier to compare proportions that represent non-simple fractions.
-@fig-loan-waffle-1 is a waffle chart of homeownership and @fig-loan-waffle-2 is a waffle chart of loan status.
+Eine weitere nützliche Technik zur Visualisierung kategorialer Daten ist ein **Waffeldiagramm**.
+Waffeldiagramme können verwendet werden, um den Anteil der Daten zu kommunizieren, der in jede Ausprägung einer kategorialen Variable fällt.
+Genau wie bei Kreisdiagrammen funktionieren sie am besten, wenn die Anzahl der dargestellten Ausprägungen gering ist.
+Im Gegensatz zu Kreisdiagrammen können sie jedoch den Vergleich von Anteilen, die nicht-einfache Brüche darstellen, erleichtern.
+@fig-loan-waffle-1 ist ein Waffeldiagramm von `homeownership` und @fig-loan-waffle-2 ist ein Waffeldiagramm des Kreditstatus.
 
 ```{r}
 #| label: fig-loan-waffle
@@ -559,13 +559,13 @@ loans |>
   guides(fill = guide_legend(nrow = 2))
 ```
 
-## Comparing numerical data across groups
+## Vergleich numerischer Daten über Gruppen hinweg
 
-Some of the more interesting investigations can be considered by examining numerical data across groups.
-In this section we will expand on a few methods we have already seen to make plots for numerical data from multiple groups on the same graph as well as introduce a few new methods for comparing numerical data across groups.
+Einige der interessanteren Untersuchungen können durch die Analyse numerischer Daten über Gruppen hinweg durchgeführt werden.
+In diesem Abschnitt werden wir einige Methoden erweitern, die wir bereits gesehen haben, um Grafiken für numerische Daten aus mehreren Gruppen in derselben Grafik zu erstellen, sowie einige neue Methoden zum Vergleich numerischer Daten über Gruppen hinweg vorstellen.
 
-We will revisit the `county` dataset and compare the median household income for counties that gained population from 2010 to 2017 versus counties that had no gain.
-While we might like to make a causal connection between income and population growth, remember that these are observational data and so such an interpretation would be, at best, half-baked.
+Wir werden den Datensatz `county` erneut aufgreifen und das mittlere Haushaltseinkommen für Landkreise vergleichen, die zwischen 2010 und 2017 Bevölkerungszuwachs verzeichnet haben, gegenüber Landkreisen ohne Zuwachs.
+Auch wenn wir eine kausale Verbindung zwischen Einkommen und Bevölkerungswachstum herstellen möchten, sollten wir bedenken, dass es sich um Beobachtungsdaten handelt und eine solche Interpretation bestenfalls unvollständig wäre.
 
 ```{r}
 n_county <- nrow(county)
@@ -598,9 +598,9 @@ n_pop_gain <- county |>
   nrow()
 ```
 
-We have data on `r n_county` counties in the United States.
-We are missing 2017 population data from `r n_missing_pop2017` of them, and of the remaining `r n_with_pop_change` counties, in `r n_pop_gain` the population increased from 2010 to 2017 and in the remaining `r n_pop_no_gain` the population decreased.
-@tbl-countyIncomeSplitByPopGainTable shows a sample of four observations from each group.
+Wir haben Daten zu `r n_county` Landkreisen in den Vereinigten Staaten.
+Für `r n_missing_pop2017` davon fehlen uns die Bevölkerungsdaten von 2017, und von den verbleibenden `r n_with_pop_change` Landkreisen ist die Bevölkerung in `r n_pop_gain` von 2010 bis 2017 gewachsen und in den verbleibenden `r n_pop_no_gain` gesunken.
+@tbl-countyIncomeSplitByPopGainTable zeigt eine Stichprobe von vier Beobachtungen aus jeder Gruppe.
 
 ```{r}
 #| label: tbl-countyIncomeSplitByPopGainTable
@@ -632,10 +632,10 @@ county |>
   column_spec(5, width = "8em")
 ```
 
-Color can be used to split histograms (see @sec-histograms for an introduction to histograms) for numerical variables by levels of a categorical variable.
-An example of this is shown in @fig-countyIncomeSplitByPopGain-1.
-The **side-by-side box plot**\index{plot!side-by-side box}\index{side-by-side box plot} is another traditional tool for comparing across groups.
-An example is shown in @fig-countyIncomeSplitByPopGain-2, where there are two box plots (see @sec-boxplots for an introduction to box plots), one for each group, placed into one plotting window and drawn on the same scale.
+Farbe kann verwendet werden, um Histogramme (eine Einführung in Histogramme finden Sie in @sec-histograms) für numerische Variablen nach Ausprägungen einer kategorialen Variable aufzuteilen.
+Ein Beispiel dafür ist in @fig-countyIncomeSplitByPopGain-1 dargestellt.
+Der **nebeneinandergestellte Boxplot**\index{plot!side-by-side box}\index{side-by-side box plot} ist ein weiteres traditionelles Werkzeug zum Gruppenvergleich.
+Ein Beispiel ist in @fig-countyIncomeSplitByPopGain-2 dargestellt, wo zwei Boxplots (eine Einführung in Boxplots finden Sie in @sec-boxplots), einer für jede Gruppe, in einem einzigen Grafikfenster auf derselben Skala dargestellt sind.
 
 ```{r}
 #| include: false
@@ -677,31 +677,31 @@ county |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Use the plots in @fig-countyIncomeSplitByPopGain to compare the incomes for counties across the two groups.
-What do you notice about the approximate center of each group?
-What do you notice about the variability between groups?
-Is the shape relatively consistent between groups?
-How many *prominent* modes are there for each group?[^04-explore-categorical-3]
+Verwenden Sie die Grafiken in @fig-countyIncomeSplitByPopGain, um die Einkommen der Landkreise in den beiden Gruppen zu vergleichen.
+Was fällt Ihnen am ungefähren Zentrum jeder Gruppe auf?
+Was fällt Ihnen an der Variabilität zwischen den Gruppen auf?
+Ist die Form zwischen den Gruppen relativ konsistent?
+Wie viele *prominente* Modi gibt es für jede Gruppe?[^04-explore-categorical-3]
 :::
 
-[^04-explore-categorical-3]: Answers may vary a little.
-    The counties with population gains tend to have higher income (median of about \$45,000) versus counties without a gain (median of about \$40,000).
-    The variability is also slightly larger for the population gain group.
-    This is evident in the IQR, which is about 50% bigger in the *gain* group.
-    Both distributions show slight to moderate right skew and are unimodal.
-    The box plots indicate there are many observations far above the median in each group, though we should anticipate that many observations will fall beyond the whiskers when examining any dataset that contain more than a few hundred data points.
+[^04-explore-categorical-3]: Die Antworten können etwas variieren.
+    Landkreise mit Bevölkerungszuwachs tendieren zu einem höheren Einkommen (Median von etwa \$45.000) im Vergleich zu Landkreisen ohne Zuwachs (Median von etwa \$40.000).
+    Die Variabilität ist für die Gruppe mit Bevölkerungszuwachs ebenfalls etwas größer.
+    Dies zeigt sich im IQR, der in der *gain*-Gruppe etwa 50 % größer ist.
+    Beide Verteilungen zeigen eine leichte bis moderate Rechtsschieflage und sind unimodal.
+    Die Boxplots zeigen, dass es in jeder Gruppe viele Beobachtungen weit oberhalb des Medians gibt, obwohl wir erwarten sollten, dass bei der Untersuchung eines Datensatzes mit mehr als einigen hundert Datenpunkten viele Beobachtungen außerhalb der Whisker liegen.
 
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-What components of each plot in @fig-countyIncomeSplitByPopGain do you find most useful?[^04-explore-categorical-4]
+Welche Komponenten jedes Diagramms in @fig-countyIncomeSplitByPopGain finden Sie am nützlichsten?[^04-explore-categorical-4]
 :::
 
-[^04-explore-categorical-4]: Answers will vary.
-    The side-by-side box plots are especially useful for comparing centers and spreads, while the hollow histograms are more useful for seeing distribution shape, skew, modes, and potential anomalies.
+[^04-explore-categorical-4]: Die Antworten werden variieren.
+    Die nebeneinandergestellten Boxplots sind besonders nützlich zum Vergleich von Zentrum und Streuung, während die hohlen Histogramme nützlicher sind, um Verteilungsform, Schiefe, Modi und mögliche Anomalien zu erkennen.
 
-Another useful visualization for comparing numerical data across groups is a **ridge plot**\index{plot!ridge}\index{ridge plot}, which combines density plots (see @sec-boxplots for an introduction to density plots) for various groups drawn on the same scale in a single plotting window.
-@fig-countyIncomeSplitByPopGainRidge displays a ridge plot for the distribution of median household income in counties, split by whether there was a population gain or not.
+Eine weitere nützliche Visualisierung zum Vergleich numerischer Daten über Gruppen hinweg ist ein **Ridge-Plot**\index{plot!ridge}\index{ridge plot}, der Dichteplots (eine Einführung in Dichteplots finden Sie in @sec-boxplots) für verschiedene Gruppen auf derselben Skala in einem einzigen Grafikfenster kombiniert.
+@fig-countyIncomeSplitByPopGainRidge zeigt einen Ridge-Plot für die Verteilung des mittleren Haushaltseinkommens in Landkreisen, aufgeteilt danach, ob es einen Bevölkerungszuwachs gab oder nicht.
 
 ```{r}
 #| include: false
@@ -741,22 +741,22 @@ county |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-What components of the ridge plot in @fig-countyIncomeSplitByPopGainRidge do you find most useful compared to those in @fig-countyIncomeSplitByPopGain?[^04-explore-categorical-5]
+Welche Komponenten des Ridge-Plots in @fig-countyIncomeSplitByPopGainRidge finden Sie im Vergleich zu denen in @fig-countyIncomeSplitByPopGain am nützlichsten?[^04-explore-categorical-5]
 :::
 
-[^04-explore-categorical-5]: The ridge plot give us a better sense of the shape, and especially modality, of the data.
+[^04-explore-categorical-5]: Der Ridge-Plot gibt uns ein besseres Gefühl für die Form, insbesondere die Modalität, der Daten.
 
-One last visualization technique we'll highlight for comparing numerical data across groups is **faceting**\index{plot!faceted}\index{faceted plot}.
-In this technique we split (facet) the graphical display of the data across plotting windows based on groups.
-In @fig-countyIncomeSplitByPopGainFacetHist-1 displays the same information as @fig-countyIncomeSplitByPopGain-1, however here the distributions of median household income for counties with and without population gain are faceted across two plotting windows.
-We preserve the same scale on the x and y axes for easier comparison.
-An advantage of this approach is that it extends to splitting the data across levels of two categorical variables, which allows for displaying relationships between three variables.
-In @fig-countyIncomeSplitByPopGainFacetHist-2 we have now split the data into four groups using the `pop_change` and `metro` variables:
+Eine letzte Visualisierungstechnik, die wir für den Vergleich numerischer Daten über Gruppen hinweg hervorheben möchten, ist das **Facettieren**\index{plot!faceted}\index{faceted plot}.
+Bei dieser Technik unterteilen (facettieren) wir die grafische Darstellung der Daten in mehrere Grafikfenster basierend auf Gruppen.
+In @fig-countyIncomeSplitByPopGainFacetHist-1 werden dieselben Informationen wie in @fig-countyIncomeSplitByPopGain-1 dargestellt, jedoch sind hier die Verteilungen des mittleren Haushaltseinkommens für Landkreise mit und ohne Bevölkerungszuwachs über zwei Grafikfenster facettiert.
+Zur besseren Vergleichbarkeit behalten wir dieselbe Skala auf den x- und y-Achsen bei.
+Ein Vorteil dieses Ansatzes ist, dass er sich auf die Aufteilung der Daten nach Ausprägungen zweier kategorialer Variablen erweitern lässt, was die Darstellung von Zusammenhängen zwischen drei Variablen ermöglicht.
+In @fig-countyIncomeSplitByPopGainFacetHist-2 haben wir die Daten nun mit den Variablen `pop_change` und `metro` in vier Gruppen aufgeteilt:
 
--   top left represents counties that are *not* in a `metro`politan area with population gain,
--   top right represents counties that are in a metropolitan area with population gain,
--   bottom left represents counties that are *not* in a metropolitan area without population gain, and finally
--   bottom right represents counties that are in a metropolitan area without population gain.
+-   oben links stehen Landkreise, die *nicht* in einem `metro`politanen Gebiet liegen und Bevölkerungszuwachs verzeichnet haben,
+-   oben rechts stehen Landkreise, die in einem Ballungsgebiet liegen und Bevölkerungszuwachs verzeichnet haben,
+-   unten links stehen Landkreise, die *nicht* in einem Ballungsgebiet liegen und keinen Bevölkerungszuwachs verzeichnet haben, und schließlich
+-   unten rechts stehen Landkreise, die in einem Ballungsgebiet liegen und keinen Bevölkerungszuwachs verzeichnet haben.
 
 ```{r}
 #| include: false
@@ -821,18 +821,18 @@ county |>
   )
 ```
 
-Distribution of median income in counties using faceted histograms.
+Verteilung des mittleren Einkommens in Landkreisen mit facettierten Histogrammen.
 
 :::
 
-We can continue building upon this visualization to add one more variable, `median_edu`, which is the median education level in the county.
-In @fig-countyIncomeRidgeMulti, we represent median education level using color, where pink (solid line) represents counties where the median education level is high school diploma, yellow (dashed line) is some college degree, and red (dotted line) is Bachelor's.
+Wir können diese Visualisierung weiter ausbauen, um eine weitere Variable hinzuzufügen, `median_edu`, die dem mittleren Bildungsniveau im Landkreis entspricht.
+In @fig-countyIncomeRidgeMulti stellen wir das mittlere Bildungsniveau durch Farbe dar, wobei Rosa (durchgezogene Linie) Landkreise mit einem mittleren Bildungsniveau „Abitur" entspricht, Gelb (gestrichelte Linie) „etwas College" und Rot (gepunktete Linie) einem Bachelor-Abschluss.
 
 ::: {.guidedpractice data-latex=""}
-Based on @fig-countyIncomeRidgeMulti, what can you say about how median household income in counties vary depending on population gain/no gain, metropolitan area/not, and median degree?[^04-explore-categorical-6]
+Was lässt sich anhand von @fig-countyIncomeRidgeMulti über die Variation des mittleren Haushaltseinkommens in Landkreisen in Abhängigkeit von Bevölkerungszuwachs/kein Zuwachs, Ballungsgebiet/kein Ballungsgebiet und mittlerem Bildungsabschluss aussagen?[^04-explore-categorical-6]
 :::
 
-[^04-explore-categorical-6]: Regardless of the location (metropolitan or not) or change in population, it seems like there is an increase in median household income from individuals with only a HS diploma, to individuals with some college, to individuals with a Bachelor's degree.
+[^04-explore-categorical-6]: Unabhängig vom Standort (Ballungsgebiet oder nicht) oder der Bevölkerungsveränderung scheint es einen Anstieg des mittleren Haushaltseinkommens von Personen mit nur einem Abitur zu Personen mit etwas College bis hin zu Personen mit einem Bachelor-Abschluss zu geben.
 
 \vspace{-5mm}
 
@@ -871,20 +871,20 @@ county |>
 
 \clearpage
 
-## Chapter review {#sec-chp4-review}
+## Kapitelzusammenfassung {#sec-chp4-review}
 
-### Summary
+### Zusammenfassung
 
-Fluently working with categorical variables is an important skill for data analysts.
-In this chapter we have introduced different visualizations and numerical summaries applied to categorical variables.
-The graphical visualizations are even more descriptive when two variables are presented simultaneously.
-We presented bar plots, mosaic plots, pie charts, and estimations of conditional proportions.
+Die sichere Arbeit mit kategorialen Variablen ist eine wichtige Fähigkeit für Datenanalysten.
+In diesem Kapitel haben wir verschiedene Visualisierungen und numerische Zusammenfassungen vorgestellt, die auf kategoriale Variablen angewendet werden.
+Die grafischen Visualisierungen sind noch aussagekräftiger, wenn zwei Variablen gleichzeitig dargestellt werden.
+Wir haben Balkendiagramme, Mosaikplots, Kreisdiagramme und Schätzungen bedingter Anteile vorgestellt.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-04.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-04 dargestellt.
+Wenn Sie sich bei einigen dieser Begriffe unsicher sind, empfehlen wir Ihnen, im Text zurückzugehen und deren Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-04
@@ -895,9 +895,9 @@ make_terms_table(terms_chp_04)
 
 \clearpage
 
-## Exercises {#sec-chp4-exercises}
+## Übungen {#sec-chp4-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-04].
+Antworten auf Übungen mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-04].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_04-ex-explore-categorical.qmd >}}
