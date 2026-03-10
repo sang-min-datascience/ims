@@ -4,14 +4,16 @@ project:
   resources: 
     - _redirects
 
+lang: de
+
 book:
-  title: "Introduction to Modern Statistics (2e)"
+  title: "Einführung in die Moderne Statistik (2. Aufl.)"
   reader-mode: true
   page-footer:
     left: |
-      This is IMS2e!
+      Dies ist IMS2e!
     right: |
-      This book was built with <a href="https://quarto.org/">Quarto</a>.
+      Dieses Buch wurde mit <a href="https://quarto.org/">Quarto</a> erstellt.
   cover-image: images/IMS2_front_cover.png
   favicon: images/openintro.png
   repo-url: https://github.com/openintrostat/ims/
