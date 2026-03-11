@@ -1,4 +1,4 @@
-# Inference for comparing two independent means {#sec-inference-two-means}
+# Inferenz zum Vergleich zweier unabhängiger Mittelwerte {#sec-inference-two-means}
 
 ```{r}
 #| include: false
@@ -6,9 +6,9 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-We now extend the methods from [Chapter -@sec-inference-one-mean] to apply confidence intervals and hypothesis tests to differences in population means that come from two groups, Group 1 and Group 2: $\mu_1 - \mu_2.$
+Wir erweitern nun die Methoden aus [Kapitel -@sec-inference-one-mean], um Konfidenzintervalle und Hypothesentests auf Unterschiede in Populationsmittelwerten anzuwenden, die aus zwei Gruppen stammen, Gruppe 1 und Gruppe 2: $\mu_1 - \mu_2.$
 
-In our investigations, we'll identify a reasonable point estimate of $\mu_1 - \mu_2$ based on the sample, and you may have already guessed its form: $\bar{x}_1 - \bar{x}_2.$ \index{point estimate!difference in means}\index{difference in means!point estimate} Then we'll look at the inferential analysis in three different ways: using a randomization test, applying bootstrapping for interval estimates, and, if we verify that the point estimate can be modeled using a normal distribution, we compute the estimate's standard error and apply the mathematical framework.
+In unseren Untersuchungen werden wir einen sinnvollen Punktschätzer für $\mu_1 - \mu_2$ auf Basis der Stichprobe bestimmen, und seine Form haben Sie vielleicht bereits erahnt: $\bar{x}_1 - \bar{x}_2.$ \index{point estimate!difference in means}\index{difference in means!point estimate} Anschließend betrachten wir die inferentielle Analyse auf drei verschiedene Weisen: mittels eines Randomisierungstests, durch Bootstrapping für Intervallschätzungen und, falls wir bestätigen können, dass der Punktschätzer durch eine Normalverteilung modelliert werden kann, berechnen wir den Standardfehler des Schätzers und wenden den mathematischen Rahmen an.
 :::
 
 ```{r}
@@ -16,33 +16,33 @@ In our investigations, we'll identify a reasonable point estimate of $\mu_1 - \m
 terms_chp_20 <- c("point estimate")
 ```
 
-In this section we consider a difference in two population means, $\mu_1 - \mu_2,$ under the condition that the data are not paired.
-Just as with a single sample, we identify conditions to ensure we can use the $t$-distribution with a point estimate of the difference, $\bar{x}_1 - \bar{x}_2,$ and a new standard error formula.
+In diesem Abschnitt betrachten wir einen Unterschied in zwei Populationsmittelwerten, $\mu_1 - \mu_2,$ unter der Bedingung, dass die Daten nicht gepaart sind.
+Genau wie bei einer einzelnen Stichprobe identifizieren wir Bedingungen, um sicherzustellen, dass wir die $t$-Verteilung mit einem Punktschätzer der Differenz, $\bar{x}_1 - \bar{x}_2,$ und einer neuen Standardfehlerformel verwenden können.
 
-The details for working through inferential problems in the two independent means setting are strikingly similar to those applied to the two independent proportions setting.
-We first cover a randomization test where the observations are shuffled under the assumption that the null hypothesis is true.
-Then we bootstrap the data (with no imposed null hypothesis) to create a confidence interval for the true difference in population means, $\mu_1 - \mu_2.$ The mathematical model, here the $t$-distribution, is able to describe both the randomization test and the bootstrapping as long as the conditions are met.
+Die Details zur Bearbeitung von Inferenzproblemen im Setting zweier unabhängiger Mittelwerte sind denen sehr ähnlich, die auf das Setting zweier unabhängiger Anteile angewendet werden.
+Zunächst behandeln wir einen Randomisierungstest, bei dem die Beobachtungen unter der Annahme, dass die Nullhypothese wahr ist, gemischt werden.
+Dann führen wir ein Bootstrap-Verfahren der Daten durch (ohne aufgezwungene Nullhypothese), um ein Konfidenzintervall für den wahren Unterschied in den Populationsmittelwerten, $\mu_1 - \mu_2,$ zu erstellen. Das mathematische Modell, hier die $t$-Verteilung, ist in der Lage, sowohl den Randomisierungstest als auch das Bootstrapping zu beschreiben, sofern die Bedingungen erfüllt sind.
 
-The inferential tools are applied to three different data contexts: determining whether stem cells can improve heart function, exploring the relationship between pregnant women's smoking habits and birth weights of newborns, and exploring whether there is convincing evidence that one variation of an exam is harder than another variation.
-This section is motivated by questions like "Is there convincing evidence that newborns from mothers who smoke have a different average birth weight than newborns from mothers who do not smoke?"
+Die inferentiellen Werkzeuge werden auf drei verschiedene Datenkontexte angewendet: die Bestimmung, ob Stammzellen die Herzfunktion verbessern können, die Untersuchung des Zusammenhangs zwischen Rauchgewohnheiten schwangerer Frauen und dem Geburtsgewicht von Neugeborenen sowie die Untersuchung, ob es überzeugende Hinweise gibt, dass eine Variante einer Prüfung schwieriger ist als eine andere.
+Dieser Abschnitt wird durch Fragen wie „Gibt es überzeugende Hinweise darauf, dass Neugeborene von Müttern, die rauchen, ein anderes durchschnittliches Geburtsgewicht haben als Neugeborene von Müttern, die nicht rauchen?" motiviert.
 
 \clearpage
 
-## Randomization test for the difference in means {#sec-rand2mean}
+## Randomisierungstest für den Unterschied in den Mittelwerten {#sec-rand2mean}
 
-An instructor decided to run two slight variations of the same exam.
-Prior to passing out the exams, they shuffled the exams together to ensure each student received a random version.
-Anticipating complaints from students who took Version B, they would like to evaluate whether the difference observed in the groups is so large that it provides convincing evidence that Version B was more difficult (on average) than Version A.
+Eine Lehrkraft entschied sich, zwei leicht unterschiedliche Versionen derselben Prüfung durchzuführen.
+Vor der Ausgabe der Prüfungen wurden diese zusammengemischt, um sicherzustellen, dass jede Schülerin und jeder Schüler eine zufällige Version erhielt.
+In Erwartung von Beschwerden von Schülerinnen und Schülern, die Version B geschrieben hatten, wollte die Lehrkraft prüfen, ob der beobachtete Unterschied zwischen den Gruppen so groß ist, dass er überzeugenden Nachweis liefert, dass Version B (im Durchschnitt) schwieriger war als Version A.
 
 ::: {.data data-latex=""}
-The [`classdata`](http://openintrostat.github.io/openintro/reference/classdata.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`classdata`](http://openintrostat.github.io/openintro/reference/classdata.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 \vspace{-5mm}
 
-### Observed data
+### Beobachtete Daten
 
-Summary statistics for how students performed on these two exams are shown in @tbl-summaryStatsForTwoVersionsOfExams and plotted in @fig-boxplotTwoVersionsOfExams.
+Zusammenfassende Statistiken zur Leistung der Schülerinnen und Schüler bei diesen zwei Prüfungen sind in @tbl-summaryStatsForTwoVersionsOfExams dargestellt und in @fig-boxplotTwoVersionsOfExams abgebildet.
 
 ```{r}
 #| label: tbl-summaryStatsForTwoVersionsOfExams
@@ -89,37 +89,37 @@ ggplot(classdata, aes(x = exam, y = m1, color = exam)) +
 ```
 
 ::: {.guidedpractice data-latex=""}
-Construct hypotheses to evaluate whether the observed difference in sample means, $\bar{x}_A - \bar{x}_B=3.1,$ is likely to have happened due to chance, if the null hypothesis is true.
-We will later evaluate these hypotheses using $\alpha = 0.01.$[^20-inference-two-means-1]
+Stellen Sie Hypothesen auf, um zu prüfen, ob der beobachtete Unterschied in den Stichprobenmittelwerten, $\bar{x}_A - \bar{x}_B=3{,}1,$ wahrscheinlich zufällig entstanden ist, wenn die Nullhypothese wahr ist.
+Wir werden diese Hypothesen später mit $\alpha = 0{,}01$ auswerten.[^20-inference-two-means-1]
 :::
 
-[^20-inference-two-means-1]: $H_0:$ the exams are equally difficult, on average.
-    $\mu_A - \mu_B = 0.$ $H_A:$ one exam was more difficult than the other, on average.
+[^20-inference-two-means-1]: $H_0:$ Die Prüfungen sind im Durchschnitt gleich schwer.
+    $\mu_A - \mu_B = 0.$ $H_A:$ Eine Prüfung war im Durchschnitt schwieriger als die andere.
     $\mu_A - \mu_B \neq 0.$
 
 ::: {.guidedpractice data-latex=""}
-Before moving on to evaluate the hypotheses in the previous Guided Practice, let's think carefully about the dataset.
-Are the observations across the two groups independent?
-Are there any concerns about outliers?[^20-inference-two-means-2]
+Bevor wir die Hypothesen aus der vorherigen Übungsaufgabe auswerten, denken wir sorgfältig über den Datensatz nach.
+Sind die Beobachtungen zwischen den beiden Gruppen unabhängig?
+Gibt es Bedenken hinsichtlich Ausreißern?[^20-inference-two-means-2]
 :::
 
-[^20-inference-two-means-2]: Since the exams were shuffled, the "treatment" in this case was randomly assigned, so independence within and between groups is satisfied.
-    The summary statistics suggest the data are roughly symmetric about the mean, and the min/max values do not suggest any outliers of concern.
+[^20-inference-two-means-2]: Da die Prüfungen gemischt wurden, wurde die „Behandlung" in diesem Fall zufällig zugewiesen, sodass die Unabhängigkeit innerhalb und zwischen den Gruppen erfüllt ist.
+    Die zusammenfassenden Statistiken legen nahe, dass die Daten annähernd symmetrisch um den Mittelwert verteilt sind, und die Minimal-/Maximalwerte deuten auf keine besorgniserregenden Ausreißer hin.
 
 \clearpage
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-In @sec-foundations-randomization, the variability of the statistic (previously: $\hat{p}_1 - \hat{p}_2)$ was visualized after shuffling the observations across the two treatment groups many times.
-The shuffling process implements the null hypothesis model (that there is no effect of the treatment).
-In the exam example, the null hypothesis is that exam A and exam B are equally difficult, so the average scores across the two tests should be the same.
-If the exams were equally difficult, *due to natural variability*, we would sometimes expect students to do slightly better on exam A $(\bar{x}_A > \bar{x}_B)$ and sometimes expect students to do slightly better on exam B $(\bar{x}_B > \bar{x}_A).$ The question at hand is: does $\bar{x}_A - \bar{x}_B=3.1$ indicate that exam A is easier than exam B.
+In @sec-foundations-randomization wurde die Variabilität der Statistik (vorher: $\hat{p}_1 - \hat{p}_2)$ nach dem vielfachen Mischen der Beobachtungen über die beiden Behandlungsgruppen hinweg visualisiert.
+Der Mischprozess implementiert das Nullhypothesenmodell (dass es keinen Effekt der Behandlung gibt).
+Im Prüfungsbeispiel lautet die Nullhypothese, dass Prüfung A und Prüfung B gleich schwer sind, sodass die durchschnittlichen Punktzahlen bei den beiden Tests gleich sein sollten.
+Wenn die Prüfungen gleich schwer wären, würden wir *aufgrund natürlicher Variabilität* manchmal erwarten, dass Schülerinnen und Schüler bei Prüfung A etwas besser abschneiden $(\bar{x}_A > \bar{x}_B)$ und manchmal bei Prüfung B $(\bar{x}_B > \bar{x}_A).$ Die entscheidende Frage lautet: Zeigt $\bar{x}_A - \bar{x}_B=3{,}1$ an, dass Prüfung A leichter ist als Prüfung B?
 
-@fig-rand2means shows the process of randomizing the exam to the observed exam scores.
-If the null hypothesis is true, then the score on each exam should represent the true student ability on that material.
-It shouldn't matter whether they were given exam A or exam B.
-By reallocating which student got which exam, we are able to understand how the difference in average exam scores changes due only to natural variability.
-There is only one iteration of the randomization process in @fig-rand2means, leading to one simulated difference in average scores.
+@fig-rand2means zeigt den Prozess der Randomisierung der Prüfung bezüglich der beobachteten Prüfungspunktzahlen.
+Wenn die Nullhypothese wahr ist, sollte die Punktzahl bei jeder Prüfung die wahre Fähigkeit der Schülerin oder des Schülers in diesem Material widerspiegeln.
+Es sollte keine Rolle spielen, ob sie Prüfung A oder Prüfung B erhalten haben.
+Indem wir neu zuteilen, welche Schülerin oder welcher Schüler welche Prüfung bekommen hat, können wir verstehen, wie sich der Unterschied in den durchschnittlichen Prüfungspunktzahlen allein aufgrund natürlicher Variabilität ändert.
+In @fig-rand2means gibt es nur eine Iteration des Randomisierungsprozesses, was zu einer simulierten Differenz in den durchschnittlichen Punktzahlen führt.
 
 ```{r}
 #| label: fig-rand2means
@@ -142,8 +142,8 @@ There is only one iteration of the randomization process in @fig-rand2means, lea
 include_graphics("images/rand2means.png")
 ```
 
-Building on @fig-rand2means, @fig-randexams shows the values of the simulated statistics $\bar{x}_{1, sim} - \bar{x}_{2, sim}$ over 1,000 random simulations.
-We see that, just by chance, the difference in scores can range anywhere from -10 points to +10 points.
+Aufbauend auf @fig-rand2means zeigt @fig-randexams die Werte der simulierten Statistiken $\bar{x}_{1, sim} - \bar{x}_{2, sim}$ über 1.000 zufällige Simulationen.
+Wir sehen, dass der Unterschied in den Punktzahlen allein durch Zufall zwischen -10 und +10 Punkten variieren kann.
 
 ```{r}
 #| label: fig-randexams
@@ -168,10 +168,10 @@ classdata |>
   )
 ```
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
-The goal of the randomization test is to assess the observed data, here the statistic of interest is $\bar{x}_A - \bar{x}_B=3.1.$ The randomization distribution allows us to identify whether a difference of 3.1 points is more than one would expect by natural variability of the scores if the two tests were equally difficult.
-By plotting the value of 3.1 on @fig-randexamspval, we can measure how different or similar 3.1 is to the randomized differences which were generated under the null hypothesis.
+Das Ziel des Randomisierungstests ist die Beurteilung der beobachteten Daten; hier ist die interessierende Statistik $\bar{x}_A - \bar{x}_B=3{,}1.$ Die Randomisierungsverteilung ermöglicht es uns zu beurteilen, ob eine Differenz von 3,1 Punkten größer ist, als man aufgrund natürlicher Variabilität der Punktzahlen erwarten würde, wenn die zwei Tests gleich schwer wären.
+Indem wir den Wert 3,1 in @fig-randexamspval einzeichnen, können wir messen, wie sehr sich 3,1 von den randomisierten Differenzen unterscheidet oder diesen ähnelt, die unter der Nullhypothese erzeugt wurden.
 
 ```{r}
 #| label: fig-randexamspval
@@ -203,38 +203,38 @@ classdata |>
 ```
 
 ::: {.workedexample data-latex=""}
-Approximate the p-value depicted in @fig-randexamspval, and provide a conclusion in the context of the case study.
+Schätzen Sie den in @fig-randexamspval dargestellten p-Wert und ziehen Sie eine Schlussfolgerung im Kontext der Fallstudie.
 
 ------------------------------------------------------------------------
 
-Using software, we can find the number of shuffled differences in means that are less than the observed difference (of 3.14) is 900 (out of 1,000 randomizations).
-So 10% of the simulations are larger than the observed difference.
-To get the p-value, we double the proportion of randomized differences which are larger than the observed difference, p-value = 0.2.
+Mithilfe von Software können wir feststellen, dass die Anzahl der gemischten Differenzen in den Mittelwerten, die kleiner als die beobachtete Differenz (von 3,14) sind, 900 (von 1.000 Randomisierungen) beträgt.
+So sind 10 % der Simulationen größer als die beobachtete Differenz.
+Um den p-Wert zu erhalten, verdoppeln wir den Anteil der randomisierten Differenzen, die größer als die beobachtete Differenz sind: p-Wert = 0,2.
 
-Previously, we specified that we would use $\alpha = 0.01.$ Since the p-value is larger than $\alpha,$ we do not reject the null hypothesis.
-That is, the data do not convincingly show that one exam version is more difficult than the other, and the teacher should not be convinced that they should add points to the Version B exam scores.
+Zuvor haben wir festgelegt, dass wir $\alpha = 0{,}01$ verwenden. Da der p-Wert größer als $\alpha$ ist, lehnen wir die Nullhypothese nicht ab.
+Das heißt, die Daten zeigen nicht überzeugend, dass eine Prüfungsversion schwieriger ist als die andere, und die Lehrkraft sollte nicht davon überzeugt sein, dass sie Punkte zu den Punktzahlen der Version B hinzufügen sollte.
 :::
 
-The large p-value and consistency of $\bar{x}_A - \bar{x}_B=3.1$ with the randomized differences leads us to *not reject the null hypothesis*.
-Said differently, there is no evidence to think that one of the tests is easier than the other.
-One might be inclined to conclude that the tests have the same level of difficulty, but that conclusion would be wrong.
-The hypothesis testing framework is set up only to reject a null claim, it is not set up to validate a null claim.
-As we concluded, the data are consistent with exams A and B being equally difficult, but the data are also consistent with exam A being 3.1 points "easier" than exam B.
-The data are not able to adjudicate on whether the exams are equally hard or whether one of them is slightly easier.
-Indeed, conclusions where the null hypothesis is not rejected often seem unsatisfactory.
-However, in this case, the teacher and class are probably all relieved that there is no evidence to demonstrate that one of the exams is more difficult than the other.
+Der große p-Wert und die Übereinstimmung von $\bar{x}_A - \bar{x}_B=3{,}1$ mit den randomisierten Differenzen führen uns dazu, *die Nullhypothese nicht abzulehnen*.
+Anders ausgedrückt: Es gibt keine Hinweise, dass eine der Prüfungen leichter ist als die andere.
+Man könnte versucht sein zu schlussfolgern, dass die Prüfungen den gleichen Schwierigkeitsgrad haben, aber diese Schlussfolgerung wäre falsch.
+Der Hypothesentest-Rahmen ist nur dazu geeignet, eine Nullbehauptung abzulehnen, nicht dazu, eine Nullbehauptung zu bestätigen.
+Wie wir geschlossen haben, sind die Daten konsistent damit, dass Prüfungen A und B gleich schwer sind, aber die Daten sind auch konsistent damit, dass Prüfung A um 3,1 Punkte „leichter" ist als Prüfung B.
+Die Daten können nicht entscheiden, ob die Prüfungen gleich schwer sind oder ob eine von ihnen etwas leichter ist.
+In der Tat erscheinen Schlussfolgerungen, bei denen die Nullhypothese nicht abgelehnt wird, oft unbefriedigend.
+In diesem Fall sind die Lehrkraft und die Klasse jedoch wahrscheinlich alle erleichtert, dass es keine Hinweise gibt, die zeigen, dass eine der Prüfungen schwieriger ist als die andere.
 
-## Bootstrap confidence interval for the difference in means
+## Bootstrap-Konfidenzintervall für den Unterschied in den Mittelwerten
 
 \index{difference in means}
 
-Before providing a full example working through a bootstrap analysis on actual data, we return to the fictional Awesome Auto example as a way to visualize the two sample bootstrap setting.
-Consider an expanded scenario where the research question centers on comparing the average price of a car at one Awesome Auto franchise (Group 1) to the average price of a car at a different Awesome Auto franchise (Group 2).
-The process of bootstrapping can be applied to *each* Group separately, and the differences of means recalculated each time.
-@fig-bootmeans2means visually describes the bootstrap process when interest is in a statistic computed on two separate samples.
-The analysis proceeds as in the one sample case, but now the (single) statistic of interest is the *difference in sample means*.
-That is, a bootstrap resample is done on each of the groups separately, but the results are combined to have a single bootstrapped difference in means.
-Repetition will produce $k$ bootstrapped differences in means, and the histogram will describe the natural sampling variability associated with the difference in means.
+Bevor wir ein vollständiges Beispiel zur Durchführung einer Bootstrap-Analyse an echten Daten vorstellen, kehren wir zum fiktiven Beispiel Awesome Auto zurück, um das Bootstrap-Verfahren mit zwei Stichproben zu visualisieren.
+Betrachten Sie ein erweitertes Szenario, bei dem die Forschungsfrage darauf abzielt, den durchschnittlichen Preis eines Autos bei einer Awesome-Auto-Filiale (Gruppe 1) mit dem durchschnittlichen Preis eines Autos bei einer anderen Awesome-Auto-Filiale (Gruppe 2) zu vergleichen.
+Das Bootstrap-Verfahren kann auf *jede* Gruppe separat angewendet werden, und die Differenzen der Mittelwerte werden jedes Mal neu berechnet.
+@fig-bootmeans2means beschreibt den Bootstrap-Prozess visuell, wenn das Interesse einer Statistik gilt, die aus zwei separaten Stichproben berechnet wird.
+Die Analyse verläuft wie im Einstichprobenfall, aber jetzt ist die (einzelne) interessierende Statistik die *Differenz in den Stichprobenmittelwerten*.
+Das heißt, eine Bootstrap-Resampling-Stichprobe wird für jede der Gruppen separat gezogen, aber die Ergebnisse werden kombiniert, um eine einzelne bootstrap-basierte Differenz in den Mittelwerten zu erhalten.
+Durch Wiederholung entstehen $k$ bootstrap-basierte Differenzen in den Mittelwerten, und das Histogramm beschreibt die natürliche Stichprobenvariabilität, die mit der Differenz in den Mittelwerten verbunden ist.
 
 ```{r}
 #| include: false
@@ -260,19 +260,19 @@ terms_chp_20 <- c(terms_chp_20, "difference in means")
 include_graphics("images/bootmeans2means.png")
 ```
 
-In the following sections, we leave the fictional setting of Awesome Auto and apply the bootstrap method to actual datasets investigating whether embryonic stem cells help improve heart function and later to investigate characteristics of births. Note that the fictional setting allowed us to visualize the bootstrap method because we had samples of size five. The visualization was important in understanding how the bootstrap method works. However, the bootstrap relies heavily on the sample being an outstanding proxy for the population, and five observations are almost never enough to truly represent the nuances of a full population. To that end, we apply bootstrap methods with much larger sample sizes, as seen in the 1000 random samples provided in the births data.
+In den folgenden Abschnitten verlassen wir das fiktive Setting von Awesome Auto und wenden die Bootstrap-Methode auf echte Datensätze an, um zu untersuchen, ob embryonale Stammzellen zur Verbesserung der Herzfunktion beitragen, und später, um Geburtsmerkmale zu untersuchen. Beachten Sie, dass das fiktive Setting uns ermöglichte, die Bootstrap-Methode zu visualisieren, weil wir Stichproben der Größe fünf hatten. Die Visualisierung war wichtig, um zu verstehen, wie die Bootstrap-Methode funktioniert. Allerdings stützt sich das Bootstrap-Verfahren stark darauf, dass die Stichprobe ein hervorragender Stellvertreter für die Population ist, und fünf Beobachtungen sind fast nie genug, um die Nuancen einer vollständigen Population wirklich abzubilden. Daher wenden wir Bootstrap-Methoden mit viel größeren Stichprobengrößen an, wie in den 1.000 zufälligen Stichproben aus den Geburtsdaten zu sehen ist.
 
-### Observed data
+### Beobachtete Daten
 
-Does treatment using embryonic stem cells (ESCs) help improve heart function following a heart attack?
-@tbl-statsSheepEscStudy contains summary statistics for an experiment to test ESCs in sheep that had a heart attack.
-Each of these sheep was randomly assigned to the ESC or control group, and the change in their hearts' pumping capacity was measured in the study.
-[@Menard:2005] @fig-stem-cell-histograms provides histograms of the two datasets.
-A positive value corresponds to increased pumping capacity, which generally suggests a stronger recovery.
-Our goal will be to identify a 95% confidence interval for the effect of ESCs on the change in heart pumping capacity relative to the control group.
+Hilft die Behandlung mit embryonalen Stammzellen (ESC), die Herzfunktion nach einem Herzinfarkt zu verbessern?
+@tbl-statsSheepEscStudy enthält zusammenfassende Statistiken für ein Experiment zur Untersuchung von ESC bei Schafen, die einen Herzinfarkt erlitten hatten.
+Jedes dieser Schafe wurde zufällig der ESC- oder der Kontrollgruppe zugewiesen, und die Veränderung der Pumpkapazität des Herzens wurde in der Studie gemessen.
+[@Menard:2005] @fig-stem-cell-histograms zeigt Histogramme der beiden Datensätze.
+Ein positiver Wert entspricht einer erhöhten Pumpkapazität, was im Allgemeinen auf eine stärkere Erholung hinweist.
+Unser Ziel ist es, ein 95%-Konfidenzintervall für den Effekt von ESC auf die Veränderung der Herzpumpkapazität im Vergleich zur Kontrollgruppe zu bestimmen.
 
 ::: {.data data-latex=""}
-The [`stem_cell`](http://openintrostat.github.io/openintro/reference/stem_cell.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`stem_cell`](http://openintrostat.github.io/openintro/reference/stem_cell.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -305,17 +305,17 @@ stem_cell |>
   column_spec(1:4, width = "6em")
 ```
 
-The point estimate of the difference in the heart pumping variable is straightforward to find: it is the difference in the sample means.
+Der Punktschätzer der Differenz in der Herzpumpvariable ist unkompliziert zu finden: Es ist die Differenz der Stichprobenmittelwerte.
 
 $$\bar{x}_{esc} - \bar{x}_{control}\   =\ 3.50 - (-4.33)\   =\ 7.83$$
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-As we saw in @sec-two-prop-boot-ci, we will use bootstrapping to estimate the variability associated with the difference in sample means when taking repeated samples.
-In a method akin to two proportions, a *separate* sample is taken with replacement from each group (here ESCs and control), the sample means are calculated, and their difference is taken.
-The entire process is repeated multiple times to produce a bootstrap distribution of the difference in sample means (*without* the null hypothesis assumption).
+Wie wir in @sec-two-prop-boot-ci gesehen haben, verwenden wir das Bootstrapping, um die mit der Differenz in den Stichprobenmittelwerten verbundene Variabilität bei wiederholten Stichproben zu schätzen.
+Ähnlich wie bei zwei Anteilen wird eine *separate* Stichprobe mit Zurücklegen aus jeder Gruppe (hier ESC und Kontrolle) gezogen, die Stichprobenmittelwerte berechnet und ihre Differenz gebildet.
+Der gesamte Prozess wird mehrfach wiederholt, um eine Bootstrap-Verteilung der Differenz in den Stichprobenmittelwerten (*ohne* die Nullhypothese-Annahme) zu erzeugen.
 
-@fig-bootexamsci displays the variability of the differences in means with the 90% percentile and SE confidence intevals super imposed.
+@fig-bootexamsci zeigt die Variabilität der Differenzen in den Mittelwerten mit den überlagerten 90%-Perzentil- und SE-Konfidenzintervallen.
 
 ```{r}
 #| label: fig-bootexamsci
@@ -386,36 +386,36 @@ boot_2mean |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Using the histogram of bootstrapped difference in means, estimate the standard error of the differences in sample means, $\bar{x}_{ESC} - \bar{x}_{Control}.$[^20-inference-two-means-3] 
+Schätzen Sie anhand des Histogramms der bootstrap-basierten Differenzen in den Mittelwerten den Standardfehler der Differenzen in den Stichprobenmittelwerten, $\bar{x}_{ESC} - \bar{x}_{Control}.$[^20-inference-two-means-3] 
 :::
 
-[^20-inference-two-means-3]: The point estimate of the population difference ($\bar{x}_{ESC} - \bar{x}_{Control}$) is 7.83.
+[^20-inference-two-means-3]: Der Punktschätzer der Populationsdifferenz ($\bar{x}_{ESC} - \bar{x}_{Control}$) beträgt 7,83.
 
 ::: {.workedexample data-latex=""}
-Choose one of the bootstrap confidence intervals for the true difference in average pumping capacity, $\mu_{ESC} - \mu_{Control}.$ Does the interval show that there is a difference across the two treatments?
+Wählen Sie eines der Bootstrap-Konfidenzintervalle für den wahren Unterschied in der durchschnittlichen Pumpkapazität, $\mu_{ESC} - \mu_{Control}.$ Zeigt das Intervall, dass es einen Unterschied zwischen den beiden Behandlungen gibt?
 
 ------------------------------------------------------------------------
 
-Because neither of the 90% intervals (either percentile or SE) above overlap zero (note that zero is never one of the bootstrapped differences so 95% and 99% intervals would have given the same conclusion!), we conclude that the ESC treatment is substantially better with respect to heart pumping capacity than the control.
+Da keines der 90%-Intervalle (weder das Perzentil- noch das SE-Intervall) oben die Null überlappt (beachten Sie, dass Null nie eine der bootstrap-basierten Differenzen ist, sodass 95%- und 99%-Intervalle zur gleichen Schlussfolgerung geführt hätten!), schlussfolgern wir, dass die ESC-Behandlung bezüglich der Herzpumpkapazität deutlich besser ist als die Kontrolle.
 
-Because the study is a randomized controlled experiment, we can conclude that it is the treatment (ESC) which is causing the change in pumping capacity.
+Da die Studie ein randomisiertes kontrolliertes Experiment ist, können wir schlussfolgern, dass es die Behandlung (ESC) ist, die die Veränderung der Pumpkapazität verursacht.
 :::
 
-## Mathematical model for testing the difference in means {#sec-math2samp}
+## Mathematisches Modell zum Testen des Unterschieds in den Mittelwerten {#sec-math2samp}
 
-Every year, the US releases to the public a large dataset containing information on births recorded in the country.
-This dataset has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children.
-We will work with a random sample of 1,000 cases from the dataset released in 2014.
+Jedes Jahr veröffentlicht die USA öffentlich einen großen Datensatz mit Informationen zu Geburten, die im Land registriert wurden.
+Dieser Datensatz hat das Interesse von Medizinforschern geweckt, die den Zusammenhang zwischen Gewohnheiten und Praktiken werdender Mütter und der Geburt ihrer Kinder untersuchen.
+Wir arbeiten mit einer Zufallsstichprobe von 1.000 Fällen aus dem 2014 veröffentlichten Datensatz.
 
 ::: {.data data-latex=""}
-The [`births14`](http://openintrostat.github.io/openintro/reference/births14.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`births14`](http://openintrostat.github.io/openintro/reference/births14.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-### Observed data
+### Beobachtete Daten
 
-Four cases from this dataset are represented in @tbl-babySmokeDF.
-We are particularly interested in two variables: `weight` and `smoke`.
-The `weight` variable represents the weights of the newborns and the `smoke` variable describes which mothers smoked during pregnancy.
+Vier Fälle aus diesem Datensatz sind in @tbl-babySmokeDF dargestellt.
+Wir interessieren uns besonders für zwei Variablen: `weight` und `smoke`.
+Die Variable `weight` gibt das Gewicht der Neugeborenen an, und die Variable `smoke` beschreibt, welche Mütter während der Schwangerschaft geraucht haben.
 
 ```{r}
 #| label: tbl-babySmokeDF
@@ -434,22 +434,22 @@ births14 |>
   )
 ```
 
-We would like to know, is there convincing evidence that newborns from mothers who smoke have a different average birth weight than newborns from mothers who do not smoke?
-We will use data from this sample to try to answer this question.
+Wir möchten wissen: Gibt es überzeugende Hinweise, dass Neugeborene von Müttern, die rauchen, ein anderes durchschnittliches Geburtsgewicht haben als Neugeborene von Müttern, die nicht rauchen?
+Wir werden Daten aus dieser Stichprobe verwenden, um diese Frage zu beantworten.
 
 ::: {.workedexample data-latex=""}
-Set up appropriate hypotheses to evaluate whether there is a relationship between a mother smoking and average birth weight.
+Stellen Sie geeignete Hypothesen auf, um zu prüfen, ob ein Zusammenhang zwischen dem Rauchen einer Mutter und dem durchschnittlichen Geburtsgewicht besteht.
 
 ------------------------------------------------------------------------
 
-The null hypothesis represents the case of no difference between the groups.
+Die Nullhypothese stellt den Fall dar, in dem kein Unterschied zwischen den Gruppen besteht.
 
--   $H_0:$ There is no difference in average birth weight for newborns from mothers who did and did not smoke. In statistical notation: $\mu_{n} - \mu_{s} = 0,$ where $\mu_{n}$ represents non-smoking mothers and $\mu_s$ represents mothers who smoked.
--   $H_A:$ There is some difference in average newborn weights from mothers who did and did not smoke $(\mu_{n} - \mu_{s} \neq 0).$
+-   $H_0:$ Es gibt keinen Unterschied im durchschnittlichen Geburtsgewicht bei Neugeborenen von Müttern, die geraucht haben, und solchen, die nicht geraucht haben. In statistischer Notation: $\mu_{n} - \mu_{s} = 0,$ wobei $\mu_{n}$ nicht rauchende Mütter und $\mu_s$ rauchende Mütter repräsentiert.
+-   $H_A:$ Es gibt einen Unterschied im durchschnittlichen Geburtsgewicht von Neugeborenen von Müttern, die geraucht haben, und solchen, die nicht geraucht haben $(\mu_{n} - \mu_{s} \neq 0).$
 :::
 
-@tbl-births14-summary-stats displays sample statistics from the data.
-We can see that the average birth weight of babies born to smoker moms is lower than those born to nonsmoker moms.
+@tbl-births14-summary-stats zeigt Stichprobenstatistiken aus den Daten.
+Wir können sehen, dass das durchschnittliche Geburtsgewicht von Babys, die von rauchenden Müttern geboren wurden, niedriger ist als das von Babys, die von nicht rauchenden Müttern geboren wurden.
 
 ```{r}
 #| label: tbl-births14-summary-stats
@@ -496,14 +496,14 @@ births14_sample_stats |>
   column_spec(1:4, width = "7em")
 ```
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-We check the two conditions necessary to model the difference in sample means using the $t$-distribution.
+Wir überprüfen die zwei Bedingungen, die notwendig sind, um die Differenz in den Stichprobenmittelwerten mit der $t$-Verteilung zu modellieren.
 
--   Because the data come from a simple random sample, the observations are independent, both within and between samples.
--   With both groups over 30 observations, we inspect the data in @fig-babySmokePlotOfTwoGroupsToExamineSkew for any particularly extreme outliers and find none.
+-   Da die Daten aus einer einfachen Zufallsstichprobe stammen, sind die Beobachtungen sowohl innerhalb als auch zwischen den Stichproben unabhängig.
+-   Mit beiden Gruppen mit mehr als 30 Beobachtungen untersuchen wir die Daten in @fig-babySmokePlotOfTwoGroupsToExamineSkew auf besonders extreme Ausreißer und finden keine.
 
-Since both conditions are satisfied, the difference in sample means may be modeled using a $t$-distribution.
+Da beide Bedingungen erfüllt sind, kann die Differenz in den Stichprobenmittelwerten mit einer $t$-Verteilung modelliert werden.
 
 ```{r}
 #| label: fig-babySmokePlotOfTwoGroupsToExamineSkew
@@ -527,32 +527,32 @@ births14_nona |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-The summary statistics in @tbl-births14-summary-stats may be useful for this Guided Practice.
-What is the point estimate of the population difference, $\mu_{n} - \mu_{s}$?[^20-inference-two-means-4]
+Die zusammenfassenden Statistiken in @tbl-births14-summary-stats können für diese Übungsaufgabe nützlich sein.
+Was ist der Punktschätzer der Populationsdifferenz, $\mu_{n} - \mu_{s}$?[^20-inference-two-means-4]
 :::
 
-[^20-inference-two-means-4]: The point estimate of the population difference ($\bar{x}_{n} - \bar{x}_{s}$) is `r xbar_difference`.
+[^20-inference-two-means-4]: Der Punktschätzer der Populationsdifferenz ($\bar{x}_{n} - \bar{x}_{s}$) beträgt `r xbar_difference`.
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
 ::: {.important data-latex=""}
-**The test statistic for comparing two means is a T.**
+**Die Teststatistik zum Vergleich zweier Mittelwerte ist ein T-Wert.**
 
 \index{T score!difference in means}\index{difference in means!T score}
 \index{t-test}
 
-The T score is a ratio of how the groups differ as compared to how the observations within a group vary.
+Der T-Wert ist ein Verhältnis, das beschreibt, wie sehr sich die Gruppen unterscheiden, verglichen damit, wie die Beobachtungen innerhalb einer Gruppe variieren.
 
 \vspace{-5mm}
 
 $$T = \frac{(\bar{x}_1 - \bar{x}_2) - 0}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}$$
 
-When the null hypothesis is true and the conditions are met, T has a t-distribution with $df = min(n_1 - 1, n_2 -1).$
+Wenn die Nullhypothese wahr ist und die Bedingungen erfüllt sind, hat T eine t-Verteilung mit $df = min(n_1 - 1, n_2 -1).$
 
-Conditions:
+Bedingungen:
 
--   Independent observations within and between groups.
--   Large samples and no extreme outliers.
+-   Unabhängige Beobachtungen innerhalb und zwischen den Gruppen.
+-   Große Stichproben und keine extremen Ausreißer.
 :::
 
 ```{r}
@@ -563,7 +563,7 @@ terms_chp_20 <- c(terms_chp_20, "T score", "t-test")
 \vspace{-2mm}
 
 ::: {.guidedpractice data-latex=""}
-Compute the standard error of the point estimate for the average difference between the weights of babies born to nonsmoker and smoker mothers.[^20-inference-two-means-5]
+Berechnen Sie den Standardfehler des Punktschätzers für den durchschnittlichen Unterschied zwischen den Gewichten von Babys, die von nicht rauchenden und rauchenden Müttern geboren wurden.[^20-inference-two-means-5]
 :::
 
 [^20-inference-two-means-5]: $SE(\bar{x}_{n} - \bar{x}_{s}) = \sqrt{s^2_{n}/ n_{n} + s^2_{s}/n_{s}} = \sqrt{1.23^2/867 + 1.60^2/114} = 0.16$
@@ -571,48 +571,48 @@ Compute the standard error of the point estimate for the average difference betw
 \vspace{-2mm}
 
 ::: {.workedexample data-latex=""}
-Complete the hypothesis test started in the previous Example and Guided Practice on `births14` dataset and research question.
-Use a discernibility level of $\alpha=0.05.$ For reference, $\bar{x}_{n} - \bar{x}_{s} = `r xbar_difference`,$ $SE = `r se_difference`,$ and the sample sizes were $n_n = `r n_nonsmoker`$ and $n_s = `r n_smoker`.$
+Vervollständigen Sie den Hypothesentest, der im vorherigen Beispiel und der vorherigen Übungsaufgabe zum Datensatz `births14` und zur Forschungsfrage begonnen wurde.
+Verwenden Sie ein Signifikanzniveau von $\alpha=0{,}05.$ Zur Referenz: $\bar{x}_{n} - \bar{x}_{s} = `r xbar_difference`,$ $SE = `r se_difference`,$ und die Stichprobengrößen betrugen $n_n = `r n_nonsmoker`$ und $n_s = `r n_smoker`.$
 
 ------------------------------------------------------------------------
 
-We can find the test statistic for this test using the previous information:
+Wir können die Teststatistik für diesen Test mithilfe der vorherigen Informationen berechnen:
 
 \vspace{-5mm}
 
 $$T = \frac{\ `r xbar_difference` - 0\ }{`r se_difference`} = `r t_difference`$$
 
-We find the single tail area using software.
-We'll use the smaller of $n_n - 1 = `r n_nonsmoker-1`$ and $n_s - 1 = `r n_smoker-1`$ as the degrees of freedom: $df = `r df_difference`.$ The one tail area is roughly 0.00017; doubling this value gives the two-tail area and p-value, 0.00034.
+Wir ermitteln die einseitige Fläche mithilfe von Software.
+Als Freiheitsgrade verwenden wir den kleineren Wert von $n_n - 1 = `r n_nonsmoker-1`$ und $n_s - 1 = `r n_smoker-1`$: $df = `r df_difference`.$ Die einseitige Fläche beträgt ungefähr 0,00017; durch Verdopplung dieses Wertes erhalten wir die zweiseitige Fläche und den p-Wert: 0,00034.
 
-The p-value is smaller than the discernibility level, 0.05, so we reject the null hypothesis.
-The data provide statistically discernible evidence of a difference in the average weights of babies born to mothers who smoked during pregnancy and those who did not.
+Der p-Wert ist kleiner als das Signifikanzniveau 0,05, daher lehnen wir die Nullhypothese ab.
+Die Daten liefern statistisch signifikante Hinweise auf einen Unterschied im durchschnittlichen Gewicht von Babys, die von Müttern geboren wurden, die während der Schwangerschaft geraucht haben, und solchen, die nicht geraucht haben.
 :::
 
 \vspace{-5mm}
 
-This result is likely not surprising.
-We all know that smoking is bad for you and you've probably also heard that smoking during pregnancy is not just bad for the mother but also for the baby as well.
-In fact, some in the tobacco industry actually had the audacity to tout that as a *benefit* of smoking:
+Dieses Ergebnis ist wahrscheinlich nicht überraschend.
+Wir alle wissen, dass Rauchen schlecht für die Gesundheit ist, und Sie haben wahrscheinlich auch gehört, dass Rauchen während der Schwangerschaft nicht nur für die Mutter, sondern auch für das Baby schädlich ist.
+Tatsächlich hatte ein Teil der Tabakindustrie die Dreistigkeit, dies als einen *Vorteil* des Rauchens anzupreisen:
 
-> *It's true. The babies born from women who smoke are smaller, but they're just as healthy as the babies born from women who do not smoke. And some women would prefer having smaller babies.* - Joseph Cullman, Philip Morris' Chairman of the Board on CBS' *Face the Nation*, Jan 3, 1971
+> *Es stimmt. Die Babys, die von rauchenden Frauen geboren werden, sind kleiner, aber sie sind genauso gesund wie die Babys, die von nicht rauchenden Frauen geboren werden. Und manche Frauen würden es vorziehen, kleinere Babys zu haben.* - Joseph Cullman, Vorstandsvorsitzender von Philip Morris in CBS' *Face the Nation*, 3. Januar 1971
 
-Furthermore, health differences between babies born to mothers who smoke and those who do not are not limited to weight differences.[^20-inference-two-means-6]
+Darüber hinaus beschränken sich die gesundheitlichen Unterschiede zwischen Babys, die von rauchenden Müttern geboren wurden, und solchen, die von nicht rauchenden Müttern geboren wurden, nicht nur auf Gewichtsunterschiede.[^20-inference-two-means-6]
 
-[^20-inference-two-means-6]: You can watch an episode of John Oliver on [*Last Week Tonight*](youtu.be/6UsHHOCH4q8) to explore the present day offenses of the tobacco industry.
-    Please be aware that there is some adult language.
+[^20-inference-two-means-6]: Sie können eine Episode von John Oliver auf [*Last Week Tonight*](youtu.be/6UsHHOCH4q8) ansehen, um die heutigen Vergehen der Tabakindustrie zu erkunden.
+    Bitte beachten Sie, dass darin einige Ausdrücke für Erwachsene vorkommen.
 
-A small note on the power of the independent t-test (recall the discussion of power in @sec-pow). It turns out that the independent t-test given here is often less powerful than the paired t-test discussed in @sec-mathpaired. That said, depending on how the data are collected, we don't always have a mechanism for pairing the data and reducing the inherent variability across observations.
+Ein kleiner Hinweis zur Teststärke des unabhängigen t-Tests (erinnern Sie sich an die Diskussion zur Teststärke in @sec-pow). Es stellt sich heraus, dass der hier beschriebene unabhängige t-Test oft weniger leistungsstark ist als der gepaarte t-Test, der in @sec-mathpaired besprochen wird. Allerdings haben wir je nach Art der Datenerhebung nicht immer die Möglichkeit, die Daten zu paaren und die inhärente Variabilität zwischen den Beobachtungen zu reduzieren.
 
 \clearpage
 
-## Mathematical model for estimating the difference in means
+## Mathematisches Modell zur Schätzung des Unterschieds in den Mittelwerten
 
-### Observed data
+### Beobachtete Daten
 
-As with hypothesis testing, for the question of whether we can model the difference using a $t$-distribution, we'll need to check new conditions.
-Like the 2-proportion cases, we will require a more robust version of independence so we are confident the two groups are also independent.
-Secondly, we also check for normality in each group separately, which in practice is a check for outliers.
+Wie bei Hypothesentests müssen wir für die Frage, ob wir die Differenz mit einer $t$-Verteilung modellieren können, neue Bedingungen überprüfen.
+Wie bei den 2-Anteile-Fällen werden wir eine robustere Version der Unabhängigkeit fordern, um sicher zu sein, dass die zwei Gruppen ebenfalls unabhängig sind.
+Zweitens überprüfen wir auch die Normalverteilung in jeder Gruppe separat, was in der Praxis eine Überprüfung auf Ausreißer ist.
 
 ```{r}
 #| include: false
@@ -622,27 +622,27 @@ terms_chp_20 <- c(terms_chp_20, "t-CI")
 \index{point estimate!difference in means}\index{difference in means!point estimate}
 
 ::: {.important data-latex=""}
-**Using the** $t$**-distribution for a difference in means.**
+**Verwendung der** $t$**-Verteilung für eine Differenz in Mittelwerten.**
 
-The $t$-distribution can be used for inference when working with the standardized difference of two means if
+Die $t$-Verteilung kann für Inferenzen verwendet werden, wenn mit der standardisierten Differenz zweier Mittelwerte gearbeitet wird, falls
 
--   *Independence* (extended). The data are independent within and between the two groups, e.g., the data come from independent random samples or from a randomized experiment.
--   *Normality*. We check the outliers for each group separately.
+-   *Unabhängigkeit* (erweitert). Die Daten sind innerhalb und zwischen den beiden Gruppen unabhängig, z.B. stammen die Daten aus unabhängigen Zufallsstichproben oder aus einem randomisierten Experiment.
+-   *Normalverteilung*. Wir überprüfen die Ausreißer für jede Gruppe separat.
 
-The standard error may be computed as \index{standard error (SE)!difference in means}\index{difference in means!standard error (SE)}
+Der Standardfehler kann berechnet werden als \index{standard error (SE)!difference in means}\index{difference in means!standard error (SE)}
 
 $$SE = \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}$$
 
-The official formula for the degrees of freedom is quite complex and is generally computed using software, so instead you may use the smaller of $n_1 - 1$ and $n_2 - 1$ for the degrees of freedom if software isn't readily available.
+Die offizielle Formel für die Freiheitsgrade ist recht komplex und wird im Allgemeinen mithilfe von Software berechnet; daher können Sie stattdessen den kleineren Wert von $n_1 - 1$ und $n_2 - 1$ als Freiheitsgrade verwenden, wenn keine Software unmittelbar verfügbar ist.
 :::
 
-Recall that the margin of error is defined by the standard error.
-The margin of error for $\bar{x}_1 - \bar{x}_2$ can be directly obtained from $SE(\bar{x}_1 - \bar{x}_2).$
+Erinnern Sie sich daran, dass der Fehlerbereich durch den Standardfehler definiert ist.
+Der Fehlerbereich für $\bar{x}_1 - \bar{x}_2$ kann direkt aus $SE(\bar{x}_1 - \bar{x}_2)$ abgeleitet werden.
 
 ::: {.important data-latex=""}
-**Margin of error for** $\bar{x}_1 - \bar{x}_2.$
+**Fehlerbereich für** $\bar{x}_1 - \bar{x}_2.$
 
-The margin of error is $t^\star_{df} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}$ where $t^\star_{df}$ is calculated from a specified percentile on the t-distribution with *df* degrees of freedom.
+Der Fehlerbereich beträgt $t^\star_{df} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}$, wobei $t^\star_{df}$ aus einem bestimmten Perzentil der t-Verteilung mit *df* Freiheitsgraden berechnet wird.
 :::
 
 ```{r}
@@ -651,22 +651,22 @@ terms_chp_20 <- c(terms_chp_20, "SE difference in means")
 ```
 
 
-### Variability of the statistic
+### Variabilität der Statistik
 
 \index{t-CI!difference in means}
 
 ::: {.workedexample data-latex=""}
-Can the $t$-distribution be used to make inference using the point estimate, $\bar{x}_{esc} - \bar{x}_{control} = 7.83$?
+Kann die $t$-Verteilung verwendet werden, um mit dem Punktschätzer $\bar{x}_{esc} - \bar{x}_{control} = 7{,}83$ Inferenzen zu machen?
 
 ------------------------------------------------------------------------
 
-First, we check for independence.
-Because the sheep were randomized into the groups, independence within and between groups is satisfied.
+Zunächst überprüfen wir die Unabhängigkeit.
+Da die Schafe zufällig den Gruppen zugewiesen wurden, ist die Unabhängigkeit innerhalb und zwischen den Gruppen erfüllt.
 
-@fig-stem-cell-histograms does not reveal any clear outliers in either group.
-(The ESC group does look a bit more variable, but this is not the same as having clear outliers.)
+@fig-stem-cell-histograms zeigt keine klaren Ausreißer in einer der Gruppen.
+(Die ESC-Gruppe sieht zwar etwas variabler aus, aber das ist nicht dasselbe wie das Vorhandensein klarer Ausreißer.)
 
-With both conditions met, we can use the $t$-distribution to model the difference of sample means.
+Da beide Bedingungen erfüllt sind, können wir die $t$-Verteilung verwenden, um die Differenz der Stichprobenmittelwerte zu modellieren.
 :::
 
 ```{r}
@@ -690,15 +690,15 @@ stem_cell |>
   )
 ```
 
-Generally, we use statistical software to find the appropriate degrees of freedom, or if software isn't available, we can use the smaller of $n_1 - 1$ and $n_2 - 1$ for the degrees of freedom, e.g., if using a $t$-table to find tail areas.
-For transparency in the Examples and Guided Practice, we'll use the latter approach for finding $df$; in the case of the ESC example, this means we'll use $df = 8.$
+Im Allgemeinen verwenden wir statistische Software, um die geeigneten Freiheitsgrade zu finden; oder wenn keine Software verfügbar ist, können wir den kleineren Wert von $n_1 - 1$ und $n_2 - 1$ als Freiheitsgrade verwenden, z.B. wenn eine $t$-Tabelle zur Bestimmung der Randbereiche verwendet wird.
+Im Interesse der Transparenz in den Beispielen und Übungsaufgaben werden wir den letzteren Ansatz zur Bestimmung von $df$ verwenden; im Fall des ESC-Beispiels bedeutet dies, dass wir $df = 8$ verwenden.
 
 ::: {.workedexample data-latex=""}
-Calculate a 95% confidence interval for the effect of ESCs on the change in heart pumping capacity of sheep after they've suffered a heart attack.
+Berechnen Sie ein 95%-Konfidenzintervall für den Effekt von ESC auf die Veränderung der Herzpumpkapazität von Schafen, nachdem sie einen Herzinfarkt erlitten haben.
 
 ------------------------------------------------------------------------
 
-We will use the sample difference and the standard error that we computed earlier:
+Wir verwenden die Stichprobendifferenz und den Standardfehler, den wir früher berechnet haben:
 
 $$
 \begin{aligned}
@@ -707,8 +707,8 @@ SE &= \sqrt{\frac{5.17^2}{9} + \frac{2.76^2}{9}} = 1.95
 \end{aligned}
 $$
 
-Using $df = 8,$ we can identify the critical value of $t^{\star}_{8} = 2.31$ for a 95% confidence interval.
-Finally, we can enter the values into the confidence interval formula:
+Mit $df = 8$ können wir den kritischen Wert von $t^{\star}_{8} = 2{,}31$ für ein 95%-Konfidenzintervall bestimmen.
+Schließlich können wir die Werte in die Konfidenzintervall-Formel einsetzen:
 
 $$
 \begin{aligned}
@@ -718,25 +718,25 @@ $$
 \end{aligned} 
 $$
 
-We are 95% confident that the heart pumping function in sheep that received embryonic stem cells is between 3.32% and 12.34% higher than for sheep that did not receive the stem cell treatment.
+Wir sind zu 95% sicher, dass die Herzpumpfunktion bei Schafen, die embryonale Stammzellen erhalten haben, zwischen 3,32% und 12,34% höher ist als bei Schafen, die keine Stammzellbehandlung erhalten haben.
 :::
 
 \clearpage
 
-## Chapter review {#sec-chp20-review}
+## Kapitelzusammenfassung {#sec-chp20-review}
 
-### Summary
+### Zusammenfassung
 
-In this chapter we extended the single mean inferential methods to questions of differences in means.
-You may have seen parallels from the chapters that extended a single proportion ([Chapter -@sec-inference-one-prop]) to differences in proportions ([Chapter -@sec-inference-two-props]).
-When considering differences in sample means (indeed, when considering many quantitative statistics), we use the t-distribution to describe the sampling distribution of the T score (the standardized difference in sample means).
-Ideas of confidence level and type of error which might occur from a hypothesis test conclusion are similar to those seen in other chapters (see [Chapter -@sec-foundations-decision-errors]).
+In diesem Kapitel haben wir die Inferenzmethoden für einzelne Mittelwerte auf Fragen zu Unterschieden in Mittelwerten ausgedehnt.
+Vielleicht haben Sie Parallelen zu den Kapiteln gesehen, die einen einzelnen Anteil ([Kapitel -@sec-inference-one-prop]) auf Unterschiede in Anteilen ([Kapitel -@sec-inference-two-props]) ausgeweitet haben.
+Bei der Betrachtung von Unterschieden in Stichprobenmittelwerten (tatsächlich bei der Betrachtung vieler quantitativer Statistiken) verwenden wir die t-Verteilung, um die Stichprobenverteilung des T-Werts (die standardisierte Differenz in den Stichprobenmittelwerten) zu beschreiben.
+Ideen zu Konfidenzniveau und Art des Fehlers, der aus einer Hypothesentestschlussfolgerung entstehen kann, ähneln denen, die in anderen Kapiteln zu sehen sind (siehe [Kapitel -@sec-foundations-decision-errors]).
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-20.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-20 aufgeführt.
+Wenn Sie nicht sicher sind, was einige dieser Begriffe bedeuten, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fettgedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-20
@@ -747,9 +747,9 @@ make_terms_table(terms_chp_20)
 
 \clearpage
 
-## Exercises {#sec-chp20-exercises}
+## Übungen {#sec-chp20-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-20].
+Antworten auf Aufgaben mit ungeraden Nummern finden sich in [Anhang -@sec-exercise-solutions-20].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_20-ex-inference-two-means.qmd >}}
