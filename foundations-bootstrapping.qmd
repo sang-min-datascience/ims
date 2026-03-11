@@ -15,8 +15,8 @@ Dann würden wir es erneut tun.
 Und wieder.
 Und so weiter, bis wir ein gutes Gespür für die Variabilität unserer ursprünglichen Schätzung haben.
 
-Wenn die Variabilität zwischen den Stichproben groß ist, würden wir annehmen, dass die ursprüngliche Statistik möglicherweise weit vom wahren Populationsparameter entfernt ist (und das Intervallschätzer wird breit sein).
-Wenn die Variabilität zwischen den Stichproben gering ist, erwarten wir, dass die Stichprobenstatistik nahe am wahren Parameter liegt (und der Intervallschätzer wird schmal sein).
+Wenn die Variabilität zwischen den Stichproben groß ist, würden wir annehmen, dass die ursprüngliche Statistik möglicherweise weit vom wahren Populationsparameter entfernt ist (und die Intervallschätzung wird breit sein).
+Wenn die Variabilität zwischen den Stichproben gering ist, erwarten wir, dass die Stichprobenstatistik nahe am wahren Parameter liegt (und die Intervallschätzung wird schmal sein).
 
 Die ideale Welt, in der das Sammeln von Stichprobendaten kostenlos oder extrem günstig ist, ist fast nie der Fall, und das wiederholte Ziehen von Stichproben aus einer Population ist in der Regel unmöglich. Anstatt also einen „Erneute Stichprobe aus der Population"-Ansatz zu verwenden, nutzt Bootstrapping einen „Erneute Stichprobe aus der Stichprobe"-Ansatz.
 In diesem Kapitel erläutern wir den Bootstrapping-Prozess ausführlich.
@@ -68,27 +68,27 @@ Patienten wählen möglicherweise einen Berater teilweise aufgrund der historisc
 
 ### Beobachtete Daten
 
-Ein Berater versuchte, Patienten zu gewinnen, indem er darauf hinwies, dass die durchschnittliche Komplikationsrate bei Leberdonoroperationen in den USA etwa 10% beträgt, seine Klienten aber nur 3 Komplikationen bei den 62 Leberdonoroperationen hatten, die er begleitet hat.
-Er behauptet, dies sei ein starker Beweis dafür, dass seine Arbeit maßgeblich dazu beiträgt, Komplikationen zu reduzieren (und er daher eingestellt werden sollte!).
+Eine Beraterin versuchte, Patienten zu gewinnen, indem sie darauf hinwies, dass die durchschnittliche Komplikationsrate bei Leberdonoroperationen in den USA etwa 10% beträgt, ihre Klientinnen und Klienten aber nur 3 Komplikationen bei den 62 Leberdonoroperationen hatten, die sie begleitet hat.
+Sie behauptet, dies sei ein starker Beweis dafür, dass ihre Arbeit maßgeblich dazu beiträgt, Komplikationen zu reduzieren (und sie daher eingestellt werden sollte!).
 
 ::: {.workedexample data-latex=""}
-Wir lassen $p$ die wahre Komplikationsrate für Leberdonoren darstellen, die mit diesem Berater zusammenarbeiten.
+Wir lassen $p$ die wahre Komplikationsrate für Leberdonoren darstellen, die mit dieser Beraterin zusammenarbeiten.
 (Die „wahre" Komplikationsrate wird als **Parameter** bezeichnet.) Wir schätzen $p$ anhand der Daten und bezeichnen die Schätzung als $\hat{p}.$
 
 ------------------------------------------------------------------------
 
-Der Stichprobenanteil für die Komplikationsrate berechnet sich aus 3 Komplikationen geteilt durch die 62 Operationen, bei denen der Berater tätig war: $\hat{p} = 3/62 = 0.048.$
+Der Stichprobenanteil für die Komplikationsrate berechnet sich aus 3 Komplikationen geteilt durch die 62 Operationen, bei denen die Beraterin tätig war: $\hat{p} = 3/62 = 0.048.$
 :::
 
 ::: {.workedexample data-latex=""}
-Ist es möglich, die Behauptung des Beraters (dass die Reduzierung der Komplikationen auf seine Arbeit zurückzuführen ist) anhand der Daten zu beurteilen?
+Ist es möglich, die Behauptung der Beraterin (dass die Reduzierung der Komplikationen auf ihre Arbeit zurückzuführen ist) anhand der Daten zu beurteilen?
 
 ------------------------------------------------------------------------
 
 Nein.
 Die Behauptung ist, dass es eine kausale Verbindung gibt, aber die Daten sind beobachtend, daher müssen wir auf Störvariablen achten.
-Zum Beispiel könnten Patienten, die sich einen medizinischen Berater leisten können, auch eine bessere medizinische Versorgung bezahlen, was ebenfalls zu einer niedrigeren Komplikationsrate führen kann.
-Obwohl es nicht möglich ist, die kausale Behauptung zu beurteilen, ist es dennoch möglich, die wahre Komplikationsrate des Beraters zu verstehen.
+Zum Beispiel könnten Patienten, die sich eine medizinische Beraterin leisten können, auch eine bessere medizinische Versorgung bezahlen, was ebenfalls zu einer niedrigeren Komplikationsrate führen kann.
+Obwohl es nicht möglich ist, die kausale Behauptung zu beurteilen, ist es dennoch möglich, die wahre Komplikationsrate der Beraterin zu verstehen.
 :::
 
 ::: {.important data-latex=""}
@@ -99,7 +99,7 @@ Ein **Parameter** ist der „wahre" Wert von Interesse.
 Wir schätzen den Parameter in der Regel mit einer Punktschätzung\index{Punktschätzung} aus einer Stichprobe von Daten.
 Die Punktschätzung ist auch als **Statistik**\index{Statistik} bekannt.
 
-Zum Beispiel schätzen wir die Wahrscheinlichkeit $p$ einer Komplikation für einen Klienten des medizinischen Beraters, indem wir die vergangenen Komplikationsraten seiner Klienten untersuchen:
+Zum Beispiel schätzen wir die Wahrscheinlichkeit $p$ einer Komplikation für einen Klienten der medizinischen Beraterin, indem wir die vergangenen Komplikationsraten ihrer Klientinnen und Klienten untersuchen:
 
 $$\hat{p} = 3 / 62 = 0.048~\text{wird verwendet, um}~p~\text{zu schätzen}$$
 :::
@@ -111,14 +111,14 @@ terms_chp_12 <- c(terms_chp_12, "parameter", "point estimate", "statistic")
 
 ### Variabilität der Statistik
 
-In der Fallstudie zum medizinischen Berater ist der Parameter $p,$ die wahre Wahrscheinlichkeit einer Komplikation für einen Klienten des medizinischen Beraters.
+In der Fallstudie zur medizinischen Beraterin ist der Parameter $p,$ die wahre Wahrscheinlichkeit einer Komplikation für einen Klienten der medizinischen Beraterin.
 Es gibt keinen Grund anzunehmen, dass $p$ genau $\hat{p} = 3/62$ ist, aber es gibt auch keinen Grund anzunehmen, dass $p$ besonders weit von $\hat{p} = 3/62$ entfernt ist. Durch Stichprobenziehung mit Zurücklegen aus dem Datensatz (ein Prozess namens Bootstrapping\index{Bootstrapping}) kann die Variabilität der möglichen $\hat{p}$-Werte angenähert werden.
 
 Die meisten in diesem Text behandelten Inferenzverfahren beruhen darauf, zu quantifizieren, wie sich ein Datensatz von einem anderen unterscheiden würde, wenn beide aus derselben Population stammen.
 Es ist nicht sinnvoll, wiederholt Stichproben aus derselben Population zu ziehen, weil wenn man die Mittel hat, mehr Stichproben zu nehmen, ein größerer Stichprobenumfang mehr nützt als die separate Auswertung zweier Stichproben gleicher Größe.
 Stattdessen messen wir, wie sich die Stichproben unter einer Schätzung der Population verhalten.
 
-@fig-boot1 zeigt, wie die unbekannte ursprüngliche Population mit Hilfe der Stichprobe geschätzt werden kann, indem der Anteil von Erfolgen und Misserfolgen approximiert wird (in unserem Fall der Anteil von Komplikationen und Nicht-Komplikationen beim medizinischen Berater).
+@fig-boot1 zeigt, wie die unbekannte ursprüngliche Population mit Hilfe der Stichprobe geschätzt werden kann, indem der Anteil von Erfolgen und Misserfolgen approximiert wird (in unserem Fall der Anteil von Komplikationen und Nicht-Komplikationen bei der medizinischen Beraterin).
 
 ```{r}
 #| label: fig-boot1
@@ -157,7 +157,7 @@ knitr::include_graphics("images/boot1prop2.png")
 ```
 
 Durch Zusammenfassen jeder der Bootstrap-Stichproben (hier mit dem Stichprobenanteil) sehen wir direkt die Variabilität des Stichprobenanteils $\hat{p}$ von Stichprobe zu Stichprobe.
-Die Verteilung von $\hat{p}_{boot}$ für das Beispielszenario ist in @fig-boot3 dargestellt, und die vollständige Bootstrap-Verteilung für die Daten des medizinischen Beraters ist in @fig-MedConsBSSim zu sehen.
+Die Verteilung von $\hat{p}_{boot}$ für das Beispielszenario ist in @fig-boot3 dargestellt, und die vollständige Bootstrap-Verteilung für die Daten der medizinischen Beraterin ist in @fig-MedConsBSSim zu sehen.
 
 ```{r}
 #| label: fig-boot3
@@ -221,7 +221,7 @@ knitr::include_graphics("images/boot1prop4.png")
 knitr::include_graphics("images/boot1propboth.png")
 ```
 
-Wenn wir das Bootstrap-Stichprobenverfahren auf das Beispiel des medizinischen Beraters anwenden, betrachten wir jeden Klienten als eine der Murmeln im Beutel.
+Wenn wir das Bootstrap-Stichprobenverfahren auf das Beispiel der medizinischen Beraterin anwenden, betrachten wir jeden Klienten als eine der Murmeln im Beutel.
 Es gibt 59 weiße Murmeln (keine Komplikation) und 3 rote Murmeln (Komplikation).
 Wenn wir 62 Murmeln aus dem Beutel ziehen (eine nach der anderen mit Zurücklegen) und den Anteil der simulierten Patienten mit Komplikationen berechnen, $\hat{p}_{boot},$ dann stellt dieser „Bootstrap"-Anteil einen einzelnen simulierten Anteil aus dem „Erneute Stichprobe aus der Stichprobe"-Ansatz dar.
 
@@ -286,15 +286,15 @@ ggplot(bsprop_med, aes(x = bsprop)) +
 ```
 
 ::: {.workedexample data-latex=""}
-Die ursprüngliche Behauptung war, dass die wahre Komplikationsrate des Beraters unter der nationalen Rate von 10% liegt.
-Deutet die Intervallschätzung von 0% bis 11,3% für die wahre Komplikationswahrscheinlichkeit darauf hin, dass der chirurgische Berater eine niedrigere Komplikationsrate als der nationale Durchschnitt hat?
+Die ursprüngliche Behauptung war, dass die wahre Komplikationsrate der Beraterin unter der nationalen Rate von 10% liegt.
+Deutet die Intervallschätzung von 0% bis 11,3% für die wahre Komplikationswahrscheinlichkeit darauf hin, dass die chirurgische Beraterin eine niedrigere Komplikationsrate als der nationale Durchschnitt hat?
 Erläutern Sie.
 
 ------------------------------------------------------------------------
 
 Nein.
-Da das Intervall 10% einschließt, könnte es sein, dass die Arbeit des Beraters mit einem niedrigeren Komplikationsrisiko verbunden ist, oder es könnte sein, dass die Arbeit des Beraters mit einem höheren Risiko (d.h. größer als 10%) von Komplikationen verbunden ist!
-Darüber hinaus kann, wie bereits erwähnt, da es sich um eine Beobachtungsstudie handelt, selbst wenn eine Assoziation gemessen werden kann, kein Beweis erbracht werden, dass die Arbeit des Beraters die Ursache für die Komplikationsrate (ob höher oder niedriger) ist.
+Da das Intervall 10% einschließt, könnte es sein, dass die Arbeit der Beraterin mit einem niedrigeren Komplikationsrisiko verbunden ist, oder es könnte sein, dass die Arbeit der Beraterin mit einem höheren Risiko (d.h. größer als 10%) von Komplikationen verbunden ist!
+Darüber hinaus kann, wie bereits erwähnt, da es sich um eine Beobachtungsstudie handelt, selbst wenn eine Assoziation gemessen werden kann, kein Beweis erbracht werden, dass die Arbeit der Beraterin die Ursache für die Komplikationsrate (ob höher oder niedriger) ist.
 :::
 
 ## Fallstudie: Klopfer und Zuhörer {#sec-tapperscasestudy}
