@@ -1,4 +1,4 @@
-# Logistic regression {#sec-model-logistic}
+# Logistische Regression {#sec-model-logistic}
 
 ```{r}
 #| include: false
@@ -8,12 +8,12 @@ source("_common.R")
 \vspace{-10mm}
 
 ::: {.chapterintro data-latex=""}
-In this chapter we introduce **logistic regression**\index{logistic regression} as a tool for building models when there is a categorical response variable with two levels, e.g., yes and no.
-Logistic regression is a type of **generalized linear model (GLM)**\index{generalized linear model} for response variables where regular multiple regression does not work very well.
-GLMs can be thought of as a two-stage modeling approach.
-We first model the response variable using a probability distribution, such as the binomial or Poisson distribution.
-Second, we model the parameter of the distribution using a collection of predictors and a special form of multiple regression.
-Ultimately, the application of a GLM will feel very similar to multiple regression, even if some of the details are different.
+In diesem Kapitel führen wir die **logistische Regression**\index{logistische Regression} als Werkzeug zum Erstellen von Modellen ein, wenn es eine kategoriale Antwortvariable mit zwei Ausprägungen gibt, z. B. ja und nein.
+Die logistische Regression ist eine Art **verallgemeinertes lineares Modell (GLM)**\index{verallgemeinertes lineares Modell} für Antwortvariablen, bei denen die herkömmliche multiple Regression nicht gut funktioniert.
+GLMs können als zweistufiger Modellierungsansatz betrachtet werden.
+Zunächst modellieren wir die Antwortvariable mit einer Wahrscheinlichkeitsverteilung, wie der Binomial- oder Poisson-Verteilung.
+Anschließend modellieren wir den Parameter der Verteilung mithilfe einer Sammlung von Prädiktoren und einer speziellen Form der multiplen Regression.
+Letztendlich wird sich die Anwendung eines GLM sehr ähnlich wie multiple Regression anfühlen, auch wenn einige Details unterschiedlich sind.
 :::
 
 ```{r}
@@ -23,25 +23,25 @@ terms_chp_09 <- c("logistic regression", "generalized linear model")
 
 \vspace{-8mm}
 
-## Discrimination in hiring
+## Diskriminierung bei Stellenbewerbungen
 
-We will consider experiment data from a study that sought to understand the effect of race and sex on job application callback rates [@bertrand2003].
-To evaluate which factors were important, job postings were identified in Boston and Chicago for the study, and researchers created many fake resumes to send off to these jobs to see which would elicit a callback.[^09-model-logistic-1]
-The researchers enumerated important characteristics, such as years of experience and education details, and they used these characteristics to randomly generate fake resumes.
-Finally, they randomly assigned a name to each resume, where the name would imply the applicant's sex and race.
+Wir betrachten Experimentdaten einer Studie, die den Einfluss von Rasse und Geschlecht auf die Rückrufquoten bei Bewerbungen untersuchen sollte [@bertrand2003].
+Um herauszufinden, welche Faktoren wichtig waren, wurden für die Studie Stellenausschreibungen in Boston und Chicago ermittelt, und die Forscher erstellten viele gefälschte Lebensläufe, die an diese Stellen geschickt wurden, um zu sehen, welche einen Rückruf auslösen würden.[^09-model-logistic-1]
+Die Forscher zählten wichtige Merkmale auf, wie zum Beispiel Berufserfahrung und Ausbildungsdetails, und sie verwendeten diese Merkmale, um zufällig gefälschte Lebensläufe zu generieren.
+Schließlich wurde jedem Lebenslauf zufällig ein Name zugewiesen, wobei der Name auf das Geschlecht und die Rasse des Bewerbers schließen ließ.
 
-[^09-model-logistic-1]: We did omit discussion of some structure in the data for the analysis presented: the experiment design included blocking, where typically four resumes were sent to each job: one for each inferred race/sex combination (as inferred based on the first name).
-    We did not worry about the blocking aspect, since accounting for the blocking would *reduce* the standard error without notably changing the point estimates for the `race` and `sex` variables versus the analysis performed in the section.
-    That is, the most interesting conclusions in the study are unaffected even when completing a more sophisticated analysis.
+[^09-model-logistic-1]: Wir haben bei der vorgestellten Analyse einige Strukturen in den Daten weggelassen: Das Experimentdesign umfasste eine Blockbildung, bei der typischerweise vier Lebensläufe an jede Stelle geschickt wurden: einer für jede erschlossene Rasse-Geschlecht-Kombination (wie sie anhand des Vornamens erschlossen wurde).
+    Wir haben uns nicht um den Blockierungsaspekt gekümmert, da die Berücksichtigung der Blockierung den Standardfehler *verringern* würde, ohne die Punktschätzungen für die Variablen `race` und `sex` im Vergleich zur durchgeführten Analyse nennenswert zu verändern.
+    Das heißt, die interessantesten Schlussfolgerungen der Studie bleiben unberührt, auch wenn eine ausgefeiltere Analyse durchgeführt wird.
 
 ::: {.data data-latex=""}
-The [`resume`](http://openintrostat.github.io/openintro/reference/resume.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`resume`](http://openintrostat.github.io/openintro/reference/resume.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) verfügbar.
 :::
 
-The first names that were used and randomly assigned in the experiment were selected so that they would predominantly be recognized as belonging to Black or White individuals; other races were not considered in the study.
-While no name would definitively be inferred as pertaining to a Black individual or to a White individual, the researchers conducted a survey to check for racial association of the names; names that did not pass the survey check were excluded from usage in the experiment.
-You can find the full set of names that did pass the survey test and were ultimately used in the study in @tbl-resume-names.
-For example, Lakisha was a name that their survey indicated would be interpreted as a Black woman, while Greg was a name that would generally be interpreted to be associated with a White male.
+Die Vornamen, die im Experiment verwendet und zufällig zugewiesen wurden, wurden so ausgewählt, dass sie überwiegend als zu schwarzen oder weißen Personen gehörend erkannt werden würden; andere Rassen wurden in der Studie nicht berücksichtigt.
+Obwohl kein Name eindeutig einer schwarzen oder weißen Person zugeordnet werden würde, führten die Forscher eine Umfrage durch, um die Rassenassoziation der Namen zu überprüfen; Namen, die die Umfrageprüfung nicht bestanden, wurden vom Einsatz im Experiment ausgeschlossen.
+Die vollständige Liste der Namen, die die Umfrageprüfung bestanden und letztendlich in der Studie verwendet wurden, findet sich in @tbl-resume-names.
+Zum Beispiel war Lakisha ein Name, der laut ihrer Umfrage als eine schwarze Frau interpretiert werden würde, während Greg ein Name war, der allgemein mit einem weißen Mann in Verbindung gebracht werden würde.
 
 \clearpage
 
@@ -117,9 +117,9 @@ resume <- resume |>
   )
 ```
 
-The response variable of interest is whether there was a callback from the employer for the applicant, and there were 8 attributes that were randomly assigned that we'll consider, with special interest in the race and sex variables.
-Race and sex are protected classes in the United States, meaning they are not legally permitted factors for hiring or employment decisions.
-The full set of attributes considered is provided in @tbl-resume-variables.
+Die interessierende Antwortvariable ist, ob es einen Rückruf des Arbeitgebers für den Bewerber gab, und es gab 8 Attribute, die zufällig zugewiesen wurden und die wir betrachten möchten, wobei besonderes Interesse den Variablen Rasse und Geschlecht gilt.
+Rasse und Geschlecht sind in den Vereinigten Staaten geschützte Klassen, d. h. sie sind gesetzlich nicht erlaubte Faktoren für Einstellungs- oder Beschäftigungsentscheidungen.
+Die vollständige Liste der betrachteten Attribute findet sich in @tbl-resume-variables.
 
 ```{r}
 #| label: tbl-resume-variables
@@ -135,7 +135,7 @@ resume_variables <- tribble(
   "job_city",          "City where the job was located: Boston or Chicago.",
   "college_degree",    "An indicator for whether the resume listed a college degree.",
   "years_experience",  "Number of years of experience listed on the resume.",
-  "honors",            "Indicator for the resume listing some sort of honors, e.g. employee of the month.",
+  "honors",            "Indicator for the resume listing some sort of honors, e.g. employee of the month.",
   "military",          "Indicator for if the resume listed any military experience.",
   "has_email_address", "Indicator for if the resume listed an email address for the applicant.",
   "race",              "Race of the applicant, implied by their first name listed on the resume.",
@@ -152,24 +152,24 @@ resume_variables |>
   column_spec(2, width = "30em")
 ```
 
-All of the attributes listed on each resume were randomly assigned, which means that no attributes that might be favorable or detrimental to employment would favor one demographic over another on these resumes.
-Importantly, due to the experimental nature of the study, we can infer causation between these variables and the callback rate, if substantial differences are found.
-Our analysis will allow us to compare the practical importance of each of the variables relative to each other.
+Alle in jedem Lebenslauf aufgelisteten Attribute wurden zufällig zugewiesen, was bedeutet, dass keine Attribute, die für die Beschäftigung günstig oder nachteilig sein könnten, in diesen Lebensläufen eine demografische Gruppe gegenüber einer anderen bevorzugen würden.
+Wichtig ist, dass wir aufgrund des experimentellen Charakters der Studie auf eine Kausalität zwischen diesen Variablen und der Rückrufquote schließen können, wenn erhebliche Unterschiede festgestellt werden.
+Unsere Analyse wird es uns ermöglichen, die praktische Bedeutung jeder der Variablen im Vergleich zueinander zu bewerten.
 
 \clearpage
 
-## Modelling the probability of an event {#sec-modelingTheProbabilityOfAnEvent}
+## Modellierung der Wahrscheinlichkeit eines Ereignisses {#sec-modelingTheProbabilityOfAnEvent}
 
-Logistic regression is a generalized linear model where the outcome is a two-level categorical variable.
-The outcome, $Y_i$, takes the value 1 (in our application, the outcome represents a callback for the resume) with probability $p_i$ and the value 0 with probability $1 - p_i$.
-Because each observation has a slightly different context, e.g., different education level or a different number of years of experience, the probability $p_i$ will differ for each observation.
-Ultimately, it is the **probability**\index{probability of an event} of the outcome taking the value 1 (i.e., being a "success") that we model in relation to the predictor variables: we will examine which resume characteristics correspond to higher or lower callback rates.
+Die logistische Regression ist ein verallgemeinertes lineares Modell, bei dem das Ergebnis eine zweistufige kategoriale Variable ist.
+Das Ergebnis, $Y_i$, nimmt den Wert 1 (in unserer Anwendung repräsentiert das Ergebnis einen Rückruf für den Lebenslauf) mit Wahrscheinlichkeit $p_i$ und den Wert 0 mit Wahrscheinlichkeit $1 - p_i$ an.
+Da jede Beobachtung einen etwas anderen Kontext hat, z. B. ein anderes Bildungsniveau oder eine andere Anzahl von Berufserfahrungsjahren, wird die Wahrscheinlichkeit $p_i$ für jede Beobachtung unterschiedlich sein.
+Letztendlich ist es die **Wahrscheinlichkeit**\index{Wahrscheinlichkeit eines Ereignisses} des Ergebnisses, den Wert 1 anzunehmen (d. h. ein „Erfolg" zu sein), die wir in Bezug auf die Prädiktorvariablen modellieren: Wir werden untersuchen, welche Lebenslaufmerkmale höheren oder niedrigeren Rückrufquoten entsprechen.
 
 ::: {.important data-latex=""}
-**Notation for a logistic regression model.**
+**Notation für ein logistisches Regressionsmodell.**
 
-The outcome variable for a GLM is denoted by $Y_i$, where the index $i$ is used to represent observation $i$.
-In the resume application, $Y_i$ will be used to represent whether resume $i$ received a callback ($Y_i=1$) or not ($Y_i=0$).
+Die Antwortvariable für ein GLM wird durch $Y_i$ bezeichnet, wobei der Index $i$ verwendet wird, um Beobachtung $i$ darzustellen.
+In der Lebenslauf-Anwendung wird $Y_i$ verwendet, um darzustellen, ob Lebenslauf $i$ einen Rückruf erhalten hat ($Y_i=1$) oder nicht ($Y_i=0$).
 :::
 
 ```{r}
@@ -177,28 +177,28 @@ In the resume application, $Y_i$ will be used to represent whether resume $i$ re
 terms_chp_09 <- c(terms_chp_09, "probability of an event")
 ```
 
-The predictor variables are represented as follows: $x_{1,i}$ is the value of variable 1 for observation $i$, $x_{2,i}$ is the value of variable 2 for observation $i$, and so on.
+Die Prädiktorvariablen werden wie folgt dargestellt: $x_{1,i}$ ist der Wert der Variable 1 für Beobachtung $i$, $x_{2,i}$ ist der Wert der Variable 2 für Beobachtung $i$, und so weiter.
 
 $$
 transformation(p_i) = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \cdots + \beta_k x_{k,i}
 $$
 
-We want to choose a **transformation**\index{transformation} in the equation that makes practical and mathematical sense.
-For example, we want a transformation that makes the range of possibilities on the left hand side of the equation equal to the range of possibilities for the right hand side; if there was no transformation in the equation, the left hand side could only take values between 0 and 1, but the right hand side could take values well outside of the range from 0 to 1.
+Wir möchten eine **Transformation**\index{Transformation} in der Gleichung wählen, die praktisch und mathematisch sinnvoll ist.
+Zum Beispiel möchten wir eine Transformation, die den Bereich der Möglichkeiten auf der linken Seite der Gleichung gleich dem Bereich der Möglichkeiten auf der rechten Seite macht; wenn es keine Transformation in der Gleichung gäbe, könnte die linke Seite nur Werte zwischen 0 und 1 annehmen, aber die rechte Seite könnte Werte weit außerhalb des Bereichs von 0 bis 1 annehmen.
 
 ```{r}
 #| include: false
 terms_chp_09 <- c(terms_chp_09, "transformation")
 ```
 
-A common transformation for $p_i$ is the **logit transformation**\index{logit transformation}, which may be written as
+Eine häufige Transformation für $p_i$ ist die **Logit-Transformation**\index{Logit-Transformation}, die wie folgt geschrieben werden kann:
 
 $$
 logit(p_i) = \log_{e}\left( \frac{p_i}{1-p_i} \right)
 $$
 
-The **logit transformation**\index{logit transformation} is shown in @fig-logit-transformation.
-Below, we rewrite the equation relating $Y_i$ to its predictors using the logit transformation of $p_i$:
+Die **Logit-Transformation**\index{Logit-Transformation} ist in @fig-logit-transformation dargestellt.
+Im Folgenden schreiben wir die Gleichung, die $Y_i$ mit seinen Prädiktoren verbindet, unter Verwendung der Logit-Transformation von $p_i$ um:
 
 ```{r}
 #| include: false
@@ -270,11 +270,11 @@ ggplot(logit_df_line, aes(x = lp, y = p)) +
   )
 ```
 
-In our resume example, there are 8 predictor variables, so $k = 8$.
-While the precise choice of a logit function isn't intuitive, it is based on theory that underpins generalized linear models, which is beyond the scope of this book.
-Fortunately, once we fit a model using software, it will start to feel like we are back in the multiple regression context, even if the interpretation of the coefficients is more complex.
+In unserem Lebenslauf-Beispiel gibt es 8 Prädiktorvariablen, also $k = 8$.
+Obwohl die genaue Wahl einer Logit-Funktion nicht intuitiv ist, basiert sie auf der Theorie, die verallgemeinerten linearen Modellen zugrunde liegt, was über den Rahmen dieses Buches hinausgeht.
+Glücklicherweise wird es sich, sobald wir ein Modell mithilfe von Software angepasst haben, anfühlen, als wären wir wieder im Kontext der multiplen Regression, auch wenn die Interpretation der Koeffizienten komplexer ist.
 
-To convert from values on the logistic regression scale to the probability scale, we need to back transform and then solve for $p_i$:
+Um von Werten auf der logistischen Regressionsskala zur Wahrscheinlichkeitsskala zu konvertieren, müssen wir rücktransformieren und dann nach $p_i$ auflösen:
 
 $$
 \begin{aligned}
@@ -288,34 +288,34 @@ p_i &= \frac{e^{\beta_0 + \beta_1 x_{1,i}  + \cdots + \beta_k x_{k,i}}}{1 + e^{\
 \end{aligned}
 $$
 
-As with most applied data problems, we substitute in the point estimates (the observed $b_i$) to calculate relevant probabilities.
+Wie bei den meisten angewandten Datenproblemen setzen wir die Punktschätzungen (die beobachteten $b_i$) ein, um relevante Wahrscheinlichkeiten zu berechnen.
 
 ::: {.workedexample data-latex=""}
-We start by fitting a model with a single predictor: `honors`.
-This variable indicates whether the applicant had any type of honors listed on their resume, such as employee of the month.
-A logistic regression model was fit using statistical software and the following model was found:
+Wir beginnen mit der Anpassung eines Modells mit einem einzigen Prädiktor: `honors`.
+Diese Variable gibt an, ob der Bewerber irgendeine Art von Auszeichnungen in seinem Lebenslauf aufgeführt hat, wie z. B. Mitarbeiter des Monats.
+Ein logistisches Regressionsmodell wurde mit statistischer Software angepasst und das folgende Modell wurde gefunden:
 
 $$\log_e \left( \frac{\widehat{p}_i}{1-\widehat{p}_i} \right) = -2.4998 + 0.8668 \times {\texttt{honors}}$$
 
-a.  If a resume is randomly selected from the study and it does not have any honors listed, what is the probability it resulted in a callback?
+a.  Wenn ein Lebenslauf zufällig aus der Studie ausgewählt wird und er keine Auszeichnungen aufführt, wie hoch ist die Wahrscheinlichkeit, dass er zu einem Rückruf geführt hat?
 
-b.  What would the probability be if the resume did list some honors?
+b.  Wie hoch wäre die Wahrscheinlichkeit, wenn der Lebenslauf einige Auszeichnungen aufführt?
 
 ------------------------------------------------------------------------
 
-a.  If a randomly chosen resume from those sent out is considered, and it does not list honors, then `honors` takes the value of 0 and the right side of the model equation equals -2.4998. Solving for $p_i$: $\frac{e^{-2.4998}}{1 + e^{-2.4998}} = 0.076$. Just as we labeled a fitted value of $y_i$ with a "hat" in single-variable and multiple regression, we do the same for this probability: $\hat{p}_i = 0.076{}$.
+a.  Wenn ein zufällig ausgewählter Lebenslauf aus den verschickten betrachtet wird und er keine Auszeichnungen aufführt, nimmt `honors` den Wert 0 an und die rechte Seite der Modellgleichung ist gleich -2.4998. Auflösen nach $p_i$: $\frac{e^{-2.4998}}{1 + e^{-2.4998}} = 0.076$. Genauso wie wir einen angepassten Wert von $y_i$ mit einem „Dach" in der einfachen und multiplen Regression beschriftet haben, machen wir das Gleiche für diese Wahrscheinlichkeit: $\hat{p}_i = 0.076{}$.
 
-b.  If the resume had listed some honors, then the right side of the model equation is $-2.4998 + 0.8668 \times 1 = -1.6330$, which corresponds to a probability $\hat{p}_i = 0.163$. Notice that we could examine -2.4998 and -1.6330 in @fig-logit-transformation to estimate the probability before formally calculating the value.
+b.  Wenn der Lebenslauf einige Auszeichnungen aufgeführt hätte, dann wäre die rechte Seite der Modellgleichung $-2.4998 + 0.8668 \times 1 = -1.6330$, was einer Wahrscheinlichkeit $\hat{p}_i = 0.163$ entspricht. Beachten Sie, dass wir -2.4998 und -1.6330 in @fig-logit-transformation untersuchen könnten, um die Wahrscheinlichkeit vor der formalen Berechnung des Wertes abzuschätzen.
 :::
 
-While knowing whether a resume listed honors provides some signal when predicting whether the employer would call, we would like to account for many different variables at once to understand how each of the different resume characteristics affected the chance of a callback.
+Obwohl die Information, ob ein Lebenslauf Auszeichnungen aufführt, ein gewisses Signal bei der Vorhersage liefert, ob der Arbeitgeber anrufen würde, möchten wir viele verschiedene Variablen gleichzeitig berücksichtigen, um zu verstehen, wie jedes der verschiedenen Lebenslaufmerkmale die Chance auf einen Rückruf beeinflusst hat.
 
 \clearpage
 
-## Logistic model with many variables
+## Logistisches Modell mit vielen Variablen
 
-We used statistical software to fit the logistic regression model with all 8 predictors described in @tbl-resume-variables.
-Like multiple regression, the result may be presented in a summary table, which is shown in @tbl-resume-full-fit.
+Wir haben statistische Software verwendet, um das logistische Regressionsmodell mit allen 8 Prädiktoren anzupassen, die in @tbl-resume-variables beschrieben sind.
+Wie bei der multiplen Regression kann das Ergebnis in einer Übersichtstabelle dargestellt werden, die in @tbl-resume-full-fit gezeigt wird.
 
 ```{r}
 #| label: tbl-resume-full-fit
@@ -341,16 +341,16 @@ resume_full_fit |>
   column_spec(2:5, width = "5em")
 ```
 
-Just like multiple regression, we could trim some variables from the model.
-Here we'll use a statistic called **Akaike information criterion (AIC)**\index{AIC}\index{Akaike information criterion}, which is analogous to how we used adjusted $R^2$ in multiple regression.
-AIC is a popular model selection method used in many disciplines, and is praised for its emphasis on model uncertainty and parsimony.
-AIC selects a "best" model by ranking models from best to worst according to their AIC values.
-In the calculation of a model's AIC, a penalty is given for including additional variables.
-The penalty for added model complexity attempts to strike a balance between underfitting (too few variables in the model) and overfitting (too many variables in the model).
-When using AIC for model selection, models with a lower AIC value are considered to be "better." Remember that when using adjusted $R^2$ we select models with higher values instead.
-It is important to note that AIC provides information about the quality of a model relative to other models, but does not provide information about the overall quality of a model.
+Genau wie bei der multiplen Regression könnten wir einige Variablen aus dem Modell entfernen.
+Hier werden wir eine Statistik namens **Akaike-Informationskriterium (AIC)**\index{AIC}\index{Akaike-Informationskriterium} verwenden, die analog dazu ist, wie wir das angepasste $R^2$ bei der multiplen Regression verwendet haben.
+Das AIC ist eine beliebte Modellauswahlmethode, die in vielen Disziplinen verwendet wird, und wird für seine Betonung von Modellunsicherheit und Sparsamkeit gelobt.
+Das AIC wählt ein „bestes" Modell aus, indem es Modelle von bestem zu schlechtestem nach ihren AIC-Werten ordnet.
+Bei der Berechnung des AIC eines Modells wird eine Strafe für das Einbeziehen zusätzlicher Variablen vergeben.
+Die Strafe für zusätzliche Modellkomplexität versucht, ein Gleichgewicht zwischen Unteranpassung (zu wenige Variablen im Modell) und Überanpassung (zu viele Variablen im Modell) zu finden.
+Bei der Verwendung des AIC zur Modellauswahl gelten Modelle mit einem niedrigeren AIC-Wert als „besser". Denken Sie daran, dass wir beim angepassten $R^2$ stattdessen Modelle mit höheren Werten auswählen.
+Es ist wichtig zu beachten, dass das AIC Informationen über die Qualität eines Modells im Verhältnis zu anderen Modellen liefert, aber keine Informationen über die Gesamtqualität eines Modells.
 
-@tbl-resume-full-fit-aic provides the AIC and the number of observations used to fit the model.  We also know from @tbl-resume-full-fit that eight variables (with nine coefficients, including the intercept) were fit.
+@tbl-resume-full-fit-aic stellt das AIC und die Anzahl der zur Modellanpassung verwendeten Beobachtungen bereit. Wir wissen auch aus @tbl-resume-full-fit, dass acht Variablen (mit neun Koeffizienten, einschließlich des Achsenabschnitts) angepasst wurden.
 
 ```{r}
 #| label: tbl-resume-full-fit-aic
@@ -376,7 +376,7 @@ resume_full_fit |>
   column_spec(1:2, width = "10em", monospace = TRUE)
 ```
 
-We will look for models with a lower AIC using a backward elimination strategy.  @tbl-resume-fit-aic provides the AIC values for the model with variables as given in @tbl-resume-fit.  Notice that the same number of observations are used, but one fewer variable (`college_degree` is dropped from the model).
+Wir werden nach Modellen mit einem niedrigeren AIC mithilfe einer Rückwärtseliminations-Strategie suchen. @tbl-resume-fit-aic stellt die AIC-Werte für das Modell mit Variablen bereit, wie in @tbl-resume-fit angegeben. Beachten Sie, dass dieselbe Anzahl von Beobachtungen verwendet wird, aber eine Variable weniger (`college_degree` wird aus dem Modell entfernt).
 
 ```{r}
 #| label: tbl-resume-fit-aic
@@ -402,7 +402,7 @@ resume_fit |>
   column_spec(1:2, width = "10em", monospace = TRUE)
 ```
 
-After using the AIC criteria, the variable `college_degree` is eliminated (the AIC value without `college_degree` is smaller than the AIC value on the full model), giving the model summarized in @tbl-resume-fit with fewer variables, which is what we'll rely on for the remainder of the section.
+Nach Anwendung des AIC-Kriteriums wird die Variable `college_degree` eliminiert (der AIC-Wert ohne `college_degree` ist kleiner als der AIC-Wert des vollständigen Modells), was das in @tbl-resume-fit zusammengefasste Modell mit weniger Variablen ergibt, auf das wir uns für den Rest des Abschnitts stützen werden.
 
 ```{r}
 #| include: false
@@ -435,26 +435,26 @@ resume_fit |>
 ```
 
 ::: {.workedexample data-latex=""}
-The `race` variable had taken only two levels: `Black` and `White`.
-Based on the model results, what does the coefficient of the `race` variable say about callback decisions?
+Die Variable `race` hatte nur zwei Ausprägungen: `Black` und `White`.
+Was sagt der Koeffizient der Variable `race` basierend auf den Modellergebnissen über Rückrufentscheidungen aus?
 
 ------------------------------------------------------------------------
 
-The coefficient shown corresponds to the level of `White`, and it is positive.
-The positive coefficient reflects a positive gain in callback rate for resumes where the candidate's first name implied they were White.
-The model results suggest that prospective employers favor resumes where the first name is typically interpreted to be White.
+Der gezeigte Koeffizient entspricht der Ausprägung `White` und ist positiv.
+Der positive Koeffizient spiegelt einen positiven Anstieg der Rückrufquote für Lebensläufe wider, bei denen der Vorname des Kandidaten implizierte, dass er weiß ist.
+Die Modellergebnisse legen nahe, dass potenzielle Arbeitgeber Lebensläufe bevorzugen, bei denen der Vorname typischerweise als weiß interpretiert wird.
 :::
 
-The coefficient of $\texttt{race}_{\texttt{White}}$ in the full model in @tbl-resume-full-fit, is nearly identical to the model shown in @tbl-resume-fit.
-The predictors in the experiment were thoughtfully laid out so that the coefficient estimates would typically not be much influenced by which other predictors were in the model, which aligned with the motivation of the study to tease out which effects were important to getting a callback.
-In most observational data, it's common for point estimates to change a little, and sometimes a lot, depending on which other variables are included in the model.
+Der Koeffizient von $\texttt{race}_{\texttt{White}}$ im vollständigen Modell in @tbl-resume-full-fit ist nahezu identisch mit dem in @tbl-resume-fit gezeigten Modell.
+Die Prädiktoren im Experiment wurden so sorgfältig festgelegt, dass die Koeffizientenschätzungen typischerweise nicht stark davon beeinflusst werden, welche anderen Prädiktoren im Modell enthalten sind, was der Motivation der Studie entspricht, herauszufinden, welche Effekte für einen Rückruf wichtig sind.
+Bei den meisten Beobachtungsdaten ist es üblich, dass sich Punktschätzungen ein wenig und manchmal viel ändern, je nachdem, welche anderen Variablen im Modell enthalten sind.
 
 ::: {.workedexample data-latex=""}
-Use the model summarized in @tbl-resume-fit to estimate the probability of receiving a callback for a job in Chicago where the candidate lists 14 years experience, no honors, no military experience, includes an email address, and has a first name that implies they are a White male.
+Verwenden Sie das in @tbl-resume-fit zusammengefasste Modell, um die Wahrscheinlichkeit eines Rückrufs für eine Stelle in Chicago zu schätzen, bei der der Kandidat 14 Jahre Erfahrung aufführt, keine Auszeichnungen, keine Militärerfahrung, eine E-Mail-Adresse angibt und einen Vornamen hat, der impliziert, dass er ein weißer Mann ist.
 
 ------------------------------------------------------------------------
 
-We can start by writing out the equation using the coefficients from the model:
+Wir können beginnen, indem wir die Gleichung unter Verwendung der Koeffizienten aus dem Modell aufschreiben:
 
 $$
 \begin{aligned}
@@ -464,7 +464,7 @@ log_e \left(\frac{\widehat{p}}{1 - \widehat{p}}\right) = -2.7162 &- 0.4364 \time
 \end{aligned}
 $$
 
-Now we can add in the corresponding values of each variable for the individual of interest:
+Jetzt können wir die entsprechenden Werte jeder Variable für die betreffende Person einsetzen:
 
 $$
 \begin{aligned}
@@ -474,87 +474,87 @@ log_e \left(\frac{\widehat{p}}{1 - \widehat{p}}\right) = - 2.7162 &- 0.4364 \tim
 \end{aligned}
 $$
 
-We can now back-solve for $\widehat{p}$: the chance such an individual will receive a callback is about $\frac{e^{-2.3955}}{1 + e^{-2.3955}} = 0.0835.$
+Wir können nun nach $\widehat{p}$ auflösen: Die Chance, dass eine solche Person einen Rückruf erhält, beträgt etwa $\frac{e^{-2.3955}}{1 + e^{-2.3955}} = 0.0835.$
 :::
 
 \clearpage
 
 ::: {.workedexample data-latex=""}
-Compute the probability of a callback for an individual with a name commonly inferred to be from a Black male but who otherwise has the same characteristics as the one described in the previous example.
+Berechnen Sie die Wahrscheinlichkeit eines Rückrufs für eine Person mit einem Namen, der üblicherweise als von einem schwarzen Mann stammend interpretiert wird, die aber ansonsten dieselben Eigenschaften hat wie die im vorherigen Beispiel beschriebene Person.
 
 ------------------------------------------------------------------------
 
-We can complete the same steps for an individual with the same characteristics who is Black, where the only difference in the calculation is that the indicator variable $\texttt{race}_{\texttt{White}}$ will take a value of 0.
-Doing so yields a probability of 0.0553.
-Let's compare the results with those of the previous example.
+Wir können dieselben Schritte für eine Person mit denselben Merkmalen durchführen, die schwarz ist, wobei der einzige Unterschied in der Berechnung darin besteht, dass die Indikatorvariable $\texttt{race}_{\texttt{White}}$ den Wert 0 annimmt.
+Dabei ergibt sich eine Wahrscheinlichkeit von 0.0553.
+Vergleichen wir die Ergebnisse mit denen des vorherigen Beispiels.
 
-In practical terms, an individual perceived as White based on their first name would need to apply to $\frac{1}{0.0835} \approx 12$ jobs on average to receive a callback, while an individual perceived as Black based on their first name would need to apply to $\frac{1}{0.0553} \approx 18$ jobs on average to receive a callback.
-That is, applicants who are perceived as Black need to apply to 50% more employers to receive a callback than someone who is perceived as White based on their first name for jobs like those in the study.
+In der Praxis müsste eine Person, die aufgrund ihres Vornamens als weiß wahrgenommen wird, durchschnittlich $\frac{1}{0.0835} \approx 12$ Stellen bewerben, um einen Rückruf zu erhalten, während eine Person, die aufgrund ihres Vornamens als schwarz wahrgenommen wird, durchschnittlich $\frac{1}{0.0553} \approx 18$ Stellen bewerben müsste, um einen Rückruf zu erhalten.
+Das heißt, Bewerber, die als schwarz wahrgenommen werden, müssen sich bei 50% mehr Arbeitgebern bewerben, um einen Rückruf zu erhalten, als jemand, der aufgrund seines Vornamens als weiß wahrgenommen wird, für Stellen wie die in der Studie.
 :::
 
-What we have quantified in the current section is alarming and disturbing.
-However, one aspect that makes the racism so difficult to address is that the experiment, as well-designed as it is, cannot send us much signal about which employers are discriminating.
-It is only possible to say that discrimination is happening, even if we cannot say which particular callbacks --- or non-callbacks --- represent discrimination.
-Finding strong evidence of racism for individual cases is a persistent challenge in enforcing anti-discrimination laws.
+Was wir im aktuellen Abschnitt quantifiziert haben, ist alarmierend und beunruhigend.
+Ein Aspekt, der es jedoch so schwierig macht, den Rassismus anzugehen, ist, dass das Experiment, so gut es auch konzipiert ist, uns kaum Hinweise darauf geben kann, welche Arbeitgeber diskriminieren.
+Es ist nur möglich zu sagen, dass Diskriminierung stattfindet, auch wenn wir nicht sagen können, welche bestimmten Rückrufe – oder Nicht-Rückrufe – Diskriminierung darstellen.
+Der Nachweis von Rassismus in Einzelfällen ist eine anhaltende Herausforderung bei der Durchsetzung von Antidiskriminierungsgesetzen.
 
-## Groups of different sizes
+## Gruppen unterschiedlicher Größe
 
-Any form of discrimination is concerning, which is why we decided it was so important to discuss the topic using data.
-The resume study also only examined discrimination in a single aspect: whether a prospective employer would call a candidate who submitted their resume.
-There was a 50% higher barrier for resumes simply when the candidate had a first name that was perceived to be of a Black individual.
-It's unlikely that discrimination would stop there.
+Jede Form von Diskriminierung ist besorgniserregend, weshalb wir es für so wichtig hielten, das Thema anhand von Daten zu besprechen.
+Die Lebenslauf-Studie untersuchte Diskriminierung auch nur in einem einzigen Aspekt: ob ein potenzieller Arbeitgeber einen Kandidaten anrufen würde, der seinen Lebenslauf eingereicht hatte.
+Es gab eine 50% höhere Hürde für Lebensläufe, allein wenn der Kandidat einen Vornamen hatte, der als zu einer schwarzen Person gehörend wahrgenommen wurde.
+Es ist unwahrscheinlich, dass die Diskriminierung dort endet.
 
 ::: {.workedexample data-latex=""}
-Let's consider a sex-imbalanced company that consists of 20% women and 80% men, and we'll suppose that the company is very large, consisting of perhaps 20,000 employees.
-(A more deliberate example would include more inclusive gender identities.) Suppose when someone goes up for promotion at the company, 5 of their colleagues are randomly chosen to provide feedback on their work.
+Betrachten wir ein geschlechterunausgewogenes Unternehmen, das zu 20% aus Frauen und zu 80% aus Männern besteht, und nehmen wir an, das Unternehmen sei sehr groß und beschäftige vielleicht 20.000 Mitarbeiter.
+(Ein bewussteres Beispiel würde inklusivere Geschlechtsidentitäten einbeziehen.) Angenommen, wenn jemand im Unternehmen für eine Beförderung in Betracht gezogen wird, werden zufällig 5 Kollegen ausgewählt, um Rückmeldung zu ihrer Arbeit zu geben.
 
-Now let's imagine that 10% of the people in the company are prejudiced against the other sex.
-That is, 10% of men are prejudiced against women, and similarly, 10% of women are prejudiced against men. Who is discriminated against more at the company, men or women?
+Stellen wir uns nun vor, dass 10% der Menschen im Unternehmen gegenüber dem anderen Geschlecht voreingenommen sind.
+Das heißt, 10% der Männer sind gegenüber Frauen voreingenommen, und ebenso sind 10% der Frauen gegenüber Männern voreingenommen. Wer wird im Unternehmen mehr diskriminiert, Männer oder Frauen?
 
 ------------------------------------------------------------------------
 
-Let's suppose we took 100 men who have gone up for promotion in the past few years.
-For these men, $5 \times 100 = 500$ random colleagues will be tapped for their feedback, of which about 20% will be women (100 women).
-Of these 100 women, 10 are expected to be biased against the man they are reviewing.
-Then, of the 500 colleagues reviewing them, men will experience discrimination by about 2% of their colleagues when they go up for promotion.
+Angenommen, wir nehmen 100 Männer, die in den letzten Jahren für eine Beförderung in Betracht gezogen wurden.
+Für diese Männer werden $5 \times 100 = 500$ zufällige Kollegen für ihr Feedback ausgewählt, von denen etwa 20% Frauen sein werden (100 Frauen).
+Von diesen 100 Frauen werden voraussichtlich 10 gegenüber dem Mann, den sie bewerten, voreingenommen sein.
+Von den 500 Kollegen, die sie bewerten, werden Männer also von etwa 2% ihrer Kollegen diskriminiert, wenn sie für eine Beförderung in Betracht gezogen werden.
 
-Let's do a similar calculation for 100 women who have gone up for promotion in the last few years.
-They will also have 500 random colleagues providing feedback, of which about 400 (80%) will be men.
-Of these 400 men, about 40 (10%) hold a bias against women.
-Of the 500 colleagues providing feedback on the promotion packet for these women, 8% of the colleagues hold a bias against the women.
+Führen wir eine ähnliche Berechnung für 100 Frauen durch, die in den letzten Jahren für eine Beförderung in Betracht gezogen wurden.
+Sie werden ebenfalls 500 zufällige Kollegen haben, die Rückmeldung geben, von denen etwa 400 (80%) Männer sein werden.
+Von diesen 400 Männern haben etwa 40 (10%) eine Voreingenommenheit gegenüber Frauen.
+Von den 500 Kollegen, die Rückmeldung zum Beförderungspaket dieser Frauen geben, haben 8% der Kollegen eine Voreingenommenheit gegenüber den Frauen.
 :::
 
 \clearpage
 
-The example highlights something profound: even in a hypothetical setting where each demographic has the same degree of prejudice against the other demographic, the smaller group experiences the negative effects more frequently.
-Additionally, if we would complete a handful of examples like the one above with different numbers, we would learn that the greater the imbalance in the population groups, the more the smaller group is disproportionately impacted.[^09-model-logistic-2]
+Das Beispiel hebt etwas Tiefgreifendes hervor: Selbst in einem hypothetischen Umfeld, in dem jede demografische Gruppe denselben Grad an Vorurteil gegenüber der anderen demografischen Gruppe hat, erfährt die kleinere Gruppe die negativen Auswirkungen häufiger.
+Wenn wir außerdem eine Handvoll Beispiele wie das obige mit unterschiedlichen Zahlen durchführen würden, würden wir feststellen, dass das Ungleichgewicht in den Bevölkerungsgruppen umso größer ist, desto mehr wird die kleinere Gruppe unverhältnismäßig stark beeinträchtigt.[^09-model-logistic-2]
 
-[^09-model-logistic-2]: If a proportion $p$ of a company are women and the rest of the company consists of men, then under the hypothetical situation the ratio of rates of discrimination against women versus men would be given by $(1 - p) / p,$ a ratio that is always greater than 1 when $p < 0.5$.
+[^09-model-logistic-2]: Wenn ein Anteil $p$ eines Unternehmens aus Frauen besteht und der Rest des Unternehmens aus Männern besteht, dann wäre im hypothetischen Szenario das Verhältnis der Diskriminierungsraten gegen Frauen im Vergleich zu Männern durch $(1 - p) / p$ gegeben, ein Verhältnis, das immer größer als 1 ist, wenn $p < 0.5$.
 
-Of course, there are other considerable real-world omissions from the hypothetical example.
-For example, studies have found instances where people from an oppressed group also discriminate against others within their own oppressed group.
-As another example, there are also instances where a majority group can be oppressed, with apartheid in South Africa being one such historic example.
-Ultimately, discrimination is complex, and there are many factors at play beyond the mathematics property we observed in the previous example.
+Natürlich gibt es noch weitere erhebliche realweltliche Auslassungen aus dem hypothetischen Beispiel.
+Zum Beispiel haben Studien Fälle gefunden, in denen Menschen aus einer unterdrückten Gruppe auch andere innerhalb ihrer eigenen unterdrückten Gruppe diskriminieren.
+Als weiteres Beispiel gibt es auch Fälle, in denen eine Mehrheitsgruppe unterdrückt werden kann, wobei die Apartheid in Südafrika ein solches historisches Beispiel ist.
+Letztendlich ist Diskriminierung komplex, und es gibt viele Faktoren, die über die mathematischen Eigenschaften hinausgehen, die wir im vorherigen Beispiel beobachtet haben.
 
-We close the chapter on the serious topic of discrimination, and we hope it inspires you to think about the power of reasoning with data.
-Whether it is with a formal statistical model or by using critical thinking skills to structure a problem, we hope the ideas you have learned will help you do more and do better in life.
+Wir schließen das Kapitel mit dem ernsten Thema der Diskriminierung ab, und wir hoffen, dass es Sie dazu inspiriert, über die Kraft des Denkens mit Daten nachzudenken.
+Ob mit einem formalen statistischen Modell oder durch kritisches Denken zur Strukturierung eines Problems – wir hoffen, dass die Ideen, die Sie gelernt haben, Ihnen helfen werden, mehr zu erreichen und Besseres im Leben zu tun.
 
 \vfill
 
-## Chapter review {#sec-chp9-review}
+## Kapitelzusammenfassung {#sec-chp9-review}
 
-### Summary
+### Zusammenfassung
 
-Logistic and linear regression models have many similarities.
-The strongest of which is the linear combination of the explanatory variables which is used to form predictions related to the response variable.
-However, with logistic regression, the response variable is binary and therefore a prediction is given on the probability of a successful event.
-Logistic model fit and variable selection can be carried out in similar ways as multiple linear regression.
+Logistische und lineare Regressionsmodelle haben viele Gemeinsamkeiten.
+Die stärkste davon ist die Linearkombination der erklärenden Variablen, die verwendet wird, um Vorhersagen im Zusammenhang mit der Antwortvariable zu bilden.
+Bei der logistischen Regression ist die Antwortvariable jedoch binär und daher wird eine Vorhersage für die Wahrscheinlichkeit eines erfolgreichen Ereignisses gemacht.
+Die Anpassung des logistischen Modells und die Variablenauswahl können auf ähnliche Weise wie bei der multiplen linearen Regression durchgeführt werden.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-09.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-09 dargestellt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-09
@@ -567,9 +567,9 @@ make_terms_table(terms_chp_09)
 
 \clearpage
 
-## Exercises {#sec-chp09-exercises}
+## Übungen {#sec-chp09-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-09].
+Antworten auf Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-09].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_09-ex-model-logistic.qmd >}}
