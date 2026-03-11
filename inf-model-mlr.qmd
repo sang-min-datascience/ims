@@ -1,4 +1,4 @@
-# Inference for linear regression with multiple predictors {#sec-inf-model-mlr}
+# Inferenz für lineare Regression mit mehreren Prädiktoren {#sec-inf-model-mlr}
 
 \chaptermark{Inference for regression with multiple predictors}
 
@@ -8,14 +8,14 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-In [Chapter -@sec-model-mlr], the least squares regression method was used to estimate linear models which predicted a particular response variable given more than one explanatory variable.
-Here, we discuss whether each of the variables individually is a statistically discernible predictor of the outcome or whether the model might be just as strong without that variable.
-That is, as before, we apply inferential methods to ask whether a variable could have come from a population where the particular coefficient at hand was zero.
-If one of the linear model coefficients is truly zero (in the population), then the estimate of the coefficient (using least squares) will vary around zero.
-The inference task at hand is to decide whether the coefficient's difference from zero is large enough to decide that the data cannot possibly have come from a model where the true population coefficient is zero.
-Both the derivations from the mathematical model and the randomization model are beyond the scope of this book, but we are able to calculate p-values using statistical software.
-We will discuss interpreting p-values in the multiple regression setting and note some scenarios where careful understanding of the context and the relationship between variables is important.
-We use cross-validation as a method for independent assessment of the multiple linear regression model.
+In [Kapitel -@sec-model-mlr] wurde die Methode der kleinsten Quadrate verwendet, um lineare Modelle zu schätzen, die eine bestimmte Zielvariable auf der Grundlage von mehr als einer erklärenden Variable vorhersagen.
+Hier erörtern wir, ob jede der Variablen einzeln ein statistisch erkennbarer Prädiktor des Ergebnisses ist oder ob das Modell ohne diese Variable gleich stark wäre.
+Das heißt, wie zuvor wenden wir inferenzielle Methoden an, um zu fragen, ob eine Variable aus einer Population stammen könnte, in der der jeweilige Koeffizient null ist.
+Wenn einer der Koeffizienten des linearen Modells tatsächlich null ist (in der Grundgesamtheit), dann variiert die Schätzung des Koeffizienten (mit der Methode der kleinsten Quadrate) um null.
+Die Inferenzaufgabe besteht darin zu entscheiden, ob die Abweichung des Koeffizienten von null groß genug ist, um zu schließen, dass die Daten unmöglich aus einem Modell stammen können, bei dem der wahre Populationskoeffizient null ist.
+Sowohl die Herleitungen aus dem mathematischen Modell als auch aus dem Randomisierungsmodell gehen über den Rahmen dieses Buches hinaus, aber wir können p-Werte mithilfe statistischer Software berechnen.
+Wir werden die Interpretation von p-Werten im Kontext der multiplen Regression erörtern und einige Szenarien aufzeigen, bei denen ein sorgfältiges Verständnis des Kontexts und der Beziehungen zwischen den Variablen wichtig ist.
+Wir verwenden Kreuzvalidierung als Methode zur unabhängigen Bewertung des multiplen linearen Regressionsmodells.
 :::
 
 ```{r}
@@ -23,21 +23,21 @@ We use cross-validation as a method for independent assessment of the multiple l
 terms_chp_25 <- c("inference on multiple linear regression")
 ```
 
-## Multiple regression output from software {#sec-inf-mult-reg-soft}
+## Ausgabe der multiplen Regression aus Software {#sec-inf-mult-reg-soft}
 
-Recall the `loans` data from [Chapter -@sec-model-mlr].
+Rufen wir uns die `loans`-Daten aus [Kapitel -@sec-model-mlr] in Erinnerung.
 
 ::: {.data data-latex=""}
-The [`loans_full_schema`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
-Based on the data in this dataset we have created two new variables: `credit_util` which is calculated as the total credit utilized divided by the total credit limit and `bankruptcy` which turns the number of bankruptcies to an indicator variable (0 for no bankruptcies and 1 for at least 1 bankruptcy).
-We will refer to this modified dataset as `loans`.
+Die Daten [`loans_full_schema`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) befinden sich im R-Paket [**openintro**](http://openintrostat.github.io/openintro).
+Auf der Grundlage der Daten in diesem Datensatz haben wir zwei neue Variablen erstellt: `credit_util`, die als die gesamte genutzte Kreditlinie geteilt durch das gesamte Kreditlimit berechnet wird, und `bankruptcy`, die die Anzahl der Insolvenzen in eine Indikatorvariable umwandelt (0 für keine Insolvenzen und 1 für mindestens 1 Insolvenz).
+Wir werden diesen modifizierten Datensatz als `loans` bezeichnen.
 :::
 
 \clearpage
 
-Now, our goal is to create a model where `interest_rate` can be predicted using the variables `debt_to_income`, `term`, and `credit_checks`.
-As you learned in @sec-model-mlr, least squares can be used to find the coefficient estimates for the linear model.
-The unknown population model can be written as:
+Unser Ziel ist es nun, ein Modell zu erstellen, bei dem `interest_rate` mithilfe der Variablen `debt_to_income`, `term` und `credit_checks` vorhergesagt werden kann.
+Wie Sie in @sec-model-mlr gelernt haben, können kleinste Quadrate verwendet werden, um die Koeffizientenschätzungen für das lineare Modell zu finden.
+Das unbekannte Populationsmodell kann wie folgt geschrieben werden:
 
 $$
 \begin{aligned}
@@ -79,65 +79,65 @@ lm(interest_rate ~ debt_to_income + term + credit_checks, data = loans) |>
   column_spec(2:5, width = "5em")
 ```
 
-The estimated equation for the regression model may be written as a model with three predictor variables:
+Die geschätzte Gleichung für das Regressionsmodell kann als Modell mit drei Prädiktorvariablen geschrieben werden:
 
 $$
 \widehat{\texttt{interest\_rate}} = 4.31 + 0.041 \times \texttt{debt\_to\_income} + 0.16 \times \texttt{term} + 0.25 \times \texttt{credit\_checks}
 $$
 
-Not only does @tbl-loansmodel provide the estimates for the coefficients, it also provides information on the inference analysis (i.e., hypothesis testing) which is the focus of this chapter.
+@tbl-loansmodel liefert nicht nur die Schätzungen für die Koeffizienten, sondern auch Informationen zur Inferenzanalyse (d.h. zum Hypothesentest), die der Schwerpunkt dieses Kapitels ist.
 
-In @sec-inf-model-slr, you learned that the hypothesis test for a linear model with **one predictor**[^25-inf-model-mlr-1] can be written as: \index{variable!predictor}\index{predictor variable}
+In @sec-inf-model-slr haben Sie gelernt, dass der Hypothesentest für ein lineares Modell mit **einem Prädiktor**[^25-inf-model-mlr-1] wie folgt geschrieben werden kann: \index{variable!predictor}\index{predictor variable}
 
-[^25-inf-model-mlr-1]: In previous sections, the term **explanatory variable**\index{variable!explanatory}\index{explanatory variable} was used instead of **predictor**.
-    The words are synonymous and are used separately in the different sections to be consistent with how most analysts use them: explanatory variable for testing, predictor for modeling.
+[^25-inf-model-mlr-1]: In früheren Abschnitten wurde der Begriff **erklärende Variable**\index{variable!explanatory}\index{explanatory variable} anstelle von **Prädiktor** verwendet.
+    Die Wörter sind synonym und werden in den verschiedenen Abschnitten getrennt verwendet, um konsistent mit der Verwendung durch die meisten Analysten zu sein: erklärende Variable beim Testen, Prädiktor beim Modellieren.
 
 ```{r}
 #| include: false
 terms_chp_25 <- c(terms_chp_25, "predictor")
 ```
 
-> if only one predictor, $H_0: \beta_1 = 0.$
+> bei nur einem Prädiktor, $H_0: \beta_1 = 0.$
 
-That is, if the true population slope is zero, the p-value measures how likely it would be to select data which produced the observed slope ($b_1$) value.
+Das heißt, wenn die wahre Steigung der Grundgesamtheit null ist, misst der p-Wert, wie wahrscheinlich es wäre, Daten auszuwählen, die den beobachteten Steigungswert ($b_1$) erzeugen.
 
-With **multiple predictors**\index{variable!multiple predictors}\index{multiple predictors}, the hypothesis is similar, however, it is now conditioned on each of the other variables remaining in the model.
+Bei **mehreren Prädiktoren**\index{variable!multiple predictors}\index{multiple predictors} ist die Hypothese ähnlich, wird jedoch nun unter der Bedingung aufgestellt, dass jede der anderen Variablen im Modell verbleibt.
 
 ```{r}
 #| include: false
 terms_chp_25 <- c(terms_chp_25, "multiple predictors")
 ```
 
-> if multiple predictors, $H_0: \beta_i = 0$ given other variables in the model
+> bei mehreren Prädiktoren, $H_0: \beta_i = 0$ gegeben der anderen Variablen im Modell
 
-Using the example above and focusing on each of the variable p-values (here we won't discuss the p-value associated with the intercept), we can write out the three different hypotheses:
+Anhand des obigen Beispiels und unter Betrachtung jedes der variablenspezifischen p-Werte (hier werden wir den p-Wert für den Achsenabschnitt nicht besprechen) können wir die drei verschiedenen Hypothesen formulieren:
 
--   $H_0: \beta_1 = 0$, given `term` and `credit_checks` are included in the model
--   $H_0: \beta_2 = 0$, given `debt_to_income` and `credit_checks` are included in the model
--   $H_0: \beta_3 = 0$, given `debt_to_income` and `term` are included in the model
+-   $H_0: \beta_1 = 0$, gegeben, dass `term` und `credit_checks` im Modell enthalten sind
+-   $H_0: \beta_2 = 0$, gegeben, dass `debt_to_income` und `credit_checks` im Modell enthalten sind
+-   $H_0: \beta_3 = 0$, gegeben, dass `debt_to_income` und `term` im Modell enthalten sind
 
-The very low p-values from the software output tell us that each of the variables acts as an important predictor in the model, despite the inclusion of the other two.
-Consider the p-value on $H_0: \beta_1 = 0$.
-The low p-value says that it would be extremely unlikely to see data that produce a coefficient on `debt_to_income` as large as 0.041 if the true relationship between `debt_to_income`and `interest_rate` was non-existent (i.e., if $\beta_1 = 0$) and the model also included `term` and `credit_checks`.
-You might have thought that the value 0.041 is a small number (i.e., close to zero), but in the units of the problem, 0.041 turns out to be far away from zero, it's all about context!
-The p-values on `term` and on `credit_checks` are interpreted similarly.
+Die sehr niedrigen p-Werte aus der Softwareausgabe zeigen uns, dass jede der Variablen trotz der Einbeziehung der anderen zwei als wichtiger Prädiktor im Modell wirkt.
+Betrachten Sie den p-Wert für $H_0: \beta_1 = 0$.
+Der niedrige p-Wert besagt, dass es äußerst unwahrscheinlich wäre, Daten zu sehen, die einen Koeffizienten bei `debt_to_income` von 0,041 erzeugen, wenn die wahre Beziehung zwischen `debt_to_income` und `interest_rate` nicht vorhanden wäre (d.h. wenn $\beta_1 = 0$) und das Modell auch `term` und `credit_checks` enthielte.
+Man könnte denken, dass der Wert 0,041 eine kleine Zahl ist (d.h. nahe null), aber in den Einheiten des Problems stellt sich heraus, dass 0,041 weit von null entfernt ist – es kommt ganz auf den Kontext an!
+Die p-Werte für `term` und `credit_checks` werden ähnlich interpretiert.
 
-Sometimes a set of predictor variables can impact the model in unusual ways, often due to the predictor variables themselves being correlated.
+Manchmal kann ein Satz von Prädiktorvariablen das Modell auf ungewöhnliche Weise beeinflussen, oft weil die Prädiktorvariablen selbst korreliert sind.
 
 \clearpage
 
-## Multicollinearity {#sec-inf-mult-reg-collin}
+## Multikollinearität {#sec-inf-mult-reg-collin}
 
-In practice, there will almost always be some degree of correlation between the explanatory variables in a multiple regression model.
-For regression models, it is important to understand the entire context of the model, particularly for correlated variables.
-Our discussion will focus on interpreting coefficients (and their signs) in relationship to other variables as well as the discernibility (i.e., the p-value) of each coefficient.
+In der Praxis wird es fast immer ein gewisses Maß an Korrelation zwischen den erklärenden Variablen in einem multiplen Regressionsmodell geben.
+Für Regressionsmodelle ist es wichtig, den gesamten Kontext des Modells zu verstehen, insbesondere bei korrelierten Variablen.
+Unsere Diskussion konzentriert sich auf die Interpretation von Koeffizienten (und deren Vorzeichen) in Bezug auf andere Variablen sowie auf die Erkennbarkeit (d.h. den p-Wert) jedes Koeffizienten.
 
-Consider an example where we would like to predict how much money is in a coin dish based only on the number of coins in the dish.
-We ask 26 students to tell us about their individual coin dishes, collecting data on the total dollar amount, the total number of coins, and the total number of low coins.[^25-inf-model-mlr-2]
-The number of low coins is the number of coins minus the number of quarters (a quarter is the largest commonly used US coin, at US\$0.25).
-@fig-money illustrates a sample of U.S. coins, their total worth (`total_amount`), the total `number_of_coins`, and the `number_of_low_coins`.
+Betrachten wir ein Beispiel, in dem wir vorhersagen möchten, wie viel Geld sich in einer Münzschüssel befindet, und zwar nur auf der Grundlage der Anzahl der Münzen in der Schüssel.
+Wir bitten 26 Studierende, uns von ihren individuellen Münzschüsseln zu berichten, und sammeln Daten über den Gesamtbetrag in Dollar, die Gesamtzahl der Münzen und die Gesamtzahl der Kleinmünzen.[^25-inf-model-mlr-2]
+Die Anzahl der Kleinmünzen ist die Anzahl der Münzen abzüglich der Anzahl der Vierteldollar (ein Quarter ist die größte gebräuchliche US-Münze mit einem Wert von US\$0,25).
+@fig-money zeigt eine Auswahl von US-Münzen mit ihrem Gesamtwert (`total_amount`), der Gesamtzahl der Münzen (`number_of_coins`) und der Anzahl der Kleinmünzen (`number_of_low_coins`).
 
-[^25-inf-model-mlr-2]: In all honesty, this particular dataset is fabricated, and the original idea for the problem comes from Jeff Witmer at Oberlin College.
+[^25-inf-model-mlr-2]: Ehrlich gesagt ist dieser spezielle Datensatz fiktiv, und die ursprüngliche Idee für das Problem stammt von Jeff Witmer am Oberlin College.
 
 ```{r}
 #| label: fig-money
@@ -151,8 +151,8 @@ The number of low coins is the number of coins minus the number of quarters (a q
 include_graphics("images/money.png")
 ```
 
-The collected data is given in @fig-coinfig and shows that the `total_amount` of money is more highly correlated with the total `number_of_coins` than it is with the `number_of_low_coins`.
-We also note that the total `number_of_coins` and the `number_of_low_coins` are positively correlated.
+Die gesammelten Daten sind in @fig-coinfig dargestellt und zeigen, dass der `total_amount` an Geld stärker mit der Gesamtzahl der Münzen (`number_of_coins`) korreliert als mit der Anzahl der Kleinmünzen (`number_of_low_coins`).
+Wir stellen auch fest, dass die Gesamtzahl der Münzen (`number_of_coins`) und die Anzahl der Kleinmünzen (`number_of_low_coins`) positiv korreliert sind.
 
 ```{r}
 #| label: fig-coinfig
@@ -191,9 +191,9 @@ ggplot(money, aes(y = total_amount, x = number_of_low_coins)) +
 
 \clearpage
 
-Using the total `number_of_coins` as the predictor variable, @tbl-coinhigh provides the least squares estimate of the coefficient is 0.13.
-For every additional coin in the dish, we would predict that the student had US\$0.13 more.
-The $b_1 = 0.13$ coefficient has a small p-value associated with it, suggesting we would not have seen data like this if `number_of_coins` and `total_amount` of money were not linearly related.
+Mit der Gesamtzahl der Münzen (`number_of_coins`) als Prädiktorvariable liefert @tbl-coinhigh die Schätzung des Koeffizienten nach der Methode der kleinsten Quadrate von 0,13.
+Für jede zusätzliche Münze in der Schüssel würden wir vorhersagen, dass der Studierende US\$0,13 mehr hat.
+Der Koeffizient $b_1 = 0,13$ hat einen kleinen zugehörigen p-Wert, was darauf hindeutet, dass wir solche Daten nicht gesehen hätten, wenn `number_of_coins` und `total_amount` an Geld nicht linear zusammenhängen würden.
 
 \vspace{-2mm}
 
@@ -222,9 +222,9 @@ lm(total_amount ~ number_of_coins, data = money) |>
 
 \vspace{-4mm}
 
-Using `number_of_low_coins` as the predictor variable, @tbl-coinlow provides the least squares estimate of the coefficient is 0.02.
-For every additional low coin in the dish, we would predict that the student had US\$0.02 more.
-The $b_1 = 0.02$ coefficient has a large p-value associated with it, suggesting we could easily have seen data like ours even if the `number_of_low_coins` and `total_amount` of money are not at all linearly related.
+Mit `number_of_low_coins` als Prädiktorvariable liefert @tbl-coinlow die Schätzung des Koeffizienten nach der Methode der kleinsten Quadrate von 0,02.
+Für jede zusätzliche Kleinmünze in der Schüssel würden wir vorhersagen, dass der Studierende US\$0,02 mehr hat.
+Der Koeffizient $b_1 = 0,02$ hat einen großen zugehörigen p-Wert, was darauf hindeutet, dass wir solche Daten wie unsere leicht hätten sehen können, selbst wenn `number_of_low_coins` und `total_amount` an Geld überhaupt nicht linear zusammenhängen.
 
 \vspace{-2mm}
 
@@ -255,12 +255,12 @@ lm(total_amount ~ number_of_low_coins, data = money) |>
 \vspace{-5mm}
 
 ::: {.workedexample data-latex=""}
-Come up with an example of two observations that have the same number of low coins but the number of total coins differs by one.
-What is the difference in total amount?
+Überlegen Sie sich ein Beispiel für zwei Beobachtungen, die die gleiche Anzahl von Kleinmünzen haben, bei denen sich die Gesamtzahl der Münzen jedoch um eine unterscheidet.
+Was ist der Unterschied im Gesamtbetrag?
 
 ------------------------------------------------------------------------
 
-Two samples of coins with the same number of low coins (3), but a different number of total coins (4 vs 5) and a different total amount (\$0.41 vs \$0.66).
+Zwei Münzproben mit der gleichen Anzahl von Kleinmünzen (3), aber einer unterschiedlichen Gesamtanzahl von Münzen (4 vs. 5) und einem unterschiedlichen Gesamtbetrag (\$0,41 vs. \$0,66).
 
 ```{r}
 #| label: lowsame
@@ -278,12 +278,12 @@ knitr::include_graphics("images/lowsame.png")
 \vspace{-5mm}
 
 ::: {.workedexample data-latex=""}
-Come up with an example of two observations that have the same total number of coins but a different number of low coins.
-What is the difference in total amount?
+Überlegen Sie sich ein Beispiel für zwei Beobachtungen, die die gleiche Gesamtanzahl von Münzen haben, aber eine unterschiedliche Anzahl von Kleinmünzen.
+Was ist der Unterschied im Gesamtbetrag?
 
 ------------------------------------------------------------------------
 
-Two samples of coins with the same total number of coins (4), but a different number of low coins (3 vs 4) and a different total amount (\$0.41 vs \$0.17).
+Zwei Münzproben mit der gleichen Gesamtanzahl von Münzen (4), aber einer unterschiedlichen Anzahl von Kleinmünzen (3 vs. 4) und einem unterschiedlichen Gesamtbetrag (\$0,41 vs. \$0,17).
 
 ```{r}
 #| label: totalsame
@@ -300,16 +300,16 @@ knitr::include_graphics("images/totalsame.png")
 
 \clearpage
 
-Using both the total `number_of_coins` and the `number_of_low_coins` as predictor variables, @tbl-coinhighlow provides the least squares estimates of both coefficients as 0.21 and -0.16.
-Now, with two variables in the model, the interpretation is more nuanced.
+Mit sowohl der Gesamtzahl der Münzen (`number_of_coins`) als auch der Anzahl der Kleinmünzen (`number_of_low_coins`) als Prädiktorvariablen liefert @tbl-coinhighlow die Schätzungen beider Koeffizienten nach der Methode der kleinsten Quadrate mit 0,21 und -0,16.
+Nun ist die Interpretation mit zwei Variablen im Modell differenzierter.
 
--   A coefficient interpretation always indicates a change in one variable while keeping the other variable(s) constant.\
-    For every additional coin in the dish **while** the `number_of_low_coins` stays constant, we would predict that the student had US\$0.21 more. Re-considering the phrase "every additional coin in the dish **while** the number of low coins stays constant" makes us realize that each increase is a single additional quarter (larger samples sizes would have led to a $b_1$ coefficient closer to 0.25 because of the deterministic relationship described here).\
--   For every additional low coin in the dish **while** the total `number_of_coins` stays constant, we would predict that the student had US\$0.16 less. Re-considering the phrase "every additional low coin in the dish **while** the number of total coins stays constant" makes us realize that a quarter is being swapped out for a penny, nickel, or dime.
+-   Eine Koeffizienteninterpretation gibt immer eine Änderung einer Variablen an, während die anderen Variable(n) konstant gehalten werden.\
+    Für jede zusätzliche Münze in der Schüssel **während** die `number_of_low_coins` konstant bleibt, würden wir vorhersagen, dass der Studierende US\$0,21 mehr hat. Wenn man die Formulierung „jede zusätzliche Münze in der Schüssel **während** die Anzahl der Kleinmünzen konstant bleibt" erneut betrachtet, wird einem klar, dass jede Erhöhung ein einzelner zusätzlicher Vierteldollar ist (größere Stichprobengrößen würden zu einem $b_1$-Koeffizienten näher an 0,25 geführt haben aufgrund der hier beschriebenen deterministischen Beziehung).\
+-   Für jede zusätzliche Kleinmünze in der Schüssel **während** die Gesamtzahl der Münzen (`number_of_coins`) konstant bleibt, würden wir vorhersagen, dass der Studierende US\$0,16 weniger hat. Wenn man die Formulierung „jede zusätzliche Kleinmünze in der Schüssel **während** die Gesamtzahl der Münzen konstant bleibt" erneut betrachtet, wird einem klar, dass ein Vierteldollar gegen einen Cent, Nickel oder Dime getauscht wird.
 
-Considering the coefficients across @tbl-coinhigh, @tbl-coinlow, and @tbl-coinhighlow within the context and knowledge we have of US coins allows us to understand the correlation between variables and why the signs of the coefficients would change depending on the model.
-Note also, however, that the p-value for the `number_of_low_coins` coefficient changed from @tbl-coinlow to @tbl-coinhighlow.
-It makes sense that the variable describing the `number_of_low_coins` provides more information about the `total_amount` of money when it is part of a model which also includes the total `number_of_coins` than it does when it is used as a single variable in a simple linear regression model.
+Der Vergleich der Koeffizienten über @tbl-coinhigh, @tbl-coinlow und @tbl-coinhighlow hinweg im Kontext unseres Wissens über US-Münzen ermöglicht es uns zu verstehen, warum die Korrelation zwischen Variablen und das Vorzeichen der Koeffizienten je nach Modell unterschiedlich sein können.
+Beachten Sie jedoch auch, dass sich der p-Wert für den Koeffizienten von `number_of_low_coins` von @tbl-coinlow zu @tbl-coinhighlow geändert hat.
+Es ergibt Sinn, dass die Variable, die die `number_of_low_coins` beschreibt, mehr Informationen über den `total_amount` an Geld liefert, wenn sie Teil eines Modells ist, das auch die Gesamtzahl der Münzen enthält, als wenn sie als einzelne Variable in einem einfachen linearen Regressionsmodell verwendet wird.
 
 
 $$
@@ -340,14 +340,14 @@ lm(total_amount ~ number_of_coins + number_of_low_coins, data = money) |>
   column_spec(2:5, width = "5em")
 ```
 
-When working with multiple regression models, interpreting the model coefficients is not always as straightforward as it was with the coin example.
-However, we encourage you to always think carefully about the variables in the model, consider how they might be correlated among themselves, and work through different models to see how using different sets of variables might produce different relationships for predicting the response variable of interest.
+Bei der Arbeit mit multiplen Regressionsmodellen ist die Interpretation der Modellkoeffizienten nicht immer so unkompliziert wie beim Münzbeispiel.
+Wir empfehlen Ihnen jedoch, immer sorgfältig über die Variablen im Modell nachzudenken, zu überlegen, wie diese untereinander korreliert sein könnten, und verschiedene Modelle zu untersuchen, um zu sehen, wie die Verwendung unterschiedlicher Variablensätze unterschiedliche Beziehungen für die Vorhersage der interessierenden Zielvariable erzeugen kann.
 
 ::: {.important data-latex=""}
-**Multicollinearity.**
+**Multikollinearität.**
 
-Multicollinearity\index{multicollinearity} happens when the predictor variables are correlated within themselves.
-When the predictor variables themselves are correlated, the coefficients in a multiple regression model can be difficult to interpret.
+Multikollinearität\index{multicollinearity} tritt auf, wenn die Prädiktorvariablen untereinander korreliert sind.
+Wenn die Prädiktorvariablen selbst korreliert sind, können die Koeffizienten in einem multiplen Regressionsmodell schwierig zu interpretieren sein.
 :::
 
 ```{r}
@@ -355,10 +355,10 @@ When the predictor variables themselves are correlated, the coefficients in a mu
 terms_chp_25 <- c(terms_chp_25, "multicollinearity")
 ```
 
-Although diving into the details are beyond the scope of this text, we will provide one more reflection about multicollinearity.
-If the predictor variables have some degree of correlation, it can be quite difficult to interpret the value of the coefficient or evaluate whether the variable is a statistically discernible predictor of the outcome.
-However, even a model that suffers from high multicollinearity will likely lead to unbiased predictions of the response variable.
-So if the task at hand is only to do prediction (and not to interpret coefficients), multicollinearity is likely to not cause you substantial problems.
+Obwohl die Details den Rahmen dieses Textes sprengen würden, möchten wir noch eine weitere Überlegung zur Multikollinearität anstellen.
+Wenn die Prädiktorvariablen ein gewisses Maß an Korrelation aufweisen, kann es recht schwierig sein, den Wert des Koeffizienten zu interpretieren oder zu beurteilen, ob die Variable ein statistisch erkennbarer Prädiktor des Ergebnisses ist.
+Ein Modell, das unter hoher Multikollinearität leidet, wird jedoch wahrscheinlich trotzdem zu unverzerrten Vorhersagen der Zielvariable führen.
+Wenn die Aufgabe also nur die Vorhersage ist (und nicht die Interpretation von Koeffizienten), verursacht Multikollinearität wahrscheinlich keine wesentlichen Probleme.
 
 ```{=html}
 <!--
@@ -370,19 +370,19 @@ Things I didn't talk about but could:
 -->
 ```
 
-## Cross-validation for prediction error {#sec-inf-mult-reg-cv}
+## Kreuzvalidierung zur Schätzung des Vorhersagefehlers {#sec-inf-mult-reg-cv}
 
-In @sec-inf-mult-reg-soft, p-values were calculated on each of the model coefficients.
-The p-value gives a sense of which variables are important to the model; however, a more extensive treatment of variable selection is warranted in a follow-up course or textbook.
-Here, we use **cross-validation**\index{cross-validation} **prediction error**\index{prediction error} to focus on which variable(s) are important for predicting the response variable of interest.
-In general, linear models are also used to make predictions of individual observations.
-In addition to model building, cross-validation provides a method for generating predictions that are not overfit to the particular dataset at hand.
-We continue to encourage you to take up further study on the topic of cross-validation, as it is among the most important ideas in modern data analysis, and we are only able to scratch the surface here.
+In @sec-inf-mult-reg-soft wurden p-Werte für jeden der Modellkoeffizienten berechnet.
+Der p-Wert gibt einen Hinweis darauf, welche Variablen für das Modell wichtig sind; eine umfassendere Behandlung der Variablenselektion ist jedoch in einem weiterführenden Kurs oder Lehrbuch angemessen.
+Hier verwenden wir den **Kreuzvalidierungs**\index{cross-validation}-**Vorhersagefehler**\index{prediction error}, um uns darauf zu konzentrieren, welche Variable(n) für die Vorhersage der interessierenden Zielvariable wichtig sind.
+Im Allgemeinen werden lineare Modelle auch zur Vorhersage einzelner Beobachtungen verwendet.
+Neben der Modellentwicklung bietet die Kreuzvalidierung eine Methode, um Vorhersagen zu erstellen, die nicht an den jeweiligen Datensatz überangepasst sind.
+Wir ermutigen Sie, das Thema Kreuzvalidierung weiter zu studieren, da es zu den wichtigsten Ideen in der modernen Datenanalyse gehört, und wir können hier nur die Oberfläche kratzen.
 
-Cross-validation is a computational technique which removes some observations before a model is run, then assesses the model accuracy on the held-out sample.
-By removing some observations, we provide ourselves with an independent evaluation of the model (that is, the removed observations do not contribute to finding the parameters which minimize the least squares equation).
-Cross-validation can be used in many different ways (as an independent assessment), and here we will just scratch the surface with respect to one way the technique can be used to compare models.
-See @fig-cv for a visual representation of the cross-validation process.
+Kreuzvalidierung ist eine rechnerische Technik, bei der einige Beobachtungen vor dem Ausführen eines Modells entfernt werden und anschließend die Modellgenauigkeit anhand der zurückgehaltenen Stichprobe bewertet wird.
+Durch das Entfernen einiger Beobachtungen verschaffen wir uns eine unabhängige Auswertung des Modells (d.h. die entfernten Beobachtungen tragen nicht zur Suche nach den Parametern bei, die die Gleichung der kleinsten Quadrate minimieren).
+Kreuzvalidierung kann auf viele verschiedene Arten verwendet werden (als unabhängige Bewertung), und hier werden wir nur die Oberfläche hinsichtlich einer Möglichkeit ankratzen, wie die Technik zum Vergleich von Modellen eingesetzt werden kann.
+Siehe @fig-cv für eine visuelle Darstellung des Kreuzvalidierungsprozesses.
 
 ```{r}
 #| label: fig-cv
@@ -417,43 +417,43 @@ terms_chp_25 <- c(terms_chp_25, "cross-validation", "prediction error")
 ```
 
 ::: {.data data-latex=""}
-The [`penguins`](https://allisonhorst.github.io/palmerpenguins/articles/intro.html) data can be found in the [**palmerpenguins**](https://github.com/allisonhorst/palmerpenguins) R package.
+Die Daten [`penguins`](https://allisonhorst.github.io/palmerpenguins/articles/intro.html) befinden sich im R-Paket [**palmerpenguins**](https://github.com/allisonhorst/palmerpenguins).
 :::
 
-Our goal in this section is to compare two different regression models which both seek to predict the mass of an individual penguin in grams.
-The observations of three different penguin species include measurements on body size and sex.
-The data were collected by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station, Antarctica LTER](https://pal.lternet.edu/) as part of the [Long Term Ecological Research Network](https://lternet.edu/).
-[@Gorman:2014] Although not exactly aligned with this research project, you might be able to imagine a setting where the dimensions of the penguin are known (through, for example, aerial photographs) but the mass is not known.
-The first model predicts `body_mass_g` by using only the `bill_length_mm`, a variable denoting the length of a penguin's bill, in mm.
-The second model predicts `body_mass_g` by using `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex`, and `species`.
+Unser Ziel in diesem Abschnitt ist es, zwei verschiedene Regressionsmodelle zu vergleichen, die beide die Körpermasse eines einzelnen Pinguins in Gramm vorhersagen sollen.
+Die Beobachtungen von drei verschiedenen Pinguinarten umfassen Messungen zur Körpergröße und zum Geschlecht.
+Die Daten wurden von [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) und der [Palmer Station, Antarktis LTER](https://pal.lternet.edu/) als Teil des [Long Term Ecological Research Network](https://lternet.edu/) gesammelt.
+[@Gorman:2014] Obwohl nicht genau mit diesem Forschungsprojekt übereinstimmend, können Sie sich vielleicht ein Szenario vorstellen, in dem die Abmessungen des Pinguins bekannt sind (z.B. durch Luftaufnahmen), die Körpermasse jedoch nicht.
+Das erste Modell sagt `body_mass_g` mithilfe von nur `bill_length_mm` vorher, einer Variable, die die Länge des Schnabels eines Pinguins in mm angibt.
+Das zweite Modell sagt `body_mass_g` mithilfe von `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex` und `species` vorher.
 
 ::: {.important data-latex=""}
-**Prediction error.**
+**Vorhersagefehler.**
 
-The predicted error (also previously called the **residual**) is the difference between the observed value and the predicted value (from the regression model).
+Der Vorhersagefehler (auch zuvor als **Residuum** bezeichnet) ist die Differenz zwischen dem beobachteten Wert und dem vorhergesagten Wert (aus dem Regressionsmodell).
 
 $$\text{prediction error}_i = e_i = y_i - \hat{y}_i$$
 :::
 
-The presentation below (see the comparison of @fig-peng-mass1 and @fig-peng-mass2) shows that the model with more variables predicts `body_mass_g` with much smaller errors (predicted minus actual body mass) than the model which uses only `bill_length_g`.
-We have deliberately used a model that intuitively makes sense (the more body measurements, the more predictable mass is).
-However, in many settings, it is not obvious which variables or which models contribute most to accurate predictions.
-Cross-validation is one way to get accurate independent predictions with which to compare different models.
+Die nachfolgende Darstellung (siehe Vergleich von @fig-peng-mass1 und @fig-peng-mass2) zeigt, dass das Modell mit mehr Variablen `body_mass_g` mit wesentlich kleineren Fehlern (vorhergesagter minus tatsächlicher Körpermasse) vorhersagt als das Modell, das nur `bill_length_g` verwendet.
+Wir haben absichtlich ein Modell verwendet, das intuitiv Sinn macht (je mehr Körpermessungen, desto besser lässt sich die Masse vorhersagen).
+In vielen Situationen ist es jedoch nicht offensichtlich, welche Variablen oder Modelle am meisten zu genauen Vorhersagen beitragen.
+Kreuzvalidierung ist eine Möglichkeit, genaue unabhängige Vorhersagen zu erhalten, mit denen verschiedene Modelle verglichen werden können.
 
-### Comparing two models to predict body mass in penguins
+### Vergleich zweier Modelle zur Vorhersage der Körpermasse bei Pinguinen
 
-The question we will seek to answer is whether the predictions of `body_mass_g` are substantially better when `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex`, and `species` are used in the model, as compared with a model on `bill_length_mm` only.
+Die Frage, die wir zu beantworten suchen, ist, ob die Vorhersagen von `body_mass_g` wesentlich besser sind, wenn `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex` und `species` im Modell verwendet werden, verglichen mit einem Modell, das nur `bill_length_mm` verwendet.
 
-We refer to the model given with only `bill_length_mm` as the **smaller** model.
-It is seen in @tbl-peng-lm-bill with coefficient estimates of the parameters as well as standard errors and p-values.
-We refer to the model given with `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex`, and `species` as the **larger** model.
-It is seen in @tbl-peng-lm-all with coefficient estimates of the parameters as well as standard errors and p-values.
-Given what we know about high correlations between body measurements, it is somewhat unsurprising that all of the variables have low p-values, suggesting that each variable is a statistically discernible predictor of `body_mass_g`, given all other variables in the model.
-However, in this section, we will go beyond the use of p-values to consider independent predictions of `body_mass_g` as a way to compare the smaller and larger models.
+Wir bezeichnen das Modell mit nur `bill_length_mm` als das **kleinere** Modell.
+Es ist in @tbl-peng-lm-bill mit Koeffizientenschätzungen der Parameter sowie Standardfehlern und p-Werten zu sehen.
+Wir bezeichnen das Modell mit `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex` und `species` als das **größere** Modell.
+Es ist in @tbl-peng-lm-all mit Koeffizientenschätzungen der Parameter sowie Standardfehlern und p-Werten zu sehen.
+Angesichts unseres Wissens über hohe Korrelationen zwischen Körpermessungen ist es nicht sehr überraschend, dass alle Variablen niedrige p-Werte haben, was darauf hindeutet, dass jede Variable ein statistisch erkennbarer Prädiktor von `body_mass_g` ist, gegeben aller anderen Variablen im Modell.
+In diesem Abschnitt werden wir jedoch über die Verwendung von p-Werten hinausgehen und unabhängige Vorhersagen von `body_mass_g` als eine Möglichkeit zum Vergleich der kleineren und größeren Modelle betrachten.
 
 \vspace{10mm}
 
-**The smaller model:**
+**Das kleinere Modell:**
 
 $$
 \begin{aligned}
@@ -483,7 +483,7 @@ lm(body_mass_g ~ bill_length_mm, data = penguins) |>
   column_spec(2:5, width = "5em")
 ```
 
-**The larger model:**
+**Das größere Modell:**
 
 $$
 \begin{aligned}
@@ -524,13 +524,13 @@ lm(body_mass_g ~ bill_length_mm + bill_depth_mm + flipper_length_mm + sex + spec
   column_spec(2:5, width = "5em")
 ```
 
-In order to compare the smaller and larger models in terms of their **ability to predict penguin mass**, we need to build models that can provide independent predictions based on the penguins in the holdout samples created by cross-validation.
-To reiterate, each of the predictions that (when combined together) will allow us to distinguish between the smaller and larger are independent of the data which were used to build the model.
-In this example, using cross-validation, we remove one quarter of the data before running the least squares calculations.
-Then the least squares model is used to predict the `body_mass_g` of the penguins in the holdout sample.
-Here we use a 4-fold cross-validation (meaning that one quarter of the data is removed each time) to produce four different versions of each model (other times it might be more appropriate to use 2-fold or 10-fold or even run the model separately after removing each individual data point one at a time).
+Um die kleineren und größeren Modelle hinsichtlich ihrer **Fähigkeit zur Vorhersage der Pinguinmasse** zu vergleichen, müssen wir Modelle erstellen, die unabhängige Vorhersagen basierend auf den Pinguinen in den durch die Kreuzvalidierung erstellten Holdout-Stichproben liefern können.
+Um es zu wiederholen: Jede der Vorhersagen, die (zusammengenommen) die Unterscheidung zwischen dem kleineren und dem größeren Modell ermöglichen, ist unabhängig von den Daten, die zur Erstellung des Modells verwendet wurden.
+In diesem Beispiel entfernen wir mithilfe der Kreuzvalidierung ein Viertel der Daten, bevor wir die Berechnungen der kleinsten Quadrate durchführen.
+Anschließend wird das Modell der kleinsten Quadrate verwendet, um `body_mass_g` der Pinguine in der Holdout-Stichprobe vorherzusagen.
+Hier verwenden wir eine 4-fache Kreuzvalidierung (d.h. jedes Mal wird ein Viertel der Daten entfernt), um vier verschiedene Versionen jedes Modells zu erstellen (zu anderen Zeiten könnte es angemessener sein, eine 2-fache oder 10-fache Kreuzvalidierung zu verwenden oder das Modell sogar separat auszuführen, nachdem jeder einzelne Datenpunkt einzeln entfernt wurde).
 
-@fig-massCV1 displays how a model is fit to 3/4 of the data (note the slight differences in coefficients as compared to @tbl-peng-lm-bill), and then predictions are made on the holdout sample.
+@fig-massCV1 zeigt, wie ein Modell an 3/4 der Daten angepasst wird (beachten Sie die leichten Unterschiede in den Koeffizienten im Vergleich zu @tbl-peng-lm-bill), und anschließend werden Vorhersagen für die Holdout-Stichprobe gemacht.
 
 ```{r}
 #| label: fig-massCV1
@@ -552,8 +552,8 @@ Here we use a 4-fold cross-validation (meaning that one quarter of the data is r
 include_graphics("images/massCV1.png")
 ```
 
-By repeating the process for each holdout quarter sample, the residuals from the model can be plotted against the predicted values.
-We see that the predictions are scattered which shows a good model fit but that the prediction errors vary $\pm$ 1,000 g of the true body mass.
+Durch Wiederholung des Prozesses für jedes Viertel der Holdout-Stichprobe können die Residuen aus dem Modell gegen die vorhergesagten Werte aufgetragen werden.
+Wir sehen, dass die Vorhersagen gestreut sind, was eine gute Modellanpassung zeigt, aber dass die Vorhersagefehler $\pm$ 1.000 g der wahren Körpermasse variieren.
 
 ```{r}
 #| label: fig-peng-mass1
@@ -652,23 +652,23 @@ massCV1 |>
   )
 ```
 
-The cross-validation SSE is the sum of squared error associated with the predictions.
-Let $\hat{y}_{cv,i}$ be the prediction for the $i^{th}$ observation where the $i^{th}$ observation was in the hold-out fold and the other three folds were used to create the linear model.
-For the model using only `bill_length_mm` to predict `body_mass_g`, the CV SSE is 141,552,822.
+Der Kreuzvalidierungs-SSE ist die Summe der quadratischen Fehler, die mit den Vorhersagen verbunden sind.
+Sei $\hat{y}_{cv,i}$ die Vorhersage für die $i$-te Beobachtung, wobei die $i$-te Beobachtung in der Holdout-Falte war und die anderen drei Falten zur Erstellung des linearen Modells verwendet wurden.
+Für das Modell, das nur `bill_length_mm` zur Vorhersage von `body_mass_g` verwendet, beträgt der CV-SSE 141.552.822.
 
 ::: {.important data-latex=""}
-**Cross-validation SSE.**
+**Kreuzvalidierungs-SSE.**
 
-The prediction error from the cross-validated model can be used to calculate a single numerical summary of the model.
-The cross-validation SSE is the sum of squared cross-validation prediction errors.
+Der Vorhersagefehler aus dem kreuzvalidierten Modell kann verwendet werden, um eine einzelne numerische Zusammenfassung des Modells zu berechnen.
+Der Kreuzvalidierungs-SSE ist die Summe der quadrierten kreuzvalidierten Vorhersagefehler.
 
 $$\mbox{CV SSE} = \sum_{i=1}^n (\hat{y}_{cv,i} - y_i)^2$$
 :::
 
-The same process is repeated for the larger number of explanatory variables.
-Note that the coefficients estimated for the first cross-validation model (in @fig-massCV2) are slightly different from the estimates computed on the entire dataset (seen in @tbl-peng-lm-all).
-@fig-massCV2 displays the cross-validation process for the multivariable model with a full set of residual plots given in @fig-peng-mass2.
-Note that the residuals are mostly within $\pm$ 500g, providing much more precise predictions for the independent body mass values of the individual penguins.
+Derselbe Prozess wird für die größere Anzahl von erklärenden Variablen wiederholt.
+Beachten Sie, dass die für das erste Kreuzvalidierungsmodell geschätzten Koeffizienten (in @fig-massCV2) leicht von den Schätzungen abweichen, die auf dem gesamten Datensatz berechnet wurden (zu sehen in @tbl-peng-lm-all).
+@fig-massCV2 zeigt den Kreuzvalidierungsprozess für das multivariable Modell mit einem vollständigen Satz von Residuenplots in @fig-peng-mass2.
+Beachten Sie, dass die Residuen meist innerhalb von $\pm$ 500 g liegen und damit deutlich präzisere Vorhersagen für die unabhängigen Körpermasswerte der einzelnen Pinguine liefern.
 
 ```{r}
 #| label: fig-massCV2
@@ -790,34 +790,34 @@ massCV1 |>
 
 \clearpage
 
-@fig-peng-mass1 shows that the independent predictions are centered around the true values (i.e., errors are centered around zero), but that the predictions can be as much as 1,000 g off when using only `bill_length_mm` to predict `body_mass_g`.
-On the other hand, when using `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex`, and `species` to predict `body_mass_g`, the prediction errors seem to be about half as big, as seen in @fig-peng-mass2.
-For the model using `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex`, and `species` to predict `body_mass_g`, the CV SSE is 27,728,698 (as compared to a CV SSE of 141,552,822 for the smaller model).
-Consistent with visually comparing the two sets of residual plots, the sum of squared prediction errors is smaller for the model which uses more predictor variables.
-The model with more predictor variables seems like the better model (according to the cross-validated prediction errors criteria).
+@fig-peng-mass1 zeigt, dass die unabhängigen Vorhersagen um die wahren Werte zentriert sind (d.h. Fehler sind um null zentriert), dass die Vorhersagen jedoch bei der Verwendung von nur `bill_length_mm` zur Vorhersage von `body_mass_g` bis zu 1.000 g daneben liegen können.
+Wenn dagegen `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex` und `species` zur Vorhersage von `body_mass_g` verwendet werden, scheinen die Vorhersagefehler etwa halb so groß zu sein, wie in @fig-peng-mass2 zu sehen ist.
+Für das Modell, das `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `sex` und `species` zur Vorhersage von `body_mass_g` verwendet, beträgt der CV-SSE 27.728.698 (im Vergleich zu einem CV-SSE von 141.552.822 für das kleinere Modell).
+Übereinstimmend mit dem visuellen Vergleich der beiden Sätze von Residuenplots ist die Summe der quadrierten Vorhersagefehler kleiner für das Modell, das mehr Prädiktorvariablen verwendet.
+Das Modell mit mehr Prädiktorvariablen scheint das bessere Modell zu sein (gemäß den kreuzvalidierten Vorhersagefehler-Kriterien).
 
-We have provided a very brief overview to and example of using cross-validation.
-Cross-validation is a computational approach to model building and model validation as an alternative to reliance on p-values.
-While p-values have a role to play in understanding model coefficients, throughout this text, we have continued to present computational methods that broaden statistical approaches to data analysis.
-Cross-validation will be used again in @sec-inf-model-logistic with logistic regression.
-We encourage you to consider both standard inferential methods (such as p-values) and computational approaches (such as cross-validation) as you build and use multivariable models of all varieties.
+Wir haben einen sehr kurzen Überblick über und ein Beispiel für die Verwendung der Kreuzvalidierung gegeben.
+Kreuzvalidierung ist ein rechnerischer Ansatz zur Modellentwicklung und Modellvalidierung als Alternative zur Abhängigkeit von p-Werten.
+Während p-Werte beim Verständnis von Modellkoeffizienten eine Rolle spielen, haben wir in diesem Text weiterhin rechnerische Methoden vorgestellt, die statistische Ansätze zur Datenanalyse erweitern.
+Kreuzvalidierung wird in @sec-inf-model-logistic erneut bei der logistischen Regression verwendet.
+Wir ermutigen Sie, sowohl Standard-Inferenzmethoden (wie p-Werte) als auch rechnerische Ansätze (wie Kreuzvalidierung) zu berücksichtigen, wenn Sie multivariable Modelle aller Art entwickeln und verwenden.
 
 \clearpage
 
-## Chapter review {#sec-chp25-review}
+## Kapitelzusammenfassung {#sec-chp25-review}
 
-### Summary
+### Zusammenfassung
 
-Building on the modeling ideas from @sec-model-mlr, we have now introduced methods for evaluating coefficients (based on p-values) and evaluating models (cross-validation).
-There are many important aspects to consider when working with multiple variables in a single model, and we have only glanced at a few topics.
-Remember, multicollinearity can make coefficient interpretation difficult.
-A topic not covered in this text but important for multiple regression models is interaction, and we hope that you learn more about how variables work together as you continue to build up your modeling skills.
+Aufbauend auf den Modellierungsideen aus @sec-model-mlr haben wir nun Methoden zur Bewertung von Koeffizienten (basierend auf p-Werten) und zur Bewertung von Modellen (Kreuzvalidierung) eingeführt.
+Es gibt viele wichtige Aspekte zu beachten, wenn mehrere Variablen in einem einzigen Modell arbeiten, und wir haben nur einige Themen gestreift.
+Denken Sie daran, dass Multikollinearität die Interpretation von Koeffizienten erschweren kann.
+Ein in diesem Text nicht behandeltes, aber für multiple Regressionsmodelle wichtiges Thema ist die Interaktion, und wir hoffen, dass Sie mehr darüber lernen, wie Variablen zusammenwirken, wenn Sie Ihre Modellierungsfähigkeiten weiter ausbauen.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-25.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-25 aufgeführt.
+Wenn Sie sich nicht sicher sind, was einige dieser Begriffe bedeuten, empfehlen wir Ihnen, im Text zurückzugehen und deren Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-25
@@ -828,9 +828,9 @@ make_terms_table(terms_chp_25)
 
 \clearpage
 
-## Exercises {#sec-chp25-exercises}
+## Übungen {#sec-chp25-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-25].
+Antworten auf Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-25].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_25-ex-inf-model-mlr.qmd >}}
