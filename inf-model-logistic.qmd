@@ -40,12 +40,12 @@ email_variables <- tribble(
   "cc", "Number of people cc'ed.",
   "sent_email", "Indicator for whether the sender had been sent an email in the last 30 days.",
   "attach", "The number of attached files.",
-  "dollar", "The number of times a dollar sign or the word \u201cdollar\u201d appeared in the email.",
-  "winner", "Indicates whether \u201cwinner\u201d appeared in the email.",
+  "dollar", "The number of times a dollar sign or the word “dollar” appeared in the email.",
+  "winner", "Indicates whether “winner” appeared in the email.",
   "format", "Indicates whether the email was written using HTML (e.g., may have included bolding or active links).",
-  "re_subj", "Whether the subject started with \u201cRe:\u201d, \u201cRE:\u201d, \u201cre:\u201d, or \u201crE:\u201d",
+  "re_subj", "Whether the subject started with “Re:”, “RE:”, “re:”, or “rE:”",
   "exclaim_subj", "Whether there was an exclamation point in the subject.",
-  "urgent_subj", "Whether the word \u201curgent\u201d was in the email subject.",
+  "urgent_subj", "Whether the word “urgent” was in the email subject.",
   "exclaim_mess", "The number of exclamation points in the email message.",
   "number", "Factor variable saying whether there was no number, a small number (under 1 million), or a big number."
 )
