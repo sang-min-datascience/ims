@@ -79,7 +79,7 @@ Der Prozess, bei dem wir Beobachtungen zufällig zwei Gruppen zuordnen, wird in 
 
 ### Variabilität der Statistik
 
-@fig-cpr-rand-dot-plot zeigt ein gestapeltes Punktdiagramm der Unterschiede aus 100 Randomisierungssimulationen (d. h. wiederholte Iterationen wie in @fig-fullrand beschrieben), wobei jeder Punkt einen simulierten Unterschied zwischen den Infektionsraten (Kontrollrate minus Behandlungsrate) darstellt.
+@fig-cpr-rand-dot-plot zeigt ein gestapeltes Punktdiagramm der Unterschiede aus 100 Randomisierungssimulationen (d. h. wiederholte Iterationen wie in @fig-fullrand beschrieben), wobei jeder Punkt einen simulierten Unterschied zwischen den Überlebensraten (Kontrollrate minus Behandlungsrate) darstellt.
 
 ```{r}
 #| label: fig-cpr-rand-dot-plot
