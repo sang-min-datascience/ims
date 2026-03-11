@@ -13,7 +13,7 @@ Wie bei zwei Gruppen wird sich die Forschungsfrage darauf konzentrieren, ob die 
 Unabhängigkeit zwischen den Gruppen bedeutet hier, dass das Wissen über die Beobachtungen in einer Gruppe nichts daran ändert, was wir in der anderen Gruppe erwarten würden.
 Aber was passiert, wenn die Gruppen **abhängig** sind?
 In diesem Abschnitt konzentrieren wir uns auf eine neue Statistik, die Unterschiede in Mittelwerten über mehr als zwei Gruppen hinweg berücksichtigt.
-Obwohl die Ideen in diesem Kapitel dem t-Test sehr ähnlich sind, haben sie sich einen eigenen Namen verdient: **AN**alyse **O**f **VA**riance\index{Varianzanalyse} (deutsch: Varianzanalyse), oder ANOVA\index{ANOVA}.
+Obwohl die Ideen in diesem Kapitel dem t-Test sehr ähnlich sind, haben sie sich einen eigenen Namen verdient: **AN**alyse **O**f **VA**riance\index{Varianzanalyse}, oder ANOVA\index{ANOVA}.
 :::
 
 \index{analysis of variance (ANOVA)}
