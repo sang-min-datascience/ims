@@ -1,4 +1,4 @@
-# Linear regression with a single predictor {#sec-model-slr}
+# Lineare Regression mit einem einzelnen Prädiktor {#sec-model-slr}
 
 ```{r}
 #| include: false
@@ -9,22 +9,22 @@ source("_common.R")
 \vspace{-5mm}
 
 ::: {.chapterintro data-latex=""}
-Linear regression is a very powerful statistical technique.
-Many people have some familiarity with regression models just from reading the news, where straight lines are overlaid on scatterplots.
-Linear models can be used for prediction or to describe the relationship between two numerical variables, assuming there is a linear relationship between them.
+Die lineare Regression ist eine sehr leistungsfähige statistische Technik.
+Viele Menschen sind mit Regressionsmodellen schon allein aus der Lektüre von Nachrichten vertraut, wo gerade Linien über Streudiagramme gelegt werden.
+Lineare Modelle können zur Vorhersage oder zur Beschreibung der Beziehung zwischen zwei numerischen Variablen verwendet werden, vorausgesetzt, es besteht eine lineare Beziehung zwischen ihnen.
 :::
 
-## Fitting a line, residuals, and correlation {#sec-fit-line-res-cor}
+## Anpassen einer Linie, Residuen und Korrelation {#sec-fit-line-res-cor}
 
-When considering linear regression, it's helpful to think deeply about the line fitting process.
-In this section, we define the form of a linear model, explore criteria for what makes a good fit, and introduce a new statistic called *correlation*.
+Wenn man lineare Regression in Betracht zieht, ist es hilfreich, den Prozess des Linieanpassens gründlich zu durchdenken.
+In diesem Abschnitt definieren wir die Form eines linearen Modells, untersuchen Kriterien für einen guten Fit und führen eine neue Statistik namens *Korrelation* ein.
 
-### Fitting a line to data
+### Eine Linie an Daten anpassen
 
-@fig-perfLinearModel shows two variables whose relationship can be modeled perfectly with a straight line.
-The equation for the line is $y = 5 + 64.96 x.$ Consider what a perfect linear relationship means: we know the exact value of $y$ just by knowing the value of $x.$ A perfect linear relationship is unrealistic in almost any natural process.
-For example, if we took family income $(x),$ this value would provide some useful information about how much financial support a college may offer a prospective student $(y.)$
-However, the prediction would be far from perfect, since other factors play a role in financial support beyond a family's finances.
+@fig-perfLinearModel zeigt zwei Variablen, deren Beziehung perfekt mit einer geraden Linie modelliert werden kann.
+Die Gleichung für die Linie lautet $y = 5 + 64{,}96 x.$ Überlegen Sie, was eine perfekte lineare Beziehung bedeutet: Wir kennen den genauen Wert von $y$, wenn wir den Wert von $x$ kennen. Eine perfekte lineare Beziehung ist in nahezu jedem natürlichen Prozess unrealistisch.
+Wenn wir beispielsweise das Familieneinkommen $(x)$ nehmen würden, würde dieser Wert einige nützliche Informationen darüber liefern, wie viel finanzielle Unterstützung eine Hochschule einem potenziellen Studenten anbieten könnte $(y.)$
+Die Vorhersage wäre jedoch weit von perfekt entfernt, da andere Faktoren neben den Finanzen einer Familie eine Rolle bei der finanziellen Unterstützung spielen.
 
 \vspace{-5mm}
 
@@ -55,44 +55,44 @@ ggplot(target, aes(x = x, y = y)) +
 
 \clearpage
 
-Linear regression is the statistical method for fitting a line to data where the relationship between two variables, $x$ and $y,$ can be modeled by a straight line with some error:
+Die lineare Regression ist die statistische Methode zur Anpassung einer Linie an Daten, bei der die Beziehung zwischen zwei Variablen, $x$ und $y,$ durch eine gerade Linie mit einem gewissen Fehler modelliert werden kann:
 
 $$
 y = b_0 + b_1 \ x + e
 $$
 
-The values $b_0$ and $b_1$ represent the model's intercept and slope, respectively, and the error is represented by $e.$
-These values are calculated based on the data, i.e., they are sample statistics.
-If the observed data is a random sample from a target population that we are interested in making inferences about, these values are considered to be point estimates for the population parameters $\beta_0$ and $\beta_1.$
-We will discuss how to make inferences about parameters of a linear model based on sample statistics in @sec-inf-model-slr.
+Die Werte $b_0$ und $b_1$ repräsentieren den Achsenabschnitt und die Steigung des Modells, und der Fehler wird durch $e$ dargestellt.
+Diese Werte werden auf Basis der Daten berechnet, d.h. sie sind Stichprobenstatistiken.
+Wenn die beobachteten Daten eine Zufallsstichprobe aus einer Zielpopulation sind, über die wir Inferenzschlüsse ziehen möchten, werden diese Werte als Punktschätzungen für die Populationsparameter $\beta_0$ und $\beta_1$ betrachtet.
+Wir werden in @sec-inf-model-slr besprechen, wie man Inferenzschlüsse über Parameter eines linearen Modells auf Basis von Stichprobenstatistiken zieht.
 
 ::: {.content-visible when-format="html"}
 ::: {.pronunciation data-latex=""}
-The Greek letter $\beta$ is pronounced *beta*, listen to the pronunciation [here](https://youtu.be/PStgY5AcEIw?t=7).
+Der griechische Buchstabe $\beta$ wird *Beta* ausgesprochen, hören Sie sich die Aussprache [hier](https://youtu.be/PStgY5AcEIw?t=7) an.
 :::
 :::
 
 ::: {.content-visible when-format="pdf"}
 ::: {.pronunciation data-latex=""}
-The Greek letter $\beta$ is pronounced *beta*.
+Der griechische Buchstabe $\beta$ wird *Beta* ausgesprochen.
 :::
 :::
 
-When we use $x$ to predict $y,$ we usually call $x$ the **predictor**\index{variable!predictor}\index{predictor variable} variable and we call $y$ the **outcome**\index{variable!outcome}\index{outcome variable}.
-We also often drop the $e$ term when writing down the model since our main focus is often on the prediction of the average outcome.
+Wenn wir $x$ zur Vorhersage von $y$ verwenden, nennen wir $x$ üblicherweise die **Prädiktor**\index{variable!predictor}\index{predictor variable}variable und $y$ die **Ergebnis**\index{variable!outcome}\index{outcome variable}variable.
+Wir lassen den $e$-Term oft weg, wenn wir das Modell aufschreiben, da unser Hauptaugenmerk oft auf der Vorhersage des durchschnittlichen Ergebnisses liegt.
 
 ```{r}
 #| include: false
 terms_chp_07 <- c("predictor", "outcome")
 ```
 
-It is rare for all of the data to fall perfectly on a straight line.
-Instead, it's more common for data to appear as a *cloud of points*, such as those examples shown in @fig-imperfLinearModel.
-In each case, the data fall around a straight line, even if none of the observations fall exactly on the line.
-The first plot shows a relatively strong downward linear trend, where the remaining variability in the data around the line is minor relative to the strength of the relationship between $x$ and $y.$ The second plot shows an upward trend that, while evident, is not as strong as the first.
-The last plot shows a very weak downward trend in the data, so slight we can hardly notice it.
-In each of these examples, we will have some uncertainty regarding our estimates of the model parameters, $\beta_0$ and $\beta_1.$ For instance, we might wonder, should we move the line up or down a little, or should we tilt it more or less?
-As we move forward in this chapter, we will learn about criteria for line-fitting, and we will also learn about the uncertainty associated with estimates of model parameters.
+Es ist selten, dass alle Daten perfekt auf einer geraden Linie liegen.
+Stattdessen erscheinen Daten häufiger als eine *Punktwolke*, wie in den Beispielen in @fig-imperfLinearModel dargestellt.
+In jedem Fall liegen die Daten um eine gerade Linie herum, auch wenn keine der Beobachtungen genau auf der Linie liegt.
+Der erste Plot zeigt einen relativ starken abwärts gerichteten linearen Trend, wobei die verbleibende Variabilität in den Daten um die Linie im Verhältnis zur Stärke der Beziehung zwischen $x$ und $y$ gering ist. Der zweite Plot zeigt einen aufwärts gerichteten Trend, der zwar erkennbar, aber nicht so stark wie der erste ist.
+Der letzte Plot zeigt einen sehr schwachen abwärts gerichteten Trend in den Daten, so leicht, dass wir ihn kaum bemerken.
+In jedem dieser Beispiele haben wir eine gewisse Unsicherheit bezüglich unserer Schätzungen der Modellparameter, $\beta_0$ und $\beta_1.$ Zum Beispiel könnten wir uns fragen, ob wir die Linie ein wenig nach oben oder unten verschieben sollten oder ob wir sie mehr oder weniger kippen sollten.
+Im weiteren Verlauf dieses Kapitels werden wir Kriterien für das Anpassen von Linien kennenlernen und auch die Unsicherheit bei den Schätzungen von Modellparametern besprechen.
 
 ```{r}
 #| label: fig-imperfLinearModel
@@ -130,9 +130,9 @@ p_neg + p_pos + p_ran
 
 \vspace{-5mm}
 
-There are also cases where fitting a straight line to the data, even if there is a clear relationship between the variables, is not helpful.
-One such case is shown in @fig-notGoodAtAllForALinearModel where there is a very clear relationship between the variables even though the trend is not linear.
-We discuss nonlinear trends in this chapter and the next, but details of fitting nonlinear models are saved for a later course.
+Es gibt auch Fälle, in denen das Anpassen einer geraden Linie an Daten nicht hilfreich ist, selbst wenn eine klare Beziehung zwischen den Variablen besteht.
+Ein solcher Fall ist in @fig-notGoodAtAllForALinearModel gezeigt, wo eine sehr klare Beziehung zwischen den Variablen besteht, obwohl der Trend nicht linear ist.
+Wir diskutieren nichtlineare Trends in diesem und dem nächsten Kapitel, aber die Details der Anpassung nichtlinearer Modelle sind für einen späteren Kurs vorgesehen.
 
 ```{r}
 #| label: fig-notGoodAtAllForALinearModel
@@ -160,11 +160,11 @@ ggplot(bad, aes(x = x, y = y)) +
 
 \clearpage
 
-### Using linear regression to predict possum head lengths
+### Lineare Regression zur Vorhersage von Opossum-Kopflängen
 
-Brushtail possums are marsupials that live in Australia, and a photo of one is shown in @fig-brushtail-possum.
-Researchers captured 104 of these animals and took body measurements before releasing the animals back into the wild.
-We consider two of these measurements: the total length of each possum, from head to tail, and the length of each possum's head.
+Pinselschweif-Opossums sind Beuteltiere, die in Australien leben, und ein Foto von einem ist in @fig-brushtail-possum gezeigt.
+Forscher fingen 104 dieser Tiere und nahmen Körpermessungen vor, bevor sie die Tiere wieder in die Wildnis entließen.
+Wir betrachten zwei dieser Messungen: die Gesamtlänge jedes Opossums, vom Kopf bis zum Schwanz, und die Länge des Kopfes jedes Opossums.
 
 ```{r}
 #| label: fig-brushtail-possum
@@ -178,13 +178,13 @@ knitr::include_graphics("images/brushtail-possum/brushtail-possum.jpg")
 ```
 
 ::: {.data data-latex=""}
-The [`possum`](http://openintrostat.github.io/openintro/reference/possum.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`possum`](http://openintrostat.github.io/openintro/reference/possum.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-@fig-scattHeadLTotalL shows a scatterplot for the head length (mm) and total length (cm) of the possums.
-Each point represents a single possum from the data.
-The head and total length variables are associated: possums with an above average total length also tend to have above average head lengths.
-While the relationship is not perfectly linear, it could be helpful to partially explain the connection between these variables with a straight line.
+@fig-scattHeadLTotalL zeigt ein Streudiagramm der Kopflänge (mm) und Gesamtlänge (cm) der Opossums.
+Jeder Punkt repräsentiert ein einzelnes Opossum aus den Daten.
+Die Kopf- und Gesamtlängenvariablen sind assoziiert: Opossums mit einer überdurchschnittlichen Gesamtlänge neigen auch dazu, überdurchschnittliche Kopflängen zu haben.
+Obwohl die Beziehung nicht perfekt linear ist, könnte es hilfreich sein, die Verbindung zwischen diesen Variablen teilweise mit einer geraden Linie zu erklären.
 
 ```{r}
 #| label: fig-scattHeadLTotalL
@@ -212,8 +212,8 @@ ggplot(possum, aes(x = total_l, y = head_l)) +
   )
 ```
 
-We want to describe the relationship between head and total length of possums with a line.
-In this example, we will use the total length as the predictor variable, $x,$ to predict a possum's head length, $y.$ We could fit the linear relationship by eye, as in @fig-scattHeadLTotalLLine.
+Wir möchten die Beziehung zwischen Kopf- und Gesamtlänge von Opossums mit einer Linie beschreiben.
+In diesem Beispiel verwenden wir die Gesamtlänge als Prädiktorvariable, $x,$ um die Kopflänge eines Opossums, $y,$ vorherzusagen. Wir könnten die lineare Beziehung nach Augenmaß anpassen, wie in @fig-scattHeadLTotalLLine.
 
 \clearpage
 
@@ -236,7 +236,7 @@ ggplot(possum, aes(x = total_l, y = head_l)) +
   geom_smooth(method = "lm", se = FALSE)
 ```
 
-The equation for this line is
+Die Gleichung für diese Linie lautet
 
 \vspace{-5mm}
 
@@ -244,9 +244,9 @@ $$
 \hat{y} = 41 + 0.59x
 $$
 
-A "hat" on $y$ is used to signify that this is an estimate.
-We can use this line to discuss properties of possums.
-For instance, the equation predicts a possum with a total length of 80 cm will have a head length of
+Ein „Dach" über $y$ wird verwendet, um anzuzeigen, dass es sich um eine Schätzung handelt.
+Wir können diese Linie verwenden, um Eigenschaften von Opossums zu besprechen.
+Die Gleichung sagt beispielsweise voraus, dass ein Opossum mit einer Gesamtlänge von 80 cm eine Kopflänge von
 
 \vspace{-5mm}
 
@@ -254,15 +254,16 @@ $$
 \hat{y} = 41 + 0.59 \times 80 = 88.2
 $$
 
-The estimate may be viewed as an average: the equation predicts that possums with a total length of 80 cm will have an average head length of 88.2 mm.
-Absent further information about an 80 cm possum, the prediction for head length that uses the average is a reasonable estimate.
+haben wird.
+Die Schätzung kann als Durchschnitt betrachtet werden: Die Gleichung sagt voraus, dass Opossums mit einer Gesamtlänge von 80 cm eine durchschnittliche Kopflänge von 88,2 mm haben werden.
+Ohne weitere Informationen über ein 80-cm-Opossum ist die Vorhersage der Kopflänge, die den Durchschnitt verwendet, eine vernünftige Schätzung.
 
-There may be other variables that could help us predict the head length of a possum besides its length.
-Perhaps the relationship would be a little different for male possums than female possums, or perhaps it would differ for possums from one region of Australia versus another region.
-@fig-scattHeadLTotalL-sex-age-1 shows the relationship between total length and head length of brushtail possums, taking into consideration their sex.
-Male possums (represented by blue triangles) seem to be larger in terms of total length and head length than female possums (represented by red circles).
-@fig-scattHeadLTotalL-sex-age-2 shows the same relationship, taking into consideration their age.
-It's harder to tell if age changes the relationship between total length and head length for these possums.
+Es könnten andere Variablen geben, die uns helfen könnten, die Kopflänge eines Opossums neben seiner Länge vorherzusagen.
+Vielleicht wäre die Beziehung bei männlichen Opossums etwas anders als bei weiblichen Opossums, oder vielleicht würde sie bei Opossums aus einer Region Australiens im Vergleich zu einer anderen Region unterschiedlich sein.
+@fig-scattHeadLTotalL-sex-age-1 zeigt die Beziehung zwischen Gesamtlänge und Kopflänge von Pinselschweif-Opossums unter Berücksichtigung ihres Geschlechts.
+Männliche Opossums (durch blaue Dreiecke dargestellt) scheinen hinsichtlich Gesamtlänge und Kopflänge größer zu sein als weibliche Opossums (durch rote Kreise dargestellt).
+@fig-scattHeadLTotalL-sex-age-2 zeigt dieselbe Beziehung unter Berücksichtigung ihres Alters.
+Es ist schwieriger zu erkennen, ob das Alter die Beziehung zwischen Gesamtlänge und Kopflänge für diese Opossums verändert.
 
 ```{r}
 #| label: fig-scattHeadLTotalL-sex-age
@@ -305,33 +306,33 @@ p_sex
 p_age
 ```
 
-In @sec-model-mlr, we'll learn about how we can include more than one predictor in our model.
-Before we get there, we first need to better understand how to best build a linear model with one predictor.
+In @sec-model-mlr werden wir erfahren, wie wir mehr als einen Prädiktor in unser Modell einbeziehen können.
+Bevor wir dorthin gelangen, müssen wir zunächst besser verstehen, wie man am besten ein lineares Modell mit einem Prädiktor erstellt.
 
 \clearpage
 
-### Residuals {#sec-resids}
+### Residuen {#sec-resids}
 
-**Residuals**\index{residuals} are the leftover variation in the data after accounting for the model fit:
+**Residuen**\index{residuals} sind die verbleibende Variation in den Daten nach Berücksichtigung des Modellfits:
 
 $$
-\text{Data} = \text{Fit} + \text{Residual}
+\text{Daten} = \text{Fit} + \text{Residuum}
 $$
 
-Each observation will have a residual, and three of the residuals for the linear model we fit for the possum data are shown in @fig-scattHeadLTotalLLine-highlighted.
-If an observation is above the regression line, then its residual, the vertical distance from the observation to the line, is positive.
-Observations below the line have negative residuals.
-One goal in picking the right linear model is for residuals to be as small as possible.
+Jede Beobachtung hat ein Residuum, und drei der Residuen für das lineare Modell, das wir für die Opossumddaten angepasst haben, sind in @fig-scattHeadLTotalLLine-highlighted dargestellt.
+Wenn eine Beobachtung über der Regressionslinie liegt, ist ihr Residuum, der vertikale Abstand von der Beobachtung zur Linie, positiv.
+Beobachtungen unterhalb der Linie haben negative Residuen.
+Ein Ziel bei der Wahl des richtigen linearen Modells ist es, dass die Residuen so klein wie möglich sind.
 
 ```{r}
 #| include: false
 terms_chp_07 <- c(terms_chp_07, "residuals")
 ```
 
-@fig-scattHeadLTotalLLine-highlighted is almost a replica of @fig-scattHeadLTotalLLine, with three points from the data highlighted.
-The observation marked by a red circle has a small, negative residual of about -1; the observation marked by a gray diamond has a large positive residual of about +7; and the observation marked by a pink triangle has a moderate negative residual of about -4.
-The size of a residual is usually discussed in terms of its absolute value.
-For example, the residual for the observation marked by a pink triangle is larger than that of the observation marked by a red circle because $|-4|$ is larger than $|-1|.$
+@fig-scattHeadLTotalLLine-highlighted ist fast eine Kopie von @fig-scattHeadLTotalLLine, mit drei hervorgehobenen Punkten aus den Daten.
+Die durch einen roten Kreis markierte Beobachtung hat ein kleines, negatives Residuum von etwa -1; die durch einen grauen Diamanten markierte Beobachtung hat ein großes positives Residuum von etwa +7; und die durch ein rosafarbenes Dreieck markierte Beobachtung hat ein moderates negatives Residuum von etwa -4.
+Die Größe eines Residuums wird normalerweise in Bezug auf seinen Absolutwert diskutiert.
+Das Residuum für die durch ein rosafarbenes Dreieck markierte Beobachtung ist beispielsweise größer als das der durch einen roten Kreis markierten Beobachtung, weil $|-4|$ größer ist als $|-1|.$
 
 ```{r}
 #| label: fig-scattHeadLTotalLLine-highlighted
@@ -380,49 +381,49 @@ ggplot(possum, aes(x = total_l, y = head_l)) +
 ```
 
 ::: {.important data-latex=""}
-**Residual: Difference between observed and expected.**
+**Residuum: Differenz zwischen beobachtetem und erwartetem Wert.**
 
-The residual of the $i^{th}$ observation $(x_i, y_i)$ is the difference of the observed outcome $(y_i)$ and the outcome we would predict based on the model fit $(\hat{y}_i):$
+Das Residuum der $i$-ten Beobachtung $(x_i, y_i)$ ist die Differenz des beobachteten Ergebnisses $(y_i)$ und des Ergebnisses, das wir basierend auf dem Modellfit vorhersagen würden $(\hat{y}_i):$
 
 $$
 e_i = y_i - \hat{y}_i
 $$
 
-We typically identify $\hat{y}_i$ by plugging $x_i$ into the model.
+Wir identifizieren $\hat{y}_i$ typischerweise, indem wir $x_i$ in das Modell einsetzen.
 :::
 
 ::: {.workedexample data-latex=""}
-The linear fit shown in @fig-scattHeadLTotalLLine-highlighted is given as $\hat{y} = 41 + 0.59x.$ Based on this line, compute the residual of the observation $(76.0, 85.1).$ This observation is marked by a red circle in @fig-scattHeadLTotalLLine-highlighted.
-Check it against the earlier visual estimate, -1.
+Der in @fig-scattHeadLTotalLLine-highlighted gezeigte lineare Fit ist gegeben als $\hat{y} = 41 + 0{,}59x.$ Berechnen Sie anhand dieser Linie das Residuum der Beobachtung $(76{,}0, 85{,}1).$ Diese Beobachtung ist in @fig-scattHeadLTotalLLine-highlighted durch einen roten Kreis markiert.
+Überprüfen Sie es gegen die frühere visuelle Schätzung von -1.
 
 ------------------------------------------------------------------------
 
-We first compute the predicted value of the observation marked by a red circle based on the model: $\hat{y} = 41+0.59x = 41+0.59\times 76.0 = 85.84$.
-Next we compute the difference of the actual head length and the predicted head length: $e = y - \hat{y} = 85.1 -  85.84 = -0.74$.
-The model's error is $e = -0.74$ mm, which is very close to the visual estimate of -1 mm.
-The negative residual indicates that the linear model overpredicted head length for this possum.
+Wir berechnen zunächst den vorhergesagten Wert der durch einen roten Kreis markierten Beobachtung basierend auf dem Modell: $\hat{y} = 41+0{,}59x = 41+0{,}59\times 76{,}0 = 85{,}84$.
+Als nächstes berechnen wir die Differenz der tatsächlichen Kopflänge und der vorhergesagten Kopflänge: $e = y - \hat{y} = 85{,}1 - 85{,}84 = -0{,}74$.
+Der Fehler des Modells ist $e = -0{,}74$ mm, was sehr nahe an der visuellen Schätzung von -1 mm liegt.
+Das negative Residuum zeigt an, dass das lineare Modell die Kopflänge für dieses Opossum überschätzt hat.
 :::
 
 ::: {.guidedpractice data-latex=""}
-If a model underestimates an observation, will the residual be positive or negative?
-What about if it overestimates the observation?[^07-model-slr-1]
+Wenn ein Modell eine Beobachtung unterschätzt, wird das Residuum positiv oder negativ sein?
+Was ist, wenn es die Beobachtung überschätzt?[^07-model-slr-1]
 :::
 
-[^07-model-slr-1]: If a model underestimates an observation, then the model estimate is below the actual.
-    The residual, which is the actual observation value minus the model estimate, must then be positive.
-    The opposite is true when the model overestimates the observation: the residual is negative.
+[^07-model-slr-1]: Wenn ein Modell eine Beobachtung unterschätzt, liegt die Modellschätzung unterhalb des tatsächlichen Werts.
+    Das Residuum, das die tatsächliche Beobachtung minus die Modellschätzung ist, muss dann positiv sein.
+    Das Gegenteil gilt, wenn das Modell die Beobachtung überschätzt: Das Residuum ist negativ.
 
 ::: {.guidedpractice data-latex=""}
-Compute the residuals for the observation marked by a blue diamond, $(85.0, 98.6),$ and the observation marked by a pink triangle, $(95.5, 94.0),$ in the figure using the linear relationship $\hat{y} = 41 + 0.59x.$[^07-model-slr-2]
+Berechnen Sie die Residuen für die durch einen blauen Diamanten markierte Beobachtung, $(85{,}0, 98{,}6),$ und die durch ein rosafarbenes Dreieck markierte Beobachtung, $(95{,}5, 94{,}0),$ in der Abbildung mit der linearen Beziehung $\hat{y} = 41 + 0{,}59x.$[^07-model-slr-2]
 :::
 
-[^07-model-slr-2]: Gray diamond: $\hat{y} = 41+0.59x = 41+0.59\times 85.0 = 91.15 \rightarrow e = y - \hat{y} = 98.6-91.15=7.45.$ This is close to the earlier estimate of 7.
-    pink triangle: $\hat{y} = 41+0.59x = 97.3 \rightarrow e = -3.3.$ This is also close to the estimate of -4.
+[^07-model-slr-2]: Grauer Diamant: $\hat{y} = 41+0{,}59x = 41+0{,}59\times 85{,}0 = 91{,}15 \rightarrow e = y - \hat{y} = 98{,}6-91{,}15=7{,}45.$ Das ist nah an der früheren Schätzung von 7.
+    Rosafarbenes Dreieck: $\hat{y} = 41+0{,}59x = 97{,}3 \rightarrow e = -3{,}3.$ Das ist auch nah an der Schätzung von -4.
 
-Residuals are helpful in evaluating how well a linear model fits a dataset.
-We often display them in a scatterplot such as the one shown in @fig-scattHeadLTotalLResidualPlot for the regression line in @fig-scattHeadLTotalLLine-highlighted.
-The residuals are plotted with their predicted outcome variable value as the horizontal coordinate, and the vertical coordinate as the residual.
-For instance, the point $(85.0, 98.6)$ (marked by the blue diamond) had a predicted value of 91.4 mm and had a residual of 7.45 mm, so in the residual plot it is placed at $(91.4, 7.45).$ Creating a residual plot is sort of like tipping the scatterplot over so the regression line is horizontal, as indicated by the dashed line.
+Residuen sind hilfreich bei der Beurteilung, wie gut ein lineares Modell zu einem Datensatz passt.
+Wir stellen sie oft in einem Streudiagramm dar, wie dem in @fig-scattHeadLTotalLResidualPlot für die Regressionslinie in @fig-scattHeadLTotalLLine-highlighted gezeigten.
+Die Residuen werden mit dem vorhergesagten Ergebnisvariablenwert als horizontale Koordinate und dem Residuum als vertikale Koordinate dargestellt.
+Der Punkt $(85{,}0, 98{,}6)$ (durch den blauen Diamanten markiert) hatte beispielsweise einen vorhergesagten Wert von 91,4 mm und ein Residuum von 7,45 mm, so dass er im Residuenplot bei $(91{,}4, 7{,}45)$ platziert ist. Das Erstellen eines Residuenplots ist so ähnlich wie das Kippen des Streudiagramms, so dass die Regressionslinie horizontal ist, wie durch die gestrichelte Linie angedeutet.
 
 ```{r}
 #| label: fig-scattHeadLTotalLResidualPlot
@@ -489,9 +490,9 @@ ggplot(m_head_total_aug, aes(x = .fitted, y = .resid)) +
 \clearpage
 
 ::: {.workedexample data-latex=""}
-One purpose of residual plots is to identify characteristics or patterns still apparent in the data after fitting a model.
-The figure below shows three scatterplots with linear models in the first row and residual plots in the second row.
-Can you identify any patterns in the residuals?
+Ein Zweck von Residuenplots ist es, Merkmale oder Muster zu identifizieren, die nach dem Anpassen eines Modells noch in den Daten erkennbar sind.
+Die folgende Abbildung zeigt drei Streudiagramme mit linearen Modellen in der ersten Zeile und Residuenplots in der zweiten Zeile.
+Können Sie Muster in den Residuen erkennen?
 
 ```{r}
 #| label: sampleLinesAndResPlots
@@ -562,33 +563,33 @@ p_neg_lin + theme(plot.margin = unit(c(0, 10, 5, 0), "pt")) +
 
 ------------------------------------------------------------------------
 
-Dataset 1: the residuals show no obvious patterns.
-The residuals are scattered randomly around 0, represented by the dashed line.
+Datensatz 1: Die Residuen zeigen keine offensichtlichen Muster.
+Die Residuen sind zufällig um 0 verteilt, dargestellt durch die gestrichelte Linie.
 
-Dataset 2: The second dataset shows a pattern in the residuals.
-There is some curvature in the scatterplot, which is more obvious in the residual plot.
-We should not use a straight line to model these data.
-Instead, a more advanced technique should be used to model the curved relationship, such as the variable transformations discussed in @sec-transforming-data.
+Datensatz 2: Der zweite Datensatz zeigt ein Muster in den Residuen.
+Im Streudiagramm gibt es eine gewisse Krümmung, die im Residuenplot deutlicher wird.
+Wir sollten keine gerade Linie zur Modellierung dieser Daten verwenden.
+Stattdessen sollte eine fortgeschrittenere Technik zur Modellierung der gekrümmten Beziehung verwendet werden, wie die in @sec-transforming-data beschriebenen Variablentransformationen.
 
-Dataset 3: The last plot shows very little upwards trend, and the residuals also show no obvious patterns.
-It is reasonable to try to fit a linear model to the data.
-However, it is unclear whether there is evidence that the slope parameter is different from zero.
-The point estimate of the slope parameter is not zero, but we might wonder if this could just be due to chance.
-We will address this scenario in @sec-inf-model-slr.
+Datensatz 3: Der letzte Plot zeigt einen sehr schwachen aufwärts gerichteten Trend, und die Residuen zeigen ebenfalls keine offensichtlichen Muster.
+Es ist vernünftig, zu versuchen, ein lineares Modell an die Daten anzupassen.
+Es ist jedoch unklar, ob es Belege dafür gibt, dass der Steigungsparameter von null verschieden ist.
+Die Punktschätzung des Steigungsparameters ist nicht null, aber wir könnten uns fragen, ob dies einfach auf Zufall zurückzuführen ist.
+Wir werden dieses Szenario in @sec-inf-model-slr behandeln.
 :::
 
-### Describing linear relationships with correlation
+### Beschreibung linearer Beziehungen durch Korrelation
 
-We've seen plots with strong linear relationships and others with very weak linear relationships.
-It would be useful if we could quantify the strength of these linear relationships with a statistic.
+Wir haben Plots mit starken linearen Beziehungen und andere mit sehr schwachen linearen Beziehungen gesehen.
+Es wäre nützlich, wenn wir die Stärke dieser linearen Beziehungen mit einer Statistik quantifizieren könnten.
 
 ::: {.important data-latex=""}
-**Correlation: strength of a linear relationship.**
+**Korrelation: Stärke einer linearen Beziehung.**
 
-**Correlation**\index{correlation} which always takes values between -1 and 1, describes the strength and direction of the linear relationship between two variables.
-We denote the correlation by $r.$
+**Korrelation**\index{correlation}, die immer Werte zwischen -1 und 1 annimmt, beschreibt die Stärke und Richtung der linearen Beziehung zwischen zwei Variablen.
+Wir bezeichnen die Korrelation mit $r.$
 
-The correlation value has no units and will not be affected by a linear change in the units (e.g., going from inches to centimeters).
+Der Korrelationswert hat keine Einheiten und wird durch eine lineare Änderung der Einheiten nicht beeinflusst (z.B. beim Wechsel von Zoll zu Zentimetern).
 :::
 
 ```{r}
@@ -596,24 +597,24 @@ The correlation value has no units and will not be affected by a linear change i
 terms_chp_07 <- c(terms_chp_07, "correlation")
 ```
 
-We can compute the correlation using a formula, just as we did with the sample mean and standard deviation.
-The formula for correlation, however, is rather complex[^07-model-slr-3], and like with other statistics, we generally perform the calculations on a computer or calculator.
+Wir können die Korrelation mithilfe einer Formel berechnen, genau wie beim Stichprobenmittelwert und der Standardabweichung.
+Die Formel für die Korrelation ist jedoch ziemlich komplex[^07-model-slr-3], und wie bei anderen Statistiken führen wir die Berechnungen im Allgemeinen auf einem Computer oder Taschenrechner durch.
 
-[^07-model-slr-3]: Formally, we can compute the correlation for observations $(x_1, y_1),$ $(x_2, y_2),$ ..., $(x_n, y_n)$ using the formula
+[^07-model-slr-3]: Formal können wir die Korrelation für Beobachtungen $(x_1, y_1),$ $(x_2, y_2),$ ..., $(x_n, y_n)$ mit der folgenden Formel berechnen
 
 $$
 r = \frac{1}{n-1} \sum_{i=1}^{n} \frac{x_i-\bar{x}}{s_x}\frac{y_i-\bar{y}}{s_y}
 $$
 
-where $\bar{x},$ $\bar{y},$ $s_x,$ and $s_y$ are the sample means and standard deviations for each variable.
+wobei $\bar{x},$ $\bar{y},$ $s_x$ und $s_y$ die Stichprobenmittelwerte und Standardabweichungen für jede Variable sind.
 
 \clearpage
 
-@fig-posNegCorPlots shows eight plots and their corresponding correlations.
-Only when the relationship is perfectly linear is the correlation either -1 or +1.
-If the relationship is strong and positive, the correlation will be near +1.
-If it is strong and negative, it will be near -1.
-If there is no apparent linear relationship between the variables, then the correlation will be near zero.
+@fig-posNegCorPlots zeigt acht Plots und ihre entsprechenden Korrelationen.
+Nur wenn die Beziehung perfekt linear ist, ist die Korrelation entweder -1 oder +1.
+Wenn die Beziehung stark und positiv ist, liegt die Korrelation nahe +1.
+Wenn sie stark und negativ ist, liegt sie nahe -1.
+Wenn zwischen den Variablen keine erkennbare lineare Beziehung besteht, liegt die Korrelation nahe null.
 
 ```{r}
 #| label: fig-posNegCorPlots
@@ -647,8 +648,8 @@ simulated_scatter |>
   )
 ```
 
-The correlation is intended to quantify the strength of a linear trend.
-Nonlinear trends, even when strong, sometimes produce correlations that do not reflect the strength of the relationship; see three such examples in @fig-corForNonLinearPlots.
+Die Korrelation soll die Stärke eines linearen Trends quantifizieren.
+Nichtlineare Trends erzeugen manchmal, auch wenn sie stark sind, Korrelationen, die die Stärke der Beziehung nicht widerspiegeln; drei solche Beispiele sind in @fig-corForNonLinearPlots dargestellt.
 
 ```{r}
 #| label: fig-corForNonLinearPlots
@@ -683,23 +684,23 @@ simulated_scatter |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-No straight line is a good fit for any of the datasets represented in @fig-corForNonLinearPlots.
-Try drawing nonlinear curves on each plot.
-Once you create a curve for each, describe what is important in your fit.[^07-model-slr-4]
+Für keinen der in @fig-corForNonLinearPlots dargestellten Datensätze ist eine gerade Linie eine gute Anpassung.
+Versuchen Sie, für jeden Plot nichtlineare Kurven zu zeichnen.
+Sobald Sie eine Kurve für jeden erstellt haben, beschreiben Sie, was bei Ihrer Anpassung wichtig ist.[^07-model-slr-4]
 :::
 
-[^07-model-slr-4]: We'll leave it to you to draw the lines.
-    In general, the lines you draw should be close to most points and reflect overall trends in the data.
+[^07-model-slr-4]: Wir überlassen es Ihnen, die Linien zu zeichnen.
+    Im Allgemeinen sollten die von Ihnen gezeichneten Linien den meisten Punkten nahe sein und die allgemeinen Trends in den Daten widerspiegeln.
 
 \clearpage
 
 ::: {.workedexample data-latex=""}
-The plot below displays the relationships between various crop yields in countries.
-In the plots, each point represents a different country.
-The x and y variables represent the proportion of total yield in the last 50 years which is due to that crop type.
-If a country did not produce a particular crop, it has been removed from the plot (so different plots may have different numbers of dots, each corresponding to one country).
+Die folgende Abbildung zeigt die Beziehungen zwischen verschiedenen Ernteerträgen in Ländern.
+In den Plots repräsentiert jeder Punkt ein anderes Land.
+Die x- und y-Variablen repräsentieren den Anteil des Gesamtertrags in den letzten 50 Jahren, der auf diesen Erntotyp zurückzuführen ist.
+Wenn ein Land eine bestimmte Ernte nicht produziert hat, wurde es aus dem Plot entfernt (so können verschiedene Plots unterschiedliche Anzahlen von Punkten haben, die jeweils einem Land entsprechen).
 
-Order the six scatterplots from strongest negative to strongest positive linear relationship.
+Ordnen Sie die sechs Streudiagramme von der stärksten negativen bis zur stärksten positiven linearen Beziehung.
 
 ```{r}
 #| label: crop-yields-af-prep
@@ -822,7 +823,7 @@ peb + sc + mc + cb + pob + wb +
 
 ------------------------------------------------------------------------
 
-The order of most negative correlation to most positive correlation is:
+Die Reihenfolge von der stärksten negativen bis zur stärksten positiven Korrelation lautet:
 
 \vspace{-2mm}
 
@@ -840,14 +841,14 @@ $$
 
 \vspace{-3mm}
 
-One important aspect of the correlation is that it's *unitless*.
-That is, unlike a measurement of the slope of a line (see the next section) which provides an increase in the y-coordinate for a one unit increase in the x-coordinate (in units of the x and y variable), there are no units associated with the correlation of x and y.
-@fig-bdims-units shows the relationship between weights and heights of 507 physically active individuals.
-In @fig-bdims-units-1, weight is measured in kilograms (kg) and height in centimeters (cm).
-In @fig-bdims-units-2, weight has been converted to pounds (lbs) and height to inches (in).
-The correlation coefficient ($r = 0.72$) is also noted on both plots.
-We can see that the shape of the relationship has not changed, and neither has the correlation coefficient.
-The only visual change to the plot is the axis *labeling* of the points.
+Ein wichtiger Aspekt der Korrelation ist, dass sie *einheitenlos* ist.
+Das heißt, im Gegensatz zu einer Messung der Steigung einer Linie (siehe nächsten Abschnitt), die einen Anstieg der y-Koordinate für einen Einheitenanstieg der x-Koordinate (in Einheiten der x- und y-Variablen) liefert, sind der Korrelation von x und y keine Einheiten zugeordnet.
+@fig-bdims-units zeigt die Beziehung zwischen Gewichten und Körpergrößen von 507 körperlich aktiven Personen.
+In @fig-bdims-units-1 wird das Gewicht in Kilogramm (kg) und die Körpergröße in Zentimetern (cm) gemessen.
+In @fig-bdims-units-2 wurde das Gewicht in Pfund (lbs) und die Körpergröße in Zoll (in) umgerechnet.
+Der Korrelationskoeffizient ($r = 0{,}72$) ist ebenfalls auf beiden Plots vermerkt.
+Wir können sehen, dass sich die Form der Beziehung nicht geändert hat und auch der Korrelationskoeffizient nicht.
+Die einzige visuelle Änderung an dem Plot ist die Achsen*beschriftung* der Punkte.
 
 \clearpage
 
@@ -892,24 +893,24 @@ p_1
 p_2
 ```
 
-## Least squares regression {#sec-least-squares-regression}
+## Kleinste-Quadrate-Regression {#sec-least-squares-regression}
 
-Fitting linear models by eye is open to criticism since it is based on an individual's preference.
-In this section, we use *least squares regression* as a more rigorous approach to fitting a line to a scatterplot.
+Das Anpassen linearer Modelle nach Augenmaß ist der Kritik ausgesetzt, da es auf den persönlichen Präferenzen des Einzelnen basiert.
+In diesem Abschnitt verwenden wir die *Kleinste-Quadrate-Regression* als einen rigoroseren Ansatz zum Anpassen einer Linie an ein Streudiagramm.
 
-### Gift aid for first-year at Elmhurst College
+### Finanzielle Unterstützung für Erstsemesterstudierende am Elmhurst College
 
-This section considers a dataset on family income and gift aid data from a random sample of fifty students in the first-year class of Elmhurst College in Illinois.
-Gift aid is financial aid that does not need to be paid back, as opposed to a loan.
-A scatterplot of these data is shown in @fig-elmhurstScatterWLine along with a linear fit.
-The line follows a negative trend in the data; students who have higher family incomes tended to have lower gift aid from the university.
+Dieser Abschnitt betrachtet einen Datensatz über Familieneinkommen und Stipendiendaten aus einer Zufallsstichprobe von fünfzig Studierenden der Erstsemesterklasse des Elmhurst College in Illinois.
+Stipendien sind finanzielle Unterstützungen, die nicht zurückgezahlt werden müssen, im Gegensatz zu einem Darlehen.
+Ein Streudiagramm dieser Daten ist in @fig-elmhurstScatterWLine zusammen mit einem linearen Fit gezeigt.
+Die Linie folgt einem negativen Trend in den Daten; Studierende mit höherem Familieneinkommen neigten zu niedrigeren Stipendien von der Universität.
 
 ::: {.guidedpractice data-latex=""}
-Is the correlation positive or negative in @fig-elmhurstScatterWLine?[^07-model-slr-5]
+Ist die Korrelation in @fig-elmhurstScatterWLine positiv oder negativ?[^07-model-slr-5]
 :::
 
-[^07-model-slr-5]: Larger family incomes are associated with lower amounts of aid, so the correlation will be negative.
-    Using a computer, the correlation can be computed: -0.499.
+[^07-model-slr-5]: Größere Familieneinkommen sind mit niedrigeren Stipendienbeträgen verbunden, daher wird die Korrelation negativ sein.
+    Mit einem Computer kann die Korrelation berechnet werden: -0,499.
 
 ```{r}
 #| label: fig-elmhurstScatterWLine
@@ -933,19 +934,19 @@ ggplot(elmhurst, aes(x = family_income, y = gift_aid)) +
 
 \vspace{-5mm}
 
-### An objective measure for finding the best line
+### Ein objektives Maß zur Bestimmung der besten Linie
 
-We begin by thinking about what we mean by the "best" line.
-Mathematically, we want a line that has small residuals.
-But beyond the mathematical reasons, hopefully it also makes sense intuitively that whatever line we fit, the residuals should be small (i.e., the points should be close to the line).
-The first option that may come to mind is to minimize the sum of the residual magnitudes:
+Wir beginnen damit, zu überlegen, was wir unter der „besten" Linie verstehen.
+Mathematisch gesehen wollen wir eine Linie, die kleine Residuen hat.
+Aber über die mathematischen Gründe hinaus sollte es hoffentlich auch intuitiv sinnvoll erscheinen, dass die Residuen, egal welche Linie wir anpassen, klein sein sollten (d.h. die Punkte sollten nahe an der Linie sein).
+Die erste Option, die möglicherweise in den Sinn kommt, ist die Minimierung der Summe der Residuenbeträge:
 
 $$
 |e_1| + |e_2| + \dots + |e_n|
 $$
 
-which we could accomplish with a computer program.
-The resulting dashed line shown in @fig-elmhurstScatterW2Lines demonstrates this fit can be quite reasonable.
+was wir mit einem Computerprogramm erreichen könnten.
+Die resultierende gestrichelte Linie in @fig-elmhurstScatterW2Lines zeigt, dass dieser Fit durchaus vernünftig sein kann.
 
 ```{r}
 #| label: fig-elmhurstScatterW2Lines
@@ -973,7 +974,7 @@ ggplot(elmhurst, aes(x = family_income, y = gift_aid)) +
   )
 ```
 
-However, a more common practice is to choose the line that minimizes the sum of the squared residuals:
+Eine gängigere Praxis ist es jedoch, die Linie zu wählen, die die Summe der quadrierten Residuen minimiert:
 
 $$
 e_{1}^2 + e_{2}^2 + \dots + e_{n}^2
@@ -981,40 +982,40 @@ $$
 
 \clearpage
 
-The line that minimizes this least squares criterion is represented as the solid line in @fig-elmhurstScatterW2Lines and is commonly called the **least squares line**\index{least squares line}.
-The following are three possible reasons to choose the least squares option instead of trying to minimize the sum of residual magnitudes without any squaring:
+Die Linie, die dieses Kleinste-Quadrate-Kriterium minimiert, ist als durchgezogene Linie in @fig-elmhurstScatterW2Lines dargestellt und wird allgemein als **Kleinste-Quadrate-Linie**\index{least squares line} bezeichnet.
+Im Folgenden sind drei mögliche Gründe aufgeführt, warum man die Kleinste-Quadrate-Option wählt, anstatt zu versuchen, die Summe der Residuenbeträge ohne Quadrierung zu minimieren:
 
 ```{r}
 #| include: false
 terms_chp_07 <- c(terms_chp_07, "least squares line")
 ```
 
-1.  It is the most commonly used method.
-2.  Computing the least squares line is widely supported in statistical software.
-3.  In many applications, a residual twice as large as another residual is more than twice as bad. For example, being off by 4 is usually more than twice as bad as being off by 2. Squaring the residuals accounts for this discrepancy.
-4.  The analyses which link the model to inference about a population are most straightforward when the line is fit through least squares.
+1.  Es ist die am häufigsten verwendete Methode.
+2.  Die Berechnung der Kleinste-Quadrate-Linie wird in statistischer Software weitgehend unterstützt.
+3.  In vielen Anwendungen ist ein Residuum, das doppelt so groß ist wie ein anderes Residuum, mehr als doppelt so schlecht. Zum Beispiel ist eine Abweichung von 4 in der Regel mehr als doppelt so schlecht wie eine Abweichung von 2. Das Quadrieren der Residuen berücksichtigt diese Diskrepanz.
+4.  Die Analysen, die das Modell mit Inferenzschlüssen über eine Population verbinden, sind am einfachsten, wenn die Linie durch Kleinste Quadrate angepasst wird.
 
-The first two reasons are largely for tradition and convenience; the third and fourth reasons explain why the least squares criterion is typically most helpful when working with real data.[^07-model-slr-6]
+Die ersten beiden Gründe sind größtenteils traditioneller Natur und aus Bequemlichkeit; der dritte und vierte Grund erklären, warum das Kleinste-Quadrate-Kriterium typischerweise am hilfreichsten ist, wenn man mit realen Daten arbeitet.[^07-model-slr-6]
 
-[^07-model-slr-6]: There are applications where the sum of residual magnitudes may be more useful, and there are plenty of other criteria we might consider.
-    However, this book only applies the least squares criterion.
+[^07-model-slr-6]: Es gibt Anwendungen, bei denen die Summe der Residuenbeträge nützlicher sein kann, und es gibt viele andere Kriterien, die wir berücksichtigen könnten.
+    Dieses Buch wendet jedoch nur das Kleinste-Quadrate-Kriterium an.
 
-### Finding and interpreting the least squares line
+### Bestimmung und Interpretation der Kleinste-Quadrate-Linie
 
-For the Elmhurst data, we could write the equation of the least squares regression line as
+Für die Elmhurst-Daten könnten wir die Gleichung der Kleinste-Quadrate-Regressionslinie schreiben als
 
 $$
 \widehat{\texttt{aid}} = \beta_0 + \beta_{1}\times \texttt{family\_income}
 $$
 
-Here the equation is set up to predict gift aid based on a student's family income, which would be useful to students considering Elmhurst.
-These two values, $\beta_0$ and $\beta_1,$ are the parameters of the regression line.
+Hier ist die Gleichung so aufgestellt, dass das Stipendium auf Basis des Familieneinkommens eines Studierenden vorhergesagt wird, was für Studierende nützlich wäre, die Elmhurst in Betracht ziehen.
+Diese beiden Werte, $\beta_0$ und $\beta_1,$ sind die Parameter der Regressionslinie.
 
-The parameters are estimated using the observed data.
-In practice, this estimation is done using a computer in the same way that other estimates, like a sample mean, can be estimated using a computer or calculator.
+Die Parameter werden anhand der beobachteten Daten geschätzt.
+In der Praxis wird diese Schätzung mit einem Computer auf die gleiche Weise durchgeführt wie andere Schätzungen, beispielsweise ein Stichprobenmittelwert, mit einem Computer oder Taschenrechner geschätzt werden können.
 
-The dataset where these data are stored is called `elmhurst`.
-The first 5 rows of this dataset are given in @tbl-elmhurst-data.
+Der Datensatz, in dem diese Daten gespeichert sind, heißt `elmhurst`.
+Die ersten 5 Zeilen dieses Datensatzes sind in @tbl-elmhurst-data aufgeführt.
 
 ```{r}
 #| label: tbl-elmhurst-data
@@ -1030,13 +1031,13 @@ elmhurst |>
   column_spec(1:3, width = "8em")
 ```
 
-We can see that family income is recorded in a variable called `family_income` and gift aid from university is recorded in a variable called `gift_aid`.
-For now, we won't worry about the `price_paid` variable.
-We should also note that these data are from the 2011-2012 academic year, and all monetary amounts are given in \$1,000s, i.e., the family income of the first student in the data shown in @tbl-elmhurst-data is \$92,920 and they received a gift aid of \$21,700.
-(The data source states that all numbers have been rounded to the nearest whole dollar.)
+Wir können sehen, dass das Familieneinkommen in einer Variablen namens `family_income` und das Stipendium der Universität in einer Variablen namens `gift_aid` erfasst wird.
+Für jetzt machen wir uns keine Sorgen um die Variable `price_paid`.
+Wir sollten auch beachten, dass diese Daten aus dem Studienjahr 2011-2012 stammen und alle Geldbeträge in \$1.000 angegeben sind, d.h. das Familieneinkommen des ersten Studierenden in den in @tbl-elmhurst-data gezeigten Daten beträgt \$92.920 und er erhielt ein Stipendium von \$21.700.
+(Die Datenquelle gibt an, dass alle Zahlen auf den nächsten vollen Dollar gerundet wurden.)
 
-Statistical software is usually used to compute the least squares line and the typical output generated as a result of fitting regression models looks like the one shown in @tbl-rOutputForIncomeAidLSRLine.
-For now we will focus on the first column of the output, which lists ${b}_0$ and ${b}_1.$ In @sec-inf-model-slr we will dive deeper into the remaining columns which give us information on how accurate and precise these values of intercept and slope that are calculated from a sample of 50 students are in estimating the population parameters of intercept and slope for *all* students.
+Statistische Software wird üblicherweise zur Berechnung der Kleinste-Quadrate-Linie verwendet, und die typische Ausgabe, die als Ergebnis der Anpassung von Regressionsmodellen generiert wird, sieht wie in @tbl-rOutputForIncomeAidLSRLine gezeigt aus.
+Für jetzt werden wir uns auf die erste Spalte der Ausgabe konzentrieren, die ${b}_0$ und ${b}_1$ auflistet. In @sec-inf-model-slr werden wir tiefer in die verbleibenden Spalten eintauchen, die uns Informationen darüber geben, wie genau und präzise diese Werte von Achsenabschnitt und Steigung, die aus einer Stichprobe von 50 Studierenden berechnet werden, bei der Schätzung der Populationsparameter von Achsenabschnitt und Steigung für *alle* Studierenden sind.
 
 ```{r}
 m_ga_fi <- lm(gift_aid ~ family_income, data = elmhurst) |> tidy()
@@ -1066,53 +1067,53 @@ m_ga_fi |>
   column_spec(2:5, width = "5em")
 ```
 
-The model output tells us that the intercept is approximately `r m_ga_fi_int` and the slope on `family_income` is approximately `r m_ga_fi_slope`.
+Die Modellausgabe teilt uns mit, dass der Achsenabschnitt ungefähr `r m_ga_fi_int` und die Steigung bei `family_income` ungefähr `r m_ga_fi_slope` beträgt.
 
-But what do these values mean?
-Interpreting parameters in a regression model is often one of the most important steps in the analysis.
+Aber was bedeuten diese Werte?
+Die Interpretation von Parametern in einem Regressionsmodell ist häufig einer der wichtigsten Schritte in der Analyse.
 
 ::: {.workedexample data-latex=""}
-The intercept and slope estimates for the Elmhurst data are $b_0$ = `r m_ga_fi_int` and $b_1$ = `r m_ga_fi_slope`.
-What do these numbers really mean?
+Die Achsenabschnitts- und Steigungsschätzungen für die Elmhurst-Daten sind $b_0$ = `r m_ga_fi_int` und $b_1$ = `r m_ga_fi_slope`.
+Was bedeuten diese Zahlen wirklich?
 
 ------------------------------------------------------------------------
 
-Interpreting the slope parameter is helpful in almost any application.
-For each additional \$1,000 of family income, we would expect a student to receive a net difference of 1,000 $\times$ (-0.0431) = -\$43.10 in aid on average, i.e., \$43.10 *less*.
-Note that a higher family income corresponds to less aid because the coefficient of family income is negative in the model.
-We must be cautious in this interpretation: while there is a real association, we cannot interpret a causal connection between the variables because these data are observational.
-That is, increasing a particular student's family income may not cause the student's aid to drop.
-(Although it would be reasonable to contact the college and ask if the relationship is causal, i.e., if Elmhurst College's aid decisions are partially based on students' family income.)
+Die Interpretation des Steigungsparameters ist in nahezu jeder Anwendung hilfreich.
+Für jede zusätzliche \$1.000 Familieneinkommen würden wir erwarten, dass ein Studierender im Durchschnitt eine Nettodifferenz von 1.000 $\times$ (-0,0431) = -\$43,10 bei der Unterstützung erhält, d.h. \$43,10 *weniger*.
+Beachten Sie, dass ein höheres Familieneinkommen weniger Unterstützung entspricht, weil der Koeffizient des Familieneinkommens im Modell negativ ist.
+Wir müssen bei dieser Interpretation vorsichtig sein: Obwohl es eine echte Assoziation gibt, können wir keine ursächliche Verbindung zwischen den Variablen interpretieren, da diese Daten Beobachtungsdaten sind.
+Das heißt, eine Erhöhung des Familieneinkommens eines bestimmten Studierenden könnte nicht bewirken, dass die Unterstützung des Studierenden sinkt.
+(Es wäre jedoch vernünftig, das College zu kontaktieren und zu fragen, ob die Beziehung ursächlich ist, d.h. ob die Stipendienentscheidungen des Elmhurst College teilweise auf dem Familieneinkommen der Studierenden basieren.)
 
-The estimated intercept $b_0$ = `r m_ga_fi_int` describes the average aid if a student's family had no income, \$`r format(round(m_ga_fi_int*1000,0), scientific = FALSE, big.mark = ",")`.
-The meaning of the intercept is relevant to this application since the family income for some students at Elmhurst is \$0.
-In other applications, the intercept may have little or no practical value if there are no observations where $x$ is near zero.
+Der geschätzte Achsenabschnitt $b_0$ = `r m_ga_fi_int` beschreibt die durchschnittliche Unterstützung, wenn das Familieneinkommen eines Studierenden null ist, \$`r format(round(m_ga_fi_int*1000,0), scientific = FALSE, big.mark = ",")`.
+Die Bedeutung des Achsenabschnitts ist für diese Anwendung relevant, da das Familieneinkommen einiger Studierender am Elmhurst \$0 beträgt.
+In anderen Anwendungen hat der Achsenabschnitt möglicherweise wenig oder keinen praktischen Wert, wenn es keine Beobachtungen gibt, bei denen $x$ nahe null liegt.
 :::
 
 ::: {.important data-latex=""}
-**Interpreting parameters estimated by least squares.**
+**Interpretation von durch Kleinste Quadrate geschätzten Parametern.**
 
-The slope describes the estimated difference in the predicted average outcome of $y$ if the predictor variable $x$ happened to be one unit larger.
-The intercept describes the average outcome of $y$ if $x = 0$ *and* the linear model is valid all the way to $x = 0$ (values of $x = 0$ are not observed or relevant in many applications).
+Die Steigung beschreibt die geschätzte Differenz im vorhergesagten durchschnittlichen Ergebnis von $y,$ wenn die Prädiktorvariable $x$ um eine Einheit größer wäre.
+Der Achsenabschnitt beschreibt das durchschnittliche Ergebnis von $y,$ wenn $x = 0$ *und* das lineare Modell bis $x = 0$ gültig ist (Werte von $x = 0$ werden in vielen Anwendungen nicht beobachtet oder sind nicht relevant).
 :::
 
-If you would like to learn more about using R to fit linear models, see @sec-model-tutorials for the interactive R tutorials.
-An alternative way of calculating the values of intercept and slope of a least squares line is manual calculations using formulas.
-While manual calculations are not commonly used by practicing statisticians and data scientists, it is useful to work through the first time you're learning about the least squares line and modeling in general.
-Calculating the values by hand leverages two properties of the least squares line:
+Wenn Sie mehr über die Verwendung von R zum Anpassen linearer Modelle erfahren möchten, lesen Sie @sec-model-tutorials für die interaktiven R-Tutorials.
+Eine alternative Art, die Werte von Achsenabschnitt und Steigung einer Kleinste-Quadrate-Linie zu berechnen, sind manuelle Berechnungen mithilfe von Formeln.
+Obwohl manuelle Berechnungen von praktizierenden Statistikern und Datenwissenschaftlern nicht häufig verwendet werden, ist es nützlich, sie beim ersten Kennenlernen der Kleinste-Quadrate-Linie und der Modellierung im Allgemeinen durchzuarbeiten.
+Die manuelle Berechnung der Werte nutzt zwei Eigenschaften der Kleinste-Quadrate-Linie:
 
-1.  The slope of the least squares line can be estimated by
+1.  Die Steigung der Kleinste-Quadrate-Linie kann geschätzt werden durch
 
 $$
 b_1 = \frac{s_y}{s_x} r
 $$
 
-where $r$ is the correlation between the two variables, and $s_x$ and $s_y$ are the sample standard deviations of the predictor and outcome, respectively.
+wobei $r$ die Korrelation zwischen den beiden Variablen ist und $s_x$ und $s_y$ die Stichprobenstandardabweichungen des Prädiktors bzw. des Ergebnisses sind.
 
-2.  If $\bar{x}$ is the sample mean of the predictor variable and $\bar{y}$ is the sample mean of the outcome variable, then the point $(\bar{x}, \bar{y})$ falls on the least squares line.
+2.  Wenn $\bar{x}$ der Stichprobenmittelwert der Prädiktorvariablen und $\bar{y}$ der Stichprobenmittelwert der Ergebnisvariablen ist, dann liegt der Punkt $(\bar{x}, \bar{y})$ auf der Kleinste-Quadrate-Linie.
 
-@tbl-summaryStatsElmhurstRegr shows the sample means for the family income and gift aid as \$101,780 and \$19,940, respectively.
-We could plot the point $(102, 19.9)$ on @fig-elmhurstScatterWLine to verify it falls on the least squares line (the solid line).
+@tbl-summaryStatsElmhurstRegr zeigt die Stichprobenmittelwerte für das Familieneinkommen und das Stipendium als \$101.780 bzw. \$19.940.
+Wir könnten den Punkt $(102, 19{,}9)$ in @fig-elmhurstScatterWLine einzeichnen, um zu überprüfen, ob er auf der Kleinste-Quadrate-Linie (der durchgezogenen Linie) liegt.
 
 ```{r}
 #| label: tbl-summaryStatsElmhurstRegr
@@ -1140,42 +1141,42 @@ elmhurst |>
   column_spec(1:5, width = "6em")
 ```
 
-Next, we find the point estimates $b_0$ and $b_1$ of the parameters $\beta_0$ and $\beta_1.$
+Als nächstes finden wir die Punktschätzungen $b_0$ und $b_1$ der Parameter $\beta_0$ und $\beta_1.$
 
 ::: {.workedexample data-latex=""}
-Using the summary statistics in @tbl-summaryStatsElmhurstRegr, compute the slope for the regression line of gift aid against family income.
+Berechnen Sie anhand der zusammenfassenden Statistiken in @tbl-summaryStatsElmhurstRegr die Steigung für die Regressionslinie des Stipendiums gegen das Familieneinkommen.
 
 ------------------------------------------------------------------------
 
-Compute the slope using the summary statistics from @tbl-summaryStatsElmhurstRegr:
+Berechnen Sie die Steigung anhand der zusammenfassenden Statistiken aus @tbl-summaryStatsElmhurstRegr:
 
 $$
-b_1 = \frac{s_y}{s_x} r = \frac{5.46}{63.2}(-0.499) = -0.0431
+b_1 = \frac{s_y}{s_x} r = \frac{5{,}46}{63{,}2}(-0{,}499) = -0{,}0431
 $$
 :::
 
-You might recall the form of a line from math class, which we can use to find the model fit, including the estimate of $b_0.$ Given the slope of a line and a point on the line, $(x_0, y_0),$ the equation for the line can be written as
+Sie erinnern sich vielleicht an die Form einer Linie aus dem Mathematikunterricht, die wir zur Bestimmung des Modell-Fits verwenden können, einschließlich der Schätzung von $b_0.$ Gegeben die Steigung einer Linie und einen Punkt auf der Linie, $(x_0, y_0),$ kann die Gleichung für die Linie geschrieben werden als
 
 $$
 y - y_0 = slope\times (x - x_0)
 $$
 
 ::: {.important data-latex=""}
-**Identifying the least squares line from summary statistics.**
+**Bestimmung der Kleinste-Quadrate-Linie aus zusammenfassenden Statistiken.**
 
-To identify the least squares line from summary statistics:
+Um die Kleinste-Quadrate-Linie aus zusammenfassenden Statistiken zu bestimmen:
 
--   Estimate the slope parameter, $b_1 = (s_y / s_x) r.$
--   Note that the point $(\bar{x}, \bar{y})$ is on the least squares line, use $x_0 = \bar{x}$ and $y_0 = \bar{y}$ with the point-slope equation: $y - \bar{y} = b_1 (x - \bar{x}).$
--   Simplify the equation, we get $y = \bar{y} - b_1 \bar{x} + b_1 x,$ which reveals that $b_0 = \bar{y} - b_1 \bar{x}.$
+-   Schätzen Sie den Steigungsparameter, $b_1 = (s_y / s_x) r.$
+-   Beachten Sie, dass der Punkt $(\bar{x}, \bar{y})$ auf der Kleinste-Quadrate-Linie liegt; verwenden Sie $x_0 = \bar{x}$ und $y_0 = \bar{y}$ mit der Punkt-Steigungs-Gleichung: $y - \bar{y} = b_1 (x - \bar{x}).$
+-   Vereinfacht man die Gleichung, erhält man $y = \bar{y} - b_1 \bar{x} + b_1 x,$ woraus hervorgeht, dass $b_0 = \bar{y} - b_1 \bar{x}.$
 :::
 
 ::: {.workedexample data-latex=""}
-Using the point (102, 19.9) from the sample means and the slope estimate $b_1 = -0.0431,$ find the least-squares line for predicting aid based on family income.
+Bestimmen Sie anhand des Punktes (102, 19,9) aus den Stichprobenmittelwerten und der Steigungsschätzung $b_1 = -0{,}0431$ die Kleinste-Quadrate-Linie zur Vorhersage des Stipendiums auf Basis des Familieneinkommens.
 
 ------------------------------------------------------------------------
 
-Apply the point-slope equation using $(102, 19.9)$ and the slope $b_1 = -0.0431$:
+Wenden Sie die Punkt-Steigungs-Gleichung unter Verwendung von $(102, 19{,}9)$ und der Steigung $b_1 = -0{,}0431$ an:
 
 \vspace{-5mm}
 
@@ -1186,7 +1187,7 @@ y - 19.9 &= -0.0431 (x - 102)
 \end{aligned}
 $$
 
-Expanding the right side and then adding 19.9 to each side, the equation simplifies:
+Erweiterung der rechten Seite und anschließendes Hinzufügen von 19,9 zu beiden Seiten vereinfacht die Gleichung:
 
 \vspace{-5mm}
 
@@ -1194,39 +1195,39 @@ $$
 \widehat{\texttt{aid}} = 24.3 - 0.0431 \times \texttt{family\_income}
 $$
 
-Here we have replaced $y$ with $\widehat{\texttt{aid}}$ and $x$ with $\texttt{family\_income}$ to put the equation in context.
-The final least squares equation should always include a "hat" on the variable being predicted, whether it is a generic $``y"$ or a named variable like $``aid"$.
+Hier haben wir $y$ durch $\widehat{\texttt{aid}}$ und $x$ durch $\texttt{family\_income}$ ersetzt, um die Gleichung in den Kontext zu setzen.
+Die endgültige Kleinste-Quadrate-Gleichung sollte immer ein „Dach" über der vorhergesagten Variablen haben, egal ob es ein generisches $``y"$ oder eine benannte Variable wie $``\texttt{aid}"$ ist.
 :::
 
 \clearpage
 
 ::: {.workedexample data-latex=""}
-Suppose a high school senior is considering Elmhurst College.
-Can they simply use the linear equation that we have estimated to calculate her financial aid from the university?
+Angenommen, ein Gymnasiast erwägt das Elmhurst College.
+Kann er die lineare Gleichung, die wir geschätzt haben, einfach verwenden, um die finanzielle Unterstützung von der Universität zu berechnen?
 
 ------------------------------------------------------------------------
 
-She may use it as an estimate, though some qualifiers on this approach are important.
-First, all data come from one first-year class, and the way aid is determined by the university may change from year to year.
-Second, the equation will provide an imperfect estimate.
-While the linear equation is good at modeling the trend in the data, no individual student's aid will be perfectly predicted (as can be seen from the individual data points around the line).
+Er kann sie als Schätzung verwenden, obwohl einige Einschränkungen für diesen Ansatz wichtig sind.
+Erstens stammen alle Daten aus einer Erstsemesterklasse, und die Art und Weise, wie die Universität Unterstützung bestimmt, kann sich von Jahr zu Jahr ändern.
+Zweitens liefert die Gleichung eine unvollkommene Schätzung.
+Während die lineare Gleichung gut geeignet ist, den Trend in den Daten zu modellieren, wird die Unterstützung keines einzelnen Studierenden perfekt vorhergesagt (wie aus den einzelnen Datenpunkten um die Linie herum ersichtlich ist).
 :::
 
-### Extrapolation is treacherous
+### Extrapolation ist gefährlich
 
-Linear models can be used to approximate the relationship between two variables.
-However, like any model, they have real limitations.
-Linear regression is simply a modeling framework.
-The truth is almost always much more complex than a simple line.
-For example, we do not know how the data outside of our limited window will behave.
+Lineare Modelle können verwendet werden, um die Beziehung zwischen zwei Variablen anzunähern.
+Wie jedes Modell haben sie jedoch echte Einschränkungen.
+Die lineare Regression ist lediglich ein Modellierungsrahmen.
+Die Wahrheit ist fast immer viel komplexer als eine einfache Linie.
+Zum Beispiel wissen wir nicht, wie sich die Daten außerhalb unseres begrenzten Fensters verhalten werden.
 
 ::: {.workedexample data-latex=""}
-Use the model $\widehat{\texttt{aid}} = 24.3 - 0.0431 \times \texttt{family\_income}$ to estimate the aid of another first-year student whose family had income of \$1 million.
+Verwenden Sie das Modell $\widehat{\texttt{aid}} = 24{,}3 - 0{,}0431 \times \texttt{family\_income}$, um die Unterstützung eines anderen Erstsemesterstudierenden zu schätzen, dessen Familie ein Einkommen von \$1 Million hatte.
 
 ------------------------------------------------------------------------
 
-We want to calculate the aid for a family with \$1 million income.
-Note that in our model this will be represented as 1,000 since the data are in \$1,000s.
+Wir möchten die Unterstützung für eine Familie mit einem Einkommen von \$1 Million berechnen.
+Beachten Sie, dass dies in unserem Modell als 1.000 dargestellt wird, da die Daten in \$1.000 angegeben sind.
 
 \vspace{-5mm}
 
@@ -1234,15 +1235,15 @@ $$
 24.3 - 0.0431 \times 1000 = -18.8
 $$
 
-The model predicts this student will have -\$18,800 in aid (!).
-However, Elmhurst College does not offer *negative aid* where they select some students to pay extra on top of tuition to attend.
+Das Modell sagt voraus, dass dieser Studierende -\$18.800 an Unterstützung erhalten wird (!).
+Das Elmhurst College bietet jedoch keine *negative Unterstützung* an, bei der einige Studierende zusätzlich zum Schulgeld extra zahlen würden, um es zu besuchen.
 :::
 
 \vspace{-5mm}
 
-Applying a model estimate to values outside of the realm of the original data is called **extrapolation**\index{extrapolation}.
-Generally, a linear model is only an approximation of the real relationship between two variables.
-If we extrapolate, we are making an unreliable bet that the approximate linear relationship will be valid in places where it has not been analyzed.
+Die Anwendung einer Modellschätzung auf Werte außerhalb des Bereichs der ursprünglichen Daten wird als **Extrapolation**\index{extrapolation} bezeichnet.
+Im Allgemeinen ist ein lineares Modell nur eine Annäherung an die echte Beziehung zwischen zwei Variablen.
+Wenn wir extrapolieren, machen wir eine unzuverlässige Wette, dass die ungefähre lineare Beziehung auch an Stellen gültig sein wird, wo sie nicht analysiert wurde.
 
 ```{r}
 #| include: false
