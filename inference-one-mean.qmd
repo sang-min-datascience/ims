@@ -1,9 +1,4 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
-# Inference for a single mean {#sec-inference-one-mean}
+# Inferenz für einen einzelnen Mittelwert {#sec-inference-one-mean}
 
 ```{r}
 #| include: false
@@ -11,15 +6,15 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-Focusing now on Statistical Inference for **numerical data**\index{numerical data}, again, we will revisit and expand upon the foundational aspects of hypothesis testing from [Chapter -@sec-foundations-randomization].
+Mit dem Fokus nun auf statistischer Inferenz für **numerische Daten**\index{numerical data} werden wir die grundlegenden Aspekte des Hypothesentests aus [Kapitel -@sec-foundations-randomization] erneut aufgreifen und erweitern.
 
-The important data structure for this chapter is a numeric response variable (that is, the outcome is quantitative).
-The four data structures we detail are one numeric response variable, one numeric response variable which is a difference across a pair of observations, a numeric response variable broken down by a binary explanatory variable, and a numeric response variable broken down by an explanatory variable that has two or more levels.
-When appropriate, each of the data structures will be analyzed using the three methods from [Chapter -@sec-foundations-randomization], [Chapter -@sec-foundations-bootstrapping], and [Chapter -@sec-foundations-mathematical]: randomization test, bootstrapping, and mathematical models, respectively.
+Die wichtige Datenstruktur in diesem Kapitel ist eine numerische Antwortvariable (d.h. das Ergebnis ist quantitativ).
+Die vier Datenstrukturen, die wir ausführen, sind: eine numerische Antwortvariable, eine numerische Antwortvariable, die eine Differenz über ein Beobachtungspaar darstellt, eine numerische Antwortvariable unterteilt nach einer binären erklärenden Variablen, und eine numerische Antwortvariable unterteilt nach einer erklärenden Variablen mit zwei oder mehr Ausprägungen.
+Wenn geeignet, werden alle Datenstrukturen mit den drei Methoden aus [Kapitel -@sec-foundations-randomization], [Kapitel -@sec-foundations-bootstrapping] und [Kapitel -@sec-foundations-mathematical] analysiert: Randomisierungstest, Bootstrapping und mathematische Modelle.
 
-As we build on the inferential ideas, we will visit new foundational concepts in statistical inference.
-One key new idea rests in estimating how the sample mean (as opposed to the sample proportion) varies from sample to sample; the resulting value is referred to as the standard error of the mean.
-We will also introduce a new important mathematical model, the $t$-distribution (as the foundation for the $t$-test).
+Beim Aufbau auf den inferenziellen Ideen werden wir neue grundlegende Konzepte der statistischen Inferenz kennenlernen.
+Eine wichtige neue Idee beruht auf der Schätzung, wie der Stichprobenmittelwert (im Gegensatz zum Stichprobenanteil) von Stichprobe zu Stichprobe variiert; der resultierende Wert wird als Standardfehler des Mittelwerts bezeichnet.
+Wir werden auch ein neues wichtiges mathematisches Modell einführen, die $t$-Verteilung (als Grundlage für den $t$-Test).
 :::
 
 ```{r}
@@ -27,26 +22,26 @@ We will also introduce a new important mathematical model, the $t$-distribution 
 terms_chp_19 <- c("numerical data")
 ```
 
-In this chapter, we focus on the sample mean (instead of, for example, the sample median or the range of the observations) because of the well-studied mathematical model which describes the behavior of the sample mean.
-We will not cover mathematical models which describe other statistics, but the bootstrap and randomization techniques described below are immediately extendable to any function of the observed data.
-The sample mean will be calculated in one group, two paired groups, two independent groups, and many groups settings.
-The techniques described for each setting will vary slightly, but you will be well served to find the structural similarities across the different settings.
+In diesem Kapitel konzentrieren wir uns auf den Stichprobenmittelwert (anstatt z. B. auf den Stichprobenmedian oder die Spannweite der Beobachtungen), weil er durch ein gut untersuchtes mathematisches Modell beschrieben wird.
+Wir werden keine mathematischen Modelle für andere Statistiken behandeln, aber die im Folgenden beschriebenen Bootstrap- und Randomisierungsverfahren sind direkt auf beliebige Funktionen der beobachteten Daten anwendbar.
+Der Stichprobenmittelwert wird in einer Gruppe, zwei gepaarten Gruppen, zwei unabhängigen Gruppen und Mehrgruppen-Einstellungen berechnet.
+Die für jede Einstellung beschriebenen Verfahren variieren leicht, aber es wird nützlich sein, die strukturellen Gemeinsamkeiten in den verschiedenen Einstellungen zu erkennen.
 
-Similar to how we can model the behavior of the sample proportion $\hat{p}$ using a normal distribution, the sample mean $\bar{x}$ can also be modeled using a normal distribution when certain conditions are met.
-\index{point estimate!single mean} However, we'll soon learn that a new distribution, called the $t$-distribution, is more useful when working with the sample mean.
-We'll first learn about this new distribution, then we'll use it for confidence intervals and hypothesis tests for the mean.
+Ähnlich wie wir das Verhalten des Stichprobenanteils $\hat{p}$ mithilfe einer Normalverteilung modellieren können, kann der Stichprobenmittelwert $\bar{x}$ ebenfalls mithilfe einer Normalverteilung modelliert werden, wenn bestimmte Bedingungen erfüllt sind.
+\index{point estimate!single mean} Wir werden jedoch bald lernen, dass eine neue Verteilung, die $t$-Verteilung, nützlicher ist, wenn mit dem Stichprobenmittelwert gearbeitet wird.
+Wir lernen zuerst diese neue Verteilung kennen und verwenden sie dann für Konfidenzintervalle und Hypothesentests für den Mittelwert.
 
-## Bootstrap confidence interval for a mean {#sec-boot1mean}
+## Bootstrap-Konfidenzintervall für einen Mittelwert {#sec-boot1mean}
 
-Consider a situation where you want to know whether you should buy a franchise of the used car store Awesome Autos.
-As part of your planning, you'd like to know for how much an average car from Awesome Autos sells.
-In order to go through the example more clearly, let's say that you are only able to randomly sample five cars from Awesome Auto.
-(If this were a real example, you would surely be able to take a much larger sample size, possibly even being able to measure the entire population!)
+Stellen Sie sich eine Situation vor, in der Sie wissen möchten, ob Sie eine Filiale des Gebrauchtwagengeschäfts Awesome Autos kaufen sollten.
+Als Teil Ihrer Planung möchten Sie wissen, für wie viel ein durchschnittliches Auto von Awesome Autos verkauft wird.
+Um das Beispiel klarer darzustellen, nehmen wir an, dass Sie nur fünf Autos zufällig von Awesome Auto entnehmen können.
+(Wenn es sich um ein echtes Beispiel handeln würde, könnten Sie sicherlich eine viel größere Stichprobengröße nehmen, möglicherweise sogar die gesamte Population messen!)
 
-### Observed data
+### Beobachtete Daten
 
-@fig-5cars shows a (small) random sample of observations from Awesome Auto.
-The actual cars as well as their selling price are shown.
+@fig-5cars zeigt eine (kleine) Zufallsstichprobe von Beobachtungen aus Awesome Auto.
+Die eigentlichen Autos sowie ihre Verkaufspreise sind dargestellt.
 
 ```{r}
 #| label: fig-5cars
@@ -63,20 +58,20 @@ include_graphics("images/5cars.png")
 aa_cars <- data.frame(price = c(18300, 20100, 9600, 10700, 27000))
 ```
 
-The sample average car price of \$`r formatC(mean(aa_cars$price), format = "f", digits = 2)` is a first guess at the price of the average car price at Awesome Auto.
-However, as a student of statistics, you understand that one sample mean based on a sample of five observations will not necessarily equal the true population average car price for all the cars at Awesome Auto.
-Indeed, you can see that the observed car prices vary with a standard deviation of \$`r formatC(sd(aa_cars$price), format = "f", digits = 2)`, and surely the average car price would be different if a different sample of size five had been taken from the population.
-Fortunately, as it did in previous chapters for the sample proportion, bootstrapping will approximate the variability of the sample mean from sample to sample.
+Der durchschnittliche Autopreis der Stichprobe von \$`r formatC(mean(aa_cars$price), format = "f", digits = 2)` ist eine erste Schätzung des durchschnittlichen Autopreises bei Awesome Auto.
+Als Statistikstudierende verstehen Sie jedoch, dass ein einzelner Stichprobenmittelwert aus einer Stichprobe von fünf Beobachtungen nicht unbedingt dem wahren Populationsdurchschnitt aller Autos bei Awesome Auto entsprechen muss.
+Tatsächlich können Sie sehen, dass die beobachteten Autopreise mit einer Standardabweichung von \$`r formatC(sd(aa_cars$price), format = "f", digits = 2)` variieren, und sicherlich wäre der durchschnittliche Autopreis unterschiedlich, wenn eine andere Stichprobe der Größe fünf aus der Population gezogen worden wäre.
+Wie bei den vorherigen Kapiteln für den Stichprobenanteil wird Bootstrapping die Variabilität des Stichprobenmittelwerts von Stichprobe zu Stichprobe annähern.
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-As with the inferential ideas covered in [Chapter -@sec-foundations-randomization], [Chapter -@sec-foundations-bootstrapping], and [Chapter -@sec-foundations-mathematical], the inferential analysis methods in this chapter are grounded in quantifying how one dataset differs from another when they are both taken from the same population.
-To repeat, the idea is that we want to know how datasets differ from one another, but we aren't ever going to take more than one sample of observations.
-It does not make sense to take repeated samples from the same population because if you have the ability to take more samples, a larger sample size will benefit you more than taking two samples from the population.
-Instead, of taking repeated samples from the actual population, we use bootstrapping to measure how the samples behave under an estimate of the population.
+Wie bei den in [Kapitel -@sec-foundations-randomization], [Kapitel -@sec-foundations-bootstrapping] und [Kapitel -@sec-foundations-mathematical] behandelten inferenziellen Ideen basieren die Inferenzanalysemethoden in diesem Kapitel auf der Quantifizierung, wie sich ein Datensatz von einem anderen unterscheidet, wenn beide aus derselben Population stammen.
+Zur Wiederholung: Die Idee ist, dass wir wissen wollen, wie sich Datensätze voneinander unterscheiden, aber wir werden nie mehr als eine Stichprobe von Beobachtungen nehmen.
+Es macht keinen Sinn, wiederholte Stichproben aus derselben Population zu nehmen, denn wenn Sie die Möglichkeit haben, mehr Stichproben zu nehmen, wird eine größere Stichprobengröße mehr Nutzen bringen als zwei Stichproben aus der Population zu nehmen.
+Anstatt wiederholte Stichproben aus der tatsächlichen Population zu nehmen, verwenden wir Bootstrapping, um zu messen, wie sich die Stichproben unter einer Schätzung der Population verhalten.
 
-As mentioned previously, to get a sense of the cars at Awesome Auto, you take a sample of five cars from the Awesome Auto branch near you as a way to gauge the price of the cars being sold.
-@fig-bootpop1mean shows how the unknown population of car prices at Awesome Auto can be approximated using the sample.
+Wie bereits erwähnt, nehmen Sie eine Stichprobe von fünf Autos aus dem Awesome-Auto-Zweig in Ihrer Nähe, um ein Gefühl für die dort verkauften Autos zu bekommen.
+@fig-bootpop1mean zeigt, wie die unbekannte Population der Autopreise bei Awesome Auto mithilfe der Stichprobe approximiert werden kann.
 
 ```{r}
 #| label: fig-bootpop1mean
@@ -94,10 +89,10 @@ As mentioned previously, to get a sense of the cars at Awesome Auto, you take a 
 include_graphics("images/bootpop1mean.png")
 ```
 
-By taking repeated samples from the estimated population, the variability from sample to sample can be observed.
-In @fig-boot2 the repeated bootstrap samples are seen to be different both from each other and from the original population.
-Recall that the bootstrap samples were taken from the same (estimated) population, and so the differences in bootstrap samples are due entirely to natural variability in the sampling procedure.
-For the situation at hand where the sample mean is the statistic of interest, the variability from sample to sample can be seen in @fig-bootsamps1mean.
+Indem wiederholte Stichproben aus der geschätzten Population gezogen werden, kann die Variabilität von Stichprobe zu Stichprobe beobachtet werden.
+In @fig-boot2 sieht man, dass sich die wiederholten Bootstrap-Stichproben sowohl voneinander als auch von der ursprünglichen Population unterscheiden.
+Denken Sie daran, dass die Bootstrap-Stichproben aus derselben (geschätzten) Population gezogen wurden, sodass die Unterschiede zwischen den Bootstrap-Stichproben ausschließlich auf natürliche Variabilität im Stichprobenverfahren zurückzuführen sind.
+Für die vorliegende Situation, in der der Stichprobenmittelwert die Statistik von Interesse ist, kann die Variabilität von Stichprobe zu Stichprobe in @fig-bootsamps1mean gesehen werden.
 
 ```{r}
 #| label: fig-bootsamps1mean
@@ -114,8 +109,8 @@ For the situation at hand where the sample mean is the statistic of interest, th
 include_graphics("images/bootsamps1mean.png")
 ```
 
-By summarizing each of the bootstrap samples (here, using the sample mean), we see, directly, the variability of the sample mean, $\bar{x},$ from sample to sample.
-The distribution of $\bar{x}_{bs}$ for the Awesome Auto cars is shown in @fig-bootmeans1mean.
+Durch das Zusammenfassen jeder der Bootstrap-Stichproben (hier mit dem Stichprobenmittelwert) sehen wir direkt die Variabilität des Stichprobenmittelwerts $\bar{x}$ von Stichprobe zu Stichprobe.
+Die Verteilung von $\bar{x}_{bs}$ für die Awesome-Auto-Autos ist in @fig-bootmeans1mean dargestellt.
 
 ```{r}
 #| label: fig-bootmeans1mean
@@ -134,20 +129,20 @@ The distribution of $\bar{x}_{bs}$ for the Awesome Auto cars is shown in @fig-bo
 include_graphics("images/bootmeans1mean.png")
 ```
 
-@fig-carsbsmean summarizes one thousand bootstrap samples in a histogram of the bootstrap sample means.
-The bootstrapped average car prices vary from about \$10,000 to \$25,000.
-The bootstrap percentile confidence interval is found by locating the middle 90% (for a 90% confidence interval) or a 95% (for a 95% confidence interval) of the bootstrapped statistics.
+@fig-carsbsmean fasst tausend Bootstrap-Stichproben in einem Histogramm der Bootstrap-Stichprobenmittelwerte zusammen.
+Die gebottstrappten durchschnittlichen Autopreise variieren von etwa \$10.000 bis \$25.000.
+Das Bootstrap-Perzentil-Konfidenzintervall wird gefunden, indem die mittleren 90% (für ein 90%-Konfidenzintervall) oder 95% (für ein 95%-Konfidenzintervall) der gebottstrappten Statistiken ermittelt werden.
 
 ::: {.workedexample data-latex=""}
-Using @fig-carsbsmean, find the 90% and 95% bootstrap percentile confidence intervals for the true average price of a car from Awesome Auto.
+Bestimmen Sie anhand von @fig-carsbsmean das 90%- und 95%-Bootstrap-Perzentil-Konfidenzintervall für den wahren Durchschnittspreis eines Autos von Awesome Auto.
 
 ------------------------------------------------------------------------
 
-A 90% confidence interval is \$12,140 to \$22,007.
-The conclusion is that we are 90% confident that the true average car price at Awesome Auto lies somewhere between \$12,140 and \$22,007.
+Ein 90%-Konfidenzintervall ist \$12.140 bis \$22.007.
+Wir sind zu 90% zuversichtlich, dass der wahre durchschnittliche Autopreis bei Awesome Auto irgendwo zwischen \$12.140 und \$22.007 liegt.
 
-A 95% confidence interval is \$11,778 to \$22,500.
-The conclusion is that we are 95% confident that the true average car price at Awesome Auto lies somewhere between \$11,778 to \$22,500.
+Ein 95%-Konfidenzintervall ist \$11.778 bis \$22.500.
+Wir sind zu 95% zuversichtlich, dass der wahre durchschnittliche Autopreis bei Awesome Auto irgendwo zwischen \$11.778 und \$22.500 liegt.
 :::
 
 ```{r}
@@ -210,34 +205,34 @@ ggplot(bscars_mean, aes(x = stat)) +
   )
 ```
 
-### Bootstrap SE confidence interval
+### Bootstrap-SE-Konfidenzintervall
 
-As seen in @sec-two-prop-boot-ci, another method for creating bootstrap confidence intervals directly uses a calculation of the variability of the bootstrap statistics (here, the bootstrap means).
-If the bootstrap distribution is relatively symmetric and bell-shaped, then the 95% bootstrap SE confidence interval can be constructed with the formula familiar from the mathematical models in previous chapters:
+Wie in @sec-two-prop-boot-ci gesehen, verwendet eine andere Methode zur Erstellung von Bootstrap-Konfidenzintervallen direkt eine Berechnung der Variabilität der Bootstrap-Statistiken (hier der Bootstrap-Mittelwerte).
+Wenn die Bootstrap-Verteilung relativ symmetrisch und glockenförmig ist, kann das 95%-Bootstrap-SE-Konfidenzintervall mit der aus den mathematischen Modellen in früheren Kapiteln bekannten Formel konstruiert werden:
 
-$$\mbox{point estimate} \pm 2 \cdot SE_{BS}$$ The number 2 is an approximation connected to the "95%" part of the confidence interval (remember the 68-95-99.7 rule).
-As will be seen in @sec-one-mean-math, a new distribution (the $t$-distribution) will be applied to most mathematical inference on numerical variables.
-However, because bootstrapping is not grounded in the same theory as the mathematical approach given in this text, we stick with the standard normal quantiles (in R use the function `qnorm()` to find normal percentiles other than 95%) for different confidence percentages.[^19-inference-one-mean-1]
+$$\mbox{Punktschätzung} \pm 2 \cdot SE_{BS}$$ Die Zahl 2 ist eine Annäherung, die mit dem „95%"-Anteil des Konfidenzintervalls zusammenhängt (erinnern Sie sich an die 68-95-99,7-Regel).
+Wie in @sec-one-mean-math zu sehen sein wird, wird eine neue Verteilung (die $t$-Verteilung) auf die meisten mathematischen Inferenzen bei numerischen Variablen angewendet.
+Da Bootstrapping jedoch nicht auf derselben Theorie wie der in diesem Text verwendete mathematische Ansatz basiert, halten wir uns an die Standard-Normalquantile (in R verwenden Sie die Funktion `qnorm()`, um normale Perzentile außer 95% zu finden) für verschiedene Konfidenzprozentsätze.[^19-inference-one-mean-1]
 
-[^19-inference-one-mean-1]: There is a large literature on understanding and improving bootstrap intervals, see @Hesterbeg:2015 titled ["What Teachers Should Know About the Bootstrap"](https://www.tandfonline.com/doi/full/10.1080/00031305.2015.1089789) and @Hayden:2019 titled ["Questionable Claims for Simple Versions of the Bootstrap"](https://www.tandfonline.com/doi/full/10.1080/10691898.2019.1669507) for more information.
+[^19-inference-one-mean-1]: Es gibt eine umfangreiche Literatur über das Verstehen und Verbessern von Bootstrap-Intervallen, siehe @Hesterbeg:2015 mit dem Titel ["What Teachers Should Know About the Bootstrap"](https://www.tandfonline.com/doi/full/10.1080/00031305.2015.1089789) und @Hayden:2019 mit dem Titel ["Questionable Claims for Simple Versions of the Bootstrap"](https://www.tandfonline.com/doi/full/10.1080/10691898.2019.1669507) für weitere Informationen.
 
 ::: {.workedexample data-latex=""}
-Explain how the standard error (SE) of the bootstrapped means is calculated and what it is measuring.
+Erklären Sie, wie der Standardfehler (SE) der gebottstrappten Mittelwerte berechnet wird und was er misst.
 
 ------------------------------------------------------------------------
 
-The SE of the bootstrapped means measures how variable the means are from resample to resample.
-The bootstrap SE is a good approximation to the SE of means as if we had taken repeated samples from the original population (which we agreed isn't something we would do because of wasted resources).
+Der SE der gebottstrappten Mittelwerte misst, wie stark die Mittelwerte von Wiederholungsstichprobe zu Wiederholungsstichprobe variieren.
+Der Bootstrap-SE ist eine gute Annäherung an den SE der Mittelwerte, als hätten wir wiederholte Stichproben aus der ursprünglichen Population genommen (was wir uns geeinigt haben, nicht zu tun, da Ressourcen verschwendet werden würden).
 
-Logistically, we can find the standard deviation of the bootstrapped means using the same calculations from [Chapter -@sec-explore-numerical].
-That is, the bootstrapped means are the individual observations about which we measure the variability.
+Logistisch können wir die Standardabweichung der gebottstrappten Mittelwerte mit denselben Berechnungen aus [Kapitel -@sec-explore-numerical] ermitteln.
+Das heißt, die gebottstrappten Mittelwerte sind die einzelnen Beobachtungen, über die wir die Variabilität messen.
 :::
 
-Although we won't spend a lot of energy on this concept, you may be wondering some of the differences between a standard error and a standard deviation.
-The **standard error**\index{standard error}\index{standard error (SE)} describes how a statistic (e.g., sample mean or sample proportion) varies from sample to sample.
-The **standard deviation**\index{standard deviation} can be thought of as a function applied to any list of numbers which measures how far those numbers vary from their own average.
-So, you can have a standard deviation calculated on a column of dog heights or a standard deviation calculated on a column of bootstrapped means from the resampled data.
-Note that the standard deviation calculated on the bootstrapped means is referred to as the bootstrap standard error of the mean.
+Obwohl wir nicht viel Energie auf dieses Konzept verwenden werden, fragen Sie sich vielleicht, was die Unterschiede zwischen einem Standardfehler und einer Standardabweichung sind.
+Der **Standardfehler**\index{standard error}\index{standard error (SE)} beschreibt, wie eine Statistik (z.B. Stichprobenmittelwert oder Stichprobenanteil) von Stichprobe zu Stichprobe variiert.
+Die **Standardabweichung**\index{standard deviation} kann als eine Funktion betrachtet werden, die auf beliebige Listen von Zahlen angewendet wird und misst, wie weit diese Zahlen von ihrem eigenen Durchschnitt abweichen.
+So können Sie eine Standardabweichung berechnet auf einer Spalte von Hundehöhen oder eine Standardabweichung berechnet auf einer Spalte von gebottstrappten Mittelwerten aus den Wiederholungsstichprobendaten haben.
+Beachten Sie, dass die Standardabweichung, die auf den gebottstrappten Mittelwerten berechnet wird, als Bootstrap-Standardfehler des Mittelwerts bezeichnet wird.
 
 ```{r}
 #| include: false
@@ -245,40 +240,40 @@ terms_chp_19 <- c(terms_chp_19, "SE single mean", "SD of observations")
 ```
 
 ::: {.guidedpractice data-latex=""}
-It turns out that the standard deviation of the bootstrapped means from @fig-carsbsmean is \$2,891.87 (a value which is an excellent approximation for the standard error of sample means if we were to take repeated samples from the population).
-(Note: in R the calculation was done using the function `sd()`.)
-The average of the observed prices is \$17,140, and we will consider the sample average to be the best guess point estimate for $\mu.$
-Find and interpret the confidence interval for $\mu$ (the true average cost of a car at Awesome Auto) using the bootstrap SE confidence interval formula.[^19-inference-one-mean-2]
+Es stellt sich heraus, dass die Standardabweichung der gebottstrappten Mittelwerte aus @fig-carsbsmean \$2.891,87 beträgt (ein Wert, der eine ausgezeichnete Annäherung an den Standardfehler der Stichprobenmittelwerte ist, wenn wir wiederholte Stichproben aus der Population nehmen würden).
+(Hinweis: In R wurde die Berechnung mit der Funktion `sd()` durchgeführt.)
+Der Durchschnitt der beobachteten Preise beträgt \$17.140, und wir werden den Stichprobendurchschnitt als die beste Schätzung des Punktschätzers für $\mu$ betrachten.
+Finden und interpretieren Sie das Konfidenzintervall für $\mu$ (den wahren durchschnittlichen Preis eines Autos bei Awesome Auto) anhand der Bootstrap-SE-Konfidenzintervallformel.[^19-inference-one-mean-2]
 :::
 
-[^19-inference-one-mean-2]: Using the formula for the bootstrap SE interval, we find the 95% confidence interval for $\mu$ is: $17,140 \pm 2 \cdot 2,891.87 \rightarrow$ (\$11,356.26, \$22,923.74).
-    We are 95% confident that the true average car price at Awesome Auto is somewhere between \$11,356.26 and \$22,923.74.
+[^19-inference-one-mean-2]: Mit der Formel für das Bootstrap-SE-Intervall ermitteln wir das 95%-Konfidenzintervall für $\mu$: $17.140 \pm 2 \cdot 2.891{,}87 \rightarrow$ (\$11.356,26, \$22.923,74).
+    Wir sind zu 95% zuversichtlich, dass der wahre durchschnittliche Autopreis bei Awesome Auto irgendwo zwischen \$11.356,26 und \$22.923,74 liegt.
 
 ::: {.workedexample data-latex=""}
-Compare and contrast the two different 95% confidence intervals for $\mu$ created by finding the percentiles of the bootstrapped means and created by finding the SE of the bootstrapped means.
-Do you think the intervals *should* be identical?
+Vergleichen und kontrastieren Sie die beiden unterschiedlichen 95%-Konfidenzintervalle für $\mu$, die durch Bestimmung der Perzentile der gebottstrappten Mittelwerte und durch Bestimmung des SE der gebottstrappten Mittelwerte erstellt wurden.
+Glauben Sie, dass die Intervalle *identisch* sein sollten?
 
 ------------------------------------------------------------------------
 
--   Percentile interval: (\$11,778, \$22,500)
--   SE interval: (\$11,356.26, \$22,923.74)
+-   Perzentilintervall: (\$11.778, \$22.500)
+-   SE-Intervall: (\$11.356,26, \$22.923,74)
 
 \vspace{-5mm}
 
-The intervals were created using different methods, so it is not surprising that they are not identical.
-However, we are pleased to see that the two methods provide very similar interval approximations.
-The technical details surrounding which data structures are best for percentile intervals and which are best for SE intervals is beyond the scope of this text.
-However, the larger the samples are, the better (and closer) the interval estimates will be.
+Die Intervalle wurden mit verschiedenen Methoden erstellt, daher ist es nicht überraschend, dass sie nicht identisch sind.
+Wir sind jedoch erfreut zu sehen, dass die beiden Methoden sehr ähnliche Intervallannäherungen liefern.
+Die technischen Details darüber, welche Datenstrukturen am besten für Perzentilintervalle und welche am besten für SE-Intervalle geeignet sind, geht über den Rahmen dieses Textes hinaus.
+Je größer die Stichproben sind, desto besser (und näher beieinander) werden die Intervallschätzungen sein.
 :::
 
 \vspace{-8mm}
 
-### Bootstrap percentile confidence interval for a standard deviation
+### Bootstrap-Perzentil-Konfidenzintervall für eine Standardabweichung
 
-Suppose that we want to understand how variable the prices of the cars are at Awesome Auto.
-That is, your interest is no longer in the average car price but in the *standard deviation* of the prices of all cars at Awesome Auto, $\sigma.$ You may have already realized that the sample standard deviation, $s,$ will work as a good **point estimate**\index{point estimate} for the parameter of interest: the population standard deviation, $\sigma.$ The point estimate of the five observations is calculated to be $s = \$7,170.286.$ While $s = \$7,170.286$ might be a good guess for $\sigma,$ we prefer to have an interval estimate for the parameter of interest.
-Although there is a mathematical model which describes how $s$ varies from sample to sample, the mathematical model will not be presented in this text.
-Instead, bootstrapping can be used to find a confidence interval for the parameter $\sigma.$ Using the same technique as presented for a confidence interval for $\mu,$ here we find the bootstrap percentile confidence interval for $\sigma.$
+Angenommen, wir möchten verstehen, wie variabel die Preise der Autos bei Awesome Auto sind.
+Das heißt, Ihr Interesse gilt nicht mehr dem durchschnittlichen Autopreis, sondern der *Standardabweichung* der Preise aller Autos bei Awesome Auto, $\sigma.$ Sie haben vielleicht bereits erkannt, dass die Stichprobenstandardabweichung $s$ als guter **Punktschätzer**\index{point estimate} für den Parameter von Interesse dienen wird: die Populationsstandardabweichung $\sigma.$ Der Punktschätzer der fünf Beobachtungen wird mit $s = \$7.170,286$ berechnet. Während $s = \$7.170,286$ eine gute Schätzung für $\sigma$ sein könnte, bevorzugen wir ein Intervallschätzer für den interessierenden Parameter.
+Obwohl es ein mathematisches Modell gibt, das beschreibt, wie $s$ von Stichprobe zu Stichprobe variiert, wird das mathematische Modell in diesem Text nicht vorgestellt.
+Stattdessen kann Bootstrapping verwendet werden, um ein Konfidenzintervall für den Parameter $\sigma$ zu finden. Unter Verwendung derselben Technik wie für ein Konfidenzintervall für $\mu$ finden wir hier das Bootstrap-Perzentil-Konfidenzintervall für $\sigma.$
 
 ```{r}
 #| include: false
@@ -286,24 +281,24 @@ terms_chp_19 <- c(terms_chp_19, "point estimate")
 ```
 
 ::: {.workedexample data-latex=""}
-Describe the bootstrap distribution for the standard deviation shown in @fig-carsbssd.
+Beschreiben Sie die in @fig-carsbssd gezeigte Bootstrap-Verteilung für die Standardabweichung.
 
 ------------------------------------------------------------------------
 
-The distribution is skewed left and centered near \$7,170.286, which is the point estimate from the original data.
-Most observations in this distribution lie between \$0 and \$10,000.
+Die Verteilung ist links verzerrt und zentriert nahe \$7.170,286, dem Punktschätzer aus den Originaldaten.
+Die meisten Beobachtungen in dieser Verteilung liegen zwischen \$0 und \$10.000.
 :::
 
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-Using @fig-carsbssd, find and interpret a 90% bootstrap percentile confidence interval for the population standard deviation for car prices at Awesome Auto.[^19-inference-one-mean-3]
+Bestimmen und interpretieren Sie anhand von @fig-carsbssd ein 90%-Bootstrap-Perzentil-Konfidenzintervall für die Populationsstandardabweichung der Autopreise bei Awesome Auto.[^19-inference-one-mean-3]
 :::
 
-[^19-inference-one-mean-3]: Based on the percentile values in @fig-carsbssd, the middle 90% of the bootstrapped standard deviations is given by the 5th (\$3,602.5) and the 95th percentiles (\$8,737.2).
-    That is, we are 90% confident that the true standard deviation of car prices is between \$3,602.5 and \$8,737.2.
-    A 90% confidence level indicates that there was not a need for a high level of confidence, such a 95% or 99%.
-    A lower confidence level has higher potential for error, but it also produces a narrower interval.
+[^19-inference-one-mean-3]: Basierend auf den Perzentilwerten in @fig-carsbssd wird das mittlere 90% der gebottstrappten Standardabweichungen durch das 5. (\$3.602,5) und das 95. Perzentil (\$8.737,2) angegeben.
+    Das heißt, wir sind zu 90% zuversichtlich, dass die wahre Standardabweichung der Autopreise zwischen \$3.602,5 und \$8.737,2 liegt.
+    Ein 90%-Konfidenzniveau zeigt an, dass kein hohes Konfidenzniveau wie 95% oder 99% benötigt wurde.
+    Ein niedrigeres Konfidenzniveau hat ein höheres Fehlerpotenzial, produziert aber auch ein engeres Intervall.
 
 \vspace{-8mm}
 
@@ -364,38 +359,38 @@ ggplot(bscars_sd, aes(x = stat)) +
   )
 ```
 
-### Bootstrapping is not a solution to small sample sizes!
+### Bootstrapping ist keine Lösung für kleine Stichprobengrößen!
 
-The example presented above is done for a sample with only five observations.
-As with analysis techniques that build on mathematical models, bootstrapping works best when a large random sample has been taken from the population.
-Bootstrapping is a method for capturing the variability of a statistic when the mathematical model is unknown (it is not a method for navigating small samples).
-As you might guess, the larger the random sample, the more accurately that sample will represent the population of interest.
+Das oben dargestellte Beispiel wird für eine Stichprobe mit nur fünf Beobachtungen durchgeführt.
+Wie bei Analysetechniken, die auf mathematischen Modellen aufbauen, funktioniert Bootstrapping am besten, wenn eine große Zufallsstichprobe aus der Population gezogen wurde.
+Bootstrapping ist eine Methode zur Erfassung der Variabilität einer Statistik, wenn das mathematische Modell unbekannt ist (es ist keine Methode zum Umgang mit kleinen Stichproben).
+Wie Sie vielleicht vermuten, wird eine größere Zufallsstichprobe die Population von Interesse genauer repräsentieren.
 
-## Mathematical model for a mean {#sec-one-mean-math}
+## Mathematisches Modell für einen Mittelwert {#sec-one-mean-math}
 
-As with the sample proportion, the variability of the sample mean is well described by the mathematical theory given by the Central Limit Theorem.
-However, because of missing information about the inherent variability in the population ($\sigma$), a $t$-distribution is used in place of the standard normal when performing hypothesis test or confidence interval analyses.
+Wie beim Stichprobenanteil wird die Variabilität des Stichprobenmittelwerts gut durch die mathematische Theorie des Zentralen Grenzwertsatzes beschrieben.
+Da jedoch Informationen über die inhärente Variabilität in der Population ($\sigma$) fehlen, wird eine $t$-Verteilung anstelle der Standardnormalverteilung verwendet, wenn Hypothesentests oder Konfidenzintervallanalysen durchgeführt werden.
 
-### Mathematical distribution of the sample mean
+### Mathematische Verteilung des Stichprobenmittelwerts
 
-The sample mean tends to follow a normal distribution centered at the population mean, $\mu,$ when certain conditions are met.
-Additionally, we can compute a standard error for the sample mean using the population standard deviation $\sigma$ and the sample size $n.$
+Der Stichprobenmittelwert neigt dazu, einer Normalverteilung zu folgen, die auf den Populationsmittelwert $\mu$ zentriert ist, wenn bestimmte Bedingungen erfüllt sind.
+Zusätzlich können wir einen Standardfehler für den Stichprobenmittelwert mithilfe der Populationsstandardabweichung $\sigma$ und der Stichprobengröße $n$ berechnen.
 
 ::: {.important data-latex=""}
-**Central Limit Theorem for the sample mean.**
+**Zentraler Grenzwertsatz für den Stichprobenmittelwert.**
 
-When we collect a sufficiently large sample of $n$ independent observations from a population with mean $\mu$ and standard deviation $\sigma,$ the sampling distribution of $\bar{x}$ will be nearly normal with
+Wenn wir eine ausreichend große Stichprobe von $n$ unabhängigen Beobachtungen aus einer Population mit Mittelwert $\mu$ und Standardabweichung $\sigma$ sammeln, wird die Stichprobenverteilung von $\bar{x}$ nahezu normal mit
 
 \index{point estimate!single mean}\index{single mean!point estimate}
 \index{standard error (SE)!single mean}\index{single mean!standard error (SE)}
 
-$$\text{Mean} = \mu \qquad \text{Standard Error }(SE) = \frac{\sigma}{\sqrt{n}}$$
+$$\text{Mittelwert} = \mu \qquad \text{Standardfehler }(SE) = \frac{\sigma}{\sqrt{n}}$$
 :::
 
-Before diving into confidence intervals and hypothesis tests using $\bar{x},$ we first need to cover two topics:
+Bevor wir uns mit Konfidenzintervallen und Hypothesentests mit $\bar{x}$ befassen, müssen wir zunächst zwei Themen behandeln:
 
--   When we modeled $\hat{p}$ using the normal distribution, certain conditions had to be satisfied. The conditions for working with $\bar{x}$ are a little more complex, and below, we will discuss how to check conditions for inference using a mathematical model.
--   The standard error is dependent on the population standard deviation, $\sigma.$ However, we rarely know $\sigma,$ and instead we must estimate it. Because this estimation is itself imperfect, we use a new distribution called the $t$-distribution to fix this problem.
+-   Als wir $\hat{p}$ mithilfe der Normalverteilung modellierten, mussten bestimmte Bedingungen erfüllt sein. Die Bedingungen für die Arbeit mit $\bar{x}$ sind etwas komplexer, und im Folgenden werden wir besprechen, wie Bedingungen für die Inferenz mit einem mathematischen Modell überprüft werden.
+-   Der Standardfehler ist von der Populationsstandardabweichung $\sigma$ abhängig. Wir kennen $\sigma$ jedoch selten und müssen sie stattdessen schätzen. Da diese Schätzung selbst unvollkommen ist, verwenden wir eine neue Verteilung namens $t$-Verteilung, um dieses Problem zu beheben.
 
 \index{t-distribution@$t$-distribution}
 
@@ -404,17 +399,17 @@ Before diving into confidence intervals and hypothesis tests using $\bar{x},$ we
 terms_chp_19 <- c(terms_chp_19, "t-distribution")
 ```
 
-### Evaluating the two conditions required for modeling $\bar{x}$
+### Überprüfung der zwei Bedingungen für die Modellierung von $\bar{x}$
 
-Two conditions are required to apply the Central Limit Theorem\index{Central Limit Theorem} for a sample mean $\bar{x}:$
+Zwei Bedingungen müssen erfüllt sein, um den Zentralen Grenzwertsatz\index{Central Limit Theorem} für einen Stichprobenmittelwert $\bar{x}$ anzuwenden:
 
--   **Independence.** The sample observations must be independent.
-    The most common way to satisfy this condition is when the sample is a simple random sample from the population.
-    If the data come from a random process, analogous to rolling a die, this would also satisfy the independence condition.
+-   **Unabhängigkeit.** Die Stichprobenbeobachtungen müssen unabhängig sein.
+    Der häufigste Weg, diese Bedingung zu erfüllen, ist, wenn die Stichprobe eine einfache Zufallsstichprobe aus der Population ist.
+    Wenn die Daten aus einem zufälligen Prozess stammen, analog zum Würfeln, würde dies ebenfalls die Unabhängigkeitsbedingung erfüllen.
 
--   **Normality.** When a sample is small, we also require that the sample observations come from a normally distributed population.
-    We can relax this condition more and more for larger and larger sample sizes.
-    This condition is vague, making it difficult to evaluate, so next we introduce a couple rules of thumb to checking it.
+-   **Normalität.** Bei einer kleinen Stichprobe erfordern wir auch, dass die Stichprobenbeobachtungen aus einer normalverteilten Population stammen.
+    Wir können diese Bedingung für immer größere Stichprobengrößen immer mehr lockern.
+    Diese Bedingung ist vage und damit schwer zu bewerten; daher führen wir im Folgenden einige Faustregeln zur Überprüfung ein.
 
 ```{r}
 #| include: false
@@ -422,43 +417,43 @@ terms_chp_19 <- c(terms_chp_19, "Central Limit Theorem")
 ```
 
 ::: {.important data-latex=""}
-**General rule for performing the normality check.**
+**Allgemeine Regel zur Überprüfung der Normalitätsbedingung.**
 
-There is no perfect way to check the normality condition, so instead we use two general rules based on the number and magnitude of extreme observations.
-Note, it often takes practice to get a sense for whether a normal approximation is appropriate.
+Es gibt keine perfekte Möglichkeit, die Normalitätsbedingung zu überprüfen, daher verwenden wir stattdessen zwei allgemeine Regeln basierend auf der Anzahl und Größe extremer Beobachtungen.
+Beachten Sie, dass es oft Übung erfordert, um ein Gefühl dafür zu entwickeln, ob eine Normalannäherung geeignet ist.
 
--   Small $n$: If the sample size $n$ is small and there are **no clear outliers** in the data, then we typically assume the data come from a nearly normal distribution to satisfy the condition.
--   Large $n$: If the sample size $n$ is large and there are no **particularly extreme** outliers, then we typically assume the sampling distribution of $\bar{x}$ is nearly normal, even if the underlying distribution of individual observations is not.
+-   Kleines $n$: Wenn die Stichprobengröße $n$ klein ist und es **keine klaren Ausreißer** in den Daten gibt, nehmen wir typischerweise an, dass die Daten aus einer nahezu normalen Verteilung stammen, um die Bedingung zu erfüllen.
+-   Großes $n$: Wenn die Stichprobengröße $n$ groß ist und es keine **besonders extremen** Ausreißer gibt, nehmen wir typischerweise an, dass die Stichprobenverteilung von $\bar{x}$ nahezu normal ist, auch wenn die zugrunde liegende Verteilung der einzelnen Beobachtungen es nicht ist.
 
-Some guidelines for determining whether $n$ is considered small or large are as follows: slight skew is okay for sample sizes of 15, moderate skew for sample sizes of 30, and strong skew for sample sizes of 60.
+Einige Richtlinien zur Bestimmung, ob $n$ als klein oder groß gilt, sind folgende: leichte Schieflage ist für Stichprobengrößen von 15 in Ordnung, moderate Schieflage für Stichprobengrößen von 30 und starke Schieflage für Stichprobengrößen von 60.
 :::
 
-In this first course in statistics, you aren't expected to develop perfect judgment on the normality condition.
-However, you are expected to be able to handle clear cut cases based on the rules of thumb.[^19-inference-one-mean-4]
+In diesem ersten Statistikkurs wird von Ihnen nicht erwartet, dass Sie ein perfektes Urteilsvermögen bei der Normalitätsbedingung entwickeln.
+Es wird jedoch erwartet, dass Sie klare Fälle anhand der Faustregeln behandeln können.[^19-inference-one-mean-4]
 
-[^19-inference-one-mean-4]: More nuanced guidelines would consider further relaxing the *particularly extreme outlier* check when the sample size is very large.
-    However, we'll leave further discussion here to a future course.
+[^19-inference-one-mean-4]: Ausgefeiltere Richtlinien würden eine weitere Lockerung der Überprüfung auf *besonders extreme Ausreißer* in Betracht ziehen, wenn die Stichprobengröße sehr groß ist.
+    Weitere Diskussionen hierzu überlassen wir jedoch einem zukünftigen Kurs.
 
 ::: {.workedexample data-latex=""}
-Consider the four plots provided in @fig-outliersandsscondition that come from simple random samples from different populations.
-Their sample sizes are $n_1 = 15$ and $n_2 = 50.$
+Betrachten Sie die vier Plots in @fig-outliersandsscondition, die aus einfachen Zufallsstichproben verschiedener Populationen stammen.
+Ihre Stichprobengrößen sind $n_1 = 15$ und $n_2 = 50.$
 
-Are the independence and normality conditions met in each case?
+Sind die Unabhängigkeits- und Normalitätsbedingungen in jedem Fall erfüllt?
 
 ------------------------------------------------------------------------
 
-Each samples is from a simple random sample of its respective population, so the independence condition is satisfied.
-Let's next check the normality condition for each using the rule of thumb.
+Jede Stichprobe stammt aus einer einfachen Zufallsstichprobe ihrer jeweiligen Population, sodass die Unabhängigkeitsbedingung erfüllt ist.
+Überprüfen wir als nächstes die Normalitätsbedingung für jede mithilfe der Faustregel.
 
-The first sample has fewer than 30 observations, so we are watching for any clear outliers.
-None are present; while there is a small gap in the histogram on the right, this gap is small and over 20% of the observations in this small sample are represented to the left of the gap, so we can hardly call these clear outliers.
-With no clear outliers, the normality condition can be reasonably assumed to be met.
+Die erste Stichprobe hat weniger als 30 Beobachtungen, daher achten wir auf klare Ausreißer.
+Keine sind vorhanden; obwohl es eine kleine Lücke im Histogramm auf der rechten Seite gibt, ist diese Lücke klein und über 20% der Beobachtungen in dieser kleinen Stichprobe werden links der Lücke dargestellt, sodass wir diese kaum als klare Ausreißer bezeichnen können.
+Da keine klaren Ausreißer vorhanden sind, kann die Normalitätsbedingung vernünftigerweise als erfüllt angenommen werden.
 
-The second sample has a sample size greater than 30 and includes an outlier that appears to be roughly 5 times further from the center of the distribution than the next furthest observation.
-This is an example of a particularly extreme outlier, so the normality condition would not be satisfied.
+Die zweite Stichprobe hat eine Stichprobengröße größer als 30 und enthält einen Ausreißer, der etwa 5-mal weiter vom Zentrum der Verteilung entfernt zu sein scheint als die nächste weitest entfernte Beobachtung.
+Dies ist ein Beispiel für einen besonders extremen Ausreißer, sodass die Normalitätsbedingung nicht erfüllt wäre.
 
-It's often helpful to also visualize the data using a box plot to assess skewness and existence of outliers.
-The box plots provided underneath each histogram confirms our conclusions that the first sample does not have any outliers and the second sample does, with one outlier being particularly more extreme than the others.
+Es ist oft hilfreich, die Daten auch mithilfe eines Boxplots zu visualisieren, um die Schiefe und das Vorhandensein von Ausreißern zu beurteilen.
+Die unter jedem Histogramm angegebenen Boxplots bestätigen unsere Schlussfolgerungen, dass die erste Stichprobe keine Ausreißer hat und die zweite Stichprobe einen hat, wobei ein Ausreißer besonders extremer als die anderen ist.
 :::
 
 ```{r}
@@ -505,30 +500,30 @@ p1 + p2 + p3 + p4 +
   plot_layout(nrow = 2, heights = c(3, 1, 3, 1))
 ```
 
-In practice, it's typical to also do a mental check to evaluate whether we have reason to believe the underlying population would have moderate skew (if $n < 30)$ or have particularly extreme outliers $(n \geq 30)$ beyond what we observe in the data.
-For example, consider the number of followers for each individual account on Twitter, and then imagine this distribution.
-The large majority of accounts have built up a couple thousand followers or fewer, while a relatively tiny fraction have amassed tens of millions of followers, meaning the distribution is extremely skewed.
-When we know the data come from such an extremely skewed distribution, it takes some effort to understand what sample size is large enough for the normality condition to be satisfied.
+In der Praxis ist es üblich, auch mental zu überprüfen, ob wir Grund zu der Annahme haben, dass die zugrunde liegende Population eine moderate Schieflage aufweist (wenn $n < 30$) oder besonders extreme Ausreißer hat $(n \geq 30)$, die über das hinausgehen, was wir in den Daten beobachten.
+Denken Sie zum Beispiel an die Anzahl der Follower für jedes einzelne Konto auf Twitter und stellen Sie sich dann diese Verteilung vor.
+Der Großteil der Konten hat ein paar tausend Follower oder weniger aufgebaut, während ein relativ kleiner Bruchteil Zehnmillionen von Followern gesammelt hat, was bedeutet, dass die Verteilung extrem schief ist.
+Wenn wir wissen, dass die Daten aus einer solch extrem schiefen Verteilung stammen, ist einiges Nachdenken erforderlich, um zu verstehen, welche Stichprobengröße groß genug ist, damit die Normalitätsbedingung erfüllt ist.
 
 \index{Central Limit Theorem}
 
-### Introducing the t-distribution
+### Einführung der t-Verteilung
 
 \index{t-distribution}
 
-In practice, we cannot directly calculate the standard error for $\bar{x}$ since we do not know the population standard deviation, $\sigma.$ We encountered a similar issue when computing the standard error for a sample proportion, which relied on the population proportion, $p.$ Our solution in the proportion context was to use the sample value in place of the population value when computing the standard error.
-We'll employ a similar strategy for computing the standard error of $\bar{x},$ using the sample standard deviation $s$ in place of $\sigma:$
+In der Praxis können wir den Standardfehler für $\bar{x}$ nicht direkt berechnen, da wir die Populationsstandardabweichung $\sigma$ nicht kennen. Wir sind auf ein ähnliches Problem gestoßen, als wir den Standardfehler für einen Stichprobenanteil berechnet haben, der von der Populationsproportion $p$ abhing. Unsere Lösung im Anteils-Kontext war, den Stichprobenwert anstelle des Populationswertes bei der Berechnung des Standardfehlers zu verwenden.
+Wir werden eine ähnliche Strategie zur Berechnung des Standardfehlers von $\bar{x}$ anwenden, indem wir die Stichprobenstandardabweichung $s$ anstelle von $\sigma$ verwenden:
 
 $$SE = \frac{\sigma}{\sqrt{n}} \approx \frac{s}{\sqrt{n}}$$
 
-This strategy tends to work well when we have a lot of data and can estimate $\sigma$ using $s$ accurately.
-However, the estimate is less precise with smaller samples, and this leads to problems when using the normal distribution to model $\bar{x}.$
+Diese Strategie funktioniert tendenziell gut, wenn wir viele Daten haben und $\sigma$ genau durch $s$ schätzen können.
+Bei kleineren Stichproben ist die Schätzung jedoch weniger präzise, was zu Problemen führt, wenn die Normalverteilung zur Modellierung von $\bar{x}$ verwendet wird.
 
-We'll find it useful to use a new distribution for inference calculations called the $t$-distribution.
-A $t$-distribution, shown as a solid line in @fig-tDistCompareToNormalDist, has a bell shape.
-However, its tails are thicker than the normal distribution's, meaning observations are more likely to fall beyond two standard deviations from the mean than under the normal distribution.
+Es wird nützlich sein, eine neue Verteilung für Inferenzberechnungen namens $t$-Verteilung zu verwenden.
+Eine $t$-Verteilung, die als Linie in @fig-tDistCompareToNormalDist dargestellt ist, hat eine Glockenform.
+Ihre Schwänze sind jedoch dicker als die der Normalverteilung, was bedeutet, dass Beobachtungen mit größerer Wahrscheinlichkeit mehr als zwei Standardabweichungen vom Mittelwert abweichen als bei der Normalverteilung.
 
-The extra thick tails of the $t$-distribution are exactly the correction needed to resolve the problem (due to extra variability of the T score) of using $s$ in place of $\sigma$ in the $SE$ calculation.
+Die extra dicken Schwänze der $t$-Verteilung sind genau die Korrektur, die benötigt wird, um das Problem (aufgrund der zusätzlichen Variabilität des T-Werts) bei der Verwendung von $s$ anstelle von $\sigma$ in der $SE$-Berechnung zu lösen.
 
 ```{r}
 #| label: fig-tDistCompareToNormalDist
@@ -564,12 +559,12 @@ ggplot(df, aes(x = x, y = y, color = distribution, linetype = distribution, size
   labs(x = NULL, y = NULL, color = NULL, linetype = NULL, size = NULL)
 ```
 
-The $t$-distribution is always centered at zero and has a single parameter: degrees of freedom.
-The **degrees of freedom**\index{degrees of freedom}\index{degrees of freedom!single mean} describes the precise form of the bell-shaped $t$-distribution.
-Several $t$-distributions are shown in @fig-tDistConvergeToNormalDist in comparison to the normal distribution.
-Similar to the Chi-square distribution, the shape of the $t$-distribution also depends on the degrees of freedom.
+Die $t$-Verteilung ist immer auf null zentriert und hat einen einzelnen Parameter: Freiheitsgrade.
+Die **Freiheitsgrade**\index{degrees of freedom}\index{degrees of freedom!single mean} beschreiben die genaue Form der glockenförmigen $t$-Verteilung.
+In @fig-tDistConvergeToNormalDist sind mehrere $t$-Verteilungen im Vergleich zur Normalverteilung dargestellt.
+Ähnlich wie die Chi-Quadrat-Verteilung hängt die Form der $t$-Verteilung ebenfalls von den Freiheitsgraden ab.
 
-In general, we'll use a $t$-distribution with $df = n - 1$ to model the sample mean when the sample size is $n.$ That is, when we have more observations, the degrees of freedom will be larger and the $t$-distribution will look more like the standard normal distribution; when the degrees of freedom is about 30 or more, the $t$-distribution is nearly indistinguishable from the normal distribution.
+Im Allgemeinen werden wir eine $t$-Verteilung mit $df = n - 1$ verwenden, um den Stichprobenmittelwert zu modellieren, wenn die Stichprobengröße $n$ ist. Das heißt, wenn wir mehr Beobachtungen haben, werden die Freiheitsgrade größer sein und die $t$-Verteilung wird mehr wie die Standardnormalverteilung aussehen; wenn die Freiheitsgrade etwa 30 oder mehr betragen, ist die $t$-Verteilung von der Normalverteilung kaum zu unterscheiden.
 
 ```{r}
 #| include: false
@@ -624,29 +619,29 @@ legend(2.5, 0.4,
 ```
 
 ::: {.important data-latex=""}
-**Degrees of freedom: df.**
+**Freiheitsgrade: df.**
 
-The degrees of freedom describes the shape of the $t$-distribution.
-The larger the degrees of freedom, the more closely the distribution approximates the normal distribution.
+Die Freiheitsgrade beschreiben die Form der $t$-Verteilung.
+Je größer die Freiheitsgrade, desto mehr nähert sich die Verteilung der Normalverteilung an.
 
-When modeling $\bar{x}$ using the $t$-distribution, use $df = n - 1.$
+Bei der Modellierung von $\bar{x}$ mithilfe der $t$-Verteilung verwenden Sie $df = n - 1.$
 :::
 
-The $t$-distribution allows us greater flexibility than the normal distribution when analyzing numerical data.
-In practice, it's common to use statistical software, such as R, Python, or SAS for these analyses.
-In R, the function used for calculating probabilities under a $t$-distribution is `pt()` (which should seem similar to previous R functions, `pnorm()` and `pchisq()`).
-Don't forget that with the $t$-distribution, the degrees of freedom must always be specified!
+Die $t$-Verteilung gibt uns mehr Flexibilität als die Normalverteilung bei der Analyse numerischer Daten.
+In der Praxis ist es üblich, statistische Software wie R, Python oder SAS für diese Analysen zu verwenden.
+In R ist die Funktion zur Berechnung von Wahrscheinlichkeiten unter einer $t$-Verteilung `pt()` (was ähnlich wie die früheren R-Funktionen `pnorm()` und `pchisq()` aussehen sollte).
+Vergessen Sie nicht, dass bei der $t$-Verteilung die Freiheitsgrade immer angegeben werden müssen!
 
-For the examples and guided practices below, you may have to use a table or statistical software to find the answers.
-We recommend trying the problems so as to get a sense for how the $t$-distribution can vary in width depending on the degrees of freedom.
-No matter the approach you choose, apply your method using the examples below to confirm your working understanding of the $t$-distribution.
+Für die folgenden Beispiele und Übungsaufgaben müssen Sie möglicherweise eine Tabelle oder statistische Software verwenden, um die Antworten zu finden.
+Wir empfehlen, die Probleme zu versuchen, um ein Gefühl dafür zu bekommen, wie die $t$-Verteilung je nach Freiheitsgraden in der Breite variieren kann.
+Welchen Ansatz Sie auch immer wählen, wenden Sie Ihre Methode anhand der folgenden Beispiele an, um Ihr Verständnis der $t$-Verteilung zu bestätigen.
 
 ::: {.workedexample data-latex=""}
-What proportion of the $t$-distribution with 18 degrees of freedom falls below -2.10?
+Welcher Anteil der $t$-Verteilung mit 18 Freiheitsgraden liegt unter -2,10?
 
 ------------------------------------------------------------------------
 
-Let's first draw the picture and shade the area below -2.10.
+Zeichnen wir zunächst die Abbildung und schattieren den Bereich unter -2,10.
 
 ```{r}
 #| label: tDistDF18LeftTail2Point10
@@ -667,7 +662,7 @@ normTail(
 axis(1)
 ```
 
-Using statistical software, we can obtain a precise value: 0.0250.
+Mithilfe statistischer Software können wir einen genauen Wert erhalten: 0,0250.
 
 ```{r}
 #| echo: true
@@ -679,13 +674,13 @@ pt(-2.10, df = 18)
 \vspace{-5mm}
 
 ::: {.workedexample data-latex=""}
-What proportion of the 𝑡-distribution with 20 degrees of freedom falls above 1.65?
+Welcher Anteil der $t$-Verteilung mit 20 Freiheitsgraden liegt oberhalb von 1,65?
 
 ------------------------------------------------------------------------
 
-Note that with 20 degrees of freedom, the $t$-distribution is relatively close to the normal distribution.
-With a normal distribution, this would correspond to about 0.05, so we should expect the $t$-distribution to give us a similar value.
-Using statistical software, we can obtain a precise value: 0.0573.
+Beachten Sie, dass mit 20 Freiheitsgraden die $t$-Verteilung relativ nahe an der Normalverteilung liegt.
+Bei einer Normalverteilung würde dies etwa 0,05 entsprechen, daher sollten wir erwarten, dass die $t$-Verteilung uns einen ähnlichen Wert gibt.
+Mithilfe statistischer Software können wir einen genauen Wert erhalten: 0,0573.
 
 ```{r}
 #| echo: true
@@ -697,7 +692,7 @@ Using statistical software, we can obtain a precise value: 0.0573.
 \vspace{-5mm}
 
 ::: {.workedexample data-latex=""}
-A $t$-distribution with 2 degrees of freedom is shown below. Estimate the proportion of the distribution falling more than 3 units from the mean (above or below).
+Eine $t$-Verteilung mit 2 Freiheitsgraden ist unten dargestellt. Schätzen Sie den Anteil der Verteilung, der mehr als 3 Einheiten vom Mittelwert entfernt liegt (oberhalb oder unterhalb).
 
 ```{r}
 #| label: tDistDF23UnitsFromMean
@@ -719,10 +714,10 @@ normTail(
 
 ------------------------------------------------------------------------
 
-With so few degrees of freedom, the $t$-distribution will give a more notably different value than the normal distribution.
-Under a normal distribution, the area would be about 0.003 using the 68-95-99.7 rule.
-For a $t$-distribution with $df = 2,$ the area in both tails beyond 3 units totals 0.0955.
-This area is dramatically different than what we obtain from the normal distribution.
+Mit so wenigen Freiheitsgraden wird die $t$-Verteilung einen deutlich anderen Wert liefern als die Normalverteilung.
+Unter einer Normalverteilung wäre der Bereich mithilfe der 68-95-99,7-Regel etwa 0,003.
+Für eine $t$-Verteilung mit $df = 2$ beläuft sich der Flächeninhalt in beiden Schwänzen jenseits von 3 Einheiten auf insgesamt 0,0955.
+Dieser Bereich unterscheidet sich dramatisch von dem, was wir aus der Normalverteilung erhalten.
 
 ```{r}
 #| echo: true
@@ -732,19 +727,19 @@ pt(-3, df = 2) + (1 - pt(3, df = 2))
 :::
 
 ::: {.guidedpractice data-latex=""}
-What proportion of the $t$-distribution with 19 degrees of freedom falls above -1.79 units?
-Use your preferred method for finding tail areas.[^19-inference-one-mean-5]
+Welcher Anteil der $t$-Verteilung mit 19 Freiheitsgraden liegt oberhalb von -1,79 Einheiten?
+Verwenden Sie Ihre bevorzugte Methode zur Ermittlung der Schwanzflächen.[^19-inference-one-mean-5]
 :::
 
-[^19-inference-one-mean-5]: We want to find the shaded area *above* -1.79 (we leave the picture to you).
-    The lower tail area has an area of 0.0447, so the upper area would have an area of $1 - 0.0447 = 0.9553.$
+[^19-inference-one-mean-5]: Wir möchten die schattierte Fläche *oberhalb* von -1,79 finden (die Abbildung überlassen wir Ihnen).
+    Die untere Schwanzfläche hat einen Flächeninhalt von 0,0447, sodass der obere Bereich einen Flächeninhalt von $1 - 0,0447 = 0,9553$ hätte.
 
 \index{t-distribution}
 
-### One sample t-intervals
+### Einstichproben-t-Intervalle
 
-Let's get our first taste of applying the $t$-distribution in the context of an example about the mercury content of dolphin muscle.
-Elevated mercury concentrations are an important problem for both dolphins and other animals, like humans, who occasionally eat them.
+Lassen Sie uns unsere erste Erfahrung mit der Anwendung der $t$-Verteilung im Kontext eines Beispiels über den Quecksilbergehalt im Delphinmuskel machen.
+Erhöhte Quecksilberkonzentrationen sind ein wichtiges Problem sowohl für Delfine als auch für andere Tiere wie Menschen, die sie gelegentlich essen.
 
 ```{r}
 #| label: fig-rissosDolphin
@@ -756,9 +751,9 @@ Elevated mercury concentrations are an important problem for both dolphins and o
 include_graphics("images/rissosDolphin.jpg")
 ```
 
-We will identify a confidence interval for the average mercury content in dolphin muscle using a sample of 19 Risso's dolphins from the Taiji area in Japan.
-The data are summarized in @tbl-summaryStatsOfHgInMuscleOfRissosDolphins.
-The minimum and maximum observed values can be used to evaluate whether there are clear outliers.
+Wir werden ein Konfidenzintervall für den durchschnittlichen Quecksilbergehalt im Delphinmuskel anhand einer Stichprobe von 19 Risso-Delfinen aus dem Taiji-Gebiet in Japan identifizieren.
+Die Daten sind in @tbl-summaryStatsOfHgInMuscleOfRissosDolphins zusammengefasst.
+Die minimalen und maximalen beobachteten Werte können verwendet werden, um zu beurteilen, ob es klare Ausreißer gibt.
 
 ```{r}
 #| label: tbl-summaryStatsOfHgInMuscleOfRissosDolphins
@@ -785,17 +780,17 @@ dolphin_summary_stats |>
 ```
 
 ::: {.workedexample data-latex=""}
-Are the independence and normality conditions satisfied for this dataset?
+Sind die Unabhängigkeits- und Normalitätsbedingungen für diesen Datensatz erfüllt?
 
 ------------------------------------------------------------------------
 
-The observations are a simple random sample, therefore it is reasonable to assume that the dolphins are independent.
-The summary statistics in @tbl-summaryStatsOfHgInMuscleOfRissosDolphins do not suggest any clear outliers, with all observations within 2.5 standard deviations of the mean.
-Based on this evidence, the normality condition seems reasonable.
+Die Beobachtungen sind eine einfache Zufallsstichprobe, daher ist es vernünftig anzunehmen, dass die Delfine unabhängig sind.
+Die zusammenfassenden Statistiken in @tbl-summaryStatsOfHgInMuscleOfRissosDolphins deuten auf keine klaren Ausreißer hin, da alle Beobachtungen innerhalb von 2,5 Standardabweichungen vom Mittelwert liegen.
+Basierend auf diesen Beweisen erscheint die Normalitätsbedingung erfüllt.
 :::
 
-In the normal model, we used $z^{\star}$ and the standard error to determine the width of a confidence interval.
-We revise the confidence interval formula slightly when using the $t$-distribution:
+Im Normalmodell haben wir $z^{\star}$ und den Standardfehler verwendet, um die Breite eines Konfidenzintervalls zu bestimmen.
+Wir überarbeiten die Konfidenzintervallformel leicht bei der Verwendung der $t$-Verteilung:
 
 $$
 \begin{aligned}
@@ -805,26 +800,26 @@ $$
 $$
 
 ::: {.workedexample data-latex=""}
-Using the summary statistics in @tbl-summaryStatsOfHgInMuscleOfRissosDolphins, compute the standard error for the average mercury content in the $n = 19$ dolphins.
+Berechnen Sie mithilfe der zusammenfassenden Statistiken in @tbl-summaryStatsOfHgInMuscleOfRissosDolphins den Standardfehler für den durchschnittlichen Quecksilbergehalt bei den $n = 19$ Delfinen.
 
 ------------------------------------------------------------------------
 
-We plug in $s$ and $n$ into the formula: $SE = \frac{s}{\sqrt{n}} = \frac{2.3}{\sqrt{19}} = 0.528.$
+Wir setzen $s$ und $n$ in die Formel ein: $SE = \frac{s}{\sqrt{n}} = \frac{2{,}3}{\sqrt{19}} = 0{,}528.$
 :::
 
-The value $t^{\star}_{df}$ is a cutoff we obtain based on the confidence level and the $t$-distribution with $df$ degrees of freedom.
-That cutoff is found in the same way as with a normal distribution: we find $t^{\star}_{df}$ such that the fraction of the $t$-distribution with $df$ degrees of freedom within a distance $t^{\star}_{df}$ of 0 matches the confidence level of interest.
+Der Wert $t^{\star}_{df}$ ist ein Grenzwert, den wir basierend auf dem Konfidenzniveau und der $t$-Verteilung mit $df$ Freiheitsgraden bestimmen.
+Dieser Grenzwert wird auf dieselbe Weise wie bei einer Normalverteilung gefunden: Wir ermitteln $t^{\star}_{df}$ so, dass der Anteil der $t$-Verteilung mit $df$ Freiheitsgraden innerhalb eines Abstands $t^{\star}_{df}$ von 0 dem interessierenden Konfidenzniveau entspricht.
 
 ::: {.workedexample data-latex=""}
-When $n = 19,$ what is the appropriate degrees of freedom?
-Find $t^{\star}_{df}$ for this degrees of freedom and the confidence level of 95%
+Bei $n = 19$, was sind die geeigneten Freiheitsgrade?
+Bestimmen Sie $t^{\star}_{df}$ für diese Freiheitsgrade und das Konfidenzniveau von 95%.
 
 ------------------------------------------------------------------------
 
-The degrees of freedom is easy to calculate: $df = n - 1 = 18.$
+Die Freiheitsgrade sind einfach zu berechnen: $df = n - 1 = 18.$
 
-Using statistical software, we find the cutoff where the upper tail is equal to 2.5%: $t^{\star}_{18} = 2.10.$ The area below -2.10 will also be equal to 2.5%.
-That is, 95% of the $t$-distribution with $df = 18$ lies within 2.10 units of 0.
+Mithilfe statistischer Software finden wir den Grenzwert, bei dem der obere Schwanz gleich 2,5% ist: $t^{\star}_{18} = 2{,}10.$ Der Bereich unterhalb von -2,10 wird ebenfalls gleich 2,5% sein.
+Das heißt, 95% der $t$-Verteilung mit $df = 18$ liegen innerhalb von 2,10 Einheiten von 0.
 
 ```{r}
 #| echo: true
@@ -835,17 +830,17 @@ qt(0.975, df = 18)
 :::
 
 ::: {.important data-latex=""}
-**Degrees of freedom for a single sample.**
+**Freiheitsgrade für eine einzelne Stichprobe.**
 
-If the sample has $n$ observations and we are examining a single mean, then we use the $t$-distribution with $df=n-1$ degrees of freedom.
+Wenn die Stichprobe $n$ Beobachtungen hat und wir einen einzelnen Mittelwert untersuchen, verwenden wir die $t$-Verteilung mit $df=n-1$ Freiheitsgraden.
 :::
 
 ::: {.workedexample data-latex=""}
-Compute and interpret the 95% confidence interval for the average mercury content in Risso's dolphins.
+Berechnen und interpretieren Sie das 95%-Konfidenzintervall für den durchschnittlichen Quecksilbergehalt bei Risso-Delfinen.
 
 ------------------------------------------------------------------------
 
-We can construct the confidence interval as
+Wir können das Konfidenzintervall wie folgt konstruieren
 
 $$
 \begin{aligned}
@@ -854,45 +849,45 @@ $$
 (3.29 \  &, \ 5.51)
 \end{aligned} 
 $$
-We are 95% confident the average mercury content of muscles in Risso's dolphins is between 3.29 and 5.51 $\mu$g/wet gram, which is considered extremely high.
+Wir sind zu 95% zuversichtlich, dass der durchschnittliche Quecksilbergehalt in den Muskeln von Risso-Delfinen zwischen 3,29 und 5,51 $\mu$g/wet Gramm liegt, was als extrem hoch gilt.
 :::
 
 ::: {.important data-latex=""}
-**Calculating a** $t$**-confidence interval for the mean,** $\mu.$
+**Berechnung eines** $t$**-Konfidenzintervalls für den Mittelwert,** $\mu.$
 
 \index{t-CI!single mean}
 
-Based on a sample of $n$ independent and nearly normal observations, a confidence interval for the population mean is
+Basierend auf einer Stichprobe von $n$ unabhängigen und nahezu normal verteilten Beobachtungen ist ein Konfidenzintervall für den Populationsmittelwert
 
 $$
 \begin{aligned}
-\text{point estimate} \ &\pm\  t^{\star}_{df} \times SE \\
+\text{Punktschätzung} \ &\pm\  t^{\star}_{df} \times SE \\
 \bar{x} \ &\pm\  t^{\star}_{df} \times \frac{s}{\sqrt{n}}
 \end{aligned}
 $$
 
-where $\bar{x}$ is the sample mean, $t^{\star}_{df}$ corresponds to the confidence level and degrees of freedom $df,$ and $SE$ is the standard error as estimated by the sample.
+wobei $\bar{x}$ der Stichprobenmittelwert ist, $t^{\star}_{df}$ dem Konfidenzniveau und den Freiheitsgraden $df$ entspricht, und $SE$ der durch die Stichprobe geschätzte Standardfehler ist.
 :::
 
 ::: {.guidedpractice data-latex=""}
-The FDA's webpage provides some data on mercury content of fish.
-Based on a sample of 15 croaker white fish (Pacific), a sample mean and standard deviation were computed as 0.287 and 0.069 ppm (parts per million), respectively.
-The 15 observations ranged from 0.18 to 0.41 ppm.
-We will assume these observations are independent.
-Based on the summary statistics of the data, do you have any objections to the normality condition of the individual observations?[^19-inference-one-mean-6]
+Die FDA-Webseite stellt einige Daten zum Quecksilbergehalt von Fischen zur Verfügung.
+Basierend auf einer Stichprobe von 15 Kroaker-Weißfischen (Pazifik) wurden ein Stichprobenmittelwert und eine Standardabweichung von 0,287 bzw. 0,069 ppm (Teile pro Million) berechnet.
+Die 15 Beobachtungen reichten von 0,18 bis 0,41 ppm.
+Wir nehmen an, dass diese Beobachtungen unabhängig sind.
+Haben Sie aufgrund der zusammenfassenden Statistiken der Daten Einwände gegen die Normalitätsbedingung der einzelnen Beobachtungen?[^19-inference-one-mean-6]
 :::
 
-[^19-inference-one-mean-6]: The sample size is under 30, so we check for obvious outliers: since all observations are within 2 standard deviations of the mean, there are no such clear outliers.
+[^19-inference-one-mean-6]: Die Stichprobengröße liegt unter 30, daher überprüfen wir auf offensichtliche Ausreißer: Da alle Beobachtungen innerhalb von 2 Standardabweichungen vom Mittelwert liegen, gibt es keine solchen klaren Ausreißer.
 
 ::: {.workedexample data-latex=""}
-Estimate the standard error of $\bar{x} = 0.287$ ppm using the data summaries in the previous Guided Practice.
-If we are to use the $t$-distribution to create a 90% confidence interval for the actual mean of the mercury content, identify the degrees of freedom and $t^{\star}_{df}.$
+Schätzen Sie den Standardfehler von $\bar{x} = 0{,}287$ ppm mithilfe der Datenzusammenfassungen in der vorherigen Geführten Übung.
+Wenn wir die $t$-Verteilung verwenden möchten, um ein 90%-Konfidenzintervall für den tatsächlichen Mittelwert des Quecksilbergehalts zu erstellen, geben Sie die Freiheitsgrade und $t^{\star}_{df}$ an.
 
 ------------------------------------------------------------------------
 
-The standard error: $SE = \frac{0.069}{\sqrt{15}} = 0.0178.$
-Degrees of freedom: $df = n - 1 = 14.$
-Since the goal is a 90% confidence interval, we choose $t_{14}^{\star}$ so that the two-tail area is 0.1: $t^{\star}_{14} = 1.76.$
+Der Standardfehler: $SE = \frac{0{,}069}{\sqrt{15}} = 0{,}0178.$
+Freiheitsgrade: $df = n - 1 = 14.$
+Da das Ziel ein 90%-Konfidenzintervall ist, wählen wir $t_{14}^{\star}$ so, dass die Zweischwanzfläche 0,1 ist: $t^{\star}_{14} = 1{,}76.$
 
 ```{r}
 #| echo: true
@@ -903,82 +898,82 @@ qt(0.95, df = 14)
 :::
 
 ::: {.guidedpractice data-latex=""}
-Using the information and results of the previous Guided Practice and Example, compute a 90% confidence interval for the average mercury content of croaker white fish (Pacific).[^19-inference-one-mean-7]
+Berechnen Sie mithilfe der Informationen und Ergebnisse der vorherigen Geführten Übung und des Beispiels ein 90%-Konfidenzintervall für den durchschnittlichen Quecksilbergehalt von Kroaker-Weißfischen (Pazifik).[^19-inference-one-mean-7]
 :::
 
-[^19-inference-one-mean-7]: $\bar{x} \ \pm\ t^{\star}_{14} \times SE \ \to\  0.287 \ \pm\  1.76 \times 0.0178 \ \to\ (0.256, 0.318).$ We are 90% confident that the average mercury content of croaker white fish (Pacific) is between 0.256 and 0.318 ppm.
+[^19-inference-one-mean-7]: $\bar{x} \ \pm\ t^{\star}_{14} \times SE \ \to\  0{,}287 \ \pm\  1{,}76 \times 0{,}0178 \ \to\ (0{,}256, 0{,}318).$ Wir sind zu 90% zuversichtlich, dass der durchschnittliche Quecksilbergehalt von Kroaker-Weißfischen (Pazifik) zwischen 0,256 und 0,318 ppm liegt.
 
 ::: {.guidedpractice data-latex=""}
-The 90% confidence interval from the previous Guided Practice is 0.256 ppm to 0.318 ppm.
-Can we say that 90% of croaker white fish (Pacific) have mercury levels between 0.256 and 0.318 ppm?[^19-inference-one-mean-8]
+Das 90%-Konfidenzintervall aus der vorherigen Geführten Übung ist 0,256 ppm bis 0,318 ppm.
+Können wir sagen, dass 90% der Kroaker-Weißfische (Pazifik) Quecksilbergehalte zwischen 0,256 und 0,318 ppm haben?[^19-inference-one-mean-8]
 :::
 
-[^19-inference-one-mean-8]: No, a confidence interval only provides a range of plausible values for a population parameter, in this case the population mean.
-    It does not describe what we might observe for individual observations.
+[^19-inference-one-mean-8]: Nein, ein Konfidenzintervall liefert nur einen Bereich plausibler Werte für einen Populationsparameter, in diesem Fall den Populationsmittelwert.
+    Es beschreibt nicht, was wir für einzelne Beobachtungen beobachten könnten.
 
-Recall that the margin of error is defined by the standard error.
-The margin of error for $\bar{x}$ can be directly obtained from $SE(\bar{x}).$
+Erinnern Sie sich daran, dass der Stichprobenfehler durch den Standardfehler definiert ist.
+Der Stichprobenfehler für $\bar{x}$ kann direkt aus $SE(\bar{x})$ ermittelt werden.
 
 ::: {.important data-latex=""}
-**Margin of error for** $\bar{x}.$
+**Stichprobenfehler für** $\bar{x}.$
 
-The margin of error is $t^\star_{df} \times s/\sqrt{n}$ where $t^\star_{df}$ is calculated from a specified percentile on the t-distribution with *df* degrees of freedom.
+Der Stichprobenfehler ist $t^\star_{df} \times s/\sqrt{n}$, wobei $t^\star_{df}$ aus einem bestimmten Perzentil der t-Verteilung mit *df* Freiheitsgraden berechnet wird.
 :::
 
-### One sample t-tests
+### Einstichproben-t-Tests
 
 \index{t-test}
 
-Now that we have used the $t$-distribution for making a confidence interval for a mean, let's speed on through to hypothesis tests for the mean.
+Nun, da wir die $t$-Verteilung zur Erstellung eines Konfidenzintervalls für einen Mittelwert verwendet haben, können wir schnell mit Hypothesentests für den Mittelwert fortfahren.
 
 ::: {.important data-latex=""}
-**The test statistic for assessing a single mean is a T.**
+**Die Teststatistik zur Bewertung eines einzelnen Mittelwerts ist ein T.**
 
-The T score is a ratio of how the sample mean differs from the hypothesized mean as compared to how the observations vary.
+Der T-Wert ist ein Verhältnis dafür, wie der Stichprobenmittelwert vom hypothetischen Mittelwert abweicht, verglichen mit der Variabilität der Beobachtungen.
 
-$$ T = \frac{\bar{x} - \mbox{null value}}{s/\sqrt{n}} $$
+$$ T = \frac{\bar{x} - \mbox{Nullwert}}{s/\sqrt{n}} $$
 
-When the null hypothesis is true and the conditions are met, T has a t-distribution with $df = n - 1.$
+Wenn die Nullhypothese wahr ist und die Bedingungen erfüllt sind, hat T eine t-Verteilung mit $df = n - 1.$
 
-Conditions:
+Bedingungen:
 
--   Independent observations.
--   Large samples and no extreme outliers.
+-   Unabhängige Beobachtungen.
+-   Große Stichproben und keine extremen Ausreißer.
 :::
 
-Is the typical US runner getting faster or slower over time?
-We consider this question in the context of the Cherry Blossom Race, which is a 10-mile race in Washington, DC each spring.
-The average time for all runners who finished the Cherry Blossom Race in 2006 was 93.29 minutes (93 minutes and about 17 seconds).
-We want to determine using data from 100 participants in the 2017 Cherry Blossom Race whether runners in this race are getting faster or slower, versus the other possibility that there has been no change.
+Wird der typische US-Läufer mit der Zeit schneller oder langsamer?
+Wir betrachten diese Frage im Kontext des Cherry Blossom Race, einem 10-Meilen-Rennen in Washington, D.C. jeden Frühling.
+Die durchschnittliche Zeit aller Läufer, die das Cherry Blossom Race 2006 beendet haben, betrug 93,29 Minuten (93 Minuten und etwa 17 Sekunden).
+Wir möchten anhand von Daten von 100 Teilnehmern am Cherry Blossom Race 2017 bestimmen, ob Läufer in diesem Rennen schneller oder langsamer werden, gegenüber der anderen Möglichkeit, dass es keine Veränderung gegeben hat.
 
 ::: {.data data-latex=""}
-The [`run17`](http://openintrostat.github.io/cherryblossom/reference/run17.html) data can be found in the [**cherryblossom**](http://openintrostat.github.io/cherryblossom) R package.
+Die [`run17`](http://openintrostat.github.io/cherryblossom/reference/run17.html)-Daten sind im R-Paket [**cherryblossom**](http://openintrostat.github.io/cherryblossom) zu finden.
 :::
 
 ::: {.guidedpractice data-latex=""}
-What are appropriate hypotheses for this context?[^19-inference-one-mean-9]
+Was sind geeignete Hypothesen für diesen Kontext?[^19-inference-one-mean-9]
 :::
 
-[^19-inference-one-mean-9]: $H_0:$ The average 10-mile run time was the same for 2006 and 2017.
-    $\mu = 93.29$ minutes.
-    $H_A:$ The average 10-mile run time for 2017 was *different* than that of 2006.
-    $\mu \neq 93.29$ minutes.
+[^19-inference-one-mean-9]: $H_0:$ Die durchschnittliche 10-Meilen-Laufzeit war 2006 und 2017 gleich.
+    $\mu = 93{,}29$ Minuten.
+    $H_A:$ Die durchschnittliche 10-Meilen-Laufzeit für 2017 war *anders* als die von 2006.
+    $\mu \neq 93{,}29$ Minuten.
 
 ```{r}
 #| include: false
 terms_chp_19 <- c(terms_chp_19, "T score single mean")
 ```
 
-When completing a hypothesis test for the one-sample mean, the process is nearly identical to completing a hypothesis test for a single proportion.
-First, we find the Z score using the observed value, null value, and standard error; however, we call it a **T score**\index{T score!single mean}\index{single mean!T score}\index{T score} since we use a $t$-distribution for calculating the tail area.
-Then we find the p-value using the same ideas we used previously: find the one-tail area under the sampling distribution, and double it.
+Bei der Durchführung eines Hypothesentests für den Einstichproben-Mittelwert ist der Prozess nahezu identisch mit der Durchführung eines Hypothesentests für einen einzelnen Anteil.
+Zuerst berechnen wir den Z-Wert unter Verwendung des beobachteten Wertes, des Nullwertes und des Standardfehlers; wir nennen es jedoch einen **T-Wert**\index{T score!single mean}\index{single mean!T score}\index{T score}, da wir eine $t$-Verteilung zur Berechnung der Schwanzfläche verwenden.
+Dann finden wir den p-Wert nach denselben Ideen wie zuvor: Wir finden die Einschwanzfläche unter der Stichprobenverteilung und verdoppeln sie.
 
-But first, we check the conditions.
+Aber zuerst überprüfen wir die Bedingungen.
 
 ::: {.guidedpractice data-latex=""}
-The data come from a simple random sample of all participants, so the observations are independent.
-A histogram of the race times is given below to evaluate if we can move forward with a t-test.
-Is the normality condition met?[^19-inference-one-mean-10]
+Die Daten stammen aus einer einfachen Zufallsstichprobe aller Teilnehmer, sodass die Beobachtungen unabhängig sind.
+Ein Histogramm der Laufzeiten ist unten angegeben, um zu beurteilen, ob wir mit einem t-Test fortfahren können.
+Ist die Normalitätsbedingung erfüllt?[^19-inference-one-mean-10]
 
 ```{r}
 #| out-width: 60%
@@ -1001,8 +996,8 @@ ggplot(run17_sample_100, aes(x = time)) +
 ```
 :::
 
-[^19-inference-one-mean-10]: With a sample of 100, we should only be concerned if there is are particularly extreme outliers.
-    The histogram of the data does not show any outliers of concern (and arguably, no outliers at all).
+[^19-inference-one-mean-10]: Mit einer Stichprobe von 100 sollten wir uns nur sorgen, wenn es besonders extreme Ausreißer gibt.
+    Das Histogramm der Daten zeigt keine besorgniserregenden Ausreißer (und eigentlich gar keine Ausreißer).
 
 ```{r}
 #| include: false
@@ -1010,21 +1005,21 @@ terms_chp_19 <- c(terms_chp_19, "T score single mean", "t-test")
 ```
 
 ::: {.workedexample data-latex=""}
-With both the independence and normality conditions satisfied, we can proceed with a hypothesis test using the $t$-distribution.
-The sample mean and sample standard deviation of the sample of `r run17_sample_100_time_n` runners from the 2017 Cherry Blossom Race are `r run17_sample_100_time_mean` and `r run17_sample_100_time_sd` minutes, respectively.
-Recall that the average run time in 2006 was 93.29 minutes.
-Find the test statistic and p-value.
-What is your conclusion?
+Da sowohl die Unabhängigkeits- als auch die Normalitätsbedingungen erfüllt sind, können wir mit einem Hypothesentest unter Verwendung der $t$-Verteilung fortfahren.
+Der Stichprobenmittelwert und die Stichprobenstandardabweichung der Stichprobe von `r run17_sample_100_time_n` Läufern des Cherry Blossom Race 2017 sind `r run17_sample_100_time_mean` bzw. `r run17_sample_100_time_sd` Minuten.
+Erinnern Sie sich, dass die durchschnittliche Laufzeit 2006 93,29 Minuten betrug.
+Finden Sie die Teststatistik und den p-Wert.
+Was ist Ihre Schlussfolgerung?
 
 ------------------------------------------------------------------------
 
-To find the test statistic (T score), we first must determine the standard error:
+Um die Teststatistik (T-Wert) zu finden, müssen wir zunächst den Standardfehler bestimmen:
 
-$$  SE = 16.6 / \sqrt{100} = 1.66 $$
-Now we can compute the **T score** using the sample mean (`r run17_sample_100_time_mean`), null value (93.29), and $SE:$
+$$  SE = 16{,}6 / \sqrt{100} = 1{,}66 $$
+Jetzt können wir den **T-Wert** unter Verwendung des Stichprobenmittelwerts (`r run17_sample_100_time_mean`), des Nullwertes (93,29) und $SE$ berechnen:
 
-$$ T = \frac{98.8 - 93.29}{1.66} = 3.32 $$
-For $df = 100 - 1 = 99,$ we can determine using statistical software (or a $t$-table) that the one-tail area is 0.000631, which we double to get the p-value: 0.00126.
+$$ T = \frac{98{,}8 - 93{,}29}{1{,}66} = 3{,}32 $$
+Für $df = 100 - 1 = 99$ können wir mithilfe statistischer Software (oder einer $t$-Tabelle) bestimmen, dass die Einschwanzfläche 0,000631 beträgt, die wir verdoppeln, um den p-Wert zu erhalten: 0,00126.
 
 ```{r}
 #| echo: true
@@ -1032,37 +1027,37 @@ For $df = 100 - 1 = 99,$ we can determine using statistical software (or a $t$-t
 (1 - pt(3.32, df = 99)) * 2
 ```
 
-Because the p-value is smaller than 0.05, we reject the null hypothesis.
-That is, the data provide convincing evidence that the average run time for the Cherry Blossom Run in 2017 is different than the 2006 average.
+Da der p-Wert kleiner als 0,05 ist, lehnen wir die Nullhypothese ab.
+Das heißt, die Daten liefern überzeugende Beweise dafür, dass die durchschnittliche Laufzeit für das Cherry Blossom Race 2017 von dem Durchschnitt von 2006 abweicht.
 :::
 
 ::: {.important data-latex=""}
-**When using a** $t$**-distribution, we use a T score (similar to a Z score).**
+**Bei Verwendung einer** $t$**-Verteilung verwenden wir einen T-Wert (ähnlich einem Z-Wert).**
 
-To help us remember to use the $t$-distribution, we use a $T$ to represent the test statistic, and we often call this a **T score**.
-The Z score and T score are computed in the exact same way and are conceptually identical: each represents how many standard errors the observed value is from the null value.
+Um uns daran zu erinnern, die $t$-Verteilung zu verwenden, benutzen wir ein $T$ zur Darstellung der Teststatistik, und wir bezeichnen dies oft als **T-Wert**.
+Der Z-Wert und der T-Wert werden auf genau dieselbe Weise berechnet und sind konzeptionell identisch: Jeder gibt an, wie viele Standardfehler der beobachtete Wert vom Nullwert entfernt liegt.
 :::
 
 \clearpage
 
-## Chapter review {#sec-chp19-review}
+## Kapitelzusammenfassung {#sec-chp19-review}
 
-### Summary
+### Zusammenfassung
 
-In this chapter we extended the randomization / bootstrap / mathematical model paradigm to questions involving quantitative variables of interest.
-When there is only one variable of interest, we are often hypothesizing or finding confidence intervals about the population mean.
-Note, however, the bootstrap method can be used for other statistics like the population median or the population IQR.
-When comparing a quantitative variable across two groups, the question often focuses on the difference in population means (or sometimes a paired difference in means).
-The questions revolving around one, two, and paired samples of means are addressed using the t-distribution; they are therefore called "t-tests" and "t-intervals." When considering a quantitative variable across 3 or more groups, a method called ANOVA is applied.
-Again, almost all the research questions can be approached using computational methods (e.g., randomization tests or bootstrapping) or using mathematical models.
-We continue to emphasize the importance of experimental design in making conclusions about research claims.
-In particular, recall that variability can come from different sources (e.g., random sampling vs. random allocation, see @fig-randsampValloc).
+In diesem Kapitel haben wir das Randomisierungs-/Bootstrap-/mathematisches-Modell-Paradigma auf Fragen mit quantitativen interessierenden Variablen ausgeweitet.
+Wenn es nur eine interessierende Variable gibt, formulieren wir häufig Hypothesen oder erstellen Konfidenzintervalle über den Populationsmittelwert.
+Beachten Sie jedoch, dass die Bootstrap-Methode auch für andere Statistiken wie den Populationsmedian oder das Populations-IQR verwendet werden kann.
+Wenn eine quantitative Variable über zwei Gruppen verglichen wird, konzentriert sich die Frage oft auf den Unterschied in den Populationsmittelwerten (oder manchmal auf einen gepaarten Unterschied in Mittelwerten).
+Die Fragen rund um ein, zwei und gepaarte Stichproben von Mittelwerten werden mit der t-Verteilung behandelt; sie werden daher als „t-Tests" und „t-Intervalle" bezeichnet. Wenn eine quantitative Variable über 3 oder mehr Gruppen betrachtet wird, wird eine Methode namens ANOVA angewendet.
+Auch hier können fast alle Forschungsfragen mit Rechenmethoden (z.B. Randomisierungstests oder Bootstrapping) oder mit mathematischen Modellen angegangen werden.
+Wir betonen weiterhin die Bedeutung des experimentellen Designs beim Ziehen von Schlussfolgerungen aus Forschungsbehauptungen.
+Denken Sie insbesondere daran, dass Variabilität aus verschiedenen Quellen stammen kann (z.B. Zufallsstichprobe versus Zufallszuteilung, siehe @fig-randsampValloc).
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-19.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-19 dargestellt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-19
@@ -1073,9 +1068,9 @@ make_terms_table(terms_chp_19)
 
 \clearpage
 
-## Exercises {#sec-chp19-exercises}
+## Übungen {#sec-chp19-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-19].
+Antworten auf Übungen mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-19].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_19-ex-inference-one-mean.qmd >}}
