@@ -1250,22 +1250,22 @@ Wenn wir extrapolieren, machen wir eine unzuverlässige Wette, dass die ungefäh
 terms_chp_07 <- c(terms_chp_07, "extrapolation")
 ```
 
-### Describing the strength of a fit {#sec-r-squared}
+### Beschreibung der Güte eines Fits {#sec-r-squared}
 
-We evaluated the strength of the linear relationship between two variables earlier using the correlation, $r.$ However, it is more common to explain the strength of a linear fit using $R^2,$ called **R-squared**\index{R-squared}.
-If provided with a linear model, we might like to describe how closely the data cluster around the linear fit.
+Wir haben früher die Stärke der linearen Beziehung zwischen zwei Variablen mithilfe der Korrelation, $r,$ beurteilt. Häufiger wird die Stärke eines linearen Fits jedoch mit $R^2$ beschrieben, dem sogenannten **Bestimmtheitsmaß**\index{R-squared}.
+Wenn uns ein lineares Modell vorliegt, möchten wir möglicherweise beschreiben, wie eng die Daten um den linearen Fit gruppiert sind.
 
 ```{r}
 #| include: false
 terms_chp_07 <- c(terms_chp_07, "R-squared")
 ```
 
-The $R^2$ of a linear model describes the amount of variation in the outcome variable that is explained by the least squares line.
-For example, consider the Elmhurst data, shown in @fig-elmhurstScatterWLine).
-The variance of the outcome variable, aid received, is about $s_{aid}^2 \approx 29.8$ million (calculated from the data, some of which is shown in @tbl-elmhurst-data).
-However, if we apply our least squares line, then this model reduces our uncertainty in predicting aid using a student's family income.
-The variability in the residuals describes how much variation remains after using the model: $s_{_{RES}}^2 \approx 22.4$ million.
-In short, there was a reduction of
+Das $R^2$ eines linearen Modells beschreibt den Anteil der Variation der Ergebnisvariablen, der durch die Kleinste-Quadrate-Linie erklärt wird.
+Betrachten Sie zum Beispiel die Elmhurst-Daten in @fig-elmhurstScatterWLine).
+Die Varianz der Ergebnisvariablen, erhaltene Unterstützung, beträgt etwa $s_{aid}^2 \approx 29{,}8$ Millionen (berechnet aus den Daten, von denen ein Teil in @tbl-elmhurst-data gezeigt wird).
+Wenn wir jedoch unsere Kleinste-Quadrate-Linie anwenden, reduziert dieses Modell unsere Unsicherheit bei der Vorhersage der Unterstützung anhand des Familieneinkommens eines Studierenden.
+Die Variabilität in den Residuen beschreibt, wie viel Variation nach der Verwendung des Modells verbleibt: $s_{_{RES}}^2 \approx 22{,}4$ Millionen.
+Kurz gesagt, gab es eine Reduktion von
 
 $$
 \frac{s_{aid}^2 - s_{_{RES}}^2}{s_{aid}^2}
@@ -1274,8 +1274,8 @@ $$
   \approx 0.25,
 $$
 
-or about 25%, of the outcome variable's variation by using information about family income for predicting aid using a linear model.
-It turns out that $R^2$ corresponds exactly to the squared value of the correlation:
+oder etwa 25%, der Variation der Ergebnisvariablen durch die Verwendung von Informationen über das Familieneinkommen zur Vorhersage der Unterstützung mithilfe eines linearen Modells.
+Es stellt sich heraus, dass $R^2$ genau dem quadrierten Wert der Korrelation entspricht:
 
 $$
 r = -0.499 \rightarrow R^2 = 0.25
@@ -1284,12 +1284,12 @@ $$
 \clearpage
 
 ::: {.guidedpractice data-latex=""}
-If a linear model has a very strong negative relationship with a correlation of -0.97, how much of the variation in the outcome is explained by the predictor?[^07-model-slr-8]
+Wenn ein lineares Modell eine sehr starke negative Beziehung mit einer Korrelation von -0,97 hat, wie viel der Variation im Ergebnis wird durch den Prädiktor erklärt?[^07-model-slr-8]
 :::
 
-[^07-model-slr-8]: About $R^2 = (-0.97)^2 = 0.94$ or 94% of the variation in the outcome variable is explained by the linear model.
+[^07-model-slr-8]: Etwa $R^2 = (-0{,}97)^2 = 0{,}94$ oder 94% der Variation in der Ergebnisvariablen werden durch das lineare Modell erklärt.
 
-$R^2$ is also called the **coefficient of determination**\index{coefficient of determination}.
+$R^2$ wird auch als **Bestimmtheitskoeffizient**\index{coefficient of determination} bezeichnet.
 
 ```{r}
 #| include: false
@@ -1297,18 +1297,18 @@ terms_chp_07 <- c(terms_chp_07, "coefficient of determination")
 ```
 
 ::: {.important data-latex=""}
-**Coefficient of determination: proportion of variability in the outcome variable explained by the model.**
+**Bestimmtheitskoeffizient: Anteil der Variabilität in der Ergebnisvariablen, der durch das Modell erklärt wird.**
 
-Since $r$ is always between -1 and 1, $R^2$ will always be between 0 and 1.
-This statistic is called the **coefficient of determination**, and it measures the proportion of variation in the outcome variable, $y,$ that can be explained by the linear model with predictor $x.$
+Da $r$ immer zwischen -1 und 1 liegt, wird $R^2$ immer zwischen 0 und 1 liegen.
+Diese Statistik wird als **Bestimmtheitskoeffizient** bezeichnet und misst den Anteil der Variation in der Ergebnisvariablen, $y,$ der durch das lineare Modell mit Prädiktor $x$ erklärt werden kann.
 :::
 
-More generally, $R^2$ can be calculated as a ratio of a measure of variability around the line divided by a measure of total variability.
+Allgemeiner kann $R^2$ als Verhältnis eines Maßes für die Variabilität um die Linie geteilt durch ein Maß für die Gesamtvariabilität berechnet werden.
 
 ::: {.important data-latex=""}
-**Sums of squares to measure variability in** $y.$
+**Quadratsummen zur Messung der Variabilität in** $y.$
 
-We can measure the variability in the $y$ values by how far they tend to fall from their mean, $\bar{y}.$ We define this value as the **total sum of squares**\index{total sum of squares}, calculated using the formula below, where $y_i$ represents each $y$ value in the sample, and $\bar{y}$ represents the mean of the $y$ values in the sample.
+Wir können die Variabilität in den $y$-Werten daran messen, wie weit sie tendenziell von ihrem Mittelwert $\bar{y}$ abweichen. Wir definieren diesen Wert als die **Gesamtquadratsumme**\index{total sum of squares}, berechnet mit der folgenden Formel, wobei $y_i$ jeden $y$-Wert in der Stichprobe darstellt und $\bar{y}$ den Mittelwert der $y$-Werte in der Stichprobe darstellt.
 
 \vspace{-2mm}
 
@@ -1316,7 +1316,7 @@ $$
 SST = (y_1 - \bar{y})^2 + (y_2 - \bar{y})^2 + \cdots + (y_n - \bar{y})^2.
 $$
 
-Left-over variability in the $y$ values if we know $x$ can be measured by the **sum of squared errors**\index{sum of squared errors}, or sum of squared residuals, calculated using the formula below, where $\hat{y}_i$ represents the predicted value of $y_i$ based on the least squares regression.[^07-model-slr-9],
+Die verbleibende Variabilität in den $y$-Werten, wenn wir $x$ kennen, kann durch die **Fehlerquadratsumme**\index{sum of squared errors}, oder Summe der quadrierten Residuen, gemessen werden, berechnet mit der folgenden Formel, wobei $\hat{y}_i$ den vorhergesagten Wert von $y_i$ basierend auf der Kleinste-Quadrate-Regression darstellt.[^07-model-slr-9],
 
 \vspace{-2mm}
 
@@ -1327,14 +1327,14 @@ SSE &= (y_1 - \hat{y}_1)^2 + (y_2 - \hat{y}_2)^2 + \cdots + (y_n - \hat{y}_n)^2\
 \end{aligned}
 $$
 
-The coefficient of determination can then be calculated as
+Der Bestimmtheitskoeffizient kann dann berechnet werden als
 
 $$
 R^2 = \frac{SST - SSE}{SST} = 1 - \frac{SSE}{SST}
 $$
 :::
 
-[^07-model-slr-9]: The difference $SST - SSE$ is called the **regression sum of squares**\index{regression sum of squares}, $SSR,$ and can also be calculated as $SSR = (\hat{y}_1 - \bar{y})^2 + (\hat{y}_2 - \bar{y})^2 + \cdots + (\hat{y}_n - \bar{y})^2.$ $SSR$ represents the variation in $y$ that was accounted for in our model.
+[^07-model-slr-9]: Die Differenz $SST - SSE$ wird als **Regressionsquadratsumme**\index{regression sum of squares}, $SSR,$ bezeichnet und kann auch berechnet werden als $SSR = (\hat{y}_1 - \bar{y})^2 + (\hat{y}_2 - \bar{y})^2 + \cdots + (\hat{y}_n - \bar{y})^2.$ $SSR$ repräsentiert die Variation in $y$, die in unserem Modell berücksichtigt wurde.
 
 ```{r}
 #| include: false
@@ -1342,33 +1342,33 @@ terms_chp_07 <- c(terms_chp_07, "total sum of squares", "sum of squared error", 
 ```
 
 ::: {.workedexample data-latex=""}
-Among 50 students in the `elmhurst` dataset, the total variability in gift aid is $SST = 1461$.[^07-model-slr-10]
-The sum of squared residuals is $SSE = 1098.$ Find $R^2.$
+Unter 50 Studierenden im `elmhurst`-Datensatz beträgt die Gesamtvariabilität der Stipendien $SST = 1461$.[^07-model-slr-10]
+Die Summe der quadrierten Residuen beträgt $SSE = 1098.$ Berechnen Sie $R^2.$
 
 ------------------------------------------------------------------------
 
-Since we know $SSE$ and $SST,$ we can calculate $R^2$ as
+Da wir $SSE$ und $SST$ kennen, können wir $R^2$ berechnen als
 
 $$
-R^2 = 1 - \frac{SSE}{SST} = 1 - \frac{1098}{1461} = 0.25,
+R^2 = 1 - \frac{SSE}{SST} = 1 - \frac{1098}{1461} = 0{,}25,
 $$
 
-the same value we found when we squared the correlation: $R^2 = (-0.499)^2 = 0.25.$
+denselben Wert, den wir erhalten haben, als wir die Korrelation quadrierten: $R^2 = (-0{,}499)^2 = 0{,}25.$
 :::
 
-[^07-model-slr-10]: $SST$ can be calculated by finding the sample variance of the outcome variable, $s^2$ and multiplying by $n-1.$
+[^07-model-slr-10]: $SST$ kann berechnet werden, indem man die Stichprobenvarianz der Ergebnisvariablen, $s^2$, findet und mit $n-1$ multipliziert.
 
 \clearpage
 
-### Categorical predictors with two levels {#sec-categorical-predictor-two-levels}
+### Kategoriale Prädiktoren mit zwei Ausprägungen {#sec-categorical-predictor-two-levels}
 
-Categorical variables are also useful in predicting outcomes.
-Here we consider a categorical predictor with two levels (recall that a *level* is the same as a *category*).
-We'll consider Ebay auctions for a video game, *Mario Kart* for the Nintendo Wii, where both the total price of the auction and the condition of the game were recorded.
-Here we want to predict total price based on game condition, which takes values `used` and `new`.
+Kategoriale Variablen sind auch bei der Vorhersage von Ergebnissen nützlich.
+Hier betrachten wir einen kategorialen Prädiktor mit zwei Ausprägungen (beachten Sie, dass eine *Ausprägung* dasselbe wie eine *Kategorie* ist).
+Wir werden eBay-Auktionen für ein Videospiel, *Mario Kart* für die Nintendo Wii, betrachten, bei denen sowohl der Gesamtpreis der Auktion als auch der Zustand des Spiels erfasst wurden.
+Hier möchten wir den Gesamtpreis basierend auf dem Spielzustand vorhersagen, der die Werte `used` (gebraucht) und `new` (neu) annimmt.
 
 ::: {.data data-latex=""}
-The [`mariokart`](http://openintrostat.github.io/openintro/reference/mariokart.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`mariokart`](http://openintrostat.github.io/openintro/reference/mariokart.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -1377,8 +1377,8 @@ mariokart_lt100 <- mariokart |>
   mutate(cond = fct_relevel(cond, "used", "new"))
 ```
 
-A plot of the auction data is shown in @fig-marioKartNewUsed.
-Note that the original dataset contains some Mario Kart games being sold at prices above \$100 but for this analysis we have limited our focus to the `r nrow(mariokart_lt100)` Mario Kart games that were sold below \$100.
+Ein Plot der Auktionsdaten ist in @fig-marioKartNewUsed dargestellt.
+Beachten Sie, dass der ursprüngliche Datensatz einige Mario-Kart-Spiele enthält, die zu Preisen über \$100 verkauft wurden, aber für diese Analyse haben wir uns auf die `r nrow(mariokart_lt100)` Mario-Kart-Spiele beschränkt, die unter \$100 verkauft wurden.
 
 ```{r}
 #| label: fig-marioKartNewUsed
@@ -1408,15 +1408,15 @@ mariokart_lt100 |>
   )
 ```
 
-To incorporate the game condition variable into a regression equation, we must convert the categories into a numerical form.
-We will do so using an **indicator variable**\index{variable!indicator}\index{indicator variable} called `condnew`, which takes value 1 when the game is new and 0 when the game is used.
-Using this indicator variable, the linear model may be written as
+Um die Spielzustandsvariable in eine Regressionsgleichung einzubeziehen, müssen wir die Kategorien in eine numerische Form umwandeln.
+Wir werden dies mithilfe einer **Indikatorvariablen**\index{variable!indicator}\index{indicator variable} namens `condnew` tun, die den Wert 1 annimmt, wenn das Spiel neu ist, und 0, wenn das Spiel gebraucht ist.
+Mit dieser Indikatorvariablen kann das lineare Modell geschrieben werden als
 
 $$
 \widehat{\texttt{price}} = b_0 + b_1 \times \texttt{condnew}
 $$
 
-The parameter estimates are given in @tbl-marioKartNewUsedRegrSummary.
+Die Parameterschätzungen sind in @tbl-marioKartNewUsedRegrSummary angegeben.
 
 ```{r}
 #| include: false
@@ -1455,73 +1455,73 @@ m_total_pr_cond_tidy |>
   column_spec(2:5, width = "5em")
 ```
 
-Using values from @tbl-marioKartNewUsedRegrSummary, the model equation can be summarized as
+Mit den Werten aus @tbl-marioKartNewUsedRegrSummary kann die Modellgleichung zusammengefasst werden als
 
 $$
 \widehat{\texttt{price}} = `r m_total_pr_cond_int` + `r m_total_pr_cond_slope` \times \texttt{condnew}
 $$
 
 ::: {.workedexample data-latex=""}
-Interpret the two parameters estimated in the model for the price of Mario Kart in eBay auctions.
+Interpretieren Sie die zwei im Modell geschätzten Parameter für den Preis von Mario Kart in eBay-Auktionen.
 
 ------------------------------------------------------------------------
 
-The intercept is the estimated price when `condnew` has a value 0, i.e., when the game is in used condition.
-That is, the average selling price of a used version of the game is \$42.9.
-The slope indicates that, on average, new games sell for about \$10.9 more than used games.
+Der Achsenabschnitt ist der geschätzte Preis, wenn `condnew` den Wert 0 hat, d.h., wenn das Spiel in gebrauchtem Zustand ist.
+Das heißt, der durchschnittliche Verkaufspreis einer gebrauchten Version des Spiels beträgt \$42,90.
+Die Steigung zeigt an, dass neue Spiele im Durchschnitt etwa \$10,90 mehr als gebrauchte Spiele kosten.
 :::
 
 ::: {.important data-latex=""}
-**Interpreting model estimates for categorical predictors.**
+**Interpretation von Modellschätzungen für kategoriale Prädiktoren.**
 
-The estimated intercept is the value of the outcome variable for the first category (i.e., the category corresponding to an indicator value of 0).
-The estimated slope is the average change in the outcome variable between the two categories.
+Der geschätzte Achsenabschnitt ist der Wert der Ergebnisvariablen für die erste Kategorie (d.h. die Kategorie, die einem Indikatorwert von 0 entspricht).
+Die geschätzte Steigung ist die durchschnittliche Änderung der Ergebnisvariablen zwischen den zwei Kategorien.
 :::
 
-Note that, fundamentally, the intercept and slope interpretations do not change when modeling categorical variables with two levels.
-However, when the predictor variable is binary, the coefficient estimates ($b_0$ and $b_1$) are directly interpretable with respect to the dataset at hand.
+Beachten Sie, dass sich die Interpretationen von Achsenabschnitt und Steigung grundsätzlich nicht ändern, wenn kategoriale Variablen mit zwei Ausprägungen modelliert werden.
+Wenn die Prädiktorvariable jedoch binär ist, sind die Koeffizientenschätzungen ($b_0$ und $b_1$) direkt in Bezug auf den vorliegenden Datensatz interpretierbar.
 
-We'll elaborate further on modeling categorical predictors in @sec-model-mlr, where we examine the influence of many predictor variables simultaneously using multiple regression.
+Wir werden die Modellierung kategorialer Prädiktoren in @sec-model-mlr weiter ausführen, wo wir den Einfluss vieler Prädiktorvariablen gleichzeitig mithilfe der multiplen Regression untersuchen.
 
-## Outliers in linear regression {#sec-outliers-in-regression}
+## Ausreißer in der linearen Regression {#sec-outliers-in-regression}
 
-In this section, we discuss when outliers are important and influential.
-Outliers in a regression model with one predictor and one outcome are observations that fall far from the cloud of points.
-These points are especially important because they can have a strong influence on the least squares line.
-Note that there are times when observations are outlying in the $x$ direction, the $y$ direction, or both.
-However, being outlying in a univariate sense (either $x$ or $y$ or both) is not outlying from the bivariate model.
-If the points are in-line with the bivariate model, they will not influence the least squares regression line (even if the observations are outlying in the $x$ or $y$ or both directions!).
+In diesem Abschnitt diskutieren wir, wann Ausreißer wichtig und einflussreich sind.
+Ausreißer in einem Regressionsmodell mit einem Prädiktor und einem Ergebnis sind Beobachtungen, die weit von der Punktwolke entfernt liegen.
+Diese Punkte sind besonders wichtig, weil sie einen starken Einfluss auf die Kleinste-Quadrate-Linie haben können.
+Beachten Sie, dass es Zeiten gibt, in denen Beobachtungen in der $x$-Richtung, der $y$-Richtung oder in beiden ausreißend sind.
+Ausreißend in einem univariaten Sinne (entweder $x$ oder $y$ oder beides) zu sein bedeutet jedoch nicht notwendigerweise, ein Ausreißer im bivariaten Modell zu sein.
+Wenn die Punkte mit dem bivariaten Modell übereinstimmen, werden sie die Kleinste-Quadrate-Regressionslinie nicht beeinflussen (auch wenn die Beobachtungen in der $x$- oder $y$-Richtung oder in beiden ausreißend sind!).
 
 ::: {.workedexample data-latex=""}
-There are three plots shown in @fig-outlier-plots-1 along with the corresponding least squares line and residual plots.
-For each scatterplot and residual plot pair, identify the outliers and note how they influence the least squares line.
-Recall that an outlier is any point that does not appear to belong with the vast majority of the other points.
+In @fig-outlier-plots-1 sind drei Plots zusammen mit der entsprechenden Kleinste-Quadrate-Linie und den Residuenplots gezeigt.
+Identifizieren Sie für jedes Streudiagramm und Residuenplot-Paar die Ausreißer und beachten Sie, wie sie die Kleinste-Quadrate-Linie beeinflussen.
+Denken Sie daran, dass ein Ausreißer jeder Punkt ist, der nicht zur überwältigenden Mehrheit der anderen Punkte zu gehören scheint.
 
 ------------------------------------------------------------------------
 
-A: There is one outlier far from the other points (in the $y$ direction and it is an outlier of the bivariate model), though it only appears to slightly influence the line.
+A: Es gibt einen Ausreißer weit von den anderen Punkten entfernt (in der $y$-Richtung und es ist ein Ausreißer des bivariaten Modells), obwohl er die Linie nur geringfügig zu beeinflussen scheint.
 
-B: There is one outlier on the right (in the $x$ and $y$ direction although it is not an outlier of the bivariate model), though it is quite close to the least squares line, which suggests it wasn't very influential.
+B: Es gibt einen Ausreißer auf der rechten Seite (in der $x$- und $y$-Richtung, obwohl er kein Ausreißer des bivariaten Modells ist), er liegt jedoch ziemlich nahe an der Kleinste-Quadrate-Linie, was darauf hindeutet, dass er nicht sehr einflussreich war.
 
-C: There is one point far away from the cloud (in the $x$ and $y$ direction and an outlier of the bivariate model), and this outlier appears to pull the least squares line up on the right; examine how the line around the primary cloud does not appear to fit very well.
+C: Es gibt einen Punkt weit von der Wolke entfernt (in der $x$- und $y$-Richtung und ein Ausreißer des bivariaten Modells), und dieser Ausreißer scheint die Kleinste-Quadrate-Linie auf der rechten Seite nach oben zu ziehen; man sieht, wie die Linie um die primäre Wolke herum nicht gut zu passen scheint.
 :::
 
 ::: {.workedexample data-latex=""}
-There are three plots shown in @fig-outlier-plots-2 along with the least squares line and residual plots.
-As you did in previous exercise, for each scatterplot and residual plot pair, identify the outliers and note how they influence the least squares line.
-Recall that an outlier is any point that does not appear to belong with the vast majority of the other points. A point can be outlying in the $x$ direction, in the $y$ direction, or in relation to the bivariate model.
+In @fig-outlier-plots-2 sind drei Plots zusammen mit der Kleinste-Quadrate-Linie und den Residuenplots gezeigt.
+Identifizieren Sie, wie in der vorherigen Aufgabe, für jedes Streudiagramm und Residuenplot-Paar die Ausreißer und beachten Sie, wie sie die Kleinste-Quadrate-Linie beeinflussen.
+Denken Sie daran, dass ein Ausreißer jeder Punkt ist, der nicht zur überwältigenden Mehrheit der anderen Punkte zu gehören scheint. Ein Punkt kann in der $x$-Richtung, in der $y$-Richtung oder in Bezug auf das bivariate Modell ausreißend sein.
 
 ------------------------------------------------------------------------
 
-D: There is a primary cloud and then a small secondary cloud of four outliers (with respect to both $x$ and the bivariate model).
-The secondary cloud appears to be influencing the line somewhat strongly, making the least square line fit poorly almost everywhere.
-There might be an interesting explanation for the dual clouds, which is something that could be investigated.
+D: Es gibt eine primäre Wolke und dann eine kleine sekundäre Wolke aus vier Ausreißern (in Bezug auf sowohl $x$ als auch das bivariate Modell).
+Die sekundäre Wolke scheint die Linie stark zu beeinflussen und lässt die Kleinste-Quadrate-Linie fast überall schlecht passen.
+Es könnte eine interessante Erklärung für die doppelte Wolke geben, was etwas ist, das untersucht werden könnte.
 
-E: There is no obvious trend in the main cloud of points and the outlier on the right (with respect to both $x$ and $y$) appears to largely (and problematically) control the slope of the least squares line.
-The point creates a bivariate model when seemingly there is none. 
+E: In der Hauptwolke der Punkte gibt es keinen offensichtlichen Trend, und der Ausreißer auf der rechten Seite (in Bezug auf sowohl $x$ als auch $y$) scheint die Steigung der Kleinste-Quadrate-Linie weitgehend (und problematisch) zu kontrollieren.
+Der Punkt erzeugt ein bivariates Modell, wenn es scheinbar keines gibt.
 
-F: There is one outlier far from the cloud (with respect to both $x$ and $y$).
-However, it falls quite close to the least squares line and does not appear to be very influential (it is not outlying with respect to the bivariate model).
+F: Es gibt einen Ausreißer weit von der Wolke entfernt (in Bezug auf sowohl $x$ als auch $y$).
+Er liegt jedoch ziemlich nahe an der Kleinste-Quadrate-Linie und scheint nicht sehr einflussreich zu sein (er ist kein Ausreißer in Bezug auf das bivariate Modell).
 :::
 
 ```{r}
@@ -1764,22 +1764,22 @@ p_4 + theme(plot.margin = unit(c(0, 10, 5, 0), "pt")) +
 
 \clearpage
 
-Examine the residual plots in @fig-outlier-plots-1 and @fig-outlier-plots-2.
-In Plots C, D, and E, you will probably find that there are a few observations which are both away from the remaining points along the x-axis and not in the trajectory of the trend in the rest of the data.
-In these cases, the outliers influenced the slope of the least squares lines.
-In Plot E, the bulk of the data show no clear trend, but if we fit a line to these data, we impose a trend where there isn't really one.
+Untersuchen Sie die Residuenplots in @fig-outlier-plots-1 und @fig-outlier-plots-2.
+In den Plots C, D und E werden Sie wahrscheinlich feststellen, dass es einige Beobachtungen gibt, die sowohl von den verbleibenden Punkten entlang der x-Achse entfernt sind als auch nicht im Verlauf des Trends des restlichen Datensatzes liegen.
+In diesen Fällen beeinflussten die Ausreißer die Steigung der Kleinste-Quadrate-Linien.
+In Plot E zeigt die Mehrzahl der Daten keinen klaren Trend, aber wenn wir eine Linie an diese Daten anpassen, führen wir einen Trend ein, der eigentlich nicht vorhanden ist.
 
-A good practice for dealing with outlying observations is to produce two analyses: one with and one without the outlying observations. Presenting both analyses to a client and discussing the role of the outlying observations should lead you to a more holistic understanding of the appropriate model for the data.
+Eine gute Praxis beim Umgang mit ausreißenden Beobachtungen ist es, zwei Analysen zu erstellen: eine mit und eine ohne die ausreißenden Beobachtungen. Wenn man einem Kunden beide Analysen präsentiert und die Rolle der ausreißenden Beobachtungen diskutiert, sollte man zu einem umfassenderen Verständnis des geeigneten Modells für die Daten gelangen.
 
 ::: {.important data-latex=""}
-**Leverage.**
+**Hebelwirkung.**
 
-Points that fall horizontally away from the center of the cloud tend to pull harder on the line, so we call them points with **high leverage**\index{high leverage} or **leverage points**\index{leverage point}.
+Punkte, die horizontal weit vom Zentrum der Wolke entfernt liegen, neigen dazu, stärker an der Linie zu ziehen. Wir nennen sie daher Punkte mit **hoher Hebelwirkung**\index{high leverage} oder **Hebelpunkte**\index{leverage point}.
 :::
 
-Points that fall horizontally far from the line are points of high leverage; these points can strongly influence the slope of the least squares line.
-If one of these high leverage points does appear to actually invoke its influence on the slope of the line -- as in Plots C, D, and E of @fig-outlier-plots-1 and @fig-outlier-plots-2 -- then we call it an **influential point**\index{influential point}.
-Usually we can say a point is influential if, had we fitted the line without it, the influential point would have been unusually far from the least squares line.
+Punkte, die horizontal weit von der Linie entfernt liegen, sind Punkte mit hoher Hebelwirkung; diese Punkte können die Steigung der Kleinste-Quadrate-Linie stark beeinflussen.
+Wenn einer dieser Hebelpunkte tatsächlich seinen Einfluss auf die Steigung der Linie ausübt – wie in den Plots C, D und E in @fig-outlier-plots-1 und @fig-outlier-plots-2 – dann nennen wir ihn einen **einflussreichen Punkt**\index{influential point}.
+Normalerweise können wir sagen, dass ein Punkt einflussreich ist, wenn der einflussreiche Punkt ohne ihn ungewöhnlich weit von der Kleinste-Quadrate-Linie entfernt gewesen wäre.
 
 ```{r}
 #| include: false
@@ -1787,35 +1787,35 @@ terms_chp_07 <- c(terms_chp_07, "high leverage", "influential point", "outlier",
 ```
 
 ::: {.important data-latex=""}
-**Types of outliers.**\index{outlier}
+**Arten von Ausreißern.**\index{outlier}
 
-A point (or a group of points) that stands out from the rest of the data is called an outlier.
-Outliers that fall horizontally away from the center of the cloud of points are called leverage points.
-Outliers that influence on the slope of the line are called influential points.
+Ein Punkt (oder eine Gruppe von Punkten), der sich vom Rest der Daten abhebt, wird als Ausreißer bezeichnet.
+Ausreißer, die horizontal weit vom Zentrum der Punktwolke entfernt liegen, werden als Hebelpunkte bezeichnet.
+Ausreißer, die die Steigung der Linie beeinflussen, werden als einflussreiche Punkte bezeichnet.
 :::
 
-It is tempting to remove outliers.
-Don't do this without a very good reason.
-Models that ignore exceptional (and interesting) cases often perform poorly.
-For instance, if a financial firm ignored the largest market swings -- the "outliers" -- they would soon go bankrupt by making poorly thought-out investments.
+Es ist verlockend, Ausreißer zu entfernen.
+Tun Sie dies nicht ohne einen sehr guten Grund.
+Modelle, die außergewöhnliche (und interessante) Fälle ignorieren, funktionieren oft schlecht.
+Wenn ein Finanzunternehmen beispielsweise die größten Marktschwankungen – die „Ausreißer" – ignorieren würde, würde es durch schlecht durchdachte Investitionen bald bankrottgehen.
 
 \clearpage
 
-## Chapter review {#sec-chp7-review}
+## Kapitelrückblick {#sec-chp7-review}
 
-### Summary
+### Zusammenfassung
 
-Throughout this chapter, the nuances of the linear model have been described.
-You have learned how to create a linear model with explanatory variables that are numerical (e.g., total possum length) and those that are categorical (e.g., whether a video game was new).
-The residuals in a linear model are an important metric used to understand how well a model fits; high leverage points, influential points, and other types of outliers can impact the fit of a model.
-Correlation is a measure of the strength and direction of the linear relationship of two variables, without specifying which variable is the explanatory and which is the outcome.
-Future chapters will focus on generalizing the linear model from the sample of data to claims about the population of interest.
+In diesem Kapitel wurden die Feinheiten des linearen Modells beschrieben.
+Sie haben gelernt, wie man ein lineares Modell mit erklärenden Variablen erstellt, die numerisch sind (z.B. Gesamtlänge des Opossums) und solchen, die kategorial sind (z.B. ob ein Videospiel neu war).
+Die Residuen in einem linearen Modell sind eine wichtige Kennzahl, die verwendet wird, um zu verstehen, wie gut ein Modell passt; Punkte mit hoher Hebelwirkung, einflussreiche Punkte und andere Arten von Ausreißern können den Fit eines Modells beeinflussen.
+Die Korrelation ist ein Maß für die Stärke und Richtung der linearen Beziehung zweier Variablen, ohne anzugeben, welche Variable die erklärende und welche die Ergebnisvariable ist.
+Zukünftige Kapitel werden sich darauf konzentrieren, das lineare Modell von der Stichprobe der Daten auf Aussagen über die Zielpopulation zu verallgemeinern.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-07.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-07 aufgeführt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzublättern und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fettgedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-07
@@ -1826,9 +1826,9 @@ make_terms_table(terms_chp_07)
 
 \clearpage
 
-## Exercises {#sec-chp7-exercises}
+## Übungsaufgaben {#sec-chp7-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-07].
+Antworten zu den Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-07].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_07-ex-model-slr.qmd >}}
