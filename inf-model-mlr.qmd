@@ -1,6 +1,6 @@
 # Inferenz für lineare Regression mit mehreren Prädiktoren {#sec-inf-model-mlr}
 
-\chaptermark{Inference for regression with multiple predictors}
+\chaptermark{Inferenz für Regression mit mehreren Prädiktoren}
 
 ```{r}
 #| include: false
