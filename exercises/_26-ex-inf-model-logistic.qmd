@@ -1,24 +1,24 @@
-1.  **Passing the driver's test.** A consulting company is hired to assess whether certain characteristics of a DMV (e.g., location, number of test takers, number of test givers, hours of operation, etc.) are associated with the pass rate of the driver's test.
-    The company is given information on 100 randomly selected DMVs across the country.
-    For each DMV the annual driving test pass rate is recorded, along with other characteristics describing the DMV.
-    Can logistic regression with multiple predictors be used to predict annual driving test pass rate for DMVs in this setting?
-    Explain your reasoning.
+1.  **Bestandene Fahrprüfung.** Ein Beratungsunternehmen wird beauftragt zu beurteilen, ob bestimmte Merkmale einer Führerscheinstelle (z. B. Standort, Anzahl der Prüflinge, Anzahl der Prüfer, Betriebsstunden usw.) mit der Bestehensquote der Fahrprüfung zusammenhängen.
+    Das Unternehmen erhält Informationen über 100 zufällig ausgewählte Führerscheinstellen im ganzen Land.
+    Für jede Führerscheinstelle wird die jährliche Bestehensquote der Fahrprüfung zusammen mit anderen beschreibenden Merkmalen erfasst.
+    Kann logistische Regression mit mehreren Prädiktoren verwendet werden, um die jährliche Bestehensquote der Fahrprüfung für Führerscheinstellen in diesem Umfeld vorherzusagen?
+    Begründen Sie Ihre Antwort.
 
 \vfill
 
-2.  **Oceans and skin cancer.** A researcher wants to investigate the relationship between living within 10 miles of an ocean for at least one year of life and developing skin cancer before the age of 50.
+2.  **Ozeane und Hautkrebs.** Ein Forscher möchte den Zusammenhang zwischen dem mindestens einjährigen Leben innerhalb von 10 Meilen von einem Ozean und der Entwicklung von Hautkrebs vor dem 50. Lebensjahr untersuchen.
 
-    a.  Explain why logistic regression can be used to study the relationship between these two binary variables?
-        What is the technical assumption describing the relationship between the response (outcome) and explanatory (predictor) variables?
+    a.  Erklären Sie, warum logistische Regression verwendet werden kann, um die Beziehung zwischen diesen zwei binären Variablen zu untersuchen.
+        Was ist die technische Voraussetzung, die die Beziehung zwischen der Antwortvariablen (Ergebnis) und den erklärenden (Prädiktor-)Variablen beschreibt?
 
-    b.  What other methods covered in this text might be used to address the research question of interest? What advantages does logistic regression have over these methods?
+    b.  Welche anderen in diesem Text behandelten Methoden könnten verwendet werden, um die interessierende Forschungsfrage zu beantworten? Welche Vorteile hat die logistische Regression gegenüber diesen Methoden?
 
 \vfill
 
-3.  **Marijuana use in college.** Researchers studying whether the value systems of adolescents conflict with those of their parents asked 445 college students if they use marijuana.
-    They also asked the students' parents if they used marijuana when they were in college.
-    Based on the regression output shown below for predicting student drug use from parent drug use, evaluate whether parents' marijuana usage is a discernible predictor of their kids' marijuana usage. 
-    State the hypotheses, the test statistics, the p-value, and the conclusion in context of the data and the research question.[^_26-ex-inf-model-logistic-1]
+3.  **Marihuanakonsum im Studium.** Forscher, die untersuchten, ob die Wertesysteme von Jugendlichen mit denen ihrer Eltern in Konflikt stehen, befragten 445 Studierende, ob sie Marihuana konsumieren.
+    Außerdem wurden die Eltern der Studierenden gefragt, ob sie selbst während ihres Studiums Marihuana konsumiert haben.
+    Beurteilen Sie anhand der unten gezeigten Regressionsausgabe zur Vorhersage des Drogenkonsums von Studierenden aus dem elterlichen Drogenkonsum, ob der Marihuanakonsum der Eltern ein erkennbarer Prädiktor für den Marihuanakonsum ihrer Kinder ist.
+    Formulieren Sie die Hypothesen, die Teststatistiken, den p-Wert und die Schlussfolgerung im Kontext der Daten und der Forschungsfrage.[^_26-ex-inf-model-logistic-1]
     [@Ellis:1979]
 
     ```{r}
@@ -37,9 +37,9 @@
 
 \vfill
 
-4.  **Treating heart attacks.** Researchers studying the effectiveness of Sulfinpyrazone in the prevention of sudden death after a heart attack conducted a randomized experiment on 1,475 patients.
-    Based on the regression output shown below for predicting the outcome (`died` or `lived`, where success is defined as `lived`) from the treatment group (`control` and `treatment`), evaluate whether treatment group is a discernible predictor of the outcome. 
-    State the hypotheses, the test statistics, the p-value, and the conclusion in context of the data and the research question.[^_26-ex-inf-model-logistic-2]
+4.  **Behandlung von Herzinfarkten.** Forscher, die die Wirksamkeit von Sulfinpyrazon zur Prävention des plötzlichen Todes nach einem Herzinfarkt untersuchten, führten ein randomisiertes Experiment mit 1.475 Patienten durch.
+    Beurteilen Sie anhand der unten gezeigten Regressionsausgabe zur Vorhersage des Ergebnisses (`died` oder `lived`, wobei Erfolg als `lived` definiert ist) aus der Behandlungsgruppe (`control` und `treatment`), ob die Behandlungsgruppe ein erkennbarer Prädiktor des Ergebnisses ist.
+    Formulieren Sie die Hypothesen, die Teststatistiken, den p-Wert und die Schlussfolgerung im Kontext der Daten und der Forschungsfrage.[^_26-ex-inf-model-logistic-2]
     [@Anturane:1980]
 
     ```{r}
@@ -58,12 +58,12 @@
 
 \clearpage
 
-5.  **Possum classification, cross-validation.** The common brushtail possum of the Australia region is a bit cuter than its distant cousin, the American opossum.
-    We consider 104 brushtail possums from two regions in Australia, where the possums may be considered a random sample from the population.
-    The first region is Victoria, which is in the eastern half of Australia and traverses the southern coast.
-    The second region consists of New South Wales and Queensland, which make up eastern and northeastern Australia.
-    We use logistic regression to differentiate between possums in these two regions.
-    The outcome variable, called `pop`, takes value 1 when a possum is from Victoria and 0 when it is from New South Wales or Queensland.[^_26-ex-inf-model-logistic-3]
+5.  **Klassifizierung von Opossums, Kreuzvalidierung.** Das gemeine Bürstenschwanz-Opossum in der australischen Region ist etwas niedlicher als sein entfernter Verwandter, das amerikanische Opossum.
+    Wir betrachten 104 Bürstenschwanz-Opossums aus zwei Regionen Australiens, wobei die Opossums als Zufallsstichprobe aus der Grundgesamtheit betrachtet werden können.
+    Die erste Region ist Victoria, die sich in der östlichen Hälfte Australiens befindet und die Südküste durchquert.
+    Die zweite Region besteht aus New South Wales und Queensland, die den östlichen und nordöstlichen Teil Australiens ausmachen.
+    Wir verwenden logistische Regression, um zwischen Opossums aus diesen zwei Regionen zu unterscheiden.
+    Die Ergebnisvariable `pop` nimmt den Wert 1 an, wenn ein Opossum aus Victoria stammt, und 0, wenn es aus New South Wales oder Queensland stammt.[^_26-ex-inf-model-logistic-3]
     
     ```{r}
     possum <- openintro::possum |>
@@ -152,21 +152,21 @@
     
     ::::
 
-    a.  How many observations are in Fold2?
-        Use the model with only tail length as a predictor variable.
-        Of the observations in Fold2, how many of them were correctly predicted to be from Vicotria?
-        How many of them were incorrectly predicted to be from Victoria?
+    a.  Wie viele Beobachtungen befinden sich in Fold2?
+        Verwenden Sie das Modell mit nur der Schwanzlänge als Prädiktorvariable.
+        Wie viele der Beobachtungen in Fold2 wurden korrekt als aus Victoria stammend vorhergesagt?
+        Wie viele wurden fälschlicherweise als aus Victoria stammend vorhergesagt?
 
-    b.  How many observations are used to build the model which predicts for the observations in Fold2?
+    b.  Wie viele Beobachtungen werden verwendet, um das Modell zu erstellen, das für die Beobachtungen in Fold2 vorhersagt?
 
-    c.  For one of the cross-validation folds, how many coefficients were estimated for the model which uses tail length as a predictor?
-        For one of the cross-validation folds, how many coefficients were estimated for the model which uses total length and sex as predictors?
+    c.  Wie viele Koeffizienten wurden für einen der Kreuzvalidierungs-Folds im Modell mit der Schwanzlänge als Prädiktor geschätzt?
+        Wie viele Koeffizienten wurden für einen der Kreuzvalidierungs-Folds im Modell mit der Gesamtlänge und dem Geschlecht als Prädiktoren geschätzt?
 
 \clearpage
 
-6.  **Premature babies, cross-validation.** US Department of Health and Human Services, Centers for Disease Control and Prevention collect information on births recorded in the country.
-    The data used here are a random sample of 1000 births from 2014 (with some rows removed due to missing data).
-    We use logistic regression to model whether the baby is premature from various explanatory variables.[^_26-ex-inf-model-logistic-4]
+6.  **Frühgeborene, Kreuzvalidierung.** Das US-amerikanische Gesundheitsministerium (Department of Health and Human Services, Centers for Disease Control and Prevention) erfasst Informationen zu im Land registrierten Geburten.
+    Die hier verwendeten Daten sind eine Zufallsstichprobe von 1.000 Geburten aus dem Jahr 2014 (wobei einige Zeilen aufgrund fehlender Daten entfernt wurden).
+    Wir verwenden logistische Regression, um zu modellieren, ob ein Baby anhand verschiedener erklärender Variablen zu früh geboren wurde.[^_26-ex-inf-model-logistic-4]
     [@data:births14]
     
     ```{r}
@@ -269,24 +269,24 @@
     :::
     ::::
 
-    a.  How many observations are in Fold2?
-        Use the model with only `weight` and `mature` as predictor variables.
-        Of the observations in Fold2, how many of them were correctly predicted to be premature?
-        How many of them were incorrectly predicted to be premature?
+    a.  Wie viele Beobachtungen befinden sich in Fold2?
+        Verwenden Sie das Modell mit nur `weight` und `mature` als Prädiktorvariablen.
+        Wie viele der Beobachtungen in Fold2 wurden korrekt als Frühgeburten vorhergesagt?
+        Wie viele wurden fälschlicherweise als Frühgeburten vorhergesagt?
 
-    b.  How many observations are used to build the model which predicts for the observations in Fold2?
+    b.  Wie viele Beobachtungen werden verwendet, um das Modell zu erstellen, das für die Beobachtungen in Fold2 vorhersagt?
 
-    c.  In the original dataset, are most of the births premature or full term?
-        Explain.
+    c.  Sind im ursprünglichen Datensatz die meisten Geburten Frühgeburten oder Termingeburten?
+        Erklären Sie.
 
-    d.  For one of the cross-validation folds, how many coefficients were estimated for the model which uses `mage`, `weight`, `mature`, `visits`, `gained`, and `habit` as predictors?
-        For one of the cross-validation folds, how many coefficients were estimated for the model which uses `weight` and `mature` as predictors?
+    d.  Wie viele Koeffizienten wurden für einen der Kreuzvalidierungs-Folds im Modell mit `mage`, `weight`, `mature`, `visits`, `gained` und `habit` als Prädiktoren geschätzt?
+        Wie viele Koeffizienten wurden für einen der Kreuzvalidierungs-Folds im Modell mit `weight` und `mature` als Prädiktoren geschätzt?
 
 \clearpage
 
-7.  **Possum classification, cross-validation to choose model.** In this exercise we consider 104 brushtail possums from two regions in Australia (the first region is Victoria and the second is New South Wales and Queensland), where the possums may be considered a random sample from the population.
-    We use logistic regression to classify the possums into the two regions.
-    The outcome variable, called `pop`, takes value 1 when a possum is from Victoria and 0 when it is from New South Wales or Queensland.
+7.  **Klassifizierung von Opossums, Kreuzvalidierung zur Modellauswahl.** In dieser Aufgabe betrachten wir 104 Bürstenschwanz-Opossums aus zwei Regionen Australiens (die erste Region ist Victoria, die zweite sind New South Wales und Queensland), wobei die Opossums als Zufallsstichprobe aus der Grundgesamtheit betrachtet werden können.
+    Wir verwenden logistische Regression, um die Opossums in die zwei Regionen zu klassifizieren.
+    Die Ergebnisvariable `pop` nimmt den Wert 1 an, wenn ein Opossum aus Victoria stammt, und 0, wenn es aus New South Wales oder Queensland stammt.
     
     ```{r}
     possum <- openintro::possum |>
@@ -375,23 +375,23 @@
     
     ::::
 
-    a.  For the model with tail length, how many of the observations were correctly classified?
-        What proportion of the observations were correctly classified?
+    a.  Wie viele der Beobachtungen wurden beim Modell mit der Schwanzlänge korrekt klassifiziert?
+        Welcher Anteil der Beobachtungen wurde korrekt klassifiziert?
 
-    b.  For the model with total length and sex, how many of the observations were correctly classified?
-        What proportion of the observations were correctly classified?
+    b.  Wie viele der Beobachtungen wurden beim Modell mit der Gesamtlänge und dem Geschlecht korrekt klassifiziert?
+        Welcher Anteil der Beobachtungen wurde korrekt klassifiziert?
 
-    c.  If you have to choose between using only tail length as a predictor versus using total length and sex as predictors (for classification into region), which model would you choose?
-        Explain.
+    c.  Wenn Sie zwischen der Verwendung nur der Schwanzlänge als Prädiktor und der Verwendung der Gesamtlänge und des Geschlechts als Prädiktoren (für die Klassifizierung nach Region) wählen müssten, welches Modell würden Sie wählen?
+        Begründen Sie.
 
-    d.  Given the predictions above, what third model might be preferable to either of the models above?
-        Explain.
+    d.  Welches dritte Modell könnte angesichts der obigen Vorhersagen den beiden oben genannten Modellen vorzuziehen sein?
+        Begründen Sie.
 
 \clearpage
 
-8.  **Premature babies, cross-validation to choose model.** US Department of Health and Human Services, Centers for Disease Control and Prevention collect information on births recorded in the country.
-    The data used here are a random sample of 1000 births from 2014 (with some rows removed due to missing data).
-    We use logistic regression to model whether the baby is premature from various explanatory variables.
+8.  **Frühgeborene, Kreuzvalidierung zur Modellauswahl.** Das US-amerikanische Gesundheitsministerium (Department of Health and Human Services, Centers for Disease Control and Prevention) erfasst Informationen zu im Land registrierten Geburten.
+    Die hier verwendeten Daten sind eine Zufallsstichprobe von 1.000 Geburten aus dem Jahr 2014 (wobei einige Zeilen aufgrund fehlender Daten entfernt wurden).
+    Wir verwenden logistische Regression, um zu modellieren, ob ein Baby anhand verschiedener erklärender Variablen zu früh geboren wurde.
     [@data:births14]
     
     ```{r}
@@ -494,19 +494,19 @@
     :::
     ::::
 
-    a.  For the model with 6 predictors, how many of the observations were correctly classified?
-        What proportion of the observations were correctly classified?
+    a.  Wie viele der Beobachtungen wurden beim Modell mit 6 Prädiktoren korrekt klassifiziert?
+        Welcher Anteil der Beobachtungen wurde korrekt klassifiziert?
 
-    b.  For the model with 2 predictors, how many of the observations were correctly classified?
-        What proportion of the observations were correctly classified?
+    b.  Wie viele der Beobachtungen wurden beim Modell mit 2 Prädiktoren korrekt klassifiziert?
+        Welcher Anteil der Beobachtungen wurde korrekt klassifiziert?
 
-    c.  If you have to choose between the model with 6 predictors and the model with 2 predictors (for predicting whether a baby will be premature), which model would you choose?
-        Explain.
+    c.  Wenn Sie zwischen dem Modell mit 6 Prädiktoren und dem Modell mit 2 Prädiktoren (zur Vorhersage, ob ein Baby zu früh geboren wird) wählen müssten, welches Modell würden Sie wählen?
+        Begründen Sie.
 
-[^_26-ex-inf-model-logistic-1]: The [`drug_use`](http://openintrostat.github.io/openintro/reference/drug_use.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_26-ex-inf-model-logistic-1]: Die [`drug_use`](http://openintrostat.github.io/openintro/reference/drug_use.html)-Daten, die in dieser Aufgabe verwendet werden, befinden sich im R-Paket [**openintro**](http://openintrostat.github.io/openintro).
 
-[^_26-ex-inf-model-logistic-2]: The [`sulphinpyrazone`](http://openintrostat.github.io/openintro/reference/sulphinpyrazone.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_26-ex-inf-model-logistic-2]: Die [`sulphinpyrazone`](http://openintrostat.github.io/openintro/reference/sulphinpyrazone.html)-Daten, die in dieser Aufgabe verwendet werden, befinden sich im R-Paket [**openintro**](http://openintrostat.github.io/openintro).
 
-[^_26-ex-inf-model-logistic-3]: The [`possum`](http://openintrostat.github.io/openintro/reference/possum.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_26-ex-inf-model-logistic-3]: Die [`possum`](http://openintrostat.github.io/openintro/reference/possum.html)-Daten, die in dieser Aufgabe verwendet werden, befinden sich im R-Paket [**openintro**](http://openintrostat.github.io/openintro).
 
-[^_26-ex-inf-model-logistic-4]: The [`births14`](http://openintrostat.github.io/openintro/reference/births14.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_26-ex-inf-model-logistic-4]: Die [`births14`](http://openintrostat.github.io/openintro/reference/births14.html)-Daten, die in dieser Aufgabe verwendet werden, befinden sich im R-Paket [**openintro**](http://openintrostat.github.io/openintro).
