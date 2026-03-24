@@ -1,7 +1,7 @@
-1.  **Body measurements, randomization test.** Researchers studying anthropometry collected body and skeletal diameter measurements, as well as age, weight, height and sex for 507 physically active individuals.
-    A linear model is built to predict height based on shoulder girth (circumference of shoulders measured over deltoid muscles), both measured in centimeters.[^_24-ex-inf-model-slr-1]
-    [@Heinz:2003] Shown below are the linear model output for predicting height from shoulder girth and the histogram of slopes from 1,000 randomized datasets (1,000 times, `hgt` was permuted and regressed against `sho_gi`).
-    The red vertical line is drawn at the observed slope value which was produced in the linear model output.
+1.  **Körpermaße, Randomisierungstest.** Forschende, die Anthropometrie untersuchten, erhoben Körper- und Skelettdurchmesser sowie Alter, Gewicht, Größe und Geschlecht von 507 körperlich aktiven Personen.
+    Ein lineares Modell wird erstellt, um die Körpergröße basierend auf dem Schulterumfang (Umfang der Schultern, gemessen über den Deltamuskeln) vorherzusagen, wobei beide in Zentimetern gemessen werden.[^_24-ex-inf-model-slr-1]
+    [@Heinz:2003] Nachfolgend sind die Ausgabe des linearen Modells zur Vorhersage der Körpergröße aus dem Schulterumfang sowie das Histogramm der Steigungen aus 1.000 randomisierten Datensätzen dargestellt (1.000 Mal wurde `hgt` permutiert und gegen `sho_gi` regressiert).
+    Die rote vertikale Linie ist beim beobachteten Steigungswert eingezeichnet, der in der Ausgabe des linearen Modells erzeugt wurde.
 
     :::: {layout="[0.6, 0.4]"}
 
@@ -44,18 +44,18 @@
     
     \vspace{-5mm}
 
-    a.  What are the null and alternative hypotheses for evaluating whether the slope of the model predicting height from shoulder girth is differen than 0.
+    a.  Wie lauten die Null- und Alternativhypothesen, um zu beurteilen, ob die Steigung des Modells zur Vorhersage der Körpergröße aus dem Schulterumfang von 0 verschieden ist?
 
-    b.  Using the histogram which describes the distribution of slopes when the null hypothesis is true, find the p-value and conclude the hypothesis test in the context of the problem (use words like shoulder girth and height).
+    b.  Bestimmen Sie mithilfe des Histogramms, das die Verteilung der Steigungen beschreibt, wenn die Nullhypothese wahr ist, den p-Wert und ziehen Sie eine Schlussfolgerung aus dem Hypothesentest im Kontext des Problems (verwenden Sie Begriffe wie Schulterumfang und Körpergröße).
 
-    c.  Is the conclusion based on the histogram of randomized slopes consistent with the conclusion from the mathematical model?
-        Explain your reasoning.
+    c.  Ist die Schlussfolgerung basierend auf dem Histogramm der randomisierten Steigungen konsistent mit der Schlussfolgerung aus dem mathematischen Modell?
+        Begründen Sie Ihre Antwort.
 
-2.  **Baby's weight and father's age, randomization test.** US Department of Health and Human Services, Centers for Disease Control and Prevention collect information on births recorded in the country.
-    The data used here are a random sample of 1000 births from 2014.
-    Here, we study the relationship between the father's age and the weight of the baby.[^_24-ex-inf-model-slr-2]
-    [@data:births14] Shown below are the linear model output for predicting baby's weight (in pounds) from father's age (in years) and the histogram of slopes from 1000 randomized datasets (1000 times, `weight` was permuted and regressed against `fage`).
-    The red vertical line is drawn at the observed slope value which was produced in the linear model output.
+2.  **Geburtsgewicht und Alter des Vaters, Randomisierungstest.** Das US-Gesundheitsministerium (US Department of Health and Human Services), Centers for Disease Control and Prevention, sammelt Informationen über im Land registrierte Geburten.
+    Die hier verwendeten Daten sind eine Zufallsstichprobe von 1000 Geburten aus dem Jahr 2014.
+    Hier untersuchen wir den Zusammenhang zwischen dem Alter des Vaters und dem Gewicht des Babys.[^_24-ex-inf-model-slr-2]
+    [@data:births14] Nachfolgend sind die Ausgabe des linearen Modells zur Vorhersage des Gewichts des Babys (in Pfund) aus dem Alter des Vaters (in Jahren) sowie das Histogramm der Steigungen aus 1000 randomisierten Datensätzen dargestellt (1000 Mal wurde `weight` permutiert und gegen `fage` regressiert).
+    Die rote vertikale Linie ist beim beobachteten Steigungswert eingezeichnet, der in der Ausgabe des linearen Modells erzeugt wurde.
 
     :::: {layout="[0.6, 0.4]"}
     :::{#table}
@@ -97,20 +97,19 @@
     ```
     :::
     ::::
-    
     \vspace{-5mm}
 
-    a.  What are the null and alternative hypotheses for evaluating whether the slope of the model for predicting baby's weight from father's age is different than 0?
+    a.  Wie lauten die Null- und Alternativhypothesen, um zu beurteilen, ob die Steigung des Modells zur Vorhersage des Gewichts des Babys aus dem Alter des Vaters von 0 verschieden ist?
 
-    b.  Using the histogram which describes the distribution of slopes when the null hypothesis is true, find the p-value and conclude the hypothesis test in the context of the problem (use words like father's age and weight of baby).
-        What does the conclusion of your test say about whether the father's age is a useful predictor of baby's weight?
+    b.  Bestimmen Sie mithilfe des Histogramms, das die Verteilung der Steigungen beschreibt, wenn die Nullhypothese wahr ist, den p-Wert und ziehen Sie eine Schlussfolgerung aus dem Hypothesentest im Kontext des Problems (verwenden Sie Begriffe wie Alter des Vaters und Gewicht des Babys).
+        Was sagt die Schlussfolgerung Ihres Tests darüber aus, ob das Alter des Vaters ein nützlicher Prädiktor für das Gewicht des Babys ist?
 
-    c.  Is the conclusion based on the histogram of randomized slopes consistent with the conclusion from the mathematical model?
-        Explain your reasoning.
+    c.  Ist die Schlussfolgerung basierend auf dem Histogramm der randomisierten Steigungen konsistent mit der Schlussfolgerung aus dem mathematischen Modell?
+        Begründen Sie Ihre Antwort.
 
 \clearpage
 
-3.  **Body measurements, mathematical test.** The scatterplot and least squares summary below show the relationship between weight measured in kilograms and height measured in centimeters of 507 physically active individuals.
+3.  **Körpermaße, mathematischer Test.** Das Streudiagramm und die Zusammenfassung der Methode der kleinsten Quadrate unten zeigen den Zusammenhang zwischen dem Gewicht in Kilogramm und der Körpergröße in Zentimetern von 507 körperlich aktiven Personen.
     [@Heinz:2003]
     
     :::: {layout="[0.4, 0.6]"}
@@ -149,21 +148,21 @@
     
     ::::
 
-    a.  Describe the relationship between height and weight.
+    a.  Beschreiben Sie den Zusammenhang zwischen Körpergröße und Gewicht.
 
-    b.  Write the equation of the regression line.
-        Interpret the slope and intercept in context.
+    b.  Schreiben Sie die Gleichung der Regressionsgeraden auf.
+        Interpretieren Sie die Steigung und den Achsenabschnitt im Kontext.
 
-    c.  Do the data provide convincing evidence that the true slope parameter is different than 0?
-        State the null and alternative hypotheses, report the p-value (using a mathematical model), and state your conclusion.
+    c.  Liefern die Daten überzeugende Evidenz dafür, dass der wahre Steigungsparameter von 0 verschieden ist?
+        Formulieren Sie die Null- und Alternativhypothesen, berichten Sie den p-Wert (unter Verwendung eines mathematischen Modells) und formulieren Sie Ihre Schlussfolgerung.
 
-    d.  The correlation coefficient for height and weight is `r r_wgt_hgt`.
-        Calculate $R^2$ and interpret it in context.
+    d.  Der Korrelationskoeffizient für Körpergröße und Gewicht beträgt `r r_wgt_hgt`.
+        Berechnen Sie $R^2$ und interpretieren Sie es im Kontext.
 
 \vfill
 
-4.  **Baby's weight and father's age, mathematical test.** Is the father's age useful in predicting the baby's weight?
-    The scatterplot and least squares summary below show the relationship between baby's weight (measured in pounds) and father's age for a random sample of babies.
+4.  **Geburtsgewicht und Alter des Vaters, mathematischer Test.** Ist das Alter des Vaters nützlich, um das Gewicht des Babys vorherzusagen?
+    Das Streudiagramm und die Zusammenfassung der Methode der kleinsten Quadrate unten zeigen den Zusammenhang zwischen dem Gewicht des Babys (gemessen in Pfund) und dem Alter des Vaters für eine Zufallsstichprobe von Babys.
     [@data:births14]
     
     :::: {layout="[0.4, 0.6]"}
@@ -200,20 +199,20 @@
     :::
     ::::
 
-    a.  What is the predicted weight of a baby whose father is 30 years old?
+    a.  Wie hoch ist das vorhergesagte Gewicht eines Babys, dessen Vater 30 Jahre alt ist?
 
-    b.  Do the data provide convincing evidence that the model for predicting baby weights from father's age has a slope different than 0?
-        State the null and alternative hypotheses, report the p-value (using a mathematical model), and state your conclusion.
+    b.  Liefern die Daten überzeugende Evidenz dafür, dass das Modell zur Vorhersage des Gewichts von Babys aus dem Alter des Vaters eine Steigung hat, die von 0 verschieden ist?
+        Formulieren Sie die Null- und Alternativhypothesen, berichten Sie den p-Wert (unter Verwendung eines mathematischen Modells) und formulieren Sie Ihre Schlussfolgerung.
 
-    c.  Based on your conclusion, is father's age a useful predictor of baby's weight?
+    c.  Ist das Alter des Vaters basierend auf Ihrer Schlussfolgerung ein nützlicher Prädiktor für das Gewicht des Babys?
 
 \vfill
 
 \clearpage
 
-5.  **Body measurements, bootstrap percentile interval.** In order to estimate the slope of the model predicting height based on shoulder girth (circumference of shoulders measured over deltoid muscles), 1,000 bootstrap samples are taken from a dataset of body measurements from 507 people.
-    A linear model predicting height based on shoulder girth is fit to each bootstrap sample, and the slope is estimated.
-    A histogram of these slopes is shown below.
+5.  **Körpermaße, Bootstrap-Perzentil-Intervall.** Um die Steigung des Modells zur Vorhersage der Körpergröße basierend auf dem Schulterumfang (Umfang der Schultern, gemessen über den Deltamuskeln) zu schätzen, werden 1.000 Bootstrap-Stichproben aus einem Datensatz mit Körpermaßen von 507 Personen gezogen.
+    An jede Bootstrap-Stichprobe wird ein lineares Modell zur Vorhersage der Körpergröße basierend auf dem Schulterumfang angepasst, und die Steigung wird geschätzt.
+    Ein Histogramm dieser Steigungen ist unten dargestellt.
     [@Heinz:2003]
 
     ```{r}
@@ -232,16 +231,16 @@
       )
     ```
 
-    a.  Using the bootstrap percentile method and the histogram above, find a 98% confidence interval for the slope parameter.
+    a.  Bestimmen Sie mithilfe der Bootstrap-Perzentil-Methode und des obigen Histogramms ein 98%-Konfidenzintervall für den Steigungsparameter.
 
-    b.  Interpret the confidence interval in the context of the problem.
+    b.  Interpretieren Sie das Konfidenzintervall im Kontext des Problems.
 
 \vfill
 
-6.  **Baby's weight and father's age, bootstrap percentile interval.** US Department of Health and Human Services, Centers for Disease Control and Prevention collect information on births recorded in the country.
-    The data used here are a random sample of 1000 births from 2014.
-    Here, we study the relationship between the father's age and the weight of the baby.
-    Below is the bootstrap distribution of the slope statistic from 1,000 different bootstrap samples of the data.
+6.  **Geburtsgewicht und Alter des Vaters, Bootstrap-Perzentil-Intervall.** Das US-Gesundheitsministerium (US Department of Health and Human Services), Centers for Disease Control and Prevention, sammelt Informationen über im Land registrierte Geburten.
+    Die hier verwendeten Daten sind eine Zufallsstichprobe von 1000 Geburten aus dem Jahr 2014.
+    Hier untersuchen wir den Zusammenhang zwischen dem Alter des Vaters und dem Gewicht des Babys.
+    Unten ist die Bootstrap-Verteilung der Steigungsstatistik aus 1.000 verschiedenen Bootstrap-Stichproben der Daten dargestellt.
     [@data:births14]
 
     ```{r}
@@ -261,16 +260,16 @@
       )
     ```
 
-    a.  Using the bootstrap percentile method and the histogram above, find a 95% confidence interval for the slope parameter.
+    a.  Bestimmen Sie mithilfe der Bootstrap-Perzentil-Methode und des obigen Histogramms ein 95%-Konfidenzintervall für den Steigungsparameter.
 
-    b.  Interpret the confidence interval in the context of the problem.
+    b.  Interpretieren Sie das Konfidenzintervall im Kontext des Problems.
 
 \vfill
 
 \clearpage
 
-7.  **Body measurements, standard error bootstrap interval.** A linear model is built to predict height based on shoulder girth (circumference of shoulders measured over deltoid muscles), both measured in centimeters.
-    [@Heinz:2003] Shown below are the linear model output for predicting height from shoulder girth and the bootstrap distribution of the slope statistic from 1,000 different bootstrap samples of the data.
+7.  **Körpermaße, Bootstrap-Standardfehler-Intervall.** Ein lineares Modell wird erstellt, um die Körpergröße basierend auf dem Schulterumfang (Umfang der Schultern, gemessen über den Deltamuskeln) vorherzusagen, wobei beide in Zentimetern gemessen werden.
+    [@Heinz:2003] Nachfolgend sind die Ausgabe des linearen Modells zur Vorhersage der Körpergröße aus dem Schulterumfang sowie die Bootstrap-Verteilung der Steigungsstatistik aus 1.000 verschiedenen Bootstrap-Stichproben der Daten dargestellt.
 
     ```{r}
     lm(hgt ~ sho_gi, data = bdims) |>
@@ -289,11 +288,11 @@
     :::: {layout="[0.48, -0.02, 0.5]"}
 
     :::{#questions}
-    a.  Using the histogram, approximate the standard error of the slope statistic (that is, quantify the variability of the slope statistic from sample to sample).
+    a.  Schätzen Sie mithilfe des Histogramms den Standardfehler der Steigungsstatistik (d. h. quantifizieren Sie die Variabilität der Steigungsstatistik von Stichprobe zu Stichprobe).
 
-    b.  Find a 98% bootstrap SE confidence interval for the slope parameter.
+    b.  Bestimmen Sie ein 98%-Bootstrap-SE-Konfidenzintervall für den Steigungsparameter.
 
-    c.  Interpret the confidence interval in the context of the problem.
+    c.  Interpretieren Sie das Konfidenzintervall im Kontext des Problems.
     :::
     
     :::{#plot}
@@ -318,10 +317,10 @@
 
 \vfill
 
-8.  **Baby's weight and father's age, standard error bootstrap interval.** US Department of Health and Human Services, Centers for Disease Control and Prevention collect information on births recorded in the country.
-    The data used here are a random sample of 1000 births from 2014.
-    Here, we study the relationship between the father's age and the weight of the baby.
-    [@data:births14] Shown below are the linear model output for predicting baby's weight (in pounds) from father's age (in years) and the the bootstrap distribution of the slope statistic from 1000 different bootstrap samples of the data.
+8.  **Geburtsgewicht und Alter des Vaters, Bootstrap-Standardfehler-Intervall.** Das US-Gesundheitsministerium (US Department of Health and Human Services), Centers for Disease Control and Prevention, sammelt Informationen über im Land registrierte Geburten.
+    Die hier verwendeten Daten sind eine Zufallsstichprobe von 1000 Geburten aus dem Jahr 2014.
+    Hier untersuchen wir den Zusammenhang zwischen dem Alter des Vaters und dem Gewicht des Babys.
+    [@data:births14] Nachfolgend sind die Ausgabe des linearen Modells zur Vorhersage des Gewichts des Babys (in Pfund) aus dem Alter des Vaters (in Jahren) sowie die Bootstrap-Verteilung der Steigungsstatistik aus 1000 verschiedenen Bootstrap-Stichproben der Daten dargestellt.
 
     ```{r}
     births14 |>
@@ -342,11 +341,11 @@
     :::: {layout="[0.48, -0.02, 0.5]"}
 
     :::{#questions}
-    a.  Using the histogram, approximate the standard error of the slope statistic (that is, quantify the variability of the slope statistic from sample to sample).
+    a.  Schätzen Sie mithilfe des Histogramms den Standardfehler der Steigungsstatistik (d. h. quantifizieren Sie die Variabilität der Steigungsstatistik von Stichprobe zu Stichprobe).
 
-    b.  Find a 95% bootstrap SE confidence interval for the slope parameter.
+    b.  Bestimmen Sie ein 95%-Bootstrap-SE-Konfidenzintervall für den Steigungsparameter.
 
-    c.  Interpret the confidence interval in the context of the problem.
+    c.  Interpretieren Sie das Konfidenzintervall im Kontext des Problems.
     :::
     
     :::{#plot}
@@ -374,8 +373,8 @@
 
 \clearpage
 
-9.  **Body measurements, conditions.** The scatterplot below shows the residuals (on the y-axis) from the linear model of weight vs. height from a dataset of body measurements from 507 physically active individuals.
-    The x-axis is the height of the individuals, in cm.
+9.  **Körpermaße, Bedingungen.** Das untenstehende Streudiagramm zeigt die Residuen (auf der y-Achse) des linearen Modells von Gewicht vs. Körpergröße aus einem Datensatz mit Körpermaßen von 507 körperlich aktiven Personen.
+    Die x-Achse zeigt die Körpergröße der Personen in cm.
     [@Heinz:2003]
 
     ```{r}
@@ -395,20 +394,20 @@
       )
     ```
 
-    a.  For these data, $R^2$ is `r rsq_uo`%.
-        What is the value of the correlation coefficient?
-        How can you tell if it is positive or negative?
-        (Hint: you may need to look at a previous exercise.)
+    a.  Für diese Daten beträgt $R^2$ `r rsq_uo`%.
+        Wie groß ist der Wert des Korrelationskoeffizienten?
+        Wie können Sie erkennen, ob er positiv oder negativ ist?
+        (Hinweis: Sie müssen möglicherweise eine vorherige Aufgabe betrachten.)
 
-    b.  Examine the residual plot.
-        What do you observe?
-        Is a simple least squares fit appropriate for these data?
-        Which of the LINE conditions are met or not met?
+    b.  Untersuchen Sie das Residuendiagramm.
+        Was beobachten Sie?
+        Ist eine einfache Anpassung mit der Methode der kleinsten Quadrate für diese Daten angemessen?
+        Welche der LINE-Bedingungen (Linearität, Unabhängigkeit, Normalverteilung, gleiche Varianz) sind erfüllt oder nicht erfüllt?
 
 \vfill
 
-10. **Baby's weight and father's age, conditions.** The scatterplot below shows the residuals (on the y-axis) from the linear model of baby's weight (measured in pounds) vs. father's age for a random sample of babies.
-    Father's age is on the x-axis.
+10. **Geburtsgewicht und Alter des Vaters, Bedingungen.** Das untenstehende Streudiagramm zeigt die Residuen (auf der y-Achse) des linearen Modells des Gewichts des Babys (gemessen in Pfund) vs. Alter des Vaters für eine Zufallsstichprobe von Babys.
+    Das Alter des Vaters ist auf der x-Achse dargestellt.
     [@data:births14]
 
     ```{r}
@@ -428,23 +427,23 @@
       )
     ```
 
-    a.  For these data, $R^2$ is `r rsq_uo`%.
-        What is the value of the correlation coefficient?
-        How can you tell if it is positive or negative?
-        (Hint: you may need to look at a previous exercise.)
+    a.  Für diese Daten beträgt $R^2$ `r rsq_uo`%.
+        Wie groß ist der Wert des Korrelationskoeffizienten?
+        Wie können Sie erkennen, ob er positiv oder negativ ist?
+        (Hinweis: Sie müssen möglicherweise eine vorherige Aufgabe betrachten.)
 
-    b.  Examine the residual plot.
-        What do you observe?
-        Is a simple least squares fit appropriate for these data?
-        Which of the LINE conditions are met or not met?
+    b.  Untersuchen Sie das Residuendiagramm.
+        Was beobachten Sie?
+        Ist eine einfache Anpassung mit der Methode der kleinsten Quadrate für diese Daten angemessen?
+        Welche der LINE-Bedingungen (Linearität, Unabhängigkeit, Normalverteilung, gleiche Varianz) sind erfüllt oder nicht erfüllt?
 
 \vfill
 
 \clearpage
 
-11. **Murders and poverty, randomization test.** The following regression output is for predicting annual murders per million (`annual_murders_per_mil`) from percentage living in poverty (`perc_pov`) in a random sample of 20 metropolitan areas.
-    Shown below are the linear model output for predicting annual murders per million from percentage living in poverty for metropolitan areas and the histogram of slopes from 1000 randomized datasets (1000 times, `annual_murders_per_mil` was permuted and regressed against `perc_pov`).
-    The red vertical line is drawn at the observed slope value which was produced in the linear model output.
+11. **Morde und Armut, Randomisierungstest.** Die folgende Regressionsausgabe dient zur Vorhersage der jährlichen Morde pro Million (`annual_murders_per_mil`) aus dem Prozentsatz in Armut Lebender (`perc_pov`) in einer Zufallsstichprobe von 20 Metropolregionen.
+    Nachfolgend sind die Ausgabe des linearen Modells zur Vorhersage der jährlichen Morde pro Million aus dem Prozentsatz in Armut Lebender für Metropolregionen sowie das Histogramm der Steigungen aus 1000 randomisierten Datensätzen dargestellt (1000 Mal wurde `annual_murders_per_mil` permutiert und gegen `perc_pov` regressiert).
+    Die rote vertikale Linie ist beim beobachteten Steigungswert eingezeichnet, der in der Ausgabe des linearen Modells erzeugt wurde.
     
     ```{r}
     lm(annual_murders_per_mil ~ perc_pov, data = murders) |>
@@ -463,12 +462,12 @@
     :::: {layout="[0.48, -0.02, 0.5]"}
     
     :::{#questions}
-    a.  What are the null and alternative hypotheses for evaluating whether the slope of the model for predicting annual murder rate from poverty percentage is different than 0?
+    a.  Wie lauten die Null- und Alternativhypothesen, um zu beurteilen, ob die Steigung des Modells zur Vorhersage der jährlichen Mordrate aus dem Armutsanteil von 0 verschieden ist?
 
-    b.  Using the histogram which describes the distribution of slopes when the null hypothesis is true, find the p-value and conclude the hypothesis test in the context of the problem (use words like murder rate and poverty).
+    b.  Bestimmen Sie mithilfe des Histogramms, das die Verteilung der Steigungen beschreibt, wenn die Nullhypothese wahr ist, den p-Wert und ziehen Sie eine Schlussfolgerung aus dem Hypothesentest im Kontext des Problems (verwenden Sie Begriffe wie Mordrate und Armut).
 
-    c.  Is the conclusion based on the histogram of randomized slopes consistent with the conclusion which would have been obtained using the mathematical model?
-        Explain your reasoning.
+    c.  Ist die Schlussfolgerung basierend auf dem Histogramm der randomisierten Steigungen konsistent mit der Schlussfolgerung, die unter Verwendung des mathematischen Modells erhalten worden wäre?
+        Begründen Sie Ihre Antwort.
     :::
 
     :::{#plot}
@@ -493,7 +492,7 @@
     :::
     ::::
 
-12. **Murders and poverty, mathematical test.** The table below shows the output of a linear model annual murders per million (`annual_murders_per_mil`) from percentage living in poverty (`perc_pov`) in a random sample of 20 metropolitan areas.
+12. **Morde und Armut, mathematischer Test.** Die untenstehende Tabelle zeigt die Ausgabe eines linearen Modells zur Vorhersage der jährlichen Morde pro Million (`annual_murders_per_mil`) aus dem Prozentsatz in Armut Lebender (`perc_pov`) in einer Zufallsstichprobe von 20 Metropolregionen.
 
     ```{r}
     lm(annual_murders_per_mil ~ perc_pov, data = murders) |>
@@ -509,22 +508,22 @@
       column_spec(2:5, width = "5em")
     ```
 
-    a.  What are the hypotheses for evaluating whether the slope of the model predicting annual murder rate from poverty percentage is different than 0?
+    a.  Wie lauten die Hypothesen, um zu beurteilen, ob die Steigung des Modells zur Vorhersage der jährlichen Mordrate aus dem Armutsanteil von 0 verschieden ist?
 
-    b.  State the conclusion of the hypothesis test from part (a) in context.
-        What does this say about whether poverty percentage is a useful predictor of annual murder rate?
+    b.  Formulieren Sie die Schlussfolgerung des Hypothesentests aus Teil (a) im Kontext.
+        Was sagt dies darüber aus, ob der Armutsanteil ein nützlicher Prädiktor für die jährliche Mordrate ist?
 
-    c.  Calculate a 95% confidence interval for the slope of poverty percentage, and interpret it in context.
+    c.  Berechnen Sie ein 95%-Konfidenzintervall für die Steigung des Armutsanteils und interpretieren Sie es im Kontext.
 
-    d.  Do your results from the hypothesis test and the confidence interval agree?
-        Explain your reasoning.
+    d.  Stimmen Ihre Ergebnisse aus dem Hypothesentest und dem Konfidenzintervall überein?
+        Begründen Sie Ihre Antwort.
 
 \clearpage
 
-13. **Murders and poverty, bootstrap percentile interval.** Data on annual murders per million (`annual_murders_per_mil`) and percentage living in poverty (`perc_pov`) is collected from a random sample of 20 metropolitan areas.
-    Using these data we want to estimate the slope of the model predicting `annual_murders_per_mil` from `perc_pov`.
-    We take 1,000 bootstrap samples of the data and fit a linear model predicting `annual_murders_per_mil` from `perc_pov` to each bootstrap sample.
-    A histogram of these slopes is shown below.
+13. **Morde und Armut, Bootstrap-Perzentil-Intervall.** Daten über jährliche Morde pro Million (`annual_murders_per_mil`) und den Prozentsatz in Armut Lebender (`perc_pov`) werden aus einer Zufallsstichprobe von 20 Metropolregionen erhoben.
+    Mithilfe dieser Daten möchten wir die Steigung des Modells zur Vorhersage von `annual_murders_per_mil` aus `perc_pov` schätzen.
+    Wir ziehen 1.000 Bootstrap-Stichproben der Daten und passen an jede Bootstrap-Stichprobe ein lineares Modell zur Vorhersage von `annual_murders_per_mil` aus `perc_pov` an.
+    Ein Histogramm dieser Steigungen ist unten dargestellt.
 
     ```{r}
     #| fig-asp: 0.4
@@ -542,12 +541,12 @@
       )
     ```
 
-    a.  Using the percentile bootstrap method and the histogram above, find a 90% confidence interval for the slope parameter.
+    a.  Bestimmen Sie mithilfe der Bootstrap-Perzentil-Methode und des obigen Histogramms ein 90%-Konfidenzintervall für den Steigungsparameter.
 
-    b.  Interpret the confidence interval in the context of the problem.
+    b.  Interpretieren Sie das Konfidenzintervall im Kontext des Problems.
 
-14. **Murders and poverty, standard error bootstrap interval.** A linear model is built to predict annual murders per million (`annual_murders_per_mil`) from percentage living in poverty (`perc_pov`) in a random sample of 20 metropolitan areas.
-    Shown below are the standard linear model output for predicting annual murders per million from percentage living in poverty for metropolitan areas and the bootstrap distribution of the slope statistic from 1000 different bootstrap samples of the data.
+14. **Morde und Armut, Bootstrap-Standardfehler-Intervall.** Ein lineares Modell wird erstellt, um die jährlichen Morde pro Million (`annual_murders_per_mil`) aus dem Prozentsatz in Armut Lebender (`perc_pov`) in einer Zufallsstichprobe von 20 Metropolregionen vorherzusagen.
+    Nachfolgend sind die Ausgabe des linearen Standardmodells zur Vorhersage der jährlichen Morde pro Million aus dem Prozentsatz in Armut Lebender für Metropolregionen sowie die Bootstrap-Verteilung der Steigungsstatistik aus 1000 verschiedenen Bootstrap-Stichproben der Daten dargestellt.
 
     ```{r}
     #| fig-asp: 0.4
@@ -577,16 +576,16 @@
       )
     ```
 
-    a.  Using the histogram, approximate the standard error of the slope statistic (that is, quantify the variability of the slope statistic from sample to sample).
+    a.  Schätzen Sie mithilfe des Histogramms den Standardfehler der Steigungsstatistik (d. h. quantifizieren Sie die Variabilität der Steigungsstatistik von Stichprobe zu Stichprobe).
 
-    b.  Find a 90% bootstrap SE confidence interval for the slope parameter.
+    b.  Bestimmen Sie ein 90%-Bootstrap-SE-Konfidenzintervall für den Steigungsparameter.
 
-    c.  Interpret the confidence interval in the context of the problem.
+    c.  Interpretieren Sie das Konfidenzintervall im Kontext des Problems.
 
 \clearpage
 
-15. **Murders and poverty, conditions.** The scatterplot below shows the annual murders per million vs. percentage living in poverty in a random sample of 20 metropolitan areas.
-    The second figure plots residuals on the y-axis and percent living in poverty on the x-axis.
+15. **Morde und Armut, Bedingungen.** Das untenstehende Streudiagramm zeigt die jährlichen Morde pro Million vs. den Prozentsatz in Armut Lebender in einer Zufallsstichprobe von 20 Metropolregionen.
+    Die zweite Abbildung zeigt die Residuen auf der y-Achse und den Prozentsatz in Armut Lebender auf der x-Achse.
 
     ```{r}
     #| out-width: 100%
@@ -617,19 +616,19 @@
       )
     ```
 
-    a.  For these data, $R^2$ is `r rsq_uo`%.
-        What is the value of the correlation coefficient?
-        How can you tell if it is positive or negative?
+    a.  Für diese Daten beträgt $R^2$ `r rsq_uo`%.
+        Wie groß ist der Wert des Korrelationskoeffizienten?
+        Wie können Sie erkennen, ob er positiv oder negativ ist?
 
-    b.  Examine the residual plot.
-        What do you observe?
-        Is a simple least squares fit appropriate for the data?
-        Which of the LINE conditions are met or not met?
+    b.  Untersuchen Sie das Residuendiagramm.
+        Was beobachten Sie?
+        Ist eine einfache Anpassung mit der Methode der kleinsten Quadrate für die Daten angemessen?
+        Welche der LINE-Bedingungen (Linearität, Unabhängigkeit, Normalverteilung, gleiche Varianz) sind erfüllt oder nicht erfüllt?
 
 \vfill
 
-16. **I heart cats.** Researchers collected data on heart and body weights of 144 domestic adult cats.
-    The table below shows the output of a linear model predicting heart weight (measured in grams) from body weight (measured in kilograms) of these cats.[^_24-ex-inf-model-slr-3]
+16. **Ich liebe Katzen.** Forschende erhoben Daten zu Herz- und Körpergewicht von 144 erwachsenen Hauskatzen.
+    Die untenstehende Tabelle zeigt die Ausgabe eines linearen Modells zur Vorhersage des Herzgewichts (gemessen in Gramm) aus dem Körpergewicht (gemessen in Kilogramm) dieser Katzen.[^_24-ex-inf-model-slr-3]
 
     ```{r}
     m_cat <- lm(Hwt ~ Bwt, data = cats)
@@ -646,24 +645,24 @@
       column_spec(2:5, width = "5em")
     ```
 
-    a.  What are the hypotheses for evaluating whether body weight is positively associated with heart weight in cats?
+    a.  Wie lauten die Hypothesen, um zu beurteilen, ob das Körpergewicht positiv mit dem Herzgewicht bei Katzen zusammenhängt?
 
-    b.  State the conclusion of the hypothesis test from part (a) in context.
+    b.  Formulieren Sie die Schlussfolgerung des Hypothesentests aus Teil (a) im Kontext.
 
-    c.  Calculate a 95% confidence interval for the slope of body weight, and interpret it in context.
+    c.  Berechnen Sie ein 95%-Konfidenzintervall für die Steigung des Körpergewichts und interpretieren Sie es im Kontext.
 
-    d.  Do your results from the hypothesis test and the confidence interval agree?
-        Explain your reasoning.
+    d.  Stimmen Ihre Ergebnisse aus dem Hypothesentest und dem Konfidenzintervall überein?
+        Begründen Sie Ihre Antwort.
 
 \vfill
 
 \clearpage
 
-17. **Beer and blood alcohol content.** Many people believe that weight, drinking habits, and many other factors are much more important in predicting blood alcohol content (BAC) than simply considering the number of drinks a person consumed.
-    Here we examine data from sixteen student volunteers at Ohio State University who each drank a randomly assigned number of cans of beer.
-    These students were evenly divided between men and women, and they differed in weight and drinking habits.
-    Thirty minutes later, a police officer measured their blood alcohol content (BAC) in grams of alcohol per deciliter of blood.
-    The scatterplot and regression table summarize the findings.
+17. **Bier und Blutalkoholgehalt.** Viele Menschen glauben, dass Gewicht, Trinkgewohnheiten und viele andere Faktoren bei der Vorhersage des Blutalkoholgehalts (BAK) viel wichtiger sind als die bloße Betrachtung der Anzahl der konsumierten Getränke.
+    Hier untersuchen wir Daten von sechzehn studentischen Freiwilligen an der Ohio State University, die jeweils eine zufällig zugewiesene Anzahl von Dosen Bier tranken.
+    Diese Studierenden waren gleichmäßig auf Männer und Frauen aufgeteilt und unterschieden sich in Gewicht und Trinkgewohnheiten.
+    Dreißig Minuten später maß ein Polizeibeamter ihren Blutalkoholgehalt (BAK) in Gramm Alkohol pro Deziliter Blut.
+    Das Streudiagramm und die Regressionstabelle fassen die Ergebnisse zusammen.
     [^_24-ex-inf-model-slr-4] [@Malkevitc+Lesser:2008]
 
     ```{r}
@@ -690,27 +689,27 @@
       column_spec(2:5, width = "5em")
     ```
 
-    a.  Describe the relationship between the number of cans of beer and BAC.
+    a.  Beschreiben Sie den Zusammenhang zwischen der Anzahl der Bierdosen und dem BAK.
 
-    b.  Write the equation of the regression line.
-        Interpret the slope and intercept in context.
+    b.  Schreiben Sie die Gleichung der Regressionsgeraden auf.
+        Interpretieren Sie die Steigung und den Achsenabschnitt im Kontext.
 
-    c.  Do the data provide convincing evidence that drinking more cans of beer is associated with an increase in blood alcohol?
-        State the null and alternative hypotheses, report the p-value, and state your conclusion.
+    c.  Liefern die Daten überzeugende Evidenz dafür, dass das Trinken von mehr Bierdosen mit einem Anstieg des Blutalkoholgehalts verbunden ist?
+        Formulieren Sie die Null- und Alternativhypothesen, berichten Sie den p-Wert und formulieren Sie Ihre Schlussfolgerung.
 
-    d.  The correlation coefficient for number of cans of beer and BAC is `r r_bac`.
-        Calculate $R^2$ and interpret it in context.
+    d.  Der Korrelationskoeffizient für die Anzahl der Bierdosen und den BAK beträgt `r r_bac`.
+        Berechnen Sie $R^2$ und interpretieren Sie es im Kontext.
 
-    e.  Suppose we visit a bar in our own town, ask people how many drinks they have had, and also measure their BAC.
-        Would the relationship between number of drinks and BAC would be as strong as the relationship found in the Ohio State study?
-        Why?
+    e.  Angenommen, wir besuchen eine Bar in unserer eigenen Stadt, fragen die Leute, wie viele Getränke sie hatten, und messen ebenfalls ihren BAK.
+        Wäre der Zusammenhang zwischen der Anzahl der Getränke und dem BAK genauso stark wie der in der Ohio-State-Studie gefundene Zusammenhang?
+        Warum?
 
 \clearpage
 
-18. **Urban homeowners, conditions.** The scatterplot below shows the percent of families who own their home vs. the percent of the population living in urban areas.
-    [@data:urbanOwner] There are 52 observations, each corresponding to a state in the US.
-    Puerto Rico and District of Columbia are also included.
-    The second figure plots residuals on the y-axis and percent of the population living in urban areas on the x-axis.
+18. **Städtische Eigenheimbesitzer, Bedingungen.** Das untenstehende Streudiagramm zeigt den Anteil der Familien, die Eigenheimbesitzer sind, vs. den Anteil der Bevölkerung, der in städtischen Gebieten lebt.
+    [@data:urbanOwner] Es gibt 52 Beobachtungen, die jeweils einem US-Bundesstaat entsprechen.
+    Puerto Rico und der District of Columbia sind ebenfalls enthalten.
+    Die zweite Abbildung zeigt die Residuen auf der y-Achse und den Anteil der Bevölkerung in städtischen Gebieten auf der x-Achse.
 
     ```{r}
     #| out-width: 100%
@@ -741,19 +740,19 @@
       )
     ```
 
-    a.  For these data, $R^2$ is `r rsq_uo`%.
-        What is the value of the correlation coefficient?
-        How can you tell if it is positive or negative?
+    a.  Für diese Daten beträgt $R^2$ `r rsq_uo`%.
+        Wie groß ist der Wert des Korrelationskoeffizienten?
+        Wie können Sie erkennen, ob er positiv oder negativ ist?
 
-    b.  Examine the residual plot.
-        What do you observe?
-        Is a simple least squares fit appropriate for the data?
-        Which of the LINE conditions are met or not met?
+    b.  Untersuchen Sie das Residuendiagramm.
+        Was beobachten Sie?
+        Ist eine einfache Anpassung mit der Methode der kleinsten Quadrate für die Daten angemessen?
+        Welche der LINE-Bedingungen (Linearität, Unabhängigkeit, Normalverteilung, gleiche Varianz) sind erfüllt oder nicht erfüllt?
 
 \vfill
 
-19. **I heart cats, LINE conditions.** Researchers collected data on heart and body weights of 144 domestic adult cats.
-    The figure below shows the output of the predicted values and residuals generated from a linear model predicting heart weight (measured in grams) from body weight (measured in kilograms) of these cats.
+19. **Ich liebe Katzen, LINE-Bedingungen.** Forschende erhoben Daten zu Herz- und Körpergewicht von 144 erwachsenen Hauskatzen.
+    Die untenstehende Abbildung zeigt die Ausgabe der vorhergesagten Werte und Residuen, die aus einem linearen Modell zur Vorhersage des Herzgewichts (gemessen in Gramm) aus dem Körpergewicht (gemessen in Kilogramm) dieser Katzen erzeugt wurden.
 
     ```{r}
     #| fig-asp: 0.5
@@ -766,18 +765,18 @@
       labs(x = "Predicted values", y = "Residuals")
     ```
 
-    a.  Examine the residual plot.
-        Notice that for the small predicted values the residuals have a smaller magnitude than the larger residuals seen with the larger predicted values.
-        The change in magnitude of the residuals across the predicted values is an indication of violation of which LINE technical condition?
+    a.  Untersuchen Sie das Residuendiagramm.
+        Beachten Sie, dass bei den kleinen vorhergesagten Werten die Residuen eine geringere Größenordnung haben als die größeren Residuen, die bei den größeren vorhergesagten Werten zu sehen sind.
+        Die Änderung der Größenordnung der Residuen über die vorhergesagten Werte hinweg ist ein Hinweis auf eine Verletzung welcher technischen LINE-Bedingung?
 
-    b.  If the LINE condtion described in part (a) is violated, might it lead to an incorrect conclusion about the model (i.e., the least squares regression line itself), the inference of the model (i.e., the p-value associated with the least squares regression line), neither, or both?
-        Explain your reasoning.
+    b.  Wenn die in Teil (a) beschriebene LINE-Bedingung verletzt ist, könnte dies zu einer falschen Schlussfolgerung über das Modell (d. h. die Regressionsgerade der kleinsten Quadrate selbst), die Inferenz des Modells (d. h. den p-Wert, der mit der Regressionsgeraden der kleinsten Quadrate verbunden ist), weder noch oder beides führen?
+        Begründen Sie Ihre Antwort.
 
 \vfill
 
 \clearpage
 
-20. **Beer and blood alcohol content, LINE conditions.** The figure below shows the output of the predicted values and residuals generated from a linear model predicting the blood alcohol content (BAC) from number of cans of beer drunk by sixteen student volunteers at Ohio State University.[^_24-ex-inf-model-slr-5]
+20. **Bier und Blutalkoholgehalt, LINE-Bedingungen.** Die untenstehende Abbildung zeigt die Ausgabe der vorhergesagten Werte und Residuen, die aus einem linearen Modell zur Vorhersage des Blutalkoholgehalts (BAK) aus der Anzahl der getrunkenen Bierdosen erzeugt wurden, basierend auf sechzehn studentischen Freiwilligen an der Ohio State University.[^_24-ex-inf-model-slr-5]
     [@Malkevitc+Lesser:2008]
 
     ```{r}
@@ -790,19 +789,19 @@
       labs(x = "Predicted values", y = "Residuals")
     ```
 
-    a.  Examine the residual plot.
-        Notice that it is difficult to identify any convincing patterns for or against violation of the LINE technical conditions.
-        What is it about the residual plot that makes it difficult to assess the LINE technical conditions?
+    a.  Untersuchen Sie das Residuendiagramm.
+        Beachten Sie, dass es schwierig ist, überzeugende Muster für oder gegen eine Verletzung der technischen LINE-Bedingungen zu erkennen.
+        Was ist es am Residuendiagramm, das die Beurteilung der technischen LINE-Bedingungen erschwert?
 
-    b.  Is there anything about the residual plot which would make you hesitate about using the linear model for inference about all students?
-        Is there anything about the experimental design of the study which would make you hesitate about using the linear model for inference about all students?
+    b.  Gibt es etwas am Residuendiagramm, das Sie zögern lassen würde, das lineare Modell für Inferenz über alle Studierenden zu verwenden?
+        Gibt es etwas am experimentellen Design der Studie, das Sie zögern lassen würde, das lineare Modell für Inferenz über alle Studierenden zu verwenden?
 
-[^_24-ex-inf-model-slr-1]: The [`bdims`](http://openintrostat.github.io/openintro/reference/bdims.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_24-ex-inf-model-slr-1]: Der Datensatz [`bdims`](http://openintrostat.github.io/openintro/reference/bdims.html), der in dieser Aufgabe verwendet wird, ist im R-Paket [**openintro**](http://openintrostat.github.io/openintro) enthalten.
 
-[^_24-ex-inf-model-slr-2]: The [`births14`](http://openintrostat.github.io/openintro/reference/births14.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_24-ex-inf-model-slr-2]: Der Datensatz [`births14`](http://openintrostat.github.io/openintro/reference/births14.html), der in dieser Aufgabe verwendet wird, ist im R-Paket [**openintro**](http://openintrostat.github.io/openintro) enthalten.
 
-[^_24-ex-inf-model-slr-3]: The [`cats`](https://stat.ethz.ch/R-manual/R-patched/library/MASS/html/cats.html) data used in this exercise can be found in the [**MASS**](https://cran.r-project.org/web/packages/MASS/index.html) R package.
+[^_24-ex-inf-model-slr-3]: Der Datensatz [`cats`](https://stat.ethz.ch/R-manual/R-patched/library/MASS/html/cats.html), der in dieser Aufgabe verwendet wird, ist im R-Paket [**MASS**](https://cran.r-project.org/web/packages/MASS/index.html) enthalten.
 
-[^_24-ex-inf-model-slr-4]: The [`bac`](http://openintrostat.github.io/openintro/reference/bac.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_24-ex-inf-model-slr-4]: Der Datensatz [`bac`](http://openintrostat.github.io/openintro/reference/bac.html), der in dieser Aufgabe verwendet wird, ist im R-Paket [**openintro**](http://openintrostat.github.io/openintro) enthalten.
 
-[^_24-ex-inf-model-slr-5]: The [`bac`](http://openintrostat.github.io/openintro/reference/bac.html) data used in this exercise can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+[^_24-ex-inf-model-slr-5]: Der Datensatz [`bac`](http://openintrostat.github.io/openintro/reference/bac.html), der in dieser Aufgabe verwendet wird, ist im R-Paket [**openintro**](http://openintrostat.github.io/openintro) enthalten.
