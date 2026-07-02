@@ -1,11 +1,11 @@
-# Foundations of inference {#sec-foundations .unnumbered}
+# Grundlagen der Inferenz {#sec-foundations .unnumbered}
 
-Among the key concepts in statistics is making conclusions about a population using information in a sample; the process is called statistical inference. By using computational methods as well as well-developed mathematical theory, we can understand how one dataset differs from a different dataset — even when the two datasets have been collected under identical settings. In this part, we will walk through the key concepts and terms which will be applied more explicitly in later chapters.
+Zu den zentralen Konzepten der Statistik gehört das Ziehen von Schlussfolgerungen über eine Grundgesamtheit anhand von Informationen in einer Stichprobe; dieser Prozess wird als statistische Inferenz bezeichnet. Durch den Einsatz von computergestützten Methoden sowie einer gut entwickelten mathematischen Theorie können wir verstehen, wie sich ein Datensatz von einem anderen unterscheidet – selbst wenn die beiden Datensätze unter identischen Bedingungen erhoben wurden. In diesem Teil werden wir die zentralen Konzepte und Begriffe durcharbeiten, die in späteren Kapiteln expliziter angewendet werden.
 
-- [Chapter -@sec-foundations-randomization] describes randomization which involves repeatedly permuting observations to represent scenarios in which there is no association between two variables of interest.
-- [Chapter -@sec-foundations-bootstrapping] describes bootstrapping which involves repeatedly sampling (with replacement) from the observed data in order to produce many samples which are similar to, but different from, the original data.
-- [Chapter -@sec-foundations-mathematical] introduces the Central Limit Theorem which is a theoretical mathematical approximation to the variability in data seen through randomization and bootstrapping.
-- In [Chapter -@sec-foundations-decision-errors] you will be presented with a structure for describing when and how errors can happen within statistical inference.
-- [Chapter -@sec-foundations-applications] includes an application on the Malaria vaccine case study where the topics from this part of the book are fully developed.
+- [Chapter -@sec-foundations-randomization] beschreibt die Randomisierung, bei der Beobachtungen wiederholt permutiert werden, um Szenarien darzustellen, in denen es keine Assoziation zwischen zwei interessierenden Variablen gibt.
+- [Chapter -@sec-foundations-bootstrapping] beschreibt das Bootstrapping, bei dem wiederholt (mit Zurücklegen) aus den beobachteten Daten gezogen wird, um viele Stichproben zu erzeugen, die den Originaldaten ähnlich, aber nicht identisch sind.
+- [Chapter -@sec-foundations-mathematical] führt den Zentralen Grenzwertsatz ein, der eine theoretische mathematische Annäherung an die durch Randomisierung und Bootstrapping beobachtete Variabilität in den Daten darstellt.
+- In [Chapter -@sec-foundations-decision-errors] wird Ihnen eine Struktur zur Beschreibung vorgestellt, wann und wie Fehler innerhalb der statistischen Inferenz auftreten können.
+- [Chapter -@sec-foundations-applications] enthält eine Anwendung zur Fallstudie „Malaria-Impfstoff", in der die Themen aus diesem Teil des Buches vollständig entwickelt werden.
 
-Although often computational and mathematical methods are both appropriate (and give similar results), your study of both approaches should convince you that (1) there is almost never a single "correct" approach, and (2) there are different ways to quantify the variability seen from dataset to dataset.
+Obwohl computergestützte und mathematische Methoden häufig beide geeignet sind (und ähnliche Ergebnisse liefern), sollte Ihnen das Studium beider Ansätze davon überzeugen, dass (1) es fast nie einen einzigen „richtigen" Ansatz gibt, und (2) es verschiedene Möglichkeiten gibt, die von Datensatz zu Datensatz beobachtete Variabilität zu quantifizieren.

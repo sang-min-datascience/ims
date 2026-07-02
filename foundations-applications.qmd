@@ -1,17 +1,17 @@
-# Applications: Foundations {#sec-foundations-applications}
+# Anwendungen: Grundlagen der Inferenz {#sec-foundations-applications}
 
 ```{r}
 #| include: false
 source("_common.R")
 ```
 
-## Recap: Foundations {#sec-foundations-sec-summary}
+## Rückblick: Grundlagen der Inferenz {#sec-foundations-sec-summary}
 
-In the foundations of inference chapters, we have provided three different methods for statistical inference.
-We will continue to build on all three of the methods throughout the text, and by the end, you should have an understanding of the similarities and differences between them.
-Meanwhile, it is important to note that the methods are designed to mimic variability with data, and we know that variability can come from different sources (e.g., random sampling vs. random allocation, see @fig-randsampValloc).
-In @tbl-foundations-summary, we have summarized some of the ways the inferential procedures feature specific sources of variability.
-We hope that you refer back to the table often as you dive more deeply into inferential ideas in future chapters.
+In den Kapiteln zu den Grundlagen der Inferenz haben wir drei verschiedene Methoden für die statistische Inferenz vorgestellt.
+Wir werden im gesamten Text auf alle drei Methoden aufbauen, und am Ende sollten Sie ein Verständnis für ihre Gemeinsamkeiten und Unterschiede entwickelt haben.
+Dabei ist es wichtig zu beachten, dass die Methoden darauf ausgelegt sind, die Variabilität von Daten nachzuahmen, und wir wissen, dass Variabilität aus verschiedenen Quellen stammen kann (z. B. Zufallsstichprobe vs. zufällige Zuweisung, siehe @fig-randsampValloc).
+In @tbl-foundations-summary haben wir einige der Möglichkeiten zusammengefasst, wie die Inferenzverfahren spezifische Variabilitätsquellen berücksichtigen.
+Wir hoffen, dass Sie immer wieder auf diese Tabelle zurückgreifen, wenn Sie in zukünftigen Kapiteln tiefer in Inferenzkonzepte eintauchen.
 
 ```{r}
 #| label: tbl-foundations-summary
@@ -33,57 +33,57 @@ inference_method_summary_table |>
   add_header_above(c("", "Answer" = 3))
 ```
 
-You might have noticed that the word *distribution* is used throughout this part (and will continue to be used in future chapters).
-A distribution always describes variability, but sometimes it is worth reflecting on *what* is varying.
-Typically the distribution either describes how the observations vary or how a statistic varies.
-But even when describing how a statistic varies, there is a further consideration with respect to the study design, e.g., does the statistic vary from random sample to random sample or does it vary from random allocation to random allocation?
-The methods presented in this text (and used in science generally) are typically used interchangeably across ideas of random samples or random allocations of the treatment.
-Often, the two different analysis methods will give equivalent conclusions.
-The most important thing to consider is how to contextualize the conclusion in terms of the problem.
-See @fig-randsampValloc to confirm that your conclusions are appropriate.
+Vielleicht ist Ihnen aufgefallen, dass das Wort *Verteilung* in diesem Teil durchgehend verwendet wird (und in zukünftigen Kapiteln weiterhin verwendet werden wird).
+Eine Verteilung beschreibt immer Variabilität, aber manchmal lohnt es sich zu überlegen, *was* variiert.
+Typischerweise beschreibt die Verteilung entweder, wie die Beobachtungen variieren, oder wie eine Statistik variiert.
+Aber selbst bei der Beschreibung, wie eine Statistik variiert, gibt es eine weitere Überlegung bezüglich des Studiendesigns, z. B.: variiert die Statistik von Zufallsstichprobe zu Zufallsstichprobe oder von zufälliger Zuweisung zu zufälliger Zuweisung?
+Die in diesem Text (und generell in der Wissenschaft) verwendeten Methoden werden typischerweise austauschbar über Ideen von Zufallsstichproben oder zufälligen Behandlungszuweisungen hinweg eingesetzt.
+Oft werden die beiden verschiedenen Analysemethoden äquivalente Schlussfolgerungen liefern.
+Das Wichtigste ist, die Schlussfolgerung im Kontext des Problems zu kontextualisieren.
+Sehen Sie sich @fig-randsampValloc an, um sicherzustellen, dass Ihre Schlussfolgerungen angemessen sind.
 
-Below, we synthesize the different types of distributions discussed throughout the text.
-Reading through the different definitions and solidifying your understanding will help as you come across these distributions in future chapters and you can always return back here to refresh your understanding of the differences between the various distributions.
+Im Folgenden fassen wir die verschiedenen Typen von Verteilungen zusammen, die im Text diskutiert werden.
+Das Durchlesen der verschiedenen Definitionen und das Festigen Ihres Verständnisses wird helfen, wenn Sie diesen Verteilungen in zukünftigen Kapiteln begegnen, und Sie können jederzeit hierher zurückkehren, um Ihr Verständnis der Unterschiede zwischen den verschiedenen Verteilungen aufzufrischen.
 
 ::: {.important data-latex=""}
-**Distributions.**
+**Verteilungen.**
 
--   A **data distribution** describes the shape, center, and variability of the **observed data**.
+-   Eine **Datenverteilung** beschreibt Form, Zentrum und Variabilität der **beobachteten Daten**.
 
-    This can also be referred to as the **sample distribution** but we'll avoid that phrase as it sounds too much like sampling distribution, which is different.
+    Dies kann auch als **Stichprobenverteilung** bezeichnet werden, aber wir vermeiden diesen Begriff, da er zu sehr nach Stichprobenverteilung klingt, was etwas anderes ist.
 
--   A **population distribution** describes the shape, center, and variability of the entire **population of data**.
+-   Eine **Grundgesamtheitsverteilung** beschreibt Form, Zentrum und Variabilität der gesamten **Grundgesamtheit der Daten**.
 
-    Except in very rare circumstances of very small, very well-defined populations, this is never observed.
+    Außer in sehr seltenen Umständen sehr kleiner, sehr gut definierter Grundgesamtheiten wird diese niemals beobachtet.
 
--   A **sampling distribution** describes the shape, center, and variability of all possible values of a **sample statistic** from samples of a given sample size from a given population.
+-   Eine **Stichprobenverteilung** beschreibt Form, Zentrum und Variabilität aller möglichen Werte einer **Stichprobenstatistik** aus Stichproben einer bestimmten Stichprobengröße aus einer gegebenen Grundgesamtheit.
 
-    Since the population is never observed, it's never possible to observe the true sampling distribution either.
-    However, when certain conditions hold, the Central Limit Theorem tells us what the sampling distribution is.
+    Da die Grundgesamtheit nie beobachtet wird, ist es auch nie möglich, die wahre Stichprobenverteilung zu beobachten.
+    Wenn jedoch bestimmte Bedingungen erfüllt sind, sagt uns der Zentrale Grenzwertsatz, wie die Stichprobenverteilung aussieht.
 
--   A **randomization distribution** describes the shape, center, and variability of all possible values of a **sample statistic** from random allocations of the treatment variable.
+-   Eine **Randomisierungsverteilung** beschreibt Form, Zentrum und Variabilität aller möglichen Werte einer **Stichprobenstatistik** aus zufälligen Zuweisungen der Behandlungsvariable.
 
-    We computationally generate the randomization distribution, though usually, it's not feasible to generate the full distribution of all possible values of the sample statistic, so we instead generate a large number of them.
-    Almost always, by randomly allocating the treatment variable, the randomization distribution describes the null hypothesis, i.e., it is centered at the null hypothesized value of the parameter.
+    Wir erzeugen die Randomisierungsverteilung rechnerisch, obwohl es in der Regel nicht durchführbar ist, die vollständige Verteilung aller möglichen Werte der Stichprobenstatistik zu erzeugen, weshalb wir stattdessen eine große Anzahl davon erzeugen.
+    Fast immer beschreibt die Randomisierungsverteilung durch zufällige Zuweisung der Behandlungsvariable die Nullhypothese, d. h., sie ist beim nullhypothesierten Wert des Parameters zentriert.
 
--   A **bootstrap distribution** describes the shape, center, and variability of all possible values of a **sample statistic** from resamples of the observed data.
+-   Eine **Bootstrap-Verteilung** beschreibt Form, Zentrum und Variabilität aller möglichen Werte einer **Stichprobenstatistik** aus Resamples der beobachteten Daten.
 
-    We computationally generate the bootstrap distribution, though usually, it's not feasible to generate all possible resamples of the observed data, so we instead generate a large number of them.
-    Since bootstrap distributions are generated by randomly resampling from the observed data, they are centered at the sample statistic.
-    Bootstrap distributions are most often used for estimation, i.e., we base confidence intervals off of them.
+    Wir erzeugen die Bootstrap-Verteilung rechnerisch, obwohl es in der Regel nicht durchführbar ist, alle möglichen Resamples der beobachteten Daten zu erzeugen, weshalb wir stattdessen eine große Anzahl davon erzeugen.
+    Da Bootstrap-Verteilungen durch zufälliges Resampling aus den beobachteten Daten erzeugt werden, sind sie bei der Stichprobenstatistik zentriert.
+    Bootstrap-Verteilungen werden am häufigsten für die Schätzung verwendet, d. h., wir stützen Konfidenzintervalle auf sie.
 :::
 
-## Case study: Malaria vaccine {#sec-case-study-malaria-vaccine}
+## Fallstudie: Malaria-Impfstoff {#sec-case-study-malaria-vaccine}
 
-In this case study, we consider a new malaria vaccine called PfSPZ.
-In the malaria study, volunteer patients were randomized into one of two experiment groups: 14 patients received an experimental vaccine and 6 patients received a placebo vaccine.
-Nineteen weeks later, all 20 patients were exposed to a drug-sensitive strain of the malaria parasite; the motivation of using a drug-sensitive strain here is for ethical considerations, allowing any infections to be treated effectively.
+In dieser Fallstudie betrachten wir einen neuen Malaria-Impfstoff namens PfSPZ.
+In der Malaria-Studie wurden freiwillige Patienten zufällig einer von zwei Experimentalgruppen zugewiesen: 14 Patienten erhielten einen experimentellen Impfstoff und 6 Patienten erhielten einen Placebo-Impfstoff.
+Neunzehn Wochen später wurden alle 20 Patienten einem medikamentensensiblen Malaria-Parasitenstamm ausgesetzt; die Motivation für die Verwendung eines medikamentensensiblen Stammes hier sind ethische Überlegungen, die es ermöglichen, etwaige Infektionen wirksam zu behandeln.
 
 ::: {.data data-latex=""}
-The [`malaria`](http://openintrostat.github.io/openintro/reference/malaria.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`malaria`](http://openintrostat.github.io/openintro/reference/malaria.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-The results are summarized in @tbl-malaria-vaccine-20-ex-summary, where 9 of the 14 treatment patients remained free of signs of infection while all of the 6 patients in the control group showed some baseline signs of infection.
+Die Ergebnisse sind in @tbl-malaria-vaccine-20-ex-summary zusammengefasst, wobei 9 der 14 Behandlungspatienten keine Infektionszeichen aufwiesen, während alle 6 Patienten in der Kontrollgruppe einige grundlegende Infektionszeichen zeigten.
 
 ```{r}
 #| label: tbl-malaria-vaccine-20-ex-summary
@@ -107,67 +107,67 @@ malaria |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Is this an observational study or an experiment?
-What implications does the study type have on what can be inferred from the results?[^15-foundations-applications-1]
+Handelt es sich um eine Beobachtungsstudie oder ein Experiment?
+Welche Implikationen hat der Studientyp auf das, was aus den Ergebnissen geschlossen werden kann?[^15-foundations-applications-1]
 :::
 
-[^15-foundations-applications-1]: The study is an experiment, as patients were randomly assigned an experiment group.
-    Since this is an experiment, the results can be used to evaluate a causal relationship between the malaria vaccine and whether patients showed signs of an infection.
+[^15-foundations-applications-1]: Die Studie ist ein Experiment, da die Patienten zufällig einer Experimentalgruppe zugeteilt wurden.
+    Da es sich um ein Experiment handelt, können die Ergebnisse verwendet werden, um eine kausale Beziehung zwischen dem Malaria-Impfstoff und dem Auftreten von Infektionszeichen bei den Patienten zu beurteilen.
 
-### Variability within data
+### Variabilität innerhalb der Daten
 
-In this study, a smaller proportion of patients who received the vaccine showed signs of an infection (35.7% versus 100%).
-However, the sample is very small, and it is unclear whether the difference provides *convincing evidence* that the vaccine is effective.
+In dieser Studie zeigte ein kleinerer Anteil der Patienten, die den Impfstoff erhielten, Infektionszeichen (35,7 % gegenüber 100 %).
+Die Stichprobe ist jedoch sehr klein, und es ist unklar, ob der Unterschied *überzeugende Belege* dafür liefert, dass der Impfstoff wirksam ist.
 
 ::: {.workedexample data-latex=""}
-Statisticians and data scientists are sometimes called upon to evaluate the strength of evidence.
-When looking at the rates of infection for patients in the two groups in this study, what comes to mind as we try to determine whether the data show convincing evidence of a real difference?
+Statistiker und Datenwissenschaftler werden manchmal aufgefordert, die Stärke von Belegen zu bewerten.
+Wenn wir die Infektionsraten für Patienten in den beiden Gruppen in dieser Studie betrachten, was kommt uns in den Sinn, wenn wir versuchen zu bestimmen, ob die Daten überzeugende Belege für einen echten Unterschied zeigen?
 
 ------------------------------------------------------------------------
 
-The observed infection rates (35.7% for the treatment group versus 100% for the control group) suggest the vaccine may be effective.
-However, we cannot be sure if the observed difference represents the vaccine's efficacy or if there is no treatment effect and the observed difference is just from random chance.
-Generally there is a little bit of fluctuation in sample data, and we wouldn't expect the sample proportions to be *exactly* equal, even if the truth was that the infection rates were independent of getting the vaccine.
-Additionally, with such small samples, perhaps it's common to observe such large differences when we randomly split a group due to chance alone!
+Die beobachteten Infektionsraten (35,7 % für die Behandlungsgruppe gegenüber 100 % für die Kontrollgruppe) legen nahe, dass der Impfstoff wirksam sein könnte.
+Wir können jedoch nicht sicher sein, ob der beobachtete Unterschied die Wirksamkeit des Impfstoffs darstellt oder ob es keinen Behandlungseffekt gibt und der beobachtete Unterschied nur durch Zufall entstand.
+Im Allgemeinen gibt es eine kleine Fluktuation in Stichprobendaten, und wir würden nicht erwarten, dass die Stichprobenanteile *genau* gleich sind, selbst wenn die Infektionsraten unabhängig von der Impfung wären.
+Außerdem ist es bei so kleinen Stichproben vielleicht üblich, solch große Unterschiede zu beobachten, wenn wir eine Gruppe allein durch Zufall aufteilen!
 :::
 
-This example is a reminder that the observed outcomes in the data sample may not perfectly reflect the true relationships between variables since there is **random noise**.
-While the observed difference in rates of infection is large, the sample size for the study is small, making it unclear if this observed difference represents efficacy of the vaccine or whether it is simply due to chance.
-We label these two competing claims, $H_0$ and $H_A$:
+Dieses Beispiel ist eine Erinnerung daran, dass die beobachteten Ergebnisse in der Datenstichprobe die wahren Beziehungen zwischen Variablen möglicherweise nicht perfekt widerspiegeln, da **Zufallsrauschen** vorhanden ist.
+Obwohl der beobachtete Unterschied in den Infektionsraten groß ist, ist die Stichprobengröße der Studie klein, was es unklar macht, ob dieser beobachtete Unterschied die Wirksamkeit des Impfstoffs darstellt oder einfach auf Zufall zurückzuführen ist.
+Wir bezeichnen diese zwei konkurrierenden Behauptungen als $H_0$ und $H_A$:
 
--   $H_0$: **Independence model.** The variables are independent.
-    They have no relationship, and the observed difference between the proportion of patients who developed an infection in the two groups, 64.3%, was due to chance.
+-   $H_0$: **Unabhängigkeitsmodell.** Die Variablen sind unabhängig.
+    Sie haben keine Beziehung, und der beobachtete Unterschied zwischen dem Anteil der Patienten, die in den zwei Gruppen eine Infektion entwickelten, 64,3 %, war auf Zufall zurückzuführen.
 
--   $H_A$: **Alternative model.** The variables are *not* independent.
-    The difference in infection rates of 64.3% was not due to chance.
-    Here (because an experiment was done), if the difference in infection rate is not due to chance, it was the vaccine that affected the rate of infection.
+-   $H_A$: **Alternativmodell.** Die Variablen sind *nicht* unabhängig.
+    Der Unterschied in den Infektionsraten von 64,3 % war nicht auf Zufall zurückzuführen.
+    Hier (weil ein Experiment durchgeführt wurde), wenn der Unterschied in der Infektionsrate nicht auf Zufall zurückzuführen ist, war es der Impfstoff, der die Infektionsrate beeinflusste.
 
-What would it mean if the independence model, which says the vaccine had no influence on the rate of infection, is true?
-It would mean 11 patients were going to develop an infection *no matter which group they were randomized into*, and 9 patients would not develop an infection *no matter which group they were randomized into*.
-That is, if the vaccine did not affect the rate of infection, the difference in the infection rates was due to chance alone in how the patients were randomized.
+Was würde es bedeuten, wenn das Unabhängigkeitsmodell, das besagt, dass der Impfstoff keinen Einfluss auf die Infektionsrate hatte, wahr ist?
+Es würde bedeuten, dass 11 Patienten eine Infektion entwickeln würden, *unabhängig davon, welcher Gruppe sie zugewiesen wurden*, und 9 Patienten würden *unabhängig davon, welcher Gruppe sie zugewiesen wurden*, keine Infektion entwickeln.
+Das heißt, wenn der Impfstoff die Infektionsrate nicht beeinflusste, war der Unterschied in den Infektionsraten allein darauf zurückzuführen, wie die Patienten zufällig zugeteilt wurden.
 
-Now consider the alternative model: infection rates were influenced by whether a patient received the vaccine or not.
-If this was true, and especially if this influence was substantial, we would expect to see some difference in the infection rates of patients in the groups.
+Betrachten Sie nun das Alternativmodell: Die Infektionsraten wurden davon beeinflusst, ob ein Patient den Impfstoff erhielt oder nicht.
+Wenn dies wahr wäre, und insbesondere wenn dieser Einfluss erheblich wäre, würden wir erwarten, einige Unterschiede in den Infektionsraten der Patienten in den Gruppen zu sehen.
 
-We choose between these two competing claims by assessing if the data conflict so much with $H_0$ that the independence model cannot be deemed reasonable.
-If this is the case, and the data support $H_A,$ then we will reject the notion of independence and conclude the vaccine was effective.
+Wir wählen zwischen diesen zwei konkurrierenden Behauptungen, indem wir beurteilen, ob die Daten so sehr mit $H_0$ im Widerspruch stehen, dass das Unabhängigkeitsmodell nicht als vernünftig angesehen werden kann.
+Wenn dies der Fall ist und die Daten $H_A$ unterstützen, werden wir die Idee der Unabhängigkeit ablehnen und schlussfolgern, dass der Impfstoff wirksam war.
 
-### Simulating the study
+### Simulation der Studie
 
-We're going to implement **simulation** under the setting where we will pretend we know that the malaria vaccine being tested does *not* work.
-Ultimately, we want to understand if the large difference we observed in the data is common in these simulations that represent independence.
-If it is common, then maybe the difference we observed was purely due to chance.
-If it is very uncommon, then the possibility that the vaccine was helpful seems more plausible.
+Wir werden eine **Simulation** unter der Annahme durchführen, dass wir so tun, als ob wir wüssten, dass der getestete Malaria-Impfstoff *nicht* funktioniert.
+Letztendlich wollen wir verstehen, ob der große Unterschied, den wir in den Daten beobachtet haben, in diesen Simulationen, die Unabhängigkeit darstellen, üblich ist.
+Wenn er üblich ist, dann war der von uns beobachtete Unterschied vielleicht rein zufällig.
+Wenn er sehr ungewöhnlich ist, erscheint die Möglichkeit, dass der Impfstoff hilfreich war, plausibler.
 
-@tbl-malaria-vaccine-20-ex-summary shows that 11 patients developed infections and 9 did not.
-For our simulation, we will suppose the infections were independent of the vaccine and we were able to *rewind* back to when the researchers randomized the patients in the study.
-If we happened to randomize the patients differently, we may get a different result in this hypothetical world where the vaccine does not influence the infection.
-Let's complete another **randomization** using a simulation.
+@tbl-malaria-vaccine-20-ex-summary zeigt, dass 11 Patienten Infektionen entwickelten und 9 nicht.
+Für unsere Simulation nehmen wir an, dass die Infektionen unabhängig vom Impfstoff waren und wir auf den Zeitpunkt *zurückspulen* könnten, an dem die Forscher die Patienten in der Studie randomisierten.
+Wenn wir die Patienten zufällig anders eingeteilt hätten, könnten wir in dieser hypothetischen Welt, in der der Impfstoff keinen Einfluss auf die Infektion hat, ein anderes Ergebnis erhalten.
+Führen wir eine weitere **Randomisierung** mithilfe einer Simulation durch.
 
-In this **simulation**, we take 20 notecards to represent the 20 patients, where we write down "infection" on 11 cards and "no infection" on 9 cards.
-In this hypothetical world, we believe each patient that got an infection was going to get it regardless of which group they were in, so let's see what happens if we randomly assign the patients to the treatment and control groups again.
-We thoroughly shuffle the notecards and deal 14 into a pile and 6 into a pile.
-Finally, we tabulate the results, which are shown in @tbl-malaria-vaccine-20-ex-summary-rand-1.
+In dieser **Simulation** nehmen wir 20 Karteikarten, um die 20 Patienten darzustellen, wobei wir auf 11 Karten „Infektion" und auf 9 Karten „keine Infektion" schreiben.
+In dieser hypothetischen Welt glauben wir, dass jeder Patient, der eine Infektion bekam, diese unabhängig von der Gruppe bekommen hätte, also sehen wir, was passiert, wenn wir die Patienten erneut zufällig der Behandlungs- und Kontrollgruppe zuweisen.
+Wir mischen die Karteikarten gründlich und teilen 14 in einen Stapel und 6 in einen anderen Stapel.
+Schließlich tabellieren wir die Ergebnisse, die in @tbl-malaria-vaccine-20-ex-summary-rand-1 dargestellt sind.
 
 ```{r}
 #| label: tbl-malaria-vaccine-20-ex-summary-rand-1
@@ -200,24 +200,24 @@ malaria_rand |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-How does this compare to the observed 64.3% difference in the actual data?[^15-foundations-applications-2]
+Wie verhält sich dieser Wert im Vergleich zum beobachteten Unterschied von 64,3 % in den tatsächlichen Daten?[^15-foundations-applications-2]
 :::
 
-[^15-foundations-applications-2]: $4 / 6 - 7 / 14 = 0.167$ or about 16.7% in favor of the vaccine.
-    This difference due to chance is much smaller than the difference observed in the actual groups.
+[^15-foundations-applications-2]: $4 / 6 - 7 / 14 = 0{,}167$ oder etwa 16,7 % zugunsten des Impfstoffs.
+    Dieser durch Zufall entstandene Unterschied ist viel kleiner als der in den tatsächlichen Gruppen beobachtete Unterschied.
 
-### Independence between treatment and outcome
+### Unabhängigkeit zwischen Behandlung und Ergebnis
 
-We computed one possible difference under the independence model in the previous Guided Practice, which represents one difference due to chance, assuming there is no vaccine effect.
-While in this first simulation, we physically dealt out notecards to represent the patients, it is more efficient to perform the simulation using a computer.
+Wir haben in der vorherigen Geführten Übung einen möglichen Unterschied unter dem Unabhängigkeitsmodell berechnet, der einen durch Zufall entstandenen Unterschied darstellt, unter der Annahme, dass es keinen Impfstoffeffekt gibt.
+Während wir in dieser ersten Simulation physisch Karteikarten ausgeteilt haben, um die Patienten darzustellen, ist es effizienter, die Simulation mit einem Computer durchzuführen.
 
-Repeating the simulation on a computer, we get another difference due to chance: $$ \frac{2}{6{}} - \frac{9}{14} = -0.310 $$
+Wenn wir die Simulation auf einem Computer wiederholen, erhalten wir einen weiteren durch Zufall entstandenen Unterschied: $$ \frac{2}{6{}} - \frac{9}{14} = -0{,}310 $$
 
-And another: $$ \frac{3}{6{}} - \frac{8}{14} = -0.071$$
+Und noch einen: $$ \frac{3}{6{}} - \frac{8}{14} = -0{,}071$$
 
-And so on until we repeat the simulation enough times to create a *distribution of differences that could have occurred if the null hypothesis was true*.
+Und so weiter, bis wir die Simulation oft genug wiederholt haben, um eine *Verteilung von Unterschieden zu erstellen, die aufgetreten sein könnten, wenn die Nullhypothese wahr wäre*.
 
-@fig-malaria-rand-dot-plot shows a stacked plot of the differences found from 100 simulations, where each dot represents a simulated difference between the infection rates (control rate minus treatment rate).
+@fig-malaria-rand-dot-plot zeigt ein gestapeltes Punktdiagramm der Unterschiede aus 100 Simulationen, wobei jeder Punkt einen simulierten Unterschied zwischen den Infektionsraten (Kontrollrate minus Behandlungsrate) darstellt.
 
 ```{r}
 #| label: fig-malaria-rand-dot-plot
@@ -252,44 +252,44 @@ malaria |>
   gghighlight(stat >= 0.643)
 ```
 
-Note that the distribution of these simulated differences is centered around 0.
-We simulated these differences assuming that the independence model was true, and under this condition, we expect the difference to be near zero with some random fluctuation, where *near* is pretty generous in this case since the sample sizes are so small in this study.
+Beachten Sie, dass die Verteilung dieser simulierten Unterschiede um 0 zentriert ist.
+Wir haben diese Unterschiede unter der Annahme simuliert, dass das Unabhängigkeitsmodell wahr ist, und unter dieser Bedingung erwarten wir, dass der Unterschied mit etwas zufälliger Fluktuation nahe null liegt, wobei *nahe* in diesem Fall recht großzügig ist, da die Stichprobengrößen in dieser Studie so klein sind.
 
 ::: {.workedexample data-latex=""}
-How often would you observe a difference of at least 64.3% (0.643) according to @fig-malaria-rand-dot-plot?
-Often, sometimes, rarely, or never?
+Wie oft würden Sie gemäß @fig-malaria-rand-dot-plot einen Unterschied von mindestens 64,3 % (0,643) beobachten?
+Oft, manchmal, selten oder nie?
 
 ------------------------------------------------------------------------
 
-It appears that a difference of at least 64.3% due to chance alone would only happen about 2% of the time according to @fig-malaria-rand-dot-plot.
-Such a low probability indicates a rare event.
+Es scheint, dass ein Unterschied von mindestens 64,3 % allein durch Zufall nur etwa 2 % der Zeit auftreten würde, gemäß @fig-malaria-rand-dot-plot.
+Eine so geringe Wahrscheinlichkeit deutet auf ein seltenes Ereignis hin.
 :::
 
-The difference of 64.3% being a rare event suggests two possible interpretations of the results of the study:
+Der Unterschied von 64,3 % als seltenes Ereignis legt zwei mögliche Interpretationen der Studienergebnisse nahe:
 
--   $H_0$: **Independence model.** The vaccine has no effect on infection rate, and we just happened to observe a difference that would only occur on a rare occasion.
+-   $H_0$: **Unabhängigkeitsmodell.** Der Impfstoff hat keinen Einfluss auf die Infektionsrate, und wir haben zufällig einen Unterschied beobachtet, der nur selten auftreten würde.
 
--   $H_A$: **Alternative model.** The vaccine has an effect on infection rate, and the difference we observed was actually due to the vaccine being effective at combating malaria, which explains the large difference of 64.3%.
+-   $H_A$: **Alternativmodell.** Der Impfstoff hat einen Einfluss auf die Infektionsrate, und der von uns beobachtete Unterschied war tatsächlich auf die Wirksamkeit des Impfstoffs gegen Malaria zurückzuführen, was den großen Unterschied von 64,3 % erklärt.
 
-Based on the simulations, we have two options.
-(1) We conclude that the study results do not provide strong evidence against the independence model.
-That is, we do not have sufficiently strong evidence to conclude the vaccine had an effect in this clinical setting.
-(2) We conclude the evidence is sufficiently strong to reject $H_0$ and assert that the vaccine was useful.
-When we conduct formal studies, usually we reject the notion that we just happened to observe a rare event.
-So in the vaccine case, we reject the independence model in favor of the alternative.
-That is, we are concluding the data provide strong evidence that the vaccine provides some protection against malaria in this clinical setting.
+Basierend auf den Simulationen haben wir zwei Möglichkeiten.
+(1) Wir kommen zu dem Schluss, dass die Studienergebnisse keine starken Belege gegen das Unabhängigkeitsmodell liefern.
+Das heißt, wir haben keine ausreichend starken Belege, um zu schlussfolgern, dass der Impfstoff in diesem klinischen Umfeld eine Wirkung hatte.
+(2) Wir kommen zu dem Schluss, dass die Belege stark genug sind, um $H_0$ abzulehnen und zu behaupten, dass der Impfstoff nützlich war.
+Wenn wir formale Studien durchführen, lehnen wir in der Regel die Vorstellung ab, dass wir zufällig ein seltenes Ereignis beobachtet haben.
+Im Fall des Impfstoffs lehnen wir daher das Unabhängigkeitsmodell zugunsten der Alternative ab.
+Das heißt, wir kommen zu dem Schluss, dass die Daten starke Belege dafür liefern, dass der Impfstoff in diesem klinischen Umfeld einen gewissen Schutz gegen Malaria bietet.
 
-One field of statistics, statistical inference, is built on evaluating whether such differences are due to chance.
-In statistical inference, data scientists evaluate which model is most reasonable given the data.
-Errors do occur, just like rare events, and we might choose the wrong model.
-While we do not always choose correctly, statistical inference gives us tools to control and evaluate how often decision errors occur.
+Ein Bereich der Statistik, die statistische Inferenz, beruht auf der Bewertung, ob solche Unterschiede auf Zufall zurückzuführen sind.
+In der statistischen Inferenz bewerten Datenwissenschaftler, welches Modell angesichts der Daten am vernünftigsten ist.
+Fehler treten auf, genau wie seltene Ereignisse, und wir könnten das falsche Modell wählen.
+Während wir nicht immer richtig wählen, gibt uns die statistische Inferenz Werkzeuge, um zu kontrollieren und zu bewerten, wie oft Entscheidungsfehler auftreten.
 
 \clearpage
 
-## Interactive R tutorials {#sec-foundations-tutorials}
+## Interaktive R-Tutorials {#sec-foundations-tutorials}
 
-Navigate the concepts you've learned in this part in R using the following self-paced tutorials.
-All you need is your browser to get started!
+Navigieren Sie die in diesem Teil erlernten Konzepte in R mithilfe der folgenden selbstgesteuerten Tutorials.
+Alles, was Sie brauchen, ist Ihr Browser, um loszulegen!
 
 ::: {.alltutorials data-latex=""}
 [Tutorial 4: Foundations of inference](https://openintrostat.github.io/ims-tutorials/04-foundations/)
@@ -332,16 +332,16 @@ All you need is your browser to get started!
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of tutorials supporting this book at <https://openintrostat.github.io/ims-tutorials>.
+Die vollständige Liste der Tutorials, die dieses Buch unterstützen, finden Sie unter <https://openintrostat.github.io/ims-tutorials>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of tutorials supporting this book [here](https://openintrostat.github.io/ims-tutorials).
+Die vollständige Liste der Tutorials, die dieses Buch unterstützen, finden Sie [hier](https://openintrostat.github.io/ims-tutorials).
 :::
 
-## R labs {#sec-foundations-labs}
+## R-Labore {#sec-foundations-labs}
 
-Further apply the concepts you've learned in this part in R with computational labs that walk you through a data analysis case study.
+Wenden Sie die in diesem Teil erlernten Konzepte weiter in R mit computergestützten Laboren an, die Sie durch eine Datenanalyse-Fallstudie führen.
 
 ::: {.singlelab data-latex=""}
 [Sampling distributions - Does science benefit you?](https://www.openintro.org/go?id=ims-r-lab-foundations-1)\
@@ -360,9 +360,9 @@ Further apply the concepts you've learned in this part in R with computational l
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of labs supporting this book at <https://www.openintro.org/go?id=ims-r-labs>.
+Die vollständige Liste der Labore, die dieses Buch unterstützen, finden Sie unter <https://www.openintro.org/go?id=ims-r-labs>.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of labs supporting this book [here](https://www.openintro.org/go?id=ims-r-labs).
+Die vollständige Liste der Labore, die dieses Buch unterstützen, finden Sie [hier](https://www.openintro.org/go?id=ims-r-labs).
 :::

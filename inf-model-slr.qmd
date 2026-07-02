@@ -1,4 +1,4 @@
-# Inference for linear regression with a single predictor {#sec-inf-model-slr}
+# Inferenz für lineare Regression mit einem einzelnen Prädiktor {#sec-inf-model-slr}
 
 ```{r}
 #| include: false
@@ -6,23 +6,23 @@
 source("_common.R")
 ```
 
-\chaptermark{Inference for regression with a single predictor}
+\chaptermark{Inferenz für Regression mit einem einzelnen Prädiktor}
 
 \vspace{-3mm}
 
 ::: {.chapterintro data-latex=""}
-We now bring together ideas of inferential analyses with the descriptive models seen in [Chapter -@sec-model-slr].
-In particular, we will use the least squares regression line to test whether there is a relationship between two continuous variables.
-Additionally, we will build confidence intervals which quantify the slope of the linear regression line.
-The setting is now focused on predicting a numeric response variable (for linear models) or a binary response variable (for logistic models), we continue to ask questions about the variability of the model from sample to sample.
-The sampling variability will inform the conclusions about the population that can be drawn.
+Wir verbinden nun die Ideen der Inferenzanalysen mit den beschreibenden Modellen aus [Kapitel -@sec-model-slr].
+Insbesondere werden wir die Kleinste-Quadrate-Regressionsgerade verwenden, um zu testen, ob es eine Beziehung zwischen zwei stetigen Variablen gibt.
+Zusätzlich werden wir Konfidenzintervalle erstellen, die die Steigung der linearen Regressionsgeraden quantifizieren.
+Da wir nun darauf abzielen, eine numerische Antwortvariable (für lineare Modelle) oder eine binäre Antwortvariable (für logistische Modelle) vorherzusagen, stellen wir weiterhin Fragen zur Variabilität des Modells von Stichprobe zu Stichprobe.
+Die Stichprobenvariabilität wird die Schlussfolgerungen über die Population informieren, die gezogen werden können.
 
-Many of the inferential ideas are remarkably similar to those covered in previous chapters.
-The technical conditions for linear models are typically assessed graphically, although independence of observations continues to be of utmost importance.
+Viele der inferenziellen Ideen sind den in früheren Kapiteln behandelten bemerkenswert ähnlich.
+Die technischen Bedingungen für lineare Modelle werden typischerweise grafisch bewertet, obwohl die Unabhängigkeit der Beobachtungen weiterhin von größter Bedeutung ist.
 
-We encourage the reader to think broadly about the models at hand without putting too much dependence on the exact p-values that are reported from the statistical software.
-Inference on models with multiple explanatory variables can suffer from data snooping which results in false positive claims.
-We provide some guidance and hope the reader will further their statistical learning after working through the material in this text.
+Wir ermutigen die Lesenden, breit über die vorliegenden Modelle nachzudenken, ohne sich zu sehr auf die genauen p-Werte zu verlassen, die von der statistischen Software gemeldet werden.
+Die Inferenz bei Modellen mit mehreren erklärenden Variablen kann unter Data-Snooping leiden, was zu falsch-positiven Behauptungen führt.
+Wir geben einige Hinweise und hoffen, dass die Lesenden ihr statistisches Wissen nach der Bearbeitung des Materials in diesem Text weiter vertiefen werden.
 :::
 
 ```{r}
@@ -32,22 +32,22 @@ terms_chp_24 <- c("inference with single predictor regression")
 
 \vspace{-7mm}
 
-## Case study: Sandwich store
+## Fallstudie: Sandwich-Laden
 
-### Observed data
+### Beobachtete Daten
 
-We start the chapter with a hypothetical example describing the linear relationship between dollars spent advertising for a chain sandwich restaurant and monthly revenue.
-The hypothetical example serves the purpose of illustrating how a linear model varies from sample to sample.
-Because we have made up the example and the data (and the entire population), we can take many many samples from the population to visualize the variability.
-Note that in real life, we always have exactly one sample (that is, one dataset), and through the inference process, we imagine what might have happened had we taken a different sample.
-The change from sample to sample leads to an understanding of how the single observed dataset is different from the population of values, which is typically the fundamental goal of inference.
+Wir beginnen das Kapitel mit einem hypothetischen Beispiel, das die lineare Beziehung zwischen den für die Werbung einer Sandwich-Restaurantkette ausgegebenen Dollar und dem monatlichen Umsatz beschreibt.
+Das hypothetische Beispiel dient dem Zweck, zu veranschaulichen, wie ein lineares Modell von Stichprobe zu Stichprobe variiert.
+Da wir das Beispiel und die Daten (und die gesamte Population) erfunden haben, können wir viele Stichproben aus der Population nehmen, um die Variabilität zu visualisieren.
+Beachten Sie, dass wir im wirklichen Leben immer genau eine Stichprobe (d.h. einen Datensatz) haben, und durch den Inferenzprozess stellen wir uns vor, was hätte passieren können, wenn wir eine andere Stichprobe genommen hätten.
+Die Veränderung von Stichprobe zu Stichprobe führt zu einem Verständnis dafür, wie sich der einzelne beobachtete Datensatz von der Population der Werte unterscheidet, was typischerweise das grundlegende Ziel der Inferenz ist.
 
 \clearpage
 
-Consider the following hypothetical population of all of the sandwich stores of a particular chain seen in @fig-sandpop.
-In this made-up world, the CEO actually has all the relevant data, which is why they can plot it here.
-The CEO is omniscient and can write down the population model which describes the true population relationship between the advertising dollars and revenue.
-There appears to be a linear relationship between advertising dollars and revenue (both in \$1,000).
+Betrachten Sie die folgende hypothetische Population aller Sandwich-Läden einer bestimmten Kette in @fig-sandpop.
+In dieser erfundenen Welt hat der CEO tatsächlich alle relevanten Daten und kann sie daher hier aufzeichnen.
+Der CEO ist allwissend und kann das Populationsmodell aufschreiben, das die wahre Populationsbeziehung zwischen den Werbeausgaben und dem Umsatz beschreibt.
+Es scheint eine lineare Beziehung zwischen den Werbeausgaben und dem Umsatz (beide in \$1.000) zu bestehen.
 
 ```{r}
 #| label: fig-sandpop
@@ -78,22 +78,22 @@ ggplot(sandwich, aes(x = ad, y = rev)) +
   coord_cartesian(ylim = c(0, 65))
 ```
 
-You may remember from @sec-model-slr that the population model is: $$y = \beta_0 + \beta_1 x + \varepsilon.$$
+Sie erinnern sich vielleicht aus @sec-model-slr, dass das Populationsmodell lautet: $$y = \beta_0 + \beta_1 x + \varepsilon.$$
 
-Again, the omniscient CEO (with the full population information) can write down the true population model as: $$\texttt{expected revenue} = 11.23 + 4.8 \times \texttt{advertising}.$$
+Auch hier kann der allwissende CEO (mit den vollständigen Populationsinformationen) das wahre Populationsmodell aufschreiben: $$\texttt{erwarteter Umsatz} = 11{,}23 + 4{,}8 \times \texttt{Werbung}.$$
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-Unfortunately, in our scenario, the CEO is not willing to part with the full set of data, but they will allow potential franchise buyers to see a small sample of the data in order to help the potential buyer decide whether set up a new franchise.
-The CEO is willing to give each potential franchise buyer a random sample of data from 20 stores.
+Leider ist der CEO in unserem Szenario nicht bereit, den vollständigen Datensatz herauszugeben, aber er erlaubt potenziellen Franchise-Käufern, eine kleine Stichprobe der Daten zu sehen, damit der potenzielle Käufer entscheiden kann, ob er eine neue Filiale eröffnen möchte.
+Der CEO ist bereit, jedem potenziellen Franchise-Käufer eine zufällige Stichprobe von Daten aus 20 Geschäften zu geben.
 
-As with any numerical characteristic which describes a subset of the population, the estimated slope of a sample will vary from sample to sample.
-Consider the linear model which describes revenue (in \$1,000) based on advertising dollars (in \$1,000).
+Wie bei jedem numerischen Merkmal, das eine Teilmenge der Population beschreibt, wird die geschätzte Steigung einer Stichprobe von Stichprobe zu Stichprobe variieren.
+Betrachten Sie das lineare Modell, das den Umsatz (in \$1.000) basierend auf den Werbeausgaben (in \$1.000) beschreibt.
 
-The least squares regression model uses the data to find a sample linear fit: $$\hat{y} = b_0 + b_1 x.$$
+Das Kleinste-Quadrate-Regressionsmodell verwendet die Daten, um eine lineare Stichprobe-Anpassung zu finden: $$\hat{y} = b_0 + b_1 x.$$
 
-Two random samples of 20 stores shows different least squares regression lines in @fig-sand-samp-1 and @fig-sand-samp-2, depending on which observations are selected.
-Both trends are similar to those seen in @fig-sandpop, which describes the population.
+Zwei zufällige Stichproben von 20 Geschäften zeigen unterschiedliche Kleinste-Quadrate-Regressionsgeraden in @fig-sand-samp-1 und @fig-sand-samp-2, je nachdem, welche Beobachtungen ausgewählt werden.
+Beide Trends ähneln denen in @fig-sandpop, die die Population beschreibt.
 
 ```{r}
 set.seed(470)
@@ -149,10 +149,10 @@ ggplot(sandwich3, aes(x = ad, y = rev)) +
 
 \vspace{-5mm}
 
-@fig-sand-samp12 shows the two samples and the least squares regressions from @fig-sand-samp on the same plot.
-We can see that the two lines are different.
-That is, there is **variability** in the regression line from sample to sample.
-The concept of the sampling variability is something you've seen before, but in this lesson, you will focus on the variability of the line often measured through the variability of a single statistic: **the slope of the line**.
+@fig-sand-samp12 zeigt die beiden Stichproben und die Kleinste-Quadrate-Regressionen aus @fig-sand-samp auf demselben Plot.
+Wir können sehen, dass die beiden Geraden unterschiedlich sind.
+Das heißt, es gibt **Variabilität** in der Regressionsgerade von Stichprobe zu Stichprobe.
+Das Konzept der Stichprobenvariabilität haben Sie bereits kennengelernt, aber in dieser Lektion werden Sie sich auf die Variabilität der Geraden konzentrieren, die häufig durch die Variabilität einer einzelnen Statistik gemessen wird: **der Steigung der Geraden**.
 
 ```{r}
 #| include: false
@@ -194,7 +194,7 @@ ggplot() +
   coord_cartesian(ylim = c(0, 65))
 ```
 
-@fig-slopes shows least squares lines fit to many more random samples of 20 from the population.
+@fig-slopes zeigt Kleinste-Quadrate-Geraden, die an viele weitere zufällige Stichproben von 20 aus der Population angepasst wurden.
 
 \vspace{-5mm}
 
@@ -233,11 +233,11 @@ ggplot() +
 
 \clearpage
 
-You might notice in @fig-slopes that the $\hat{y}$ values given by the lines are much more consistent in the middle of the dataset than at the ends.
-The reason is that the data itself anchors the lines in such a way that the line must pass through the center of the data cloud.
-The effect of the fan-shaped lines is that predicted revenue for advertising close to \$4,000 will be much more precise than the revenue predictions made for \$1,000 or \$7,000 of advertising.
+Sie bemerken vielleicht in @fig-slopes, dass die von den Geraden gegebenen $\hat{y}$-Werte in der Mitte des Datensatzes viel konsistenter sind als an den Enden.
+Der Grund dafür ist, dass die Daten selbst die Geraden so verankern, dass die Gerade durch den Mittelpunkt der Datenwolke verlaufen muss.
+Der Effekt der fächerförmigen Geraden ist, dass vorhergesagte Umsätze für Werbung nahe \$4.000 viel genauer sein werden als die Umsatzvorhersagen für \$1.000 oder \$7.000 Werbung.
 
-The distribution of slopes (for samples of size $n=20$) can be seen in @fig-sand20lm.
+Die Verteilung der Steigungen (für Stichproben der Größe $n=20$) ist in @fig-sand20lm zu sehen.
 
 ```{r}
 #| label: fig-sand20lm
@@ -263,34 +263,34 @@ ggplot(sandwich_many_lm, aes(x = estimate)) +
   )
 ```
 
-Recall, the example described in this introduction is hypothetical.
-That is, we created an entire population in order to demonstrate how the slope of a line would vary from sample to sample.
-The tools in this textbook are designed to evaluate only one single sample of data.
-With actual studies, we do not have repeated samples, so we are not able to use repeated samples to visualize the variability in slopes.
-We have seen variability in samples throughout this text, so it should not come as a surprise that different samples will produce different linear models.
-However, it is nice to visually consider the linear models produced by different slopes.
-Additionally, as with measuring the variability of previous statistics (e.g., $\overline{X}_1 - \overline{X}_2$ or $\hat{p}_1 - \hat{p}_2$), the histogram of the sample statistics can provide information related to inferential considerations.
+Denken Sie daran, dass das in dieser Einleitung beschriebene Beispiel hypothetisch ist.
+Das heißt, wir haben eine gesamte Population erstellt, um zu demonstrieren, wie die Steigung einer Geraden von Stichprobe zu Stichprobe variieren würde.
+Die Werkzeuge in diesem Lehrbuch sind darauf ausgelegt, nur eine einzige Stichprobe von Daten auszuwerten.
+Bei tatsächlichen Studien haben wir keine wiederholten Stichproben, sodass wir keine wiederholten Stichproben verwenden können, um die Variabilität der Steigungen zu visualisieren.
+Wir haben in diesem Text Variabilität in Stichproben gesehen, daher sollte es nicht überraschend sein, dass verschiedene Stichproben unterschiedliche lineare Modelle produzieren werden.
+Es ist jedoch schön, die durch verschiedene Steigungen produzierten linearen Modelle visuell zu betrachten.
+Darüber hinaus kann das Histogramm der Stichprobenstatistiken, wie bei der Messung der Variabilität früherer Statistiken (z.B. $\overline{X}_1 - \overline{X}_2$ oder $\hat{p}_1 - \hat{p}_2$), Informationen bezüglich inferenzieller Überlegungen liefern.
 
-In the following sections, the distribution (i.e., histogram) of $b_1$ (the estimated slope coefficient) will be constructed in the same three ways that, by now, may be familiar to you.
-First (in @sec-randslope), the distribution of $b_1$ when $\beta_1 = 0$ is constructed by randomizing (permuting) the response variable.
-Next (in @sec-bootbeta1), we can bootstrap the data by taking random samples of size $n$ from the original dataset.
-And last (in @sec-mathslope), we use mathematical tools to describe the variability using the $t$-distribution that was first encountered in @sec-one-mean-math.
+In den folgenden Abschnitten wird die Verteilung (d.h. das Histogramm) von $b_1$ (dem geschätzten Steigungskoeffizienten) auf dieselben drei Arten konstruiert, die Ihnen inzwischen möglicherweise vertraut sind.
+Zunächst (in @sec-randslope) wird die Verteilung von $b_1$ wenn $\beta_1 = 0$ durch Randomisierung (Permutation) der Antwortvariablen konstruiert.
+Als nächstes (in @sec-bootbeta1) können wir die Daten bootstrappen, indem wir zufällige Stichproben der Größe $n$ aus dem ursprünglichen Datensatz nehmen.
+Und zuletzt (in @sec-mathslope) verwenden wir mathematische Werkzeuge, um die Variabilität mithilfe der $t$-Verteilung zu beschreiben, die erstmals in @sec-one-mean-math eingeführt wurde.
 
 \clearpage
 
-## Randomization test for the slope {#sec-randslope}
+## Randomisierungstest für die Steigung {#sec-randslope}
 
 \index{randomization test for the slope}
 
-Consider data on 100 randomly selected births gathered originally from the US Department of Health and Human Services.
-Some of the variables are plotted in @fig-babyweight.
+Betrachten Sie Daten zu 100 zufällig ausgewählten Geburten, die ursprünglich vom US-Gesundheitsministerium gesammelt wurden.
+Einige der Variablen sind in @fig-babyweight dargestellt.
 
-The scientific research interest at hand will be in determining the linear relationship between weight of baby at birth (in lbs) and number of weeks of gestation.
-The dataset is quite rich and deserves exploring, but for this example, we will focus only on the weight of the baby.
+Das wissenschaftliche Forschungsinteresse liegt darin, die lineare Beziehung zwischen dem Geburtsgewicht des Babys (in Pfund) und der Anzahl der Schwangerschaftswochen zu bestimmen.
+Der Datensatz ist sehr reichhaltig und verdient eine Erkundung, aber für dieses Beispiel konzentrieren wir uns nur auf das Gewicht des Babys.
 
 ::: {.data data-latex=""}
-The [`births14`](http://openintrostat.github.io/openintro/reference/births14.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
-We will work with a random sample of 100 observations from these data.
+Die [`births14`](http://openintrostat.github.io/openintro/reference/births14.html)-Daten sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
+Wir werden mit einer zufälligen Stichprobe von 100 Beobachtungen aus diesen Daten arbeiten.
 :::
 
 ```{r}
@@ -335,24 +335,24 @@ p_gained + p_mage + p_visits + p_weeks +
   plot_layout(ncol = 2)
 ```
 
-As you have seen previously, statistical inference typically relies on setting a null hypothesis which is hoped to be subsequently rejected.
-In the linear model setting, we might hope to have a linear relationship between `weeks` and `weight` in settings where `weeks` gestation is known and `weight` of baby needs to be predicted.
+Wie Sie bereits gesehen haben, basiert die statistische Inferenz typischerweise auf der Aufstellung einer Nullhypothese, die anschließend abgelehnt werden soll.
+Im linearen Modell-Kontext könnten wir hoffen, eine lineare Beziehung zwischen `weeks` und `weight` in Situationen zu haben, in denen die Schwangerschaftswochen bekannt sind und das Gewicht des Babys vorhergesagt werden muss.
 
-The relevant hypotheses for the linear model setting can be written in terms of the population slope parameter.
-Here the population refers to a larger population of births in the US.
+Die relevanten Hypothesen für den linearen Modell-Kontext können in Bezug auf den Populationssteigungsparameter geschrieben werden.
+Hier bezieht sich die Population auf eine größere Population von Geburten in den USA.
 
--   $H_0: \beta_1= 0$, there is no linear relationship between `weight` and `weeks`.
--   $H_A: \beta_1 \ne 0$, there is some linear relationship between `weight` and `weeks`.
+-   $H_0: \beta_1= 0$, es gibt keine lineare Beziehung zwischen `weight` und `weeks`.
+-   $H_A: \beta_1 \ne 0$, es gibt eine lineare Beziehung zwischen `weight` und `weeks`.
 
-Recall that for the randomization test, we permute one variable to eliminate any existing relationship between the variables.
-That is, we set the null hypothesis to be true, and we measure the natural variability in the data due to sampling but **not** due to variables being correlated.
-@fig-permweightScatter-1 shows the observed data and @fig-permweightScatter-2 shows one permutation of the `weight` variable.
-The careful observer can see that each of the observed values for `weight` (and for `weeks`) exist in both the original data plot as well as the permuted `weight` plot, but the `weight` and `weeks` gestation are no longer matched for a given birth.
-That is, each `weight` value is randomly assigned to a new `weeks` gestation.
+Erinnern Sie sich daran, dass wir beim Randomisierungstest eine Variable permutieren, um jede bestehende Beziehung zwischen den Variablen zu eliminieren.
+Das heißt, wir setzen die Nullhypothese als wahr voraus und messen die natürliche Variabilität in den Daten aufgrund der Stichprobenziehung, aber **nicht** aufgrund einer Korrelation der Variablen.
+@fig-permweightScatter-1 zeigt die beobachteten Daten und @fig-permweightScatter-2 eine Permutation der Variable `weight`.
+Der aufmerksame Beobachter kann erkennen, dass jeder der beobachteten Werte für `weight` (und für `weeks`) sowohl im ursprünglichen Datenplot als auch im permutierten `weight`-Plot vorhanden ist, aber `weight` und `weeks` Gestation sind für eine gegebene Geburt nicht mehr zugeordnet.
+Das heißt, jeder `weight`-Wert wird einer neuen `weeks` Gestation zufällig zugeordnet.
 
-By repeatedly permuting the response variable, any pattern in the linear model that is observed is due only to random chance (and not an underlying relationship).
-The randomization test compares the slopes calculated from the permuted response variable with the observed slope.
-If the observed slope is inconsistent with the slopes from permuting, we can conclude that there is some underlying relationship (and that the slope is not merely due to random chance).
+Durch wiederholtes Permutieren der Antwortvariablen ist jedes beobachtete Muster im linearen Modell nur auf den Zufall zurückzuführen (und nicht auf eine zugrunde liegende Beziehung).
+Der Randomisierungstest vergleicht die aus der permutierten Antwortvariablen berechneten Steigungen mit der beobachteten Steigung.
+Wenn die beobachtete Steigung nicht mit den Steigungen aus der Permutation übereinstimmt, können wir schlussfolgern, dass es eine zugrunde liegende Beziehung gibt (und dass die Steigung nicht nur auf den Zufall zurückzuführen ist).
 
 ```{r}
 #| label: fig-permweightScatter
@@ -390,11 +390,11 @@ ggplot(births14_100) +
   )
 ```
 
-### Observed data
+### Beobachtete Daten
 
-We will continue to use the births data to investigate the linear relationship between `weight` and `weeks` gestation.
-Note that the least squares model (see @sec-model-slr) describing the relationship is given in @tbl-ls-births.
-The columns in @tbl-ls-births are further described in @sec-mathslope.
+Wir werden weiterhin die Geburtsdaten verwenden, um die lineare Beziehung zwischen `weight` und `weeks` Gestation zu untersuchen.
+Beachten Sie, dass das Kleinste-Quadrate-Modell (siehe @sec-model-slr), das die Beziehung beschreibt, in @tbl-ls-births angegeben ist.
+Die Spalten in @tbl-ls-births werden weiter in @sec-mathslope beschrieben.
 
 ```{r}
 #| label: tbl-ls-births
@@ -413,11 +413,11 @@ lm(weight ~ weeks, data = births14_100) |>
   column_spec(2:5, width = "5em")
 ```
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-After permuting the data, the least squares estimate of the line can be computed.
-Repeated permutations and slope calculations describe the variability in the line (i.e., in the slope) due only to the natural variability and not due to a relationship between `weight` and `weeks` gestation.
-@fig-permweekslm shows two different permutations of `weight` and the resulting linear models.
+Nach der Permutation der Daten kann die Kleinste-Quadrate-Schätzung der Geraden berechnet werden.
+Wiederholte Permutationen und Steigungsberechnungen beschreiben die Variabilität der Geraden (d.h. der Steigung) nur aufgrund der natürlichen Variabilität und nicht aufgrund einer Beziehung zwischen `weight` und `weeks` Gestation.
+@fig-permweekslm zeigt zwei verschiedene Permutationen von `weight` und die resultierenden linearen Modelle.
 
 ```{r}
 #| label: fig-permweekslm
@@ -455,10 +455,10 @@ ggplot(births14_100, aes(x = weeks, y = sample(weight))) +
   )
 ```
 
-As you can see, sometimes the slope of the permuted data is positive, sometimes it is negative.
-Because the randomization happens under the condition of no underlying relationship (because the response variable is completely mixed with the explanatory variable), we expect to see the center of the randomized slope distribution to be zero.
+Wie Sie sehen können, ist die Steigung der permutierten Daten manchmal positiv, manchmal negativ.
+Da die Randomisierung unter der Bedingung stattfindet, dass keine zugrunde liegende Beziehung besteht (weil die Antwortvariable vollständig mit der erklärenden Variablen vermischt ist), erwarten wir, dass das Zentrum der zufälligen Steigungsverteilung bei null liegt.
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
 ```{r}
 #| label: fig-nulldistBirths
@@ -489,32 +489,32 @@ ggplot(data = perm_slope, aes(x = stat)) +
 
 \vspace{-2mm}
 
-As we can see from @fig-nulldistBirths, a slope estimate as extreme as the observed slope estimate (the red line) never happened in many repeated permutations of the `weight` variable.
-That is, if indeed there were no linear relationship between `weight` and `weeks`, the natural variability of the slopes would produce estimates between approximately -0.15 and +0.15.
-We reject the null hypothesis.
-Therefore, we believe that the slope observed on the original data is not just due to natural variability and indeed, there is a linear relationship between `weight` of baby and `weeks` gestation for births in the US.
+Wie wir aus @fig-nulldistBirths sehen können, kam eine Steigungsschätzung, die so extrem ist wie die beobachtete Steigungsschätzung (die rote Linie), bei vielen wiederholten Permutationen der Variable `weight` nie vor.
+Das heißt, wenn tatsächlich keine lineare Beziehung zwischen `weight` und `weeks` bestünde, würde die natürliche Variabilität der Steigungen Schätzungen zwischen ungefähr -0,15 und +0,15 produzieren.
+Wir lehnen die Nullhypothese ab.
+Daher glauben wir, dass die auf den Originaldaten beobachtete Steigung nicht nur auf die natürliche Variabilität zurückzuführen ist, und es gibt tatsächlich eine lineare Beziehung zwischen dem Gewicht des Babys und den Schwangerschaftswochen für Geburten in den USA.
 
 \vspace{-2mm}
 
-## Bootstrap confidence interval for the slope {#sec-bootbeta1}
+## Bootstrap-Konfidenzintervall für die Steigung {#sec-bootbeta1}
 
 \index{bootstrap CI for the slope}
 
-As we have seen in previous chapters, we can use bootstrapping to estimate the sampling distribution of the statistic of interest (here, the slope) without the null assumption of no relationship (which was the condition in the randomization test).
-Because interest is now in creating a CI, there is no null hypothesis, so there won't be any reason to permute either of the variables.
+Wie wir in früheren Kapiteln gesehen haben, können wir Bootstrapping verwenden, um die Stichprobenverteilung der Statistik von Interesse (hier die Steigung) ohne die Nullannahme keiner Beziehung zu schätzen (was die Bedingung beim Randomisierungstest war).
+Da es nun darum geht, ein Konfidenzintervall zu erstellen, gibt es keine Nullhypothese, sodass es keinen Grund gibt, eine der Variablen zu permutieren.
 
 ```{r}
 #| include: false
 terms_chp_24 <- c(terms_chp_24, "bootstrap CI for the slope")
 ```
 
-### Observed data
+### Beobachtete Daten
 
-Returning to the births data, we may want to consider the relationship between `mage` (mother's age) and `weight`.
-Is `mage` a good predictor of `weight`?
-And if so, what is the relationship?
-That is, what is the slope that models average `weight` of baby as a function of `mage` (mother's age)?
-The linear model regressing `weight` on `mage` is provided in @tbl-ls-births-mage.
+Wenn wir zu den Geburtsdaten zurückkehren, möchten wir möglicherweise die Beziehung zwischen `mage` (Alter der Mutter) und `weight` betrachten.
+Ist `mage` ein guter Prädiktor für `weight`?
+Und wenn ja, was ist die Beziehung?
+Das heißt, was ist die Steigung, die das durchschnittliche `weight` des Babys als Funktion von `mage` (Alter der Mutter) modelliert?
+Das lineare Modell, das `weight` auf `mage` regressiert, ist in @tbl-ls-births-mage angegeben.
 
 ```{r}
 #| echo: false
@@ -567,13 +567,13 @@ lm(weight ~ mage, data = births14_100) |>
   column_spec(2:5, width = "5em")
 ```
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-Because the focus here is *not* on a null distribution, we sample with replacement $n = 100$ observations from the original dataset.
-Recall that with bootstrapping the resample always has the same number of observations as the original dataset in order to mimic the process of taking a sample from the population.
-When sampling in the linear model case, consider each observation to be a single dot.
-If the dot is resampled, both the `weight` and the `mage` measurement are observed.
-The measurements are linked to the dot (i.e., to the birth in the sample).
+Da es hier *nicht* um eine Nullverteilung geht, samplen wir mit Zurücklegen $n = 100$ Beobachtungen aus dem ursprünglichen Datensatz.
+Denken Sie daran, dass bei Bootstrapping die Wiederholungsstichprobe immer dieselbe Anzahl von Beobachtungen hat wie der ursprüngliche Datensatz, um den Prozess der Stichprobenentnahme aus der Population zu imitieren.
+Beim Sampeln im linearen Modell-Fall betrachten Sie jede Beobachtung als einen einzelnen Punkt.
+Wenn der Punkt erneut gesampelt wird, werden sowohl die `weight`- als auch die `mage`-Messung beobachtet.
+Die Messungen sind mit dem Punkt verbunden (d.h. mit der Geburt in der Stichprobe).
 
 ```{r}
 #| label: fig-birth2BS
@@ -625,11 +625,11 @@ ggplot(births5) +
   geom_point(x = 39, y = 9, pch = 1, size = 8)
 ```
 
-@fig-birth2BS-1 shows the original data as compared with a single bootstrap sample in @fig-birth2BS-2, resulting in (slightly) different linear models.
-The red circles represent points in the original data which were not included in the bootstrap sample.
-The blue circles represent a point that was repeatedly resampled (and is therefore darker) in the bootstrap sample.
-The green circles represent a particular structure to the data which is observed in both the original and bootstrap samples.
-By repeatedly resampling, we can see dozens of bootstrapped slopes on the same plot in @fig-birthBS.
+@fig-birth2BS-1 zeigt die Originaldaten im Vergleich zu einer einzelnen Bootstrap-Stichprobe in @fig-birth2BS-2, was zu (leicht) unterschiedlichen linearen Modellen führt.
+Die roten Kreise repräsentieren Punkte in den Originaldaten, die nicht in der Bootstrap-Stichprobe enthalten waren.
+Die blauen Kreise repräsentieren einen Punkt, der wiederholt gesampelt wurde (und daher dunkler ist) in der Bootstrap-Stichprobe.
+Die grünen Kreise repräsentieren eine bestimmte Struktur in den Daten, die sowohl in der Original- als auch in der Bootstrap-Stichprobe beobachtet wird.
+Durch wiederholtes Resampling können wir Dutzende von gebottstrappten Steigungen auf demselben Plot in @fig-birthBS sehen.
 
 ```{r}
 #| label: fig-birthBS
@@ -648,10 +648,10 @@ ggplot(births_many_BS, aes(x = mage, y = weight, group = replicate)) +
   )
 ```
 
-Recall that in order to create a confidence interval for the slope, we need to find the range of values that the statistic (here the slope) takes on from different bootstrap samples.
-@fig-mageBSslopes is a histogram of the relevant bootstrapped slopes.
-We can see that a 95% bootstrap percentile interval for the true population slope is given by (-0.01, 0.081).
-We are 95% confident that for the model describing the population of births, predicting weight of baby from mother's age, a one unit increase in `mage` (in years) is associated with an increase in predicted average baby `weight` of between -0.01 and 0.081 pounds. Notice that the CI contains zero, so the true relationship *might* be null!
+Denken Sie daran, dass wir zur Erstellung eines Konfidenzintervalls für die Steigung den Wertebereich finden müssen, den die Statistik (hier die Steigung) aus verschiedenen Bootstrap-Stichproben annimmt.
+@fig-mageBSslopes ist ein Histogramm der relevanten gebottstrappten Steigungen.
+Wir können sehen, dass ein 95%-Bootstrap-Perzentil-Intervall für die wahre Populationssteigung (-0,01, 0,081) beträgt.
+Wir sind zu 95% zuversichtlich, dass für das Modell, das die Population der Geburten beschreibt und das Gewicht des Babys aus dem Alter der Mutter vorhersagt, eine Einheitserhöhung von `mage` (in Jahren) mit einer Erhöhung des vorhergesagten durchschnittlichen `weight` des Babys von -0,01 bis 0,081 Pfund verbunden ist. Beachten Sie, dass das Konfidenzintervall null enthält, die wahre Beziehung könnte also tatsächlich null sein!
 
 ```{r}
 #| label: fig-mageBSslopes
@@ -691,58 +691,57 @@ ggplot(births_many_lm_BS, aes(x = estimate)) +
 
 
 ::: {.workedexample data-latex=""}
-Using @fig-mageBSslopes, calculate the bootstrap estimate for the standard error of the slope.
-Using the bootstrap standard error, find a 95% bootstrap SE confidence interval for the true population slope, and interpret the interval in context.
+Berechnen Sie mithilfe von @fig-mageBSslopes die Bootstrap-Schätzung des Standardfehlers der Steigung.
+Finden Sie anhand des Bootstrap-Standardfehlers ein 95%-Bootstrap-SE-Konfidenzintervall für die wahre Populationssteigung und interpretieren Sie das Intervall im Kontext.
 
 ------------------------------------------------------------------------
 
-Notice that most of the bootstrapped slopes fall between -0.01 and +0.08 (a range of 0.09).
-Using the empirical rule (that with bell-shaped distributions, most observations are within two standard errors of the center), the standard error of the slopes is approximately 0.0225.
-The critical value for a 95% confidence interval is $z^\star = 1.96$ which leads to a confidence interval of $b_1 \pm 1.96 \cdot SE \rightarrow 0.036 \pm 1.96 \cdot 0.0225 \rightarrow (-0.0081, 0.0801).$ The bootstrap SE confidence interval is almost identical to the bootstrap percentile interval.
-In context, we are 95% confident that for the model describing the population of births, predicting weight of baby from mother's age, a one unit increase in `mage` (in years) is associated with an increase in predicted average baby `weight` of between -0.0081 and 0.0801 pounds.
+Beachten Sie, dass die meisten gebottstrappten Steigungen zwischen -0,01 und +0,08 fallen (ein Bereich von 0,09).
+Unter Verwendung der empirischen Regel (dass bei glockenförmigen Verteilungen die meisten Beobachtungen innerhalb von zwei Standardfehlern des Zentrums liegen) beträgt der Standardfehler der Steigungen ungefähr 0,0225.
+Der kritische Wert für ein 95%-Konfidenzintervall ist $z^\star = 1,96$, was zu einem Konfidenzintervall von $b_1 \pm 1{,}96 \cdot SE \rightarrow 0{,}036 \pm 1{,}96 \cdot 0{,}0225 \rightarrow (-0{,}0081, 0{,}0801)$ führt. Das Bootstrap-SE-Konfidenzintervall ist nahezu identisch mit dem Bootstrap-Perzentil-Intervall.
+Im Kontext sind wir zu 95% zuversichtlich, dass für das Modell, das die Population der Geburten beschreibt und das Gewicht des Babys aus dem Alter der Mutter vorhersagt, eine Einheitserhöhung von `mage` (in Jahren) mit einer Erhöhung des vorhergesagten durchschnittlichen `weight` des Babys von -0,0081 bis 0,0801 Pfund verbunden ist.
 :::
 
-## Mathematical model for testing the slope {#sec-mathslope}
+## Mathematisches Modell zum Testen der Steigung {#sec-mathslope}
 
-When certain technical conditions apply, it is convenient to use mathematical approximations to test and estimate the slope parameter.
-The approximations will build on the t-distribution which was described in @sec-inference-one-mean.
-The mathematical model is often correct and is usually easy to implement computationally.
-The validity of the technical conditions will be considered in detail in @sec-tech-cond-linmod.
+Wenn bestimmte technische Bedingungen zutreffen, ist es praktisch, mathematische Annäherungen zu verwenden, um den Steigungsparameter zu testen und zu schätzen.
+Die Annäherungen bauen auf der $t$-Verteilung auf, die in @sec-inference-one-mean beschrieben wurde.
+Das mathematische Modell ist oft korrekt und in der Regel einfach rechnerisch umzusetzen.
+Die Gültigkeit der technischen Bedingungen wird in @sec-tech-cond-linmod ausführlich berücksichtigt.
 
-In this section, we discuss uncertainty in the estimates of the slope and y-intercept for a regression line.
-Just as we identified standard errors for point estimates in previous chapters, we start by discussing standard errors for the slope and y-intercept estimates.
+In diesem Abschnitt diskutieren wir die Unsicherheit in den Schätzungen der Steigung und des y-Achsenabschnitts für eine Regressionsgerade.
+Genau wie wir in früheren Kapiteln Standardfehler für Punktschätzungen identifiziert haben, beginnen wir mit der Diskussion von Standardfehlern für die Steigung und die y-Achsenabschnitt-Schätzungen.
 
-### Observed data
+### Beobachtete Daten
 
-**Midterm elections and unemployment**
+**Zwischenwahlen und Arbeitslosigkeit**
 
-Elections for members of the United States House of Representatives occur every two years, coinciding every four years with the U.S.
-Presidential election.
-The set of House elections occurring during the middle of a Presidential term are called midterm elections.
-In America's two-party system (the vast majority of House members through history have been either Republicans or Democrats), one political theory suggests the higher the unemployment rate, the worse the President's party will do in the midterm elections.
-In 2020 there were 232 Democrats, 198 Republicans, and 1 Libertarian in the House.
+Wahlen für Mitglieder des Repräsentantenhauses der Vereinigten Staaten finden alle zwei Jahre statt, alle vier Jahre gleichzeitig mit der Präsidentschaftswahl.
+Die Hauswahlen, die in der Mitte einer Präsidentschaftsperiode stattfinden, werden Zwischenwahlen genannt.
+Im amerikanischen Zweiparteiensystem (die überwiegende Mehrheit der Mitglieder des Repräsentantenhauses in der Geschichte waren entweder Republikaner oder Demokraten) legt eine politische Theorie nahe, dass je höher die Arbeitslosenquote, desto schlechter die Partei des Präsidenten bei den Zwischenwahlen abschneiden wird.
+Im Jahr 2020 gab es 232 Demokraten, 198 Republikaner und 1 Libertären im Repräsentantenhaus.
 
-To assess the validity of the claim related to unemployment and voting patterns, we can compile historical data and look for a connection.
-We consider every midterm election from 1898 to 2018, with the exception of the elections during the Great Depression.
-The House of Representatives is made up of 435 voting members.
+Um die Gültigkeit der Behauptung bezüglich Arbeitslosigkeit und Wahlmustern zu bewerten, können wir historische Daten zusammenstellen und nach einer Verbindung suchen.
+Wir betrachten jede Zwischenwahl von 1898 bis 2018, mit Ausnahme der Wahlen während der Großen Depression.
+Das Repräsentantenhaus besteht aus 435 stimmberechtigten Mitgliedern.
 
 ::: {.data data-latex=""}
-The [`midterms_house`](http://openintrostat.github.io/openintro/reference/midterms_house.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die [`midterms_house`](http://openintrostat.github.io/openintro/reference/midterms_house.html)-Daten sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-@fig-unemploymentAndChangeInHouse shows these data and the least-squares regression line:
+@fig-unemploymentAndChangeInHouse zeigt diese Daten und die Kleinste-Quadrate-Regressionsgerade:
 
 $$
 \begin{aligned}
-&\texttt{percent change in House seats for President's party}  \\
-&\qquad\qquad= -7.36 - 0.89 \times \texttt{(unemployment rate)}
+&\texttt{prozentualer Wandel der Sitze des Repräsentantenhauses für die Partei des Präsidenten}  \\
+&\qquad\qquad= -7{,}36 - 0{,}89 \times \texttt{(Arbeitslosenquote)}
 \end{aligned}
 $$
 
-We consider the percent change in the number of seats of the President's party (e.g., percent change in the number of seats for Republicans in 2018) against the unemployment rate.
+Wir betrachten die prozentuale Veränderung der Sitzanzahl der Partei des Präsidenten (z.B. prozentuale Veränderung der Sitze der Republikaner im Jahr 2018) gegenüber der Arbeitslosenquote.
 
-Examining the data, there are no clear deviations from linearity or substantial outliers (see @sec-resids for a discussion on using residuals to visualize how well a linear model fits the data).
-While the data are collected sequentially, a separate analysis was used to check for any apparent correlation between successive observations; no such correlation was found.
+Bei der Untersuchung der Daten gibt es keine klaren Abweichungen von der Linearität oder wesentliche Ausreißer (siehe @sec-resids für eine Diskussion über die Verwendung von Residuen zur Visualisierung, wie gut ein lineares Modell zu den Daten passt).
+Obwohl die Daten sequenziell gesammelt werden, wurde eine separate Analyse verwendet, um auf offensichtliche Korrelation zwischen aufeinanderfolgenden Beobachtungen zu überprüfen; keine solche Korrelation wurde gefunden.
 
 ```{r}
 #| label: fig-unemploymentAndChangeInHouse
@@ -790,42 +789,42 @@ midterms_house_with_labels |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-The data for the Great Depression (1934 and 1938) were removed because the unemployment rate was 21% and 18%, respectively.
-Do you agree that they should be removed for this investigation?
-Why or why not?[^24-inf-model-slr-1]
+Die Daten für die Große Depression (1934 und 1938) wurden entfernt, weil die Arbeitslosenquote jeweils 21% und 18% betrug.
+Stimmen Sie zu, dass sie für diese Untersuchung entfernt werden sollten?
+Warum oder warum nicht?[^24-inf-model-slr-1]
 :::
 
-[^24-inf-model-slr-1]: The answer to this question relies on the idea that statistical data analysis is somewhat of an art.
-    That is, in many situations, there is no "right" answer.
-    As you do more and more analyses on your own, you will come to recognize the nuanced understanding which is needed for a particular dataset.
-    In terms of the Great Depression, we will provide two contrasting considerations.
-    Each of these points would have very high leverage on any least-squares regression line, and years with such high unemployment may not help us understand what would happen in other years where the unemployment is only modestly high.
-    On the other hand, the Depression years are exceptional cases, and we would be discarding important information if we exclude them from a final analysis.
+[^24-inf-model-slr-1]: Die Antwort auf diese Frage stützt sich auf die Idee, dass die statistische Datenanalyse gewissermaßen eine Kunst ist.
+    Das heißt, in vielen Situationen gibt es keine „richtige" Antwort.
+    Je mehr Sie eigene Analysen durchführen, desto mehr werden Sie das nuancierte Verständnis erkennen, das für einen bestimmten Datensatz erforderlich ist.
+    Was die Große Depression betrifft, geben wir zwei gegensätzliche Überlegungen an.
+    Jeder dieser Punkte hätte einen sehr hohen Einfluss auf jede Kleinste-Quadrate-Regressionsgerade, und Jahre mit so hoher Arbeitslosigkeit helfen uns vielleicht nicht zu verstehen, was in anderen Jahren passieren würde, in denen die Arbeitslosigkeit nur moderat hoch ist.
+    Andererseits sind die Depressionsjahre Ausnahmefälle, und wir würden wichtige Informationen wegwerfen, wenn wir sie von einer endgültigen Analyse ausschließen.
 
-There is a negative slope in the line shown in @fig-unemploymentAndChangeInHouse.
-However, this slope (and the y-intercept) are only estimates of the parameter values.
-We might wonder, is this convincing evidence that the "true" linear model has a negative slope?
-That is, do the data provide strong evidence that the political theory is accurate, where the unemployment rate is a useful predictor of the midterm election?
-We can frame this investigation into a statistical hypothesis test:
+Die in @fig-unemploymentAndChangeInHouse gezeigte Gerade hat eine negative Steigung.
+Diese Steigung (und der y-Achsenabschnitt) sind jedoch nur Schätzungen der Parameterwerte.
+Wir fragen uns möglicherweise: Ist dies ein überzeugender Beweis dafür, dass das „wahre" lineare Modell eine negative Steigung hat?
+Das heißt, liefern die Daten starke Belege dafür, dass die politische Theorie korrekt ist, wonach die Arbeitslosenquote ein nützlicher Prädiktor für die Zwischenwahl ist?
+Wir können diese Untersuchung in einen statistischen Hypothesentest einrahmen:
 
--   $H_0$: $\beta_1 = 0$. The true linear model has slope zero.
--   $H_A$: $\beta_1 \neq 0$. The true linear model has a slope different than zero. The unemployment is predictive of whether the President's party wins or loses seats in the House of Representatives.
+-   $H_0$: $\beta_1 = 0$. Das wahre lineare Modell hat die Steigung null.
+-   $H_A$: $\beta_1 \neq 0$. Das wahre lineare Modell hat eine von null verschiedene Steigung. Die Arbeitslosigkeit ist prädiktiv dafür, ob die Partei des Präsidenten Sitze im Repräsentantenhaus gewinnt oder verliert.
 
-We would reject $H_0$ in favor of $H_A$ if the data provide strong evidence that the true slope parameter is different than zero.
-To assess the hypotheses, we identify a standard error for the estimate, compute an appropriate test statistic, and identify the p-value.
+Wir würden $H_0$ zugunsten von $H_A$ ablehnen, wenn die Daten starke Belege dafür liefern, dass der wahre Steigungsparameter von null verschieden ist.
+Um die Hypothesen zu bewerten, identifizieren wir einen Standardfehler für die Schätzung, berechnen eine geeignete Teststatistik und identifizieren den p-Wert.
 
 \clearpage
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-Just like other point estimates we have seen before, we can compute a standard error and test statistic for $b_1$.
-We will generally label the test statistic using a $T$, since it follows the $t$-distribution.
+Genau wie bei anderen Punktschätzungen, die wir zuvor gesehen haben, können wir einen Standardfehler und eine Teststatistik für $b_1$ berechnen.
+Wir werden die Teststatistik im Allgemeinen mit einem $T$ bezeichnen, da sie der $t$-Verteilung folgt.
 
 \index{T score!slope}
 
-We will rely on statistical software to compute the standard error and leave the explanation of how this standard error is determined to a second or third statistics course.
-@tbl-midtermUnempRegTable shows software output for the least squares regression line in @fig-unemploymentAndChangeInHouse.
-The row labeled `unemp` includes all relevant information about the slope estimate (i.e., the coefficient of the unemployment variable, the related SE, the T statistic, and the corresponding p-value).
+Wir verlassen uns auf statistische Software zur Berechnung des Standardfehlers und überlassen die Erklärung, wie dieser Standardfehler bestimmt wird, einem zweiten oder dritten Statistikkurs.
+@tbl-midtermUnempRegTable zeigt die Software-Ausgabe für die Kleinste-Quadrate-Regressionsgerade in @fig-unemploymentAndChangeInHouse.
+Die mit `unemp` bezeichnete Zeile enthält alle relevanten Informationen über die Steigungsschätzung (d.h. den Koeffizienten der Arbeitslosigkeitsvariablen, den zugehörigen SE, die T-Statistik und den entsprechenden p-Wert).
 
 ```{r}
 #| include: false
@@ -853,60 +852,60 @@ lm(house_change ~ unemp, d[th, ]) |>
 ```
 
 ::: {.workedexample data-latex=""}
-What do the first and second columns of @tbl-midtermUnempRegTable represent?
+Was repräsentieren die erste und zweite Spalte von @tbl-midtermUnempRegTable?
 
 ------------------------------------------------------------------------
 
-The entries in the first column represent the least squares estimates, $b_0$ and $b_1$, and the values in the second column correspond to the standard errors of each estimate.
-Using the estimates, we could write the equation for the least square regression line as
+Die Einträge in der ersten Spalte repräsentieren die Kleinste-Quadrate-Schätzungen $b_0$ und $b_1$, und die Werte in der zweiten Spalte entsprechen den Standardfehlern jeder Schätzung.
+Mithilfe der Schätzungen könnten wir die Gleichung für die Kleinste-Quadrate-Regressionsgerade wie folgt schreiben:
 
-$$ \hat{y} = -7.36 - 0.89 x $$
+$$ \hat{y} = -7{,}36 - 0{,}89 x $$
 
-where $\hat{y}$ in this case represents the predicted change in the number of seats for the president's party, and $x$ represents the unemployment rate.
+wobei $\hat{y}$ in diesem Fall die vorhergesagte Veränderung der Sitzanzahl für die Partei des Präsidenten darstellt und $x$ die Arbeitslosenquote darstellt.
 :::
 
-We previously used a $t$-test statistic for hypothesis testing in the context of numerical data.
-Regression is very similar.
-In the hypotheses we consider, the null value for the slope is 0, so we can compute the test statistic using the T score formula:
+Wir haben früher eine $t$-Teststatistik für Hypothesentests im Kontext numerischer Daten verwendet.
+Die Regression ist sehr ähnlich.
+In den betrachteten Hypothesen ist der Nullwert für die Steigung 0, sodass wir die Teststatistik mithilfe der T-Wert-Formel berechnen können:
 
 $$
-T \ = \ \frac{\text{estimate} - \text{null value}}{\text{SE}} = \ \frac{-0.89 - 0}{0.835} = \ -1.07
+T \ = \ \frac{\text{Schätzung} - \text{Nullwert}}{\text{SE}} = \ \frac{-0{,}89 - 0}{0{,}835} = \ -1{,}07
 $$
 
-The T score we calculated corresponds to the third column of @tbl-midtermUnempRegTable.
+Der berechnete T-Wert entspricht der dritten Spalte von @tbl-midtermUnempRegTable.
 
 ::: {.workedexample data-latex=""}
-Use @tbl-midtermUnempRegTable to determine the p-value for the hypothesis test.
+Verwenden Sie @tbl-midtermUnempRegTable, um den p-Wert für den Hypothesentest zu bestimmen.
 
 ------------------------------------------------------------------------
 
-The last column of the table gives the p-value for the two-sided hypothesis test for the coefficient of the unemployment rate 0.2961. That is, the data do not provide convincing evidence that a higher unemployment rate has any correspondence with smaller or larger losses for the President's party in the House of Representatives in midterm elections. If there was no linear relationship between the two variables (i.e., if $\beta_1 = 0)$, then we would expect to see linear models as or more extreme that the observed model roughly 30% of the time.
+Die letzte Spalte der Tabelle gibt den p-Wert für den zweiseitigen Hypothesentest für den Koeffizienten der Arbeitslosenquote 0,2961 an. Das heißt, die Daten liefern keine überzeugenden Belege dafür, dass eine höhere Arbeitslosenquote irgendeinen Zusammenhang mit kleineren oder größeren Verlusten für die Partei des Präsidenten im Repräsentantenhaus bei den Zwischenwahlen hat. Wenn es keine lineare Beziehung zwischen den beiden Variablen gäbe (d.h. wenn $\beta_1 = 0$), dann würden wir erwarten, dass wir lineare Modelle so extrem oder extremer als das beobachtete Modell etwa 30% der Zeit sehen.
 :::
 
 \clearpage
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
-As the final step in a mathematical hypothesis test for the slope, we use the information provided to make a conclusion about whether the data could have come from a population where the true slope was zero (i.e., $\beta_1 = 0$).
-Before evaluating the formal hypothesis claim, sometimes it is important to check your intuition.
-Based on everything we have seen in the examples above describing the variability of a line from sample to sample, ask yourself if the linear relationship given by the data could have come from a population in which the slope was truly zero.
+Als letzten Schritt in einem mathematischen Hypothesentest für die Steigung verwenden wir die bereitgestellten Informationen, um eine Schlussfolgerung darüber zu ziehen, ob die Daten aus einer Population hätten stammen können, in der die wahre Steigung null war (d.h. $\beta_1 = 0$).
+Bevor wir die formale Hypothesenbehauptung bewerten, ist es manchmal wichtig, die eigene Intuition zu überprüfen.
+Basierend auf allem, was wir in den obigen Beispielen über die Variabilität einer Geraden von Stichprobe zu Stichprobe gesehen haben, fragen Sie sich, ob die durch die Daten gegebene lineare Beziehung aus einer Population hätte stammen können, in der die Steigung tatsächlich null war.
 
 ::: {.workedexample data-latex=""}
-Examine @fig-elmhurstScatterWLine, which relates the Elmhurst College aid and student family income.
-Are you convinced that the slope is discernibly different from zero?
-That is, do you think a formal hypothesis test would reject the claim that the true slope of the line should be zero?
+Untersuchen Sie @fig-elmhurstScatterWLine, das die Elmhurst College-Unterstützung und das Familieneinkommen der Studierenden in Beziehung setzt.
+Sind Sie überzeugt, dass die Steigung erkennbar von null verschieden ist?
+Das heißt, glauben Sie, dass ein formaler Hypothesentest die Behauptung ablehnen würde, dass die wahre Steigung der Geraden null sein sollte?
 
 ------------------------------------------------------------------------
 
-While the relationship between the variables is not perfect, there is an evident decreasing trend in the data.
-Such a distinct trend suggests that the hypothesis test will reject the null claim that the slope is zero.
+Obwohl die Beziehung zwischen den Variablen nicht perfekt ist, gibt es einen evidenten abnehmenden Trend in den Daten.
+Ein solch deutlicher Trend deutet darauf hin, dass der Hypothesentest die Nullbehauptung, dass die Steigung null ist, ablehnen wird.
 :::
 
 ::: {.data data-latex=""}
-The [`elmhurst`](http://openintrostat.github.io/openintro/reference/elmhurst.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die [`elmhurst`](http://openintrostat.github.io/openintro/reference/elmhurst.html)-Daten sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-The tools in this section help you go beyond a visual interpretation of the linear relationship toward a formal mathematical claim about whether the slope estimate is meaningfully different from 0 to suggest that the true population slope is different from 0.
+Die Werkzeuge in diesem Abschnitt helfen Ihnen, über eine visuelle Interpretation der linearen Beziehung hinaus zu einer formalen mathematischen Behauptung darüber zu gelangen, ob die Steigungsschätzung signifikant von 0 verschieden ist, um darauf hinzudeuten, dass die wahre Populationssteigung von 0 verschieden ist.
 
 ```{r}
 #| label: tbl-rOutputForIncomeAidLSRLineInInferenceSection
@@ -934,100 +933,100 @@ elmhurst |>
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-@tbl-rOutputForIncomeAidLSRLineInInferenceSection shows statistical software output from fitting the least squares regression line shown in @fig-elmhurstScatterWLine.
-Use the output to formally evaluate the following hypotheses.[^24-inf-model-slr-2]
+@tbl-rOutputForIncomeAidLSRLineInInferenceSection zeigt die statistische Software-Ausgabe für die Anpassung der Kleinste-Quadrate-Regressionsgerade, die in @fig-elmhurstScatterWLine dargestellt ist.
+Verwenden Sie die Ausgabe, um die folgenden Hypothesen formal zu bewerten.[^24-inf-model-slr-2]
 
--   $H_0$: The true coefficient for family income is zero.
--   $H_A$: The true coefficient for family income is not zero.
+-   $H_0$: Der wahre Koeffizient für das Familieneinkommen ist null.
+-   $H_A$: Der wahre Koeffizient für das Familieneinkommen ist nicht null.
 :::
 
-[^24-inf-model-slr-2]: We look in the second row corresponding to the family income variable.
-    We see the point estimate of the slope of the line is -0.0431, the standard error of this estimate is 0.0108, and the $t$-test statistic is $T = -3.98$.
-    The p-value corresponds exactly to the two-sided test we are interested in: 0.0002.
-    The p-value is so small that we reject the null hypothesis and conclude that family income and financial aid at Elmhurst College for freshman entering in the year 2011 are negatively correlated and the true slope parameter is indeed less than 0, just as we believed in our analysis of @fig-elmhurstScatterWLine.
+[^24-inf-model-slr-2]: Wir schauen in der zweiten Zeile nach, die der Variable Familieneinkommen entspricht.
+    Wir sehen, dass die Punktschätzung der Steigung der Geraden -0,0431 beträgt, der Standardfehler dieser Schätzung 0,0108 ist und die $t$-Test-Statistik $T = -3{,}98$ ist.
+    Der p-Wert entspricht genau dem zweiseitigen Test, an dem wir interessiert sind: 0,0002.
+    Der p-Wert ist so klein, dass wir die Nullhypothese ablehnen und schlussfolgern, dass das Familieneinkommen und die Finanzunterstützung am Elmhurst College für Erstsemester im Jahr 2011 negativ korreliert sind und der wahre Steigungsparameter tatsächlich kleiner als 0 ist, wie wir in unserer Analyse von @fig-elmhurstScatterWLine glaubten.
 
 \vspace{-5mm}
 
 ::: {.important data-latex=""}
-**Inference for regression.**
+**Inferenz für Regression.**
 
-We usually rely on statistical software to identify point estimates, standard errors, test statistics, and p-values in practice.
-However, be aware that software will not generally check whether the method is appropriate, meaning we must still verify conditions are met.
-See @sec-tech-cond-linmod.
+Wir verlassen uns in der Praxis normalerweise auf statistische Software, um Punktschätzungen, Standardfehler, Teststatistiken und p-Werte zu identifizieren.
+Beachten Sie jedoch, dass Software im Allgemeinen nicht überprüft, ob die Methode geeignet ist, was bedeutet, dass wir die Bedingungen noch selbst überprüfen müssen.
+Siehe @sec-tech-cond-linmod.
 :::
 
 \clearpage
 
-## Mathematical model, interval for the slope
+## Mathematisches Modell, Intervall für die Steigung
 
-Similar to how we can conduct a hypothesis test for a model coefficient using regression output, we can also construct confidence intervals for the slope and intercept coefficients.
+Ähnlich wie wir einen Hypothesentest für einen Modellkoeffizienten mithilfe der Regressionsausgabe durchführen können, können wir auch Konfidenzintervalle für die Steigung und die y-Achsenabschnitt-Koeffizienten konstruieren.
 
 ::: {.important data-latex=""}
-**Confidence intervals for coefficients.**
+**Konfidenzintervalle für Koeffizienten.**
 
-Confidence intervals for model coefficients (e.g., the intercept or the slope) can be computed using the $t$-distribution:
+Konfidenzintervalle für Modellkoeffizienten (z.B. den y-Achsenabschnitt oder die Steigung) können mithilfe der $t$-Verteilung berechnet werden:
 
 $$ b_i \ \pm\ t_{df}^{\star} \times SE_{b_{i}} $$
 
-where $t_{df}^{\star}$ is the appropriate $t^{\star}$ cutoff corresponding to the confidence level with the model's degrees of freedom, $df = n - 2$.
+wobei $t_{df}^{\star}$ der geeignete $t^{\star}$-Grenzwert ist, der dem Konfidenzniveau mit den Freiheitsgraden des Modells $df = n - 2$ entspricht.
 :::
 
 ::: {.workedexample data-latex=""}
-Compute the 95% confidence interval for the coefficient using the regression output from @tbl-rOutputForIncomeAidLSRLineInInferenceSection.
+Berechnen Sie das 95%-Konfidenzintervall für den Koeffizienten mithilfe der Regressionsausgabe aus @tbl-rOutputForIncomeAidLSRLineInInferenceSection.
 
 ------------------------------------------------------------------------
 
-The point estimate is -0.0431 and the standard error is $SE = 0.0108$.
-When constructing a confidence interval for a model coefficient, we generally use a $t$-distribution.
-The degrees of freedom for the distribution are noted in the regression output, $df = 48$, allowing us to identify $t_{48}^{\star} = 2.01$ for use in the confidence interval.
+Die Punktschätzung ist -0,0431 und der Standardfehler beträgt $SE = 0{,}0108$.
+Bei der Konstruktion eines Konfidenzintervalls für einen Modellkoeffizienten verwenden wir im Allgemeinen eine $t$-Verteilung.
+Die Freiheitsgrade für die Verteilung sind in der Regressionsausgabe angegeben, $df = 48$, was es uns ermöglicht, $t_{48}^{\star} = 2{,}01$ für das Konfidenzintervall zu identifizieren.
 
-We can now construct the confidence interval in the usual way:
+Wir können nun das Konfidenzintervall auf die übliche Weise konstruieren:
 
 $$
 \begin{aligned}
-\text{point estimate} &\pm t_{48}^{\star} \times SE \\
--0.0431 &\pm 2.01 \times 0.0108 \\
-(-0.0648 &, -0.0214)
+\text{Punktschätzung} &\pm t_{48}^{\star} \times SE \\
+-0{,}0431 &\pm 2{,}01 \times 0{,}0108 \\
+(-0{,}0648 &, -0{,}0214)
 \end{aligned}
 $$
 
-We are 95% confident that for an additional one unit (i.e., $1000 increase) in family income, the university's gift aid is predicted to decrease on average by \$21.40 to \$64.80.
+Wir sind zu 95% zuversichtlich, dass für eine zusätzliche Einheit (d.h. \$1.000 Erhöhung) des Familieneinkommens die Zuschüsse der Universität durchschnittlich um \$21,40 bis \$64,80 sinken werden.
 :::
 
-On the topic of intervals in this book, we have focused exclusively on confidence intervals for model parameters.
-However, there are other types of intervals that may be of interest (and are outside the scope of this book), including prediction intervals for a response value and confidence intervals for a mean response value in the context of regression.
+Bezüglich der Intervalle in diesem Buch haben wir uns ausschließlich auf Konfidenzintervalle für Modellparameter konzentriert.
+Es gibt jedoch andere Arten von Intervallen, die von Interesse sein könnten (und außerhalb des Geltungsbereichs dieses Buches liegen), einschließlich Vorhersageintervallen für einen Antwortwert und Konfidenzintervallen für einen mittleren Antwortwert im Kontext der Regression.
 
 \clearpage
 
-## Checking model conditions {#sec-tech-cond-linmod}
+## Überprüfung der Modellbedingungen {#sec-tech-cond-linmod}
 
 \index{technical conditions linear regression}
 
-In the previous sections, we used randomization and bootstrapping to perform inference when the mathematical model was not valid due to violations of the technical conditions.
-In this section, we'll provide details for when the mathematical model is appropriate and a discussion of technical conditions needed for the randomization and bootstrapping procedures.
-Recall from @sec-resids that residual plots can be used to visualize how well a linear model fits the data.
+In den vorherigen Abschnitten haben wir Randomisierung und Bootstrapping verwendet, um Inferenz durchzuführen, wenn das mathematische Modell aufgrund von Verletzungen der technischen Bedingungen nicht gültig war.
+In diesem Abschnitt geben wir Details dafür, wann das mathematische Modell geeignet ist, und diskutieren die technischen Bedingungen, die für die Randomisierungs- und Bootstrapping-Verfahren erforderlich sind.
+Denken Sie daran, dass in @sec-resids Residualplots verwendet werden können, um zu visualisieren, wie gut ein lineares Modell zu den Daten passt.
 
 ```{r}
 #| include: false
 terms_chp_24 <- c(terms_chp_24, "technical conditions linear regression")
 ```
 
-### What are the technical conditions for the mathematical model?
+### Was sind die technischen Bedingungen für das mathematische Modell?
 
-When fitting a least squares line, we generally require the following:
+Bei der Anpassung einer Kleinste-Quadrate-Geraden erfordern wir im Allgemeinen folgendes:
 
--   **Linearity.** The data should show a linear trend.
-    If there is a nonlinear trend (e.g., first panel of @fig-whatCanGoWrongWithLinearModel) an advanced regression method from another book or later course should be applied.
+-   **Linearität.** Die Daten sollten einen linearen Trend zeigen.
+    Wenn es einen nichtlinearen Trend gibt (z.B. erstes Panel von @fig-whatCanGoWrongWithLinearModel), sollte eine fortgeschrittene Regressionsmethode aus einem anderen Buch oder einem späteren Kurs angewendet werden.
 
--   **Independent observations.** Be cautious about applying regression to data that are sequential observations in time such as a stock price each day.
-    Such data may have an underlying structure that should be considered in a different type of model and analysis.
-    An example of a dataset where successive observations are not independent is shown in the fourth panel of @fig-whatCanGoWrongWithLinearModel.
-    There are also other instances where correlations within the data are important, which is further discussed in @sec-inf-model-mlr.
+-   **Unabhängige Beobachtungen.** Seien Sie vorsichtig bei der Anwendung von Regression auf Daten, die sequentielle Beobachtungen im Zeitverlauf sind, wie z.B. ein Aktienkurs jeden Tag.
+    Solche Daten können eine zugrunde liegende Struktur haben, die in einem anderen Modelltyp und einer anderen Analyse berücksichtigt werden sollte.
+    Ein Beispiel für einen Datensatz, bei dem aufeinanderfolgende Beobachtungen nicht unabhängig sind, ist im vierten Panel von @fig-whatCanGoWrongWithLinearModel dargestellt.
+    Es gibt auch andere Fälle, in denen Korrelationen innerhalb der Daten wichtig sind, was in @sec-inf-model-mlr weiter diskutiert wird.
 
--   **Nearly normal residuals.** Generally, the residuals should be nearly normal.
-    When this condition is found to be unreasonable, it is often because of outliers or concerns about influential points, which we'll talk about more in @sec-outliers-in-regression.
-    An example of a residual that would be potentially concerning is shown in the second panel of @fig-whatCanGoWrongWithLinearModel, where one observation is clearly much further from the regression line than the others. Outliers should be treated extremely carefully. Do not automatically remove an outlier if it truly belongs in the dataset. However, be honest about its impact on the analysis. A strategy for dealing with outliers is to present two analyses: one with the outlier and one without the outlier.
-Additionally, a type of violation of normality happens when the positive residuals are smaller in magnitude than the negative residuals (or vice versa). That is, when the residuals are not symmetrically distributed around the line $y=0.$ 
+-   **Nahezu normalverteilte Residuen.** Im Allgemeinen sollten die Residuen nahezu normalverteilt sein.
+    Wenn diese Bedingung als unangemessen befunden wird, liegt es häufig an Ausreißern oder Bedenken hinsichtlich einflussreicher Punkte, über die wir in @sec-outliers-in-regression mehr sprechen werden.
+    Ein Beispiel für ein Residuum, das potenziell besorgniserregend wäre, ist im zweiten Panel von @fig-whatCanGoWrongWithLinearModel dargestellt, wo eine Beobachtung offensichtlich viel weiter von der Regressionsgeraden entfernt ist als die anderen. Ausreißer sollten mit äußerster Sorgfalt behandelt werden. Entfernen Sie einen Ausreißer nicht automatisch, wenn er wirklich zum Datensatz gehört. Seien Sie jedoch ehrlich über seine Auswirkungen auf die Analyse. Eine Strategie für den Umgang mit Ausreißern besteht darin, zwei Analysen vorzulegen: eine mit dem Ausreißer und eine ohne den Ausreißer.
+    Darüber hinaus tritt eine Art Verletzung der Normalität auf, wenn die positiven Residuen kleiner in ihrer Größenordnung sind als die negativen Residuen (oder umgekehrt). Das heißt, wenn die Residuen nicht symmetrisch um die Gerade $y=0$ verteilt sind.
 
 ```{r}
 #| label: fig-whatCanGoWrongWithLinearModel
@@ -1230,107 +1229,107 @@ makeTubeAdv(x, y, col =  IMSCOL["lgray", "f2"])
 #par(par_og) # restore original par
 ```
 
--   **Constant or equal variability.** The variability of points around the least squares line remains roughly constant.
-    An example of non-constant variability is shown in the third panel of @fig-whatCanGoWrongWithLinearModel, which represents the most common pattern observed when this condition fails: the variability of $y$ is larger when $x$ is larger.
+-   **Konstante oder gleiche Variabilität.** Die Variabilität der Punkte um die Kleinste-Quadrate-Gerade bleibt ungefähr konstant.
+    Ein Beispiel für nicht-konstante Variabilität ist im dritten Panel von @fig-whatCanGoWrongWithLinearModel zu sehen, das das häufigste beobachtete Muster darstellt, wenn diese Bedingung nicht erfüllt ist: Die Variabilität von $y$ ist größer, wenn $x$ größer ist.
 
 ::: {.guidedpractice data-latex=""}
-Should we have concerns about applying least squares regression to the Elmhurst data in @fig-elmhurstScatterW2Lines?[^24-inf-model-slr-3]
+Sollten wir Bedenken haben, die Kleinste-Quadrate-Regression auf die Elmhurst-Daten in @fig-elmhurstScatterW2Lines anzuwenden?[^24-inf-model-slr-3]
 :::
 
-[^24-inf-model-slr-3]: The trend appears to be linear, the data fall around the line with no obvious outliers, the variance is roughly constant.
-    The data do not come from a time series or other obvious violation to independence.
-    Least squares regression can be applied to these data.
+[^24-inf-model-slr-3]: Der Trend scheint linear zu sein, die Daten liegen um die Gerade ohne offensichtliche Ausreißer, die Varianz ist ungefähr konstant.
+    Die Daten stammen nicht aus einer Zeitreihe oder einer anderen offensichtlichen Verletzung der Unabhängigkeit.
+    Kleinste-Quadrate-Regression kann auf diese Daten angewendet werden.
 
-The technical conditions are often remembered using the **LINE** mnemonic.
-The linearity, normality, and equality of variance conditions usually can be assessed through residual plots, as seen in @fig-whatCanGoWrongWithLinearModel.
-A careful consideration of the experimental design should be undertaken to confirm that the observed values are indeed independent.
+Die technischen Bedingungen werden oft mithilfe des **LINE**-Mnemonics erinnert.
+Die Linearitäts-, Normalitäts- und Varianzgleichheitsbedingungen können typischerweise anhand von Residualplots bewertet werden, wie in @fig-whatCanGoWrongWithLinearModel zu sehen.
+Eine sorgfältige Berücksichtigung des Versuchsdesigns sollte durchgeführt werden, um zu bestätigen, dass die beobachteten Werte tatsächlich unabhängig sind.
 
--   L: **linear** model
--   I: **independent** observations
--   N: points are **normally** distributed around the line
--   E: **equal** variability around the line for all values of the explanatory variable
+-   L: **lineares** Modell (linear)
+-   I: **unabhängige** Beobachtungen (independent)
+-   N: Punkte sind **normalverteilt** um die Gerade (normally distributed)
+-   E: **gleiche** Variabilität um die Gerade für alle Werte der erklärenden Variablen (equal variability)
 
-### Why do we need technical conditions?
+### Warum brauchen wir technische Bedingungen?
 
-As with other inferential techniques we have covered in this text, if the technical conditions above do not hold, then it is not possible to make concluding claims about the population.
-That is, without the technical conditions, the T score will not have the assumed t-distribution.
-That said, it is almost always impossible to check the conditions precisely, so we look for large deviations from the conditions.
-If there are large deviations, we will be unable to trust the calculated p-value or the endpoints of the resulting confidence interval.
+Wie bei anderen Inferenztechniken, die wir in diesem Text behandelt haben, ist es nicht möglich, abschließende Behauptungen über die Population zu machen, wenn die oben genannten technischen Bedingungen nicht gelten.
+Das heißt, ohne die technischen Bedingungen hat der T-Wert nicht die angenommene $t$-Verteilung.
+Allerdings ist es fast immer unmöglich, die Bedingungen genau zu überprüfen, daher suchen wir nach großen Abweichungen von den Bedingungen.
+Wenn es große Abweichungen gibt, werden wir nicht in der Lage sein, dem berechneten p-Wert oder den Endpunkten des resultierenden Konfidenzintervalls zu vertrauen.
 
-**The model based on linearity**
+**Das auf Linearität basierende Modell**
 
-The linearity condition is among the most important if your goal is to understand a linear model between $x$ and $y$.
-For example, the value of the slope will not be at all meaningful if the true relationship between $x$ and $y$ is quadratic, as in @fig-notGoodAtAllForALinearModel.
-Not only should we be cautious about the inference, but the model *itself* is also not an accurate portrayal of the relationship between the variables.
-However, an extended discussion on the different methods for modeling functional forms other than linear is outside the scope of this text.
+Die Linearitätsbedingung ist eine der wichtigsten, wenn Ihr Ziel darin besteht, ein lineares Modell zwischen $x$ und $y$ zu verstehen.
+Zum Beispiel wird der Wert der Steigung überhaupt nicht aussagekräftig sein, wenn die wahre Beziehung zwischen $x$ und $y$ quadratisch ist, wie in @fig-notGoodAtAllForALinearModel.
+Wir sollten nicht nur bei der Inferenz vorsichtig sein, sondern das Modell *selbst* ist auch keine genaue Darstellung der Beziehung zwischen den Variablen.
+Eine erweiterte Diskussion über die verschiedenen Methoden zur Modellierung anderer Funktionsformen als linearer liegt jedoch außerhalb des Geltungsbereichs dieses Textes.
 
-**The importance of independence**
+**Die Bedeutung der Unabhängigkeit**
 
-The technical condition describing the independence of the observations is often the most crucial but also the most difficult to diagnose.
-It is also extremely difficult to gather a dataset which is a true random sample from the population of interest.
-A true randomized experiment from a fixed set of individuals is much easier to implement, and indeed, randomized experiments are done in most medical studies these days.
+Die technische Bedingung, die die Unabhängigkeit der Beobachtungen beschreibt, ist oft die wichtigste, aber auch die schwierigste zu diagnostizieren.
+Es ist auch extrem schwierig, einen Datensatz zu sammeln, der eine echte Zufallsstichprobe aus der Population von Interesse ist.
+Ein echtes randomisiertes Experiment aus einem festen Satz von Individuen ist viel einfacher durchzuführen, und tatsächlich werden randomisierte Experimente in den meisten medizinischen Studien heutzutage durchgeführt.
 
-Dependent observations can bias results in ways that produce fundamentally flawed analyses.
-That is, if you hang out at the gym measuring height and weight, your linear model is surely not a representation of all students at your university.
-At best it is a model describing students who use the gym, but also who are willing to talk to you, that use the gym at the times you were there measuring, etc.
+Abhängige Beobachtungen können Ergebnisse verzerren auf Weisen, die grundlegend fehlerhafte Analysen produzieren.
+Das heißt, wenn Sie im Fitnessstudio hängen und Körpergröße und Gewicht messen, ist Ihr lineares Modell sicherlich keine Darstellung aller Studierenden an Ihrer Universität.
+Bestenfalls ist es ein Modell, das Studierende beschreibt, die das Fitnessstudio nutzen, aber auch die bereit sind, mit Ihnen zu sprechen, die das Fitnessstudio zu den Zeiten nutzen, zu denen Sie dort messen, usw.
 
-In lieu of trying to answer whether your observations are a true random sample, you might instead focus on whether you believe your observations are representative of a population of interest.
-Humans are notoriously bad at implementing random procedures, so you should be wary of any process that used human intuition to balance the data with respect to, for example, the demographics of the individuals in the sample.
-
-\clearpage
-
-**Some thoughts on normality**
-
-The normality condition requires that points vary symmetrically around the line, spreading out in a bell-shaped fashion.
-You should consider the "bell" of the normal distribution as sitting on top of the line (coming off the paper in a 3-D sense) so as to indicate that the points are dense close to the line and disperse gradually as they get farther from the line.
-
-The normality condition is less important than linearity or independence for a few reasons.
-First, the linear model fit with least squares will still be an unbiased estimate of the true population model.
-However, the distribution of the estimate will be unknown.
-Fortunately the Central Limit Theorem (described in @sec-one-mean-math) tells us that most of the analyses (e.g., SEs, p-values, confidence intervals) done using the mathematical model (with the $t$-distribution) will still hold (even if the data are not normally distributed around the line) as long as the sample size is large enough.
-One analysis method that *does* require normality, regardless of sample size, is creating intervals which predict the response of individual outcomes at a given $x$ value, using the linear model.
-One additional reason to worry slightly less about normality is that neither the randomization test nor the bootstrapping procedures require the data to be normal around the line.
-
-**Equal variability for prediction in particular**
-
-As with normality, the equal variability condition (that points are spread out in similar ways around the line for all values of $x$) will not cause problems for the estimate of the linear model.
-That said, the **inference** on the model (e.g., computing p-values) will be incorrect if the variability around the line is extremely heterogeneous.
-Data that exhibit non-equal variance across the range of x-values will have the potential to seriously mis-estimate the variability of the slope which will have consequences for the inference results (i.e., hypothesis tests and confidence intervals).
-
-In many cases, the inference results for both a randomization test or a bootstrap confidence interval are also robust to the equal variability condition, so they provide the analyst a set of methods to use when the data are heteroskedastic (that is, exhibit unequal variability around the regression line).
-Although randomization tests and bootstrapping allow us to analyze data using fewer conditions, some technical conditions are required for all methods described in this text (e.g., independent observation).
-When the equal variability condition is violated and a mathematical analysis (e.g., p-value from T score) is needed, there are other existing methods (outside the scope of this text) which can handle the unequal variance (e.g., weighted least squares analysis).
-
-### What if all the technical conditions are met?
-
-When the technical conditions are met, the least squares regression model and inference is provided by virtually all statistical software.
-In addition to being ubiquitous, however, an additional advantage to the least squares regression model (and related inference) is that the linear model has important extensions (which are not trivial to implement with bootstrapping and randomization tests).
-In particular, random effects models, repeated measures, and interaction are all linear model extensions which require the above technical conditions.
-When the technical conditions hold, the extensions to the linear model can provide important insight into the data and research question at hand.
-We will discuss some of the extended modeling and associated inference in @sec-inf-model-mlr and @sec-inf-model-logistic.
-Many of the techniques used to deal with technical condition violations are outside the scope of this text, but they are taught in universities in the very next class after this one.
-If you are working with linear models or are curious to learn more, we recommend that you continue learning about statistical methods applicable to a larger class of datasets.
+Anstatt zu versuchen zu beantworten, ob Ihre Beobachtungen eine echte Zufallsstichprobe sind, könnten Sie sich stattdessen darauf konzentrieren, ob Sie glauben, dass Ihre Beobachtungen repräsentativ für eine Population von Interesse sind.
+Menschen sind notorisch schlecht darin, zufällige Verfahren umzusetzen, daher sollten Sie bei jedem Prozess misstrauisch sein, der menschliche Intuition verwendet hat, um die Daten z.B. in Bezug auf die Demografie der Individuen in der Stichprobe auszubalancieren.
 
 \clearpage
 
-## Chapter review {#sec-chp24-review}
+**Einige Gedanken zur Normalität**
 
-### Summary
+Die Normalitätsbedingung erfordert, dass Punkte symmetrisch um die Gerade variieren und sich in einer glockenförmigen Weise ausbreiten.
+Sie sollten die „Glocke" der Normalverteilung als auf der Geraden sitzend vorstellen (im 3D-Sinne aus dem Papier herauskommend), um anzuzeigen, dass die Punkte nahe an der Geraden dicht sind und sich allmählich ausbreiten, wenn sie sich weiter von der Geraden entfernen.
 
-Recall that early in the text we presented graphical techniques which communicated relationships across multiple variables.
-We also used modeling to formalize the relationships.
-Many chapters were dedicated to inferential methods which allowed claims about the population to be made based on samples of data.
-Not only did we present the mathematical model for each of the inferential techniques, but when appropriate, we also presented bootstrapping and permutation methods.
+Die Normalitätsbedingung ist aus einigen Gründen weniger wichtig als Linearität oder Unabhängigkeit.
+Erstens wird die lineare Modell-Anpassung mit Kleinste-Quadrate immer noch eine unverzerrte Schätzung des wahren Populationsmodells sein.
+Die Verteilung der Schätzung wird jedoch unbekannt sein.
+Glücklicherweise sagt uns der Zentrale Grenzwertsatz (beschrieben in @sec-one-mean-math), dass die meisten Analysen (z.B. SEs, p-Werte, Konfidenzintervalle), die mit dem mathematischen Modell (mit der $t$-Verteilung) durchgeführt werden, immer noch gültig sind (auch wenn die Daten nicht normalverteilt um die Gerade sind), solange die Stichprobengröße groß genug ist.
+Eine Analysemethode, die *unabhängig von der Stichprobengröße* Normalität erfordert, ist das Erstellen von Intervallen, die die Reaktion einzelner Ergebnisse bei einem gegebenen $x$-Wert mithilfe des linearen Modells vorhersagen.
+Ein weiterer Grund, sich etwas weniger um Normalität zu sorgen, ist, dass weder der Randomisierungstest noch die Bootstrapping-Verfahren verlangen, dass die Daten normalverteilt um die Gerade sind.
 
-In @sec-inf-model-slr we brought all of those ideas together by considering inferential claims on linear models through randomization tests, bootstrapping, and mathematical modeling.
-We continue to emphasize the importance of experimental design in making conclusions about research claims.
-In particular, recall that variability can come from different sources (e.g., random sampling vs. random allocation, see @fig-randsampValloc).
+**Gleiche Variabilität insbesondere für Vorhersagen**
 
-### Terms
+Wie bei der Normalität wird die Bedingung gleicher Variabilität (dass Punkte um die Gerade für alle Werte von $x$ ähnlich verteilt sind) keine Probleme für die Schätzung des linearen Modells verursachen.
+Allerdings wird die **Inferenz** auf das Modell (z.B. das Berechnen von p-Werten) falsch sein, wenn die Variabilität um die Gerade extrem heterogen ist.
+Daten, die über den Bereich der x-Werte hinweg ungleiche Varianz aufweisen, haben das Potenzial, die Variabilität der Steigung ernsthaft falsch zu schätzen, was Konsequenzen für die Inferenzergebnisse hat (d.h. Hypothesentests und Konfidenzintervalle).
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-24.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+In vielen Fällen sind die Inferenzergebnisse sowohl für einen Randomisierungstest als auch für ein Bootstrap-Konfidenzintervall auch gegenüber der Bedingung gleicher Variabilität robust, sodass sie dem Analysten eine Reihe von Methoden bieten, die bei Heteroskedastizität der Daten (d.h. bei ungleicher Variabilität um die Regressionsgerade) verwendet werden können.
+Obwohl Randomisierungstests und Bootstrapping es uns ermöglichen, Daten mit weniger Bedingungen zu analysieren, sind einige technische Bedingungen für alle in diesem Text beschriebenen Methoden erforderlich (z.B. unabhängige Beobachtungen).
+Wenn die Bedingung gleicher Variabilität verletzt wird und eine mathematische Analyse (z.B. p-Wert aus T-Wert) erforderlich ist, gibt es andere vorhandene Methoden (außerhalb des Geltungsbereichs dieses Textes), die mit der ungleichen Varianz umgehen können (z.B. gewichtete Kleinste-Quadrate-Analyse).
+
+### Was wenn alle technischen Bedingungen erfüllt sind?
+
+Wenn die technischen Bedingungen erfüllt sind, wird das Kleinste-Quadrate-Regressionsmodell und die Inferenz praktisch von aller statistischen Software bereitgestellt.
+Neben der Allgegenwärtigkeit hat das Kleinste-Quadrate-Regressionsmodell (und die zugehörige Inferenz) jedoch einen weiteren Vorteil: Das lineare Modell hat wichtige Erweiterungen (die mit Bootstrapping und Randomisierungstests nicht trivial umzusetzen sind).
+Insbesondere sind zufällige Effektmodelle, Wiederholungsmessungen und Interaktion allesamt lineare Modellerweiterungen, die die obigen technischen Bedingungen erfordern.
+Wenn die technischen Bedingungen gelten, können die Erweiterungen des linearen Modells wichtige Einblicke in die vorliegenden Daten und die Forschungsfrage bieten.
+Wir werden einige der erweiterten Modellierungen und die damit verbundene Inferenz in @sec-inf-model-mlr und @sec-inf-model-logistic besprechen.
+Viele der Techniken zum Umgang mit Verletzungen technischer Bedingungen liegen außerhalb des Geltungsbereichs dieses Textes, werden aber an Universitäten in der nächsten Klasse nach dieser gelehrt.
+Wenn Sie mit linearen Modellen arbeiten oder mehr erfahren möchten, empfehlen wir Ihnen, weiterhin statistische Methoden zu erlernen, die auf eine größere Klasse von Datensätzen anwendbar sind.
+
+\clearpage
+
+## Kapitelzusammenfassung {#sec-chp24-review}
+
+### Zusammenfassung
+
+Erinnern Sie sich daran, dass wir früher im Text grafische Techniken vorgestellt haben, die Beziehungen über mehrere Variablen hinweg kommunizieren.
+Wir haben auch Modellierung verwendet, um die Beziehungen zu formalisieren.
+Viele Kapitel waren Inferenzmethoden gewidmet, die es ermöglichten, Behauptungen über die Population basierend auf Datenstichproben zu machen.
+Wir haben nicht nur das mathematische Modell für jede der Inferenztechniken vorgestellt, sondern wo geeignet auch Bootstrapping- und Permutationsmethoden.
+
+In @sec-inf-model-slr haben wir all diese Ideen zusammengeführt, indem wir inferenzielle Behauptungen über lineare Modelle durch Randomisierungstests, Bootstrapping und mathematische Modellierung berücksichtigt haben.
+Wir betonen weiterhin die Bedeutung des experimentellen Designs beim Ziehen von Schlussfolgerungen aus Forschungsbehauptungen.
+Denken Sie insbesondere daran, dass Variabilität aus verschiedenen Quellen stammen kann (z.B. Zufallsstichprobe versus Zufallszuteilung, siehe @fig-randsampValloc).
+
+### Begriffe
+
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-24 dargestellt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-24
@@ -1341,9 +1340,9 @@ make_terms_table(terms_chp_24)
 
 \clearpage
 
-## Exercises {#sec-chp24-exercises}
+## Übungen {#sec-chp24-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-24].
+Antworten auf Übungen mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-24].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_24-ex-inf-model-slr.qmd >}}

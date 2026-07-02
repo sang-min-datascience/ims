@@ -1,4 +1,4 @@
-# Inference for comparing two proportions {#sec-inference-two-props}
+# Inferenz für den Vergleich zweier Anteile {#sec-inference-two-props}
 
 ```{r}
 #| include: false
@@ -8,9 +8,9 @@ source("_common.R")
 \vspace{-5mm}
 
 ::: {.chapterintro data-latex=""}
-We now extend the methods from [Chapter -@sec-inference-one-prop] to apply confidence intervals and hypothesis tests to differences in population proportions that come from two groups, Group 1 and Group 2: $p_1 - p_2.$
+Wir erweitern nun die Methoden aus [Kapitel -@sec-inference-one-prop], um Konfidenzintervalle und Hypothesentests auf Unterschiede in Populationsanteilen anzuwenden, die aus zwei Gruppen, Gruppe 1 und Gruppe 2, stammen: $p_1 - p_2.$
 
-In our investigations, we'll identify a reasonable point estimate of $p_1 - p_2$ based on the sample, and you may have already guessed its form: $\hat{p}_1 - \hat{p}_2.$ \index{point estimate!difference of proportions}\index{difference of proportions!point estimate} Then we'll look at the inferential analysis in three different ways: using a randomization test, applying bootstrapping for interval estimates, and, if we verify that the point estimate can be modeled using a normal distribution, we compute the estimate's standard error, and we apply the mathematical framework.
+In unseren Untersuchungen werden wir einen vernünftigen Punktschätzer für $p_1 - p_2$ auf Basis der Stichprobe identifizieren, und Sie haben seine Form vielleicht bereits erraten: $\hat{p}_1 - \hat{p}_2.$ \index{point estimate!difference of proportions}\index{difference of proportions!point estimate} Dann werden wir die inferenzielle Analyse auf drei verschiedene Arten betrachten: mithilfe eines Randomisierungstests, durch Anwendung von Bootstrapping für Intervallschätzungen, und wenn wir bestätigen, dass der Punktschätzer mit einer Normalverteilung modelliert werden kann, berechnen wir den Standardfehler des Schätzers und wenden das mathematische Rahmenwerk an.
 :::
 
 ```{r}
@@ -20,22 +20,22 @@ terms_chp_17 <- c("point estimate")
 
 \vspace{-5mm}
 
-## Randomization test for the difference in proportions {#sec-two-prop-errors}
+## Randomisierungstest für den Unterschied in Anteilen {#sec-two-prop-errors}
 
-### Observed data
+### Beobachtete Daten
 
-Let's take another look at the cardiopulmonary resuscitation (CPR) study we introduced in @sec-two-sided-hypotheses.
-The experiment consisted of two treatments on patients who underwent CPR for a heart attack and were subsequently admitted to a hospital.
-Each patient was randomly assigned to either receive a blood thinner (treatment group) or not receive a blood thinner (control group).
-The outcome variable of interest was whether the patient survived for at least 24 hours.
+Werfen wir einen weiteren Blick auf die Studie zur kardiopulmonalen Reanimation (CPR), die wir in @sec-two-sided-hypotheses vorgestellt haben.
+Das Experiment bestand aus zwei Behandlungen bei Patienten, die nach einem Herzanfall CPR erhielten und anschließend in ein Krankenhaus eingeliefert wurden.
+Jeder Patient wurde zufällig entweder einer Behandlungsgruppe (Erhalt eines Blutverdünners) oder einer Kontrollgruppe (kein Blutverdünner) zugeteilt.
+Die interessierende Ergebnisvariable war, ob der Patient mindestens 24 Stunden überlebte.
 [@Bottiger:2001]
 
 ::: {.data data-latex=""}
-The [`cpr`](http://openintrostat.github.io/openintro/reference/cpr.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`cpr`](http://openintrostat.github.io/openintro/reference/cpr.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) verfügbar.
 :::
 
-The results are summarized in @tbl-cpr-summary-again (which is a replica of @tbl-cpr-summary).
-11 out of the 50 patients in the control group and 14 out of the 40 patients in the treatment group survived.
+Die Ergebnisse sind in @tbl-cpr-summary-again zusammengefasst (eine Replik von @tbl-cpr-summary).
+11 von 50 Patienten in der Kontrollgruppe und 14 von 40 Patienten in der Behandlungsgruppe überlebten.
 
 ```{r}
 #| label: tbl-cpr-summary-again
@@ -65,21 +65,21 @@ cpr |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Is this an observational study or an experiment?
-What implications does the study type have on what can be inferred from the results?[^17-inference-two-props-1]
+Handelt es sich um eine Beobachtungsstudie oder ein Experiment?
+Welche Konsequenzen hat der Studientyp für das, was aus den Ergebnissen geschlossen werden kann?[^17-inference-two-props-1]
 :::
 
-[^17-inference-two-props-1]: The study is an experiment, as patients were randomly assigned an experiment group.
-    Since this is an experiment, the results can be used to evaluate a causal relationship between blood thinner use after CPR and whether patients survived.
+[^17-inference-two-props-1]: Die Studie ist ein Experiment, da die Patienten zufällig einer Experimentgruppe zugeteilt wurden.
+    Da es sich um ein Experiment handelt, können die Ergebnisse verwendet werden, um einen kausalen Zusammenhang zwischen der Verwendung von Blutverdünnern nach CPR und dem Überleben der Patienten zu bewerten.
 
-In this study, a larger proportion of patients who received blood thinner after CPR,$\hat{p}_T = \frac{14}{40} = 0.35,$ survived compared to those who did not receive blood thinner, $\hat{p}_C = \frac{11}{50} = 0.22.$ However, based on these observed proportions alone, we cannot determine whether the difference ($\hat{p}_T - \hat{p}_C = 0.35 - 0.22 = 0.13$) provides *convincing evidence* that blood thinner usage after CPR is effective.
+In dieser Studie überlebten ein größerer Anteil der Patienten, die nach der CPR einen Blutverdünner erhielten, $\hat{p}_T = \frac{14}{40} = 0{,}35,$ im Vergleich zu denen, die keinen Blutverdünner erhielten, $\hat{p}_C = \frac{11}{50} = 0{,}22.$ Anhand dieser beobachteten Anteile allein können wir jedoch nicht bestimmen, ob die Differenz ($\hat{p}_T - \hat{p}_C = 0{,}35 - 0{,}22 = 0{,}13$) *überzeugende Beweise* dafür liefert, dass die Verwendung von Blutverdünnern nach CPR wirksam ist.
 
-As we saw in [Chapter -@sec-foundations-randomization], we can re-randomize the responses (`survived` or `died`) to the treatment conditions assuming the null hypothesis is true and compute possible differences in proportions.
-The process by which we randomize observations to two groups is summarized and visualized in @fig-fullrand).
+Wie wir in [Kapitel -@sec-foundations-randomization] gesehen haben, können wir die Antworten (`survived` oder `died`) unter der Annahme, dass die Nullhypothese wahr ist, zufällig den Behandlungsbedingungen zuordnen und mögliche Unterschiede in den Anteilen berechnen.
+Der Prozess, bei dem wir Beobachtungen zufällig zwei Gruppen zuordnen, wird in @fig-fullrand) zusammengefasst und visualisiert.
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-@fig-cpr-rand-dot-plot shows a stacked plot of the differences found from 100 randomization simulations (i.e., repeated iterations as described in @fig-fullrand, where each dot represents a simulated difference between the infection rates (control rate minus treatment rate).
+@fig-cpr-rand-dot-plot zeigt ein gestapeltes Punktdiagramm der Unterschiede aus 100 Randomisierungssimulationen (d. h. wiederholte Iterationen wie in @fig-fullrand beschrieben), wobei jeder Punkt einen simulierten Unterschied zwischen den Überlebensraten (Kontrollrate minus Behandlungsrate) darstellt.
 
 ```{r}
 #| label: fig-cpr-rand-dot-plot
@@ -116,54 +116,54 @@ cpr |>
   gghighlight(stat >= 0.13)
 ```
 
-### Observed statistic vs null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
-Note that the distribution of these simulated differences is centered around 0.
-We simulated the differences assuming that the independence model was true, that blood thinners after CPR have no effect on survival.
-Under the null hypothesis, we expect the difference to be near zero with some random fluctuation, where *near* is pretty generous in this case since the sample sizes are so small in this study.
+Beachten Sie, dass die Verteilung dieser simulierten Unterschiede um 0 zentriert ist.
+Wir haben die Unterschiede unter der Annahme simuliert, dass das Unabhängigkeitsmodell wahr ist, d. h. dass Blutverdünner nach CPR keinen Einfluss auf das Überleben haben.
+Unter der Nullhypothese erwarten wir, dass die Differenz nahe bei null liegt, mit einigen zufälligen Schwankungen, wobei *nahe* in diesem Fall recht großzügig ist, da die Stichprobengrößen in dieser Studie so klein sind.
 
 ::: {.workedexample data-latex=""}
-How often would you observe a difference of at least 13% (0.13) according to @fig-cpr-rand-dot-plot?
-Is this a rare event?
+Wie oft würde man gemäß @fig-cpr-rand-dot-plot eine Differenz von mindestens 13% (0,13) beobachten?
+Ist dies ein seltenes Ereignis?
 
 ------------------------------------------------------------------------
 
-It appears that a difference of at least 13% due to chance alone, if the null hypothesis was true would happen about 12% of the time according to @fig-cpr-rand-dot-plot.
-This is not a very rare event.
+Es scheint, dass eine Differenz von mindestens 13% allein durch Zufall, wenn die Nullhypothese wahr wäre, gemäß @fig-cpr-rand-dot-plot etwa 12% der Zeit auftreten würde.
+Dies ist kein sehr seltenes Ereignis.
 :::
 
-The difference of 13% not being a rare event suggests two possible interpretations of the results of the study:
+Die Tatsache, dass eine Differenz von 13% kein seltenes Ereignis ist, legt zwei mögliche Interpretationen der Studienergebnisse nahe:
 
--   $H_0$ Independence model. Blood thinners after CPR have no effect on survival, and we just happened to observe a difference that would only occur on a rare occasion.
--   $H_A$ Alternative model. Blood thinners after CPR increase chance of survival, and the difference we observed was actually due to the blood thinners after CPR being effective at increasing the chance of survival, which explains the difference of 13%.
+-   $H_0$ Unabhängigkeitsmodell. Blutverdünner nach CPR haben keinen Einfluss auf das Überleben, und wir haben zufällig eine Differenz beobachtet, die nur bei einem seltenen Ereignis auftreten würde.
+-   $H_A$ Alternatives Modell. Blutverdünner nach CPR erhöhen die Überlebenschance, und die beobachtete Differenz war tatsächlich auf die Wirksamkeit der Blutverdünner nach CPR bei der Erhöhung der Überlebenschance zurückzuführen, was die Differenz von 13% erklärt.
 
-Since we determined that the outcome is not that rare (12% chance of observing a difference of 13% or more under the assumption that blood thinners after CPR have no effect on survival), we fail to reject $H_0$, and conclude that the study results do not provide strong evidence against the independence model.
-This does not mean that we have proved that blood thinners are not effective, it just means that this study does not provide convincing evidence that they are effective in this setting.
+Da wir festgestellt haben, dass das Ergebnis nicht so selten ist (12% Wahrscheinlichkeit, eine Differenz von 13% oder mehr zu beobachten, unter der Annahme, dass Blutverdünner nach CPR keinen Einfluss auf das Überleben haben), lehnen wir $H_0$ nicht ab und schlussfolgern, dass die Studienergebnisse keine starken Belege gegen das Unabhängigkeitsmodell liefern.
+Dies bedeutet nicht, dass wir bewiesen haben, dass Blutverdünner nicht wirksam sind; es bedeutet nur, dass diese Studie keine überzeugenden Belege für ihre Wirksamkeit in diesem Rahmen liefert.
 
-Statistical inference, is built on evaluating how likely such differences are to occur due to chance if in fact the null hypothesis is true.
-In statistical inference, data scientists evaluate which model is most reasonable given the data.
-Errors do occur, just like rare events, and we might choose the wrong model.
-While we do not always choose correctly, statistical inference gives us tools to control and evaluate how often these errors occur.
+Statistische Inferenz basiert auf der Bewertung, wie wahrscheinlich solche Unterschiede durch Zufall auftreten, wenn tatsächlich die Nullhypothese wahr ist.
+Bei der statistischen Inferenz beurteilen Datenwissenschaftler, welches Modell angesichts der Daten am vernünftigsten ist.
+Fehler passieren, genau wie seltene Ereignisse, und wir könnten das falsche Modell wählen.
+Obwohl wir nicht immer richtig liegen, gibt uns die statistische Inferenz Werkzeuge, um zu kontrollieren und zu bewerten, wie oft diese Fehler auftreten.
 
-## Bootstrap confidence interval for the difference in proportions {#sec-two-prop-boot-ci}
+## Bootstrap-Konfidenzintervall für den Unterschied in Anteilen {#sec-two-prop-boot-ci}
 
 \chaptermark{Bootstrap CI for the difference in proportions}
 
-In @sec-two-prop-errors, we worked with the randomization distribution to understand the distribution of $\hat{p}_1 - \hat{p}_2$ when the null hypothesis $H_0: p_1 - p_2 = 0$ is true.
-Now, through bootstrapping, we study the variability of $\hat{p}_1 - \hat{p}_2$ without assuming the null hypothesis is true.
+In @sec-two-prop-errors haben wir mit der Randomisierungsverteilung gearbeitet, um die Verteilung von $\hat{p}_1 - \hat{p}_2$ zu verstehen, wenn die Nullhypothese $H_0: p_1 - p_2 = 0$ wahr ist.
+Nun untersuchen wir durch Bootstrapping die Variabilität von $\hat{p}_1 - \hat{p}_2$, ohne die Nullhypothese als wahr vorauszusetzen.
 
-### Observed data
+### Beobachtete Daten
 
-Reconsider the CPR data from @sec-two-prop-errors which is provided in  @tbl-cpr-summary.
-Again, we use the difference in sample proportions as the observed statistic of interest.
-Here, the value of the statistic is: $\hat{p}_T - \hat{p}_C = 0.35 - 0.22 = 0.13.$
+Betrachten wir erneut die CPR-Daten aus @sec-two-prop-errors, die in @tbl-cpr-summary bereitgestellt werden.
+Auch hier verwenden wir die Differenz der Stichprobenanteile als beobachtete Statistik von Interesse.
+Der Wert der Statistik beträgt: $\hat{p}_T - \hat{p}_C = 0{,}35 - 0{,}22 = 0{,}13.$
 
-### Variability of the difference in sample proportions
+### Variabilität der Differenz der Stichprobenanteile
 
-The bootstrap method applied to two samples is an extension of the method described in [Chapter -@sec-foundations-bootstrapping].
-Now, we have two samples, so each sample estimates the population from which they came.
-In the CPR setting, the `treatment` sample estimates the population of all individuals who have gotten (or will get) the treatment; the `control` sample estimates the population of all individuals who do not get the treatment and are controls.
-@fig-boot2proppops extends @fig-boot1 to show the bootstrapping process from two samples simultaneously.
+Die Bootstrap-Methode, die auf zwei Stichproben angewendet wird, ist eine Erweiterung der in [Kapitel -@sec-foundations-bootstrapping] beschriebenen Methode.
+Jetzt haben wir zwei Stichproben, sodass jede Stichprobe die Population schätzt, aus der sie stammt.
+Im CPR-Kontext schätzt die `treatment`-Stichprobe die Population aller Personen, die die Behandlung erhalten haben (oder erhalten werden); die `control`-Stichprobe schätzt die Population aller Personen, die die Behandlung nicht erhalten und Kontrollen sind.
+@fig-boot2proppops erweitert @fig-boot1, um den Bootstrap-Prozess aus zwei Stichproben gleichzeitig zu zeigen.
 
 ```{r}
 #| label: fig-boot2proppops
@@ -177,7 +177,7 @@ In the CPR setting, the `treatment` sample estimates the population of all indiv
 include_graphics("images/boot2proppops.png")
 ```
 
-As before, once the population is estimated, we can randomly resample observations to create bootstrap samples, as seen in @fig-boot2propresamps.
+Sobald die Population geschätzt ist, können wir, wie zuvor, Beobachtungen zufällig neu entnehmen, um Bootstrap-Stichproben zu erstellen, wie in @fig-boot2propresamps zu sehen.
 
 ```{r}
 #| label: fig-boot2propresamps
@@ -196,7 +196,7 @@ As before, once the population is estimated, we can randomly resample observatio
 include_graphics("images/boot2propresamps.png")
 ```
 
-The variability of the statistic (the difference in sample proportions) can be calculated by taking one bootstrap resample from Sample 1 and one bootstrap resample from Sample 2 and calculating the difference in the bootstrap proportions.
+Die Variabilität der Statistik (die Differenz der Stichprobenanteile) kann berechnet werden, indem man eine Bootstrap-Resampling aus Stichprobe 1 und eine aus Stichprobe 2 entnimmt und die Differenz der Bootstrap-Anteile berechnet.
 
 ```{r}
 #| label: fig-boot2samp2
@@ -212,8 +212,8 @@ The variability of the statistic (the difference in sample proportions) can be c
 include_graphics("images/boot2prop3.png")
 ```
 
-As always, the variability of the difference in proportions can only be estimated by repeated simulations, in this case, repeated bootstrap resamples.
-@fig-boot2samp2 shows multiple bootstrap differences calculated for each of the repeated bootstrap samples.
+Wie immer kann die Variabilität der Differenz der Anteile nur durch wiederholte Simulationen geschätzt werden, in diesem Fall durch wiederholte Bootstrap-Resamples.
+@fig-boot2samp2 zeigt mehrere Bootstrap-Differenzen, die für jedes der wiederholten Bootstrap-Resamples berechnet wurden.
 
 ```{r}
 #| label: fig-boot2samp3
@@ -234,11 +234,11 @@ As always, the variability of the difference in proportions can only be estimate
 include_graphics("images/boot2prop2.png")
 ```
 
-Repeated bootstrap simulations lead to a bootstrap sampling distribution of the statistic of interest, here the difference in sample proportions.
-@fig-boot2samp1 visualizes the process and @fig-bootCPR1000 shows 1,000 bootstrap differences in proportions for the CPR data.
-Note that the CPR data includes 40 and 50 people in the respective groups, and the illustrated example includes 7 and 9 people in the two groups.
-Accordingly, the variability in the distribution of sample proportions is higher for the illustrated example.
-As you will see in the mathematical models discussed in @sec-math-2prop, large sample sizes lead to smaller standard errors for a difference in proportions.
+Wiederholte Bootstrap-Simulationen führen zu einer Bootstrap-Stichprobenverteilung der interessierenden Statistik, hier der Differenz der Stichprobenanteile.
+@fig-boot2samp1 visualisiert den Prozess und @fig-bootCPR1000 zeigt 1.000 Bootstrap-Differenzen der Anteile für die CPR-Daten.
+Beachten Sie, dass die CPR-Daten 40 bzw. 50 Personen in den jeweiligen Gruppen umfassen, während das illustrierte Beispiel 7 bzw. 9 Personen in den zwei Gruppen enthält.
+Dementsprechend ist die Variabilität in der Verteilung der Stichprobenanteile für das illustrierte Beispiel höher.
+Wie Sie in den mathematischen Modellen in @sec-math-2prop sehen werden, führen große Stichprobengrößen zu kleineren Standardfehlern für eine Differenz in Anteilen.
 
 ```{r}
 #| label: fig-boot2samp1
@@ -281,10 +281,10 @@ ggplot(cpr_boot_dist, aes(x = stat)) +
   )
 ```
 
-### Bootstrap percentile vs. SE confidence intervals
+### Bootstrap-Perzentil- vs. SE-Konfidenzintervalle
 
-@fig-bootCPR1000 provides an estimate for the variability of the difference in survival proportions from sample to sample.
-The values in the histogram can be used in two different ways to create a confidence interval for the parameter of interest: $p_1 - p_2$.
+@fig-bootCPR1000 liefert eine Schätzung für die Variabilität der Differenz der Überlebensanteile von Stichprobe zu Stichprobe.
+Die Werte im Histogramm können auf zwei verschiedene Arten verwendet werden, um ein Konfidenzintervall für den interessierenden Parameter $p_1 - p_2$ zu erstellen.
 
 ```{r}
 cpr_boot_90 <- cpr_boot_dist |>
@@ -297,12 +297,12 @@ cpr_boot_90_lower_perc <- cpr_boot_90 |> pull(lower)
 cpr_boot_90_upper_perc <- cpr_boot_90 |> pull(upper)
 ```
 
-As in [Chapter -@sec-foundations-bootstrapping], the bootstrap confidence interval can be calculated directly from the bootstrapped differences in @fig-bootCPR1000.
-The interval created from the percentiles of the distribution is called the **percentile interval**\index{bootstrap!percentile interval}\index{percentile interval}.
-Note that here we calculate the 90% confidence interval by finding the $5^{th}$ and $95^{th}$ percentile values from the bootstrapped differences.
-The bootstrap 5 percentile proportion is `r cpr_boot_90_lower_perc` and the 95 percentile is `r cpr_boot_90_upper_perc`.
-The result is: we are 90% confident that, in the population, the true difference in probability of survival for individuals receiving blood thinners after CPR is between `r cpr_boot_90_lower_perc` lower and `r cpr_boot_90_upper_perc` higher than those who did not receive blood thinners.
-The interval shows that we do not have much definitive evidence of the effect of blood thinners, one way or another.
+Wie in [Kapitel -@sec-foundations-bootstrapping] kann das Bootstrap-Konfidenzintervall direkt aus den Bootstrap-Differenzen in @fig-bootCPR1000 berechnet werden.
+Das aus den Perzentilen der Verteilung erstellte Intervall wird als **Perzentilintervall**\index{bootstrap!percentile interval}\index{percentile interval} bezeichnet.
+Beachten Sie, dass wir hier das 90%-Konfidenzintervall berechnen, indem wir die $5.$ und $95.$ Perzentilwerte aus den Bootstrap-Differenzen bestimmen.
+Der Bootstrap-5.-Perzentilanteil beträgt `r cpr_boot_90_lower_perc` und das 95. Perzentil `r cpr_boot_90_upper_perc`.
+Das Ergebnis lautet: Wir sind zu 90% zuversichtlich, dass in der Population die wahre Differenz in der Überlebenswahrscheinlichkeit für Personen, die nach CPR Blutverdünner erhalten, zwischen `r cpr_boot_90_lower_perc` niedriger und `r cpr_boot_90_upper_perc` höher liegt als bei denen, die keine Blutverdünner erhalten haben.
+Das Intervall zeigt, dass wir keine wesentlichen eindeutigen Beweise für die Wirkung von Blutverdünnern haben, in keiner Richtung.
 
 ```{r}
 #| include: false
@@ -344,9 +344,9 @@ cpr_boot_90_lower_se <- round((14 / 40 - 11 / 50) - 2 * cpr_boot_se, 3)
 cpr_boot_90_upper_se <- round((14 / 40 - 11 / 50) + 2 * cpr_boot_se, 3)
 ```
 
-Alternatively, we can use the variability in the bootstrapped differences to calculate a standard error of the difference.
-The resulting interval is called the **SE interval**\index{SE interval}\index{bootstrap!SE interval}.
-@sec-math-2prop details the mathematical model for the standard error of the difference in sample proportions, but the bootstrap distribution typically does an excellent job of estimating the variability of the sampling distribution of the sample statistic.
+Alternativ können wir die Variabilität der Bootstrap-Differenzen verwenden, um einen Standardfehler der Differenz zu berechnen.
+Das resultierende Intervall wird als **SE-Intervall**\index{SE interval}\index{bootstrap!SE interval} bezeichnet.
+@sec-math-2prop beschreibt das mathematische Modell für den Standardfehler der Differenz der Stichprobenanteile, aber die Bootstrap-Verteilung liefert typischerweise eine ausgezeichnete Schätzung der Variabilität der Stichprobenverteilung der Stichprobenstatistik.
 
 ```{r}
 #| include: false
@@ -357,33 +357,33 @@ $$
 SE(\hat{p}_T - \hat{p}_C) \approx SE(\hat{p}_{T, boot} - \hat{p}_{C, boot}) = `r cpr_boot_se`
 $$
 
-The variability of the difference in proportions was calculated in R using the `sd()` function, but any statistical software will calculate the standard deviation of the differences, here, the exact quantity we hope to approximate.
+Die Variabilität der Differenz der Anteile wurde in R mit der Funktion `sd()` berechnet, aber jede statistische Software berechnet die Standardabweichung der Differenzen, hier die genaue Größe, die wir annähern möchten.
 
-Note that we do not know the true distribution of $\hat{p}_T - \hat{p}_C,$ so we will use a rough approximation to find a confidence interval for $p_T - p_C.$ As seen in the bootstrap histograms, the shape of the distribution is roughly symmetric and bell-shaped.
-So for a rough approximation, we will apply the 67-95-99.7 rule which tells us that 95% of observed differences should be roughly no farther than 2 SE from the true parameter (difference in proportions).
-A 95% confidence interval for $p_T - p_C$ is given by:
+Beachten Sie, dass wir die wahre Verteilung von $\hat{p}_T - \hat{p}_C$ nicht kennen, weshalb wir eine grobe Näherung verwenden, um ein Konfidenzintervall für $p_T - p_C$ zu finden. Wie in den Bootstrap-Histogrammen zu sehen ist, ist die Form der Verteilung ungefähr symmetrisch und glockenförmig.
+Für eine grobe Näherung wenden wir daher die 67-95-99,7-Regel an, die uns sagt, dass 95% der beobachteten Differenzen ungefähr nicht weiter als 2 SE vom wahren Parameter (Differenz der Anteile) entfernt sein sollten.
+Ein 95%-Konfidenzintervall für $p_T - p_C$ ergibt sich durch:
 
 $$
 \hat{p}_T - \hat{p}_C \pm 2 \cdot SE \rightarrow \ \ \ 14/40 - 11/50 \pm 2 \cdot `r cpr_boot_se` \ \ \  \rightarrow \ \ \  (`r cpr_boot_90_lower_se`, `r cpr_boot_90_upper_se`)
 $$
 
-We are 95% confident that the true value of $p_T - p_C$ is between `r cpr_boot_90_lower_se` and `r cpr_boot_90_upper_se`.
-Again, the wide confidence interval that contains zero indicates that the study provides very little evidence about the effectiveness of blood thinners.
-For other percentages, e.g., a 90% bootstrap SE confidence interval, we will use quantiles given by the standard normal distribution, as seen in @sec-normalDist and @fig-er6895997.
+Wir sind zu 95% zuversichtlich, dass der wahre Wert von $p_T - p_C$ zwischen `r cpr_boot_90_lower_se` und `r cpr_boot_90_upper_se` liegt.
+Auch hier zeigt das breite Konfidenzintervall, das die Null enthält, dass die Studie sehr wenig Belege für die Wirksamkeit von Blutverdünnern liefert.
+Für andere Prozentwerte, z. B. ein 90%-Bootstrap-SE-Konfidenzintervall, verwenden wir Quantile der Standardnormalverteilung, wie in @sec-normalDist und @fig-er6895997 gezeigt.
 
-### What does 95% mean?
+### Was bedeutet 95%?
 
-Recall that the goal of a confidence interval is to find a plausible range of values for a *parameter* of interest.
-The estimated statistic is not the value of interest, but it is typically the best guess for the unknown parameter.
-The confidence level (often 95%) is a number that takes a while to get used to.
-Surprisingly, the percentage does not describe the dataset at hand, it describes many possible datasets.
-One way to understand a confidence interval is to think about all the confidence intervals that you have ever made or that you will ever make as a scientist, the confidence level describes **those** intervals.
+Erinnern Sie sich, dass das Ziel eines Konfidenzintervalls darin besteht, einen plausiblen Wertebereich für einen interessierenden *Parameter* zu finden.
+Die geschätzte Statistik ist nicht der interessierende Wert, aber sie ist typischerweise die beste Schätzung für den unbekannten Parameter.
+Das Konfidenzniveau (oft 95%) ist eine Zahl, an die man sich erst gewöhnen muss.
+Überraschenderweise beschreibt der Prozentsatz nicht den vorliegenden Datensatz, sondern viele mögliche Datensätze.
+Eine Möglichkeit, ein Konfidenzintervall zu verstehen, besteht darin, an alle Konfidenzintervalle zu denken, die Sie jemals als Wissenschaftler erstellt haben oder erstellen werden; das Konfidenzniveau beschreibt **diese** Intervalle.
 
-@fig-ci25ints demonstrates a hypothetical situation in which 25 different studies are performed on the exact same population (with the same goal of estimating the true parameter value of $p_1 - p_2 = 0.47).$ The study at hand represents one point estimate (a dot) and a corresponding interval.
-It is not possible to know whether the interval at hand is to the right of the unknown true parameter value (the black line) or to the left of that line.
-It is also impossible to know whether the interval captures the true parameter (is blue) or does not (is red).
-If we are making 95% intervals, then about 5% of the intervals we create over our lifetime will *not* capture the parameter of interest (e.g., will be red as in @fig-ci25ints).
-What we know is that over our lifetimes as scientists, about 95% of the intervals created and reported on will capture the parameter value of interest: thus the language "95% confident."
+@fig-ci25ints veranschaulicht eine hypothetische Situation, in der 25 verschiedene Studien an genau derselben Population durchgeführt werden (mit dem gleichen Ziel, den wahren Parameterwert $p_1 - p_2 = 0{,}47$ zu schätzen). Die vorliegende Studie repräsentiert einen Punktschätzer (ein Punkt) und ein entsprechendes Intervall.
+Es ist nicht möglich zu wissen, ob das vorliegende Intervall rechts vom unbekannten wahren Parameterwert (der schwarzen Linie) oder links davon liegt.
+Es ist auch unmöglich zu wissen, ob das Intervall den wahren Parameter enthält (blau ist) oder nicht (rot ist).
+Wenn wir 95%-Intervalle erstellen, werden etwa 5% der Intervalle, die wir im Laufe unseres Lebens erstellen, den interessierenden Parameter *nicht* enthalten (z. B. rot sein wie in @fig-ci25ints).
+Was wir wissen, ist, dass im Laufe unseres Lebens als Wissenschaftler etwa 95% der erstellten und gemeldeten Intervalle den interessierenden Parameterwert enthalten werden: daher die Formulierung „95% zuversichtlich".
 
 ```{r}
 #| label: fig-ci25ints
@@ -447,45 +447,45 @@ for (i in 1:k) {
 }
 ```
 
-The choice of 95% or 90% or even 99% as a confidence level is admittedly somewhat arbitrary; however, it is related to the logic we used when deciding that a p-value should be declared as "discernible" if it is lower than 0.05 (or 0.10 or 0.01, respectively).
-Indeed, one can show mathematically, that a 95% confidence interval and a two-sided hypothesis test at a cutoff of 0.05 will provide the same conclusion when the same data and mathematical tools are applied for the analysis.
-A full derivation of the explicit connection between confidence intervals and hypothesis tests is beyond the scope of this text.
+Die Wahl von 95% oder 90% oder sogar 99% als Konfidenzniveau ist zugegebenermaßen etwas willkürlich; sie hängt jedoch mit der Logik zusammen, die wir bei der Entscheidung verwendet haben, dass ein p-Wert als „erkennbar" gilt, wenn er kleiner als 0,05 (oder 0,10 bzw. 0,01) ist.
+Tatsächlich lässt sich mathematisch zeigen, dass ein 95%-Konfidenzintervall und ein zweiseitiger Hypothesentest mit einem Schwellenwert von 0,05 zum gleichen Schluss führen, wenn dieselben Daten und mathematischen Werkzeuge für die Analyse verwendet werden.
+Eine vollständige Herleitung des expliziten Zusammenhangs zwischen Konfidenzintervallen und Hypothesentests geht über den Rahmen dieses Textes hinaus.
 
-## Mathematical model for the difference in proportions {#sec-math-2prop}
+## Mathematisches Modell für den Unterschied in Anteilen {#sec-math-2prop}
 
-### Variability of the difference between two proportions
+### Variabilität der Differenz zwischen zwei Anteilen
 
-Like with $\hat{p},$ the difference of two sample proportions $\hat{p}_1 - \hat{p}_2$ can be modeled using a normal distribution when certain conditions are met.
-First, we require a broader independence condition, and secondly, the success-failure condition must be met by both groups.
+Wie bei $\hat{p}$ kann die Differenz zweier Stichprobenanteile $\hat{p}_1 - \hat{p}_2$ unter bestimmten Bedingungen mit einer Normalverteilung modelliert werden.
+Zunächst benötigen wir eine erweiterte Unabhängigkeitsbedingung, und außerdem muss die Erfolg-Misserfolg-Bedingung von beiden Gruppen erfüllt sein.
 
 ::: {.important data-latex=""}
-**Conditions for the sampling distribution of** $\hat{p}_1 -\hat{p}_2$ **to be normal.**
+**Bedingungen dafür, dass die Stichprobenverteilung von** $\hat{p}_1 -\hat{p}_2$ **normal ist.**
 
-The difference $\hat{p}_1 - \hat{p}_2$ can be modeled using a normal distribution when
+Die Differenz $\hat{p}_1 - \hat{p}_2$ kann mit einer Normalverteilung modelliert werden, wenn
 
-1.  *Independence* (extended). The data are independent within and between the two groups. Generally this is satisfied if the data come from two independent random samples or if the data come from a randomized experiment.
-2.  *Success-failure condition.* The success-failure condition holds for both groups, where we check successes and failures in each group separately. That is, we should have at least 10 successes and 10 failures in each of the two groups.
+1.  *Unabhängigkeit* (erweitert). Die Daten sind innerhalb und zwischen den beiden Gruppen unabhängig. Dies ist im Allgemeinen erfüllt, wenn die Daten aus zwei unabhängigen Zufallsstichproben stammen oder wenn die Daten aus einem randomisierten Experiment stammen.
+2.  *Erfolg-Misserfolg-Bedingung.* Die Erfolg-Misserfolg-Bedingung gilt für beide Gruppen, wobei wir Erfolge und Misserfolge in jeder Gruppe separat prüfen. Das heißt, wir sollten mindestens 10 Erfolge und 10 Misserfolge in jeder der beiden Gruppen haben.
 
-When these conditions are satisfied, the standard error of $\hat{p}_1 - \hat{p}_2$ is:
+Wenn diese Bedingungen erfüllt sind, ist der Standardfehler von $\hat{p}_1 - \hat{p}_2$:
 
 $$SE(\hat{p}_1 - \hat{p}_2) = \sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}$$
 
-where $p_1$ and $p_2$ represent the population proportions, and $n_1$ and $n_2$ represent the sample sizes.
+wobei $p_1$ und $p_2$ die Populationsanteile und $n_1$ und $n_2$ die Stichprobengrößen darstellen.
 
-Note that in most cases, the standard error is approximated using the observed data:
+Beachten Sie, dass in den meisten Fällen der Standardfehler mithilfe der beobachteten Daten approximiert wird:
 
 $$SE(\hat{p}_1 - \hat{p}_2) = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}$$
 
-where $\hat{p}_1$ and $\hat{p}_2$ represent the observed sample proportions, and $n_1$ and $n_2$ represent the sample sizes.
+wobei $\hat{p}_1$ und $\hat{p}_2$ die beobachteten Stichprobenanteile und $n_1$ und $n_2$ die Stichprobengrößen darstellen.
 :::
 
-Recall that the margin of error is defined by the standard error.
-The margin of error for $\hat{p}_1 - \hat{p}_2$ can be directly obtained from $SE(\hat{p}_1 - \hat{p}_2).$
+Erinnern Sie sich, dass der Fehlerrahmen durch den Standardfehler definiert wird.
+Der Fehlerrahmen für $\hat{p}_1 - \hat{p}_2$ kann direkt aus $SE(\hat{p}_1 - \hat{p}_2)$ abgeleitet werden.
 
 ::: {.important data-latex=""}
-**Margin of error for** $\hat{p}_1 - \hat{p}_2.$
+**Fehlerrahmen für** $\hat{p}_1 - \hat{p}_2.$
 
-The margin of error is $z^\star \times \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}$ where $z^\star$ is calculated from a specified percentile on the normal distribution.
+Der Fehlerrahmen ist $z^\star \times \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}$, wobei $z^\star$ aus einem angegebenen Perzentil der Normalverteilung berechnet wird.
 :::
 
 \index{standard error (SE)!difference in proportions}
@@ -496,85 +496,85 @@ The margin of error is $z^\star \times \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} 
 terms_chp_17 <- c(terms_chp_17, "SE difference in proportions")
 ```
 
-### Confidence interval for the difference between two proportions
+### Konfidenzintervall für den Unterschied zwischen zwei Anteilen
 
 \index{Z-CI!difference in proportions}
-We can apply the generic confidence interval formula for a difference of two proportions, where we use $\hat{p}_1 - \hat{p}_2$ as the point estimate and substitute the $SE$ formula:
+Wir können die allgemeine Konfidenzintervallformel für eine Differenz zweier Anteile anwenden, wobei wir $\hat{p}_1 - \hat{p}_2$ als Punktschätzer verwenden und die $SE$-Formel einsetzen:
 
 $$
 \begin{aligned}
-\text{point estimate} \ &\pm \  z^{\star} \ \times \ SE \\
+\text{Punktschätzer} \ &\pm \  z^{\star} \ \times \ SE \\
 (\hat{p}_1 - \hat{p}_2) \ &\pm \ z^{\star} \times \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}
 \end{aligned}
 $$
 
 ::: {.important data-latex=""}
-**Standard error of the difference in two proportions,** $\hat{p}_1 -\hat{p}_2.$
+**Standardfehler der Differenz zweier Anteile,** $\hat{p}_1 -\hat{p}_2.$
 
-When the conditions for the normal model are are met, the **variability** of the difference in proportions, $\hat{p}_1 -\hat{p}_2,$ is well described by:
+Wenn die Bedingungen für das Normalmodell erfüllt sind, wird die **Variabilität** der Differenz der Anteile, $\hat{p}_1 -\hat{p}_2,$ gut beschrieben durch:
 
 $$SE(\hat{p}_1 -\hat{p}_2) = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}$$
 :::
 
 ::: {.workedexample data-latex=""}
-We reconsider the experiment for patients who underwent cardiopulmonary resuscitation (CPR) for a heart attack and were subsequently admitted to a hospital.
-These patients were randomly divided into a treatment group where they received a blood thinner or the control group where they did not receive a blood thinner.
-The outcome variable of interest was whether the patients survived for at least 24 hours.
-The results are shown in @tbl-cpr-summary.
-Check whether we can model the difference in sample proportions using the normal distribution.
+Wir betrachten erneut das Experiment für Patienten, die eine kardiopulmonale Reanimation (CPR) nach einem Herzanfall erhielten und anschließend in ein Krankenhaus eingeliefert wurden.
+Diese Patienten wurden zufällig in eine Behandlungsgruppe, die einen Blutverdünner erhielt, oder in die Kontrollgruppe, die keinen Blutverdünner erhielt, eingeteilt.
+Die interessierende Ergebnisvariable war, ob die Patienten mindestens 24 Stunden überlebten.
+Die Ergebnisse sind in @tbl-cpr-summary gezeigt.
+Prüfen Sie, ob wir die Differenz der Stichprobenanteile mit der Normalverteilung modellieren können.
 
 ------------------------------------------------------------------------
 
-We first check for independence: since this is a randomized experiment, it seems reasonable to assume that the observations are idependent.
-Next, we check the success-failure condition for each group.
-We have at least 10 successes and 10 failures in each experiment arm (11, 14, 39, 26), so this condition is also satisfied.
-With both conditions satisfied, the difference in sample proportions can be reasonably modeled using a normal distribution for these data.
+Wir prüfen zunächst auf Unabhängigkeit: Da es sich um ein randomisiertes Experiment handelt, erscheint es vernünftig anzunehmen, dass die Beobachtungen unabhängig sind.
+Anschließend prüfen wir die Erfolg-Misserfolg-Bedingung für jede Gruppe.
+Wir haben mindestens 10 Erfolge und 10 Misserfolge in jedem Experimentarm (11, 14, 39, 26), sodass diese Bedingung ebenfalls erfüllt ist.
+Da beide Bedingungen erfüllt sind, kann die Differenz der Stichprobenanteile für diese Daten vernünftigerweise mit einer Normalverteilung modelliert werden.
 :::
 
 ::: {.workedexample data-latex=""}
-Create and interpret a 90% confidence interval of the difference for the survival rates in the CPR study.
+Erstellen und interpretieren Sie ein 90%-Konfidenzintervall der Differenz für die Überlebensraten in der CPR-Studie.
 
 ------------------------------------------------------------------------
 
-We'll use $p_T$ for the survival rate in the treatment group and $p_C$ for the control group:
+Wir verwenden $p_T$ für die Überlebensrate in der Behandlungsgruppe und $p_C$ für die Kontrollgruppe:
 
-$$\hat{p}_{T} - \hat{p}_{C} = \frac{14}{40} - \frac{11}{50}  = 0.35 - 0.22 = 0.13$$
+$$\hat{p}_{T} - \hat{p}_{C} = \frac{14}{40} - \frac{11}{50}  = 0{,}35 - 0{,}22 = 0{,}13$$
 
-We use the standard error formula previously provided.
-As with the one-sample proportion case, we use the sample estimates of each proportion in the formula in the confidence interval context:
+Wir verwenden die zuvor angegebene Standardfehlerformel.
+Wie beim Einstichprobenanteilsfall verwenden wir im Konfidenzintervallkontext die Stichprobenschätzungen der jeweiligen Anteile in der Formel:
 
-$$SE \approx \sqrt{\frac{0.35 (1 - 0.35)}{40} + \frac{0.22 (1 - 0.22)}{50}}  = 0.095$$
+$$SE \approx \sqrt{\frac{0{,}35 (1 - 0{,}35)}{40} + \frac{0{,}22 (1 - 0{,}22)}{50}}  = 0{,}095$$
 
-For a 90% confidence interval, we use $z^{\star} = 1.65:$
+Für ein 90%-Konfidenzintervall verwenden wir $z^{\star} = 1{,}65:$
 
 $$
 \begin{aligned}
-\text{point estimate} \ &\pm \ z^{\star} \ \times \ SE \\
-0.13 \ &\pm \ 1.65 \ \times \ 0.095 \\
-(-0.027 \ &, \ 0.287)
+\text{Punktschätzer} \ &\pm \ z^{\star} \ \times \ SE \\
+0{,}13 \ &\pm \ 1{,}65 \ \times \ 0{,}095 \\
+(-0{,}027 \ &, \ 0{,}287)
 \end{aligned}
 $$
 
-We are 90% confident that individuals receiving blood thinners have between a 2.7% less chance of survival to a 28.7% greater chance of survival than those in the control group.
-Because 0% is contained in the interval, we do not have enough information to say whether blood thinners help or harm heart attack patients who have been admitted after they have undergone CPR.
+Wir sind zu 90% zuversichtlich, dass Personen, die Blutverdünner erhalten, zwischen einer 2,7% geringeren Überlebenschance und einer 28,7% höheren Überlebenschance haben als die Kontrollgruppe.
+Da 0% im Intervall enthalten ist, haben wir nicht genügend Informationen, um zu sagen, ob Blutverdünner Herzanfallpatienten, die nach CPR eingeliefert wurden, helfen oder schaden.
 
-Note, the problem was set up as 90% to indicate that there was not a need for a high level of confidence (such a 95% or 99%).
-A lower degree of confidence increases potential for error, but it also produces a more narrow interval.
+Beachten Sie, dass das Problem auf 90% ausgelegt wurde, um anzuzeigen, dass kein hohes Konfidenzniveau (wie 95% oder 99%) erforderlich war.
+Ein niedrigeres Konfidenzniveau erhöht das Fehlerpotenzial, erzeugt aber auch ein schmaleres Intervall.
 :::
 
 ::: {.guidedpractice data-latex=""}
-A 5-year experiment was conducted to evaluate the effectiveness of fish oils on reducing cardiovascular events, where each subject was randomized into one of two treatment groups [@Manson:2019].
-We'll consider heart attack outcomes in the patients listed in @tbl-fish-oil-data.
+Ein 5-jähriges Experiment wurde durchgeführt, um die Wirksamkeit von Fischölen zur Reduzierung kardiovaskulärer Ereignisse zu bewerten, wobei jeder Proband zufällig einer von zwei Behandlungsgruppen zugeteilt wurde [@Manson:2019].
+Wir betrachten Herzinfarkt-Ergebnisse bei den in @tbl-fish-oil-data aufgeführten Patienten.
 
-Create a 95% confidence interval for the effect of fish oils on heart attacks for patients who are well-represented by those in the study.
-Also interpret the interval in the context of the study.[^17-inference-two-props-2]
+Erstellen Sie ein 95%-Konfidenzintervall für den Effekt von Fischölen auf Herzinfarkte bei Patienten, die gut durch die Studienteilnehmer repräsentiert werden.
+Interpretieren Sie das Intervall auch im Kontext der Studie.[^17-inference-two-props-2]
 :::
 
-[^17-inference-two-props-2]: Because the patients were randomized, the subjects are independent, both within and between the two groups.
-    The success-failure condition is also met for both groups as all counts are at least 10.
-    This satisfies the conditions necessary to model the difference in proportions using a normal distribution.
-    Compute the sample proportions $(\hat{p}_{\text{fish oil}} = 0.0112,$ $\hat{p}_{\text{placebo}} = 0.0155),$ point estimate of the difference $(0.0112 - 0.0155 = -0.0043),$ and standard error $SE = \sqrt{\frac{0.0112 \times 0.9888}{12933} + \frac{0.0155 \times 0.9845}{12938}},$ $SE = 0.00145.$ Next, plug the values into the general formula for a confidence interval, where we'll use a 95% confidence level with $z^{\star} = 1.96:$ $-0.0043 \pm 1.96 \times 0.00145 = (-0.0071, -0.0015).$ We are 95% confident that fish oils decreases heart attacks by 0.15 to 0.71 percentage points (off of a baseline of about 1.55%) over a 5-year period for subjects who are similar to those in the study.
-    Because the interval is entirely below 0, and the treatment was randomly assigned the data provide strong evidence that fish oil supplements reduce heart attacks in patients like those in the study.
+[^17-inference-two-props-2]: Da die Patienten randomisiert wurden, sind die Probanden unabhängig, sowohl innerhalb als auch zwischen den beiden Gruppen.
+    Die Erfolg-Misserfolg-Bedingung ist auch für beide Gruppen erfüllt, da alle Zählungen mindestens 10 betragen.
+    Dies erfüllt die Bedingungen, die notwendig sind, um die Differenz der Anteile mit einer Normalverteilung zu modellieren.
+    Berechnen Sie die Stichprobenanteile $(\hat{p}_{\text{fish oil}} = 0{,}0112,$ $\hat{p}_{\text{placebo}} = 0{,}0155),$ den Punktschätzer der Differenz $(0{,}0112 - 0{,}0155 = -0{,}0043),$ und den Standardfehler $SE = \sqrt{\frac{0{,}0112 \times 0{,}9888}{12933} + \frac{0{,}0155 \times 0{,}9845}{12938}},$ $SE = 0{,}00145.$ Setzen Sie dann die Werte in die allgemeine Formel für ein Konfidenzintervall ein, wobei wir ein 95%-Konfidenzniveau mit $z^{\star} = 1{,}96$ verwenden: $-0{,}0043 \pm 1{,}96 \times 0{,}00145 = (-0{,}0071, -0{,}0015).$ Wir sind zu 95% zuversichtlich, dass Fischöle Herzinfarkte um 0,15 bis 0,71 Prozentpunkte (von einem Ausgangswert von etwa 1,55%) über einen Zeitraum von 5 Jahren bei Probanden reduzieren, die den Studienteilnehmern ähnlich sind.
+    Da das Intervall vollständig unterhalb von 0 liegt und die Behandlung zufällig zugewiesen wurde, liefern die Daten starke Belege dafür, dass Fischölpräparate Herzinfarkte bei Patienten wie den in der Studie reduzieren.
 
 ```{r}
 #| label: tbl-fish-oil-data
@@ -600,41 +600,41 @@ fish_oil_18[[3]] |>
 ```
 
 ::: {.data data-latex=""}
-The [`fish_oil_18`](http://openintrostat.github.io/openintro/reference/fish_oil.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`fish_oil_18`](http://openintrostat.github.io/openintro/reference/fish_oil.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) verfügbar.
 :::
 
-### Hypothesis test for the difference between two proportions {#sec-test-prop-pool}
+### Hypothesentest für den Unterschied zwischen zwei Anteilen {#sec-test-prop-pool}
 
-The details for calculating a SE and for checking technical conditions are very similar to that of confidence intervals.
-However, when the null hypothesis is that $p_1 - p_2 = 0,$ we use a special proportion called the **pooled proportion**\index{pooled proportion} to estimate the SE and to check the success-failure condition.
+Die Details zur Berechnung eines SE und zur Prüfung der technischen Bedingungen ähneln sehr denen bei Konfidenzintervallen.
+Wenn die Nullhypothese jedoch $p_1 - p_2 = 0$ ist, verwenden wir einen speziellen Anteil namens **gepoolter Anteil**\index{pooled proportion}, um den SE zu schätzen und die Erfolg-Misserfolg-Bedingung zu prüfen.
 
 ::: {.important data-latex=""}
-**Use the pooled proportion when** $H_0$ is $p_1 - p_2 = 0.$
+**Verwenden Sie den gepoolten Anteil, wenn** $H_0$ $p_1 - p_2 = 0$ ist.
 
-When the null hypothesis is that the proportions are equal, use the pooled proportion $(\hat{p}_{\textit{pool}})$ of successes to verify the success-failure condition and estimate the standard error:
+Wenn die Nullhypothese besagt, dass die Anteile gleich sind, verwenden Sie den gepoolten Anteil $(\hat{p}_{\textit{pool}})$ der Erfolge, um die Erfolg-Misserfolg-Bedingung zu prüfen und den Standardfehler zu schätzen:
 
-$$\hat{p}_{\textit{pool}} = \frac{\text{number of successes}}{\text{number of cases}} = \frac{\hat{p}_1 n_1 + \hat{p}_2 n_2}{n_1 + n_2}$$
+$$\hat{p}_{\textit{pool}} = \frac{\text{Anzahl der Erfolge}}{\text{Anzahl der Fälle}} = \frac{\hat{p}_1 n_1 + \hat{p}_2 n_2}{n_1 + n_2}$$
 
-Here $\hat{p}_1 n_1$ represents the number of successes in sample 1 because $\hat{p}_1 = \frac{\text{number of successes in sample 1}}{n_1}.$
+Dabei repräsentiert $\hat{p}_1 n_1$ die Anzahl der Erfolge in Stichprobe 1, weil $\hat{p}_1 = \frac{\text{Anzahl der Erfolge in Stichprobe 1}}{n_1}.$
 
-Similarly, $\hat{p}_2 n_2$ represents the number of successes in sample 2.
+Ebenso repräsentiert $\hat{p}_2 n_2$ die Anzahl der Erfolge in Stichprobe 2.
 :::
 
 ::: {.important data-latex=""}
-**The test statistic for assessing two proportions is a Z.**
+**Die Teststatistik zur Beurteilung zweier Anteile ist ein Z-Wert.**
 
-The Z score\index{Z score!difference in proportions}\index{difference in proportions!Z score} is a ratio of how the two sample proportions differ as compared to the expected variability of difference between the proportions.
+Der Z-Wert\index{Z score!difference in proportions}\index{difference in proportions!Z score} ist ein Verhältnis, das angibt, wie sich die beiden Stichprobenanteile im Vergleich zur erwarteten Variabilität der Differenz zwischen den Anteilen unterscheiden.
 
 $$Z = \frac{(\hat{p}_1 - \hat{p}_2) - 0}{\sqrt{\hat{p}_{pool}(1-\hat{p}_{pool}) \bigg(\frac{1}{n_1} + \frac{1}{n_2} \bigg)}}$$
 
-When the null hypothesis is true and the conditions are met, Z has a standard normal distribution.
-See the box below for calculation of the pooled proportion of successes.
+Wenn die Nullhypothese wahr ist und die Bedingungen erfüllt sind, hat Z eine Standardnormalverteilung.
+Siehe das Feld unten für die Berechnung des gepoolten Anteils der Erfolge.
 
-Conditions:
+Bedingungen:
 
--   Independent observations
--   Large samples: $(n_1 p_1 \geq 10$ and $n_1 (1-p_1) \geq 10$ and $n_2 p_2 \geq 10$ and $n_2 (1-p_2) \geq 10)$
--   Check conditions using: $(n_1 \hat{p}_{\textit{pool}} \geq 10$ and $n_1 (1-\hat{p}_{\textit{pool}}) \geq 10$ and $n_2 \hat{p}_{\textit{pool}}\geq 10$ and $n_2 (1-\hat{p}_{\textit{pool}}) \geq 10)$
+-   Unabhängige Beobachtungen
+-   Große Stichproben: $(n_1 p_1 \geq 10$ und $n_1 (1-p_1) \geq 10$ und $n_2 p_2 \geq 10$ und $n_2 (1-p_2) \geq 10)$
+-   Bedingungen prüfen mit: $(n_1 \hat{p}_{\textit{pool}} \geq 10$ und $n_1 (1-\hat{p}_{\textit{pool}}) \geq 10$ und $n_2 \hat{p}_{\textit{pool}}\geq 10$ und $n_2 (1-\hat{p}_{\textit{pool}}) \geq 10)$
 :::
 
 ```{r}
@@ -642,20 +642,20 @@ Conditions:
 terms_chp_17 <- c(terms_chp_17, "Z score two proportions")
 ```
 
-A mammogram is an X-ray procedure used to check for breast cancer.
-Whether mammograms should be used is part of a controversial discussion, and it's the topic of our next example where we learn about 2-proportion hypothesis tests when $H_0$ is $p_1 - p_2 = 0$ (or equivalently, $p_1 = p_2).$
+Eine Mammographie ist ein Röntgenverfahren zur Erkennung von Brustkrebs.
+Ob Mammographien eingesetzt werden sollten, ist Teil einer kontroversen Diskussion und das Thema unseres nächsten Beispiels, in dem wir 2-Anteils-Hypothesentests kennenlernen, wenn $H_0$ $p_1 - p_2 = 0$ (oder äquivalent $p_1 = p_2$) ist.
 
-A 30-year study was conducted with nearly 90,000 participants who identified as female.
-During a 5-year screening period, each participant was randomized to one of two groups: in the first group, participants received regular mammograms to screen for breast cancer, and in the second group, participants received regular non-mammogram breast cancer exams.
-No intervention was made during the following 25 years of the study, and we'll consider death resulting from breast cancer over the full 30-year period.
-Results from the study are summarized in @tbl-mammogramStudySummaryTable.
+Eine 30-jährige Studie wurde mit fast 90.000 Teilnehmern durchgeführt, die sich als weiblich identifizierten.
+Während eines 5-jährigen Screening-Zeitraums wurde jeder Teilnehmer zufällig einer von zwei Gruppen zugewiesen: In der ersten Gruppe erhielten die Teilnehmer regelmäßige Mammographien zum Screening auf Brustkrebs, und in der zweiten Gruppe erhielten die Teilnehmer regelmäßige Nicht-Mammographie-Brustkrebsuntersuchungen.
+Während der folgenden 25 Jahre der Studie wurden keine Maßnahmen ergriffen, und wir betrachten den Tod durch Brustkrebs über den gesamten 30-Jahres-Zeitraum.
+Die Ergebnisse der Studie sind in @tbl-mammogramStudySummaryTable zusammengefasst.
 
 ::: {.data data-latex=""}
-The [`mammogram`](http://openintrostat.github.io/openintro/reference/mammogram.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`mammogram`](http://openintrostat.github.io/openintro/reference/mammogram.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) verfügbar.
 :::
 
-If mammograms are much more effective than non-mammogram breast cancer exams, then we would expect to see additional deaths from breast cancer in the control group.
-On the other hand, if mammograms are not as effective as regular breast cancer exams, we would expect to see an increase in breast cancer deaths in the mammogram group.
+Wenn Mammographien viel wirksamer sind als Nicht-Mammographie-Brustkrebsuntersuchungen, würden wir erwarten, in der Kontrollgruppe zusätzliche Todesfälle durch Brustkrebs zu beobachten.
+Wenn Mammographien dagegen nicht so wirksam sind wie reguläre Brustkrebsuntersuchungen, würden wir einen Anstieg der Brustkrebstodesfälle in der Mammographie-Gruppe erwarten.
 
 ```{r}
 #| label: tbl-mammogramStudySummaryTable
@@ -678,35 +678,35 @@ mammogram |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-Is this study an experiment or an observational study?[^17-inference-two-props-3]
+Handelt es sich bei dieser Studie um ein Experiment oder eine Beobachtungsstudie?[^17-inference-two-props-3]
 :::
 
-[^17-inference-two-props-3]: This is an experiment.
-    Patients were randomized to receive mammograms or a standard breast cancer exam.
-    We will be able to make causal conclusions based on this study.
+[^17-inference-two-props-3]: Dies ist ein Experiment.
+    Die Patienten wurden zufällig Mammographien oder einer Standard-Brustkrebsuntersuchung zugeteilt.
+    Wir werden in der Lage sein, auf Basis dieser Studie kausale Schlussfolgerungen zu ziehen.
 
 ::: {.guidedpractice data-latex=""}
-Set up hypotheses to test whether there was a difference in breast cancer deaths in the mammogram and control groups.[^17-inference-two-props-4]
+Formulieren Sie Hypothesen, um zu testen, ob es einen Unterschied in den Brustkrebssterblichkeitsraten zwischen der Mammographie- und der Kontrollgruppe gab.[^17-inference-two-props-4]
 :::
 
-[^17-inference-two-props-4]: $H_0:$ the breast cancer death rate for patients screened using mammograms is the same as the breast cancer death rate for patients in the control, $p_{MGM} - p_{C} = 0.$ $H_A:$ the breast cancer death rate for patients screened using mammograms is different than the breast cancer death rate for patients in the control, $p_{MGM} - p_{C} \neq 0.$
+[^17-inference-two-props-4]: $H_0:$ Die Brustkrebssterblichkeitsrate für Patienten, die mit Mammographien untersucht wurden, ist dieselbe wie die Brustkrebssterblichkeitsrate für Patienten in der Kontrollgruppe, $p_{MGM} - p_{C} = 0.$ $H_A:$ Die Brustkrebssterblichkeitsrate für Patienten, die mit Mammographien untersucht wurden, unterscheidet sich von der Brustkrebssterblichkeitsrate für Patienten in der Kontrollgruppe, $p_{MGM} - p_{C} \neq 0.$
 
-The research question describing mammograms is set up to address specific hypotheses (in contrast to a confidence interval for a parameter).
-In order to fully take advantage of the hypothesis testing structure, we assess the randomness under the condition that the null hypothesis is true (as we always do for hypothesis testing).
-Using the data from @tbl-mammogramStudySummaryTable, we will check the conditions for using a normal distribution to analyze the results of the study using a hypothesis test.
+Die Forschungsfrage zu Mammographien ist so formuliert, dass sie spezifische Hypothesen anspricht (im Gegensatz zu einem Konfidenzintervall für einen Parameter).
+Um die Struktur des Hypothesentests vollständig zu nutzen, beurteilen wir die Zufälligkeit unter der Bedingung, dass die Nullhypothese wahr ist (wie wir es beim Hypothesentest immer tun).
+Anhand der Daten aus @tbl-mammogramStudySummaryTable werden wir die Bedingungen für die Verwendung einer Normalverteilung zur Analyse der Studienergebnisse mittels eines Hypothesentests prüfen.
 
 $$
 \begin{aligned}
 \hat{p}_{\textit{pool}}
     &= \frac
-        {\text{number of patients who died from breast cancer in the entire study}}
-        {\text{number of patients in the entire study}} \\
-    &= \frac{500 + 505}{500 + \text{44,425} + 505 + \text{44,405}} \\
-    &= 0.0112
+        {\text{Anzahl der Patienten, die in der gesamten Studie an Brustkrebs gestorben sind}}
+        {\text{Anzahl der Patienten in der gesamten Studie}} \\
+    &= \frac{500 + 505}{500 + \text{44.425} + 505 + \text{44.405}} \\
+    &= 0{,}0112
 \end{aligned} 
 $$
 
-This proportion is an estimate of the breast cancer death rate across the entire study, and it's our best estimate of the proportions $p_{MGM}$ and $p_{C}$ *if the null hypothesis is true that* $p_{MGM} = p_{C}.$ We will also use this pooled proportion when computing the standard error.
+Dieser Anteil ist eine Schätzung der Brustkrebssterblichkeitsrate in der gesamten Studie, und er ist unsere beste Schätzung der Anteile $p_{MGM}$ und $p_{C}$, *wenn die Nullhypothese wahr ist, dass* $p_{MGM} = p_{C}.$ Wir werden diesen gepoolten Anteil auch bei der Berechnung des Standardfehlers verwenden.
 
 ```{r}
 #| include: false
@@ -714,67 +714,67 @@ terms_chp_17 <- c(terms_chp_17, "pooled proportion")
 ```
 
 ::: {.workedexample data-latex=""}
-Is it reasonable to model the difference in proportions using a normal distribution in this study?
+Ist es vernünftig, die Differenz der Anteile in dieser Studie mit einer Normalverteilung zu modellieren?
 
 ------------------------------------------------------------------------
 
-Because the patients were randomized, observations can be assumed to be independent, both within each group and between treatment groups.
-We also must check the success-failure condition for each group.
-Under the null hypothesis, the proportions $p_{MGM}$ and $p_{C}$ are equal, so we check the success-failure condition with our best estimate of these values under $H_0,$ the pooled proportion from the two samples, $\hat{p}_{\textit{pool}} = 0.0112:$
+Da die Patienten randomisiert wurden, können die Beobachtungen als unabhängig angenommen werden, sowohl innerhalb jeder Gruppe als auch zwischen den Behandlungsgruppen.
+Wir müssen auch die Erfolg-Misserfolg-Bedingung für jede Gruppe prüfen.
+Unter der Nullhypothese sind die Anteile $p_{MGM}$ und $p_{C}$ gleich, sodass wir die Erfolg-Misserfolg-Bedingung mit unserer besten Schätzung dieser Werte unter $H_0,$ dem gepoolten Anteil aus den beiden Stichproben, $\hat{p}_{\textit{pool}} = 0{,}0112,$ prüfen:
 
 $$
 \begin{aligned}
 \hat{p}_{\textit{pool}} \times n_{MGM}
-      &= 0.0112 \times \text{44,925} = 503\\
+      &= 0{,}0112 \times \text{44.925} = 503\\
  (1 - \hat{p}_{\textit{pool}}) \times n_{MGM}
-      &= 0.9888 \times \text{44,925} = \text{44,422} \\
+      &= 0{,}9888 \times \text{44.925} = \text{44.422} \\
   \hat{p}_{\textit{pool}} \times n_{C}
-      &= 0.0112 \times \text{44,910} = 503\\
+      &= 0{,}0112 \times \text{44.910} = 503\\
   (1 - \hat{p}_{\textit{pool}}) \times n_{C}
-      &= 0.9888 \times \text{44,910} = \text{44,407}
+      &= 0{,}9888 \times \text{44.910} = \text{44.407}
 \end{aligned}
 $$
 
-The success-failure condition is satisfied since all values are at least 10.
-With both conditions satisfied, we can safely model the difference in proportions using a normal distribution.
+Die Erfolg-Misserfolg-Bedingung ist erfüllt, da alle Werte mindestens 10 betragen.
+Da beide Bedingungen erfüllt sind, können wir die Differenz der Anteile sicher mit einer Normalverteilung modellieren.
 :::
 
-In the previous example, the pooled proportion was used to check the success-failure condition[^17-inference-two-props-5].
-In the next example, we see an additional place where the pooled proportion comes into play: the standard error calculation.
+Im vorherigen Beispiel wurde der gepoolte Anteil verwendet, um die Erfolg-Misserfolg-Bedingung zu prüfen[^17-inference-two-props-5].
+Im nächsten Beispiel sehen wir eine weitere Stelle, an der der gepoolte Anteil eine Rolle spielt: die Berechnung des Standardfehlers.
 
-[^17-inference-two-props-5]: For an example of a two-proportion hypothesis test that does not require the success-failure condition to be met, see @sec-two-prop-errors.
+[^17-inference-two-props-5]: Ein Beispiel für einen Zweistichproben-Hypothesentest, bei dem die Erfolg-Misserfolg-Bedingung nicht erfüllt sein muss, finden Sie in @sec-two-prop-errors.
 
 ::: {.workedexample data-latex=""}
-Compute the point estimate of the difference in breast cancer death rates in the two groups, and use the pooled proportion $\hat{p}_{\textit{pool}} = 0.0112$ to calculate the standard error.
+Berechnen Sie den Punktschätzer der Differenz der Brustkrebssterblichkeitsraten in den zwei Gruppen und verwenden Sie den gepoolten Anteil $\hat{p}_{\textit{pool}} = 0{,}0112$, um den Standardfehler zu berechnen.
 
 ------------------------------------------------------------------------
 
-The point estimate of the difference in breast cancer death rates is
+Der Punktschätzer der Differenz der Brustkrebssterblichkeitsraten beträgt
 
 \vspace{-2mm}
 
 $$
-\hat{p}_{MGM} - \hat{p}_{C} = \frac{500}{500 + 44,425} - \frac{505}{505 + 44,405} = 0.01113 - 0.01125 = -0.00012
+\hat{p}_{MGM} - \hat{p}_{C} = \frac{500}{500 + 44.425} - \frac{505}{505 + 44.405} = 0{,}01113 - 0{,}01125 = -0{,}00012
 $$
 
-The breast cancer death rate in the mammogram group was 0.012% less than in the control group.
-Next, the standard error is calculated *using the pooled proportion,* $\hat{p}_{\textit{pool}}:$
+Die Brustkrebssterblichkeitsrate in der Mammographie-Gruppe war um 0,012% niedriger als in der Kontrollgruppe.
+Als nächstes wird der Standardfehler *unter Verwendung des gepoolten Anteils,* $\hat{p}_{\textit{pool}},$ berechnet:
 
 \vspace{-2mm}
 
-$$SE = \sqrt{\frac{\hat{p}_{\textit{pool}}(1-\hat{p}_{\textit{pool}})}{n_{MGM}} + \frac{\hat{p}_{\textit{pool}}(1-\hat{p}_{\textit{pool}})}{n_{C}}}= 0.00070$$
+$$SE = \sqrt{\frac{\hat{p}_{\textit{pool}}(1-\hat{p}_{\textit{pool}})}{n_{MGM}} + \frac{\hat{p}_{\textit{pool}}(1-\hat{p}_{\textit{pool}})}{n_{C}}}= 0{,}00070$$
 :::
 
 ::: {.workedexample data-latex=""}
-Using the point estimate $\hat{p}_{MGM} - \hat{p}_{C} = -0.00012$ and standard error $SE = 0.00070,$ calculate a p-value for the hypothesis test and write a conclusion.
+Berechnen Sie mit dem Punktschätzer $\hat{p}_{MGM} - \hat{p}_{C} = -0{,}00012$ und dem Standardfehler $SE = 0{,}00070$ einen p-Wert für den Hypothesentest und formulieren Sie eine Schlussfolgerung.
 
 ------------------------------------------------------------------------
 
-We first compute a test statistic and draw a picture:
+Wir berechnen zunächst eine Teststatistik und zeichnen eine Abbildung:
 
 \vspace{-5mm}
 
-$$Z = \frac{\text{point estimate} - \text{null value}}{SE} = \frac{-0.00012 - 0}{0.00070} = -0.17$$
+$$Z = \frac{\text{Punktschätzer} - \text{Nullwert}}{SE} = \frac{-0{,}00012 - 0}{0{,}00070} = -0{,}17$$
 
 ```{r}
 #| fig-asp: 0.4
@@ -784,41 +784,41 @@ par(mar = c(2, 0, 0, 0))
 normTail(L = -0.17, U = 0.17, col = IMSCOL["blue", "full"])
 ```
 
-The lower tail area is 0.4325, which we double to get the p-value: 0.8650.
-Because this p-value is larger than 0.05, we do not reject the null hypothesis.
-That is, the difference in breast cancer death rates is likely to have occurred just by chance, if the null hypothesis is true.
-Thus, we do not observe benefits or harm from mammograms relative to a regular breast exam.
+Der untere Schwanzbereich beträgt 0,4325, den wir verdoppeln, um den p-Wert zu erhalten: 0,8650.
+Da dieser p-Wert größer als 0,05 ist, lehnen wir die Nullhypothese nicht ab.
+Das heißt, die Differenz der Brustkrebssterblichkeitsraten ist wahrscheinlich allein durch Zufall entstanden, wenn die Nullhypothese wahr ist.
+Daher beobachten wir keine Vorteile oder Nachteile von Mammographien im Vergleich zu einer regulären Brustuntersuchung.
 :::
 
-Can we conclude that mammograms have no benefits or harm?
-Here are a few considerations to keep in mind when reviewing the mammogram study as well as any other medical study:
+Können wir schlussfolgern, dass Mammographien keine Vorteile oder Nachteile haben?
+Hier sind einige Überlegungen, die beim Überprüfen der Mammographie-Studie sowie anderer medizinischer Studien berücksichtigt werden sollten:
 
--   We do not reject the null hypothesis, which means we do not have sufficient evidence to conclude that mammograms reduce or increase breast cancer deaths.
--   If mammograms are helpful or harmful, the data suggest the effect isn't very large.
--   Are mammograms more or less expensive than a non-mammogram breast exam? If one option is much more expensive than the other and does not offer clear benefits, then we should lean towards the less expensive option.
--   The study's authors also found that mammograms led to over-diagnosis of breast cancer, which means some breast cancers were found (or thought to be found) but that these cancers would not cause symptoms during patients' lifetimes. That is, something else would kill the patient before breast cancer symptoms appeared. This means some patients may have been treated for breast cancer unnecessarily, and this treatment is another cost to consider. It is also important to recognize that over-diagnosis can cause unnecessary physical or emotional harm to patients.
+-   Wir lehnen die Nullhypothese nicht ab, was bedeutet, dass wir nicht genügend Belege haben, um zu schlussfolgern, dass Mammographien Brustkrebstodesfälle reduzieren oder erhöhen.
+-   Wenn Mammographien hilfreich oder schädlich sind, deuten die Daten darauf hin, dass der Effekt nicht sehr groß ist.
+-   Sind Mammographien teurer oder günstiger als eine Nicht-Mammographie-Brustuntersuchung? Wenn eine Option viel teurer als die andere ist und keine klaren Vorteile bietet, sollten wir uns für die günstigere Option entscheiden.
+-   Die Autoren der Studie stellten auch fest, dass Mammographien zu einer Überdiagnose von Brustkrebs führten, was bedeutet, dass einige Brustkrebserkrankungen gefunden wurden (oder vermeintlich gefunden wurden), diese Krebserkrankungen jedoch während des Lebens der Patienten keine Symptome verursacht hätten. Das heißt, etwas anderes würde den Patienten töten, bevor Brustkrebssymptome auftreten. Dies bedeutet, dass einige Patienten möglicherweise unnötigerweise wegen Brustkrebs behandelt wurden, und diese Behandlung ist ein weiterer zu berücksichtigender Kostenfaktor. Es ist auch wichtig zu erkennen, dass eine Überdiagnose unnötigen körperlichen oder emotionalen Schaden bei Patienten verursachen kann.
 
-These considerations highlight the complexity around medical care and treatment recommendations.
-Experts and medical boards who study medical treatments use considerations like those above to provide their best recommendation based on the current evidence.
+Diese Überlegungen verdeutlichen die Komplexität rund um medizinische Versorgung und Behandlungsempfehlungen.
+Experten und medizinische Gremien, die medizinische Behandlungen untersuchen, verwenden solche Überlegungen, um ihre beste Empfehlung auf Basis der aktuellen Evidenz zu geben.
 
 \clearpage
 
-## Chapter review {#sec-chp17-review}
+## Kapitelzusammenfassung {#sec-chp17-review}
 
-### Summary
+### Zusammenfassung
 
-When the parameter of interest is the difference in population proportions across two groups, randomization tests, bootstrapping, and mathematical modeling can be applied.
-For confidence intervals, bootstrapping from each group separately will provide a sampling distribution for the difference in sample proportions; the mathematical model shows a similar distributional shape as long as the sample size is large enough to fulfill the success-failure conditions and so that the data are representative of the entire population.
-Keep in mind that some datasets will produce a confidence interval which does not capture the true parameter, this is the nature of variability!
-Over your lifetime, about 95% of the confidence intervals you create will capture the parameter of interest, and about 5% won't.
-For hypothesis testing, repeated randomization of the explanatory variable creates a null distribution of differences in sample proportions that could have occurred under the null hypothesis.
-Randomization and the mathematical model will have similar null distributions, as long as the sample size is large enough to fulfill the success-failure conditions.
+Wenn der interessierende Parameter die Differenz der Populationsanteile in zwei Gruppen ist, können Randomisierungstests, Bootstrapping und mathematische Modellierung angewendet werden.
+Für Konfidenzintervalle liefert das Bootstrapping aus jeder Gruppe separat eine Stichprobenverteilung für die Differenz der Stichprobenanteile; das mathematische Modell zeigt eine ähnliche Verteilungsform, sofern die Stichprobengröße groß genug ist, um die Erfolg-Misserfolg-Bedingungen zu erfüllen und die Daten repräsentativ für die gesamte Population sind.
+Denken Sie daran, dass einige Datensätze ein Konfidenzintervall erzeugen, das den wahren Parameter nicht enthält – das ist die Natur der Variabilität!
+Im Laufe Ihres Lebens werden etwa 95% der von Ihnen erstellten Konfidenzintervalle den interessierenden Parameter enthalten, und etwa 5% werden es nicht.
+Beim Hypothesentest erzeugt die wiederholte Randomisierung der erklärenden Variable eine Nullverteilung der Differenzen der Stichprobenanteile, die unter der Nullhypothese hätten auftreten können.
+Randomisierung und das mathematische Modell werden ähnliche Nullverteilungen aufweisen, sofern die Stichprobengröße groß genug ist, um die Erfolg-Misserfolg-Bedingungen zu erfüllen.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-17.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-17 aufgeführt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und deren Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-17
@@ -829,9 +829,9 @@ make_terms_table(terms_chp_17)
 
 \clearpage
 
-## Exercises {#sec-chp17-exercises}
+## Übungen {#sec-chp17-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-17].
+Antworten auf Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-17].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_17-ex-inference-two-props.qmd >}}

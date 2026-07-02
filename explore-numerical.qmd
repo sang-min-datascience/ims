@@ -1,4 +1,4 @@
-# Exploring numerical data {#sec-explore-numerical}
+# Erkundung numerischer Daten {#sec-explore-numerical}
 
 ```{r}
 #| include: false
@@ -6,30 +6,30 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-This chapter focuses on exploring **numerical** data using summary statistics and visualizations.
-The summaries and graphs presented in this chapter are created using statistical software; however, since this might be your first exposure to the concepts, we take our time in this chapter to detail how to create them.
-Mastery of the content presented in this chapter will be crucial for understanding the methods and techniques introduced in the rest of the book.
+Dieses Kapitel konzentriert sich auf die Erkundung **numerischer** Daten mithilfe von zusammenfassenden Statistiken und Visualisierungen.
+Die in diesem Kapitel vorgestellten Zusammenfassungen und Grafiken werden mit statistischer Software erstellt; da dies jedoch möglicherweise Ihre erste Begegnung mit diesen Konzepten ist, nehmen wir uns in diesem Kapitel die Zeit, detailliert zu erklären, wie sie erstellt werden.
+Die Beherrschung der in diesem Kapitel vorgestellten Inhalte ist entscheidend für das Verständnis der Methoden und Techniken, die im weiteren Verlauf des Buches eingeführt werden.
 :::
 
-Consider the `loan_amount` variable from the `loan50` dataset, which represents the loan size for each of 50 loans in the dataset.
+Betrachten Sie die Variable `loan_amount` aus dem Datensatz `loan50`, die die Kredithöhe für jeden der 50 Kredite im Datensatz darstellt.
 
-This variable is numerical since we can sensibly discuss the numerical difference of the size of two loans.
-On the other hand, area codes and zip codes are not numerical, but rather they are categorical variables.
+Diese Variable ist numerisch, da wir sinnvoll über den numerischen Unterschied in der Größe zweier Kredite sprechen können.
+Andererseits sind Vorwahlen und Postleitzahlen nicht numerisch, sondern kategoriale Variablen.
 
-Throughout this chapter, we will apply numerical methods using the `loan50` and `county` datasets, which were introduced in @sec-data-basics.
-If you'd like to review the variables from either dataset, see Tables @tbl-loan-50-variables and @tbl-county-variables.
+Im gesamten Kapitel werden wir numerische Methoden auf die Datensätze `loan50` und `county` anwenden, die in @sec-data-basics eingeführt wurden.
+Wenn Sie die Variablen eines der Datensätze überprüfen möchten, lesen Sie die Tabellen @tbl-loan-50-variables und @tbl-county-variables.
 
 ::: {.data data-latex=""}
-The [`county`](http://openintrostat.github.io/usdata/reference/county.html) data can be found in the [**usdata**](http://openintrostat.github.io/usdata) R package and the [`loan50`](http://openintrostat.github.io/openintro/reference/loan50.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`county`](http://openintrostat.github.io/usdata/reference/county.html) sind im R-Paket [**usdata**](http://openintrostat.github.io/usdata) zu finden, und die Daten [`loan50`](http://openintrostat.github.io/openintro/reference/loan50.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-## Scatterplots for paired data {#sec-scatterplots}
+## Streudiagramme für gepaarte Daten {#sec-scatterplots}
 
-A **scatterplot**\index{plot!scatterplot}\index{scatterplot} provides a case-by-case view of data for two numerical variables.
-In @fig-county-multi-unit-homeownership, a scatterplot was used to examine the homeownership rate against the percentage of housing units that are in multi-unit structures (e.g., apartments) in the `county` dataset.
-Another scatterplot is shown in @fig-loan50-amount-income, comparing the total income of a borrower `total_income` and the amount they borrowed `loan_amount` for the `loan50` dataset.
-In any scatterplot, each point represents a single case.
-Since there are `r nrow(loan50)` cases in `loan50`, there are `r nrow(loan50)` points in @fig-loan50-amount-income.
+Ein **Streudiagramm**\index{plot!scatterplot}\index{scatterplot} bietet eine fallweise Ansicht der Daten für zwei numerische Variablen.
+In @fig-county-multi-unit-homeownership wurde ein Streudiagramm verwendet, um die Wohneigentumsquote gegenüber dem Prozentsatz der Wohneinheiten in Mehrfamilienhäusern (z. B. Wohnungen) im Datensatz `county` zu untersuchen.
+Ein weiteres Streudiagramm ist in @fig-loan50-amount-income dargestellt, das das Gesamteinkommen eines Kreditnehmers `total_income` und den aufgenommenen Betrag `loan_amount` für den Datensatz `loan50` vergleicht.
+In jedem Streudiagramm steht jeder Punkt für einen einzelnen Fall.
+Da es im Datensatz `loan50` `r nrow(loan50)` Fälle gibt, enthält @fig-loan50-amount-income `r nrow(loan50)` Punkte.
 
 ```{r}
 #| include: false
@@ -52,7 +52,7 @@ ggplot(loan50, aes(x = total_income, y = loan_amount)) +
   scale_y_continuous(labels = dollar_format(scale = 0.001, suffix = "K"))
 ```
 
-Looking at @fig-loan50-amount-income, we see that there are many borrowers with income below \$100,000 on the left side of the graph, while there are a handful of borrowers with income above \$250,000.
+Betrachtet man @fig-loan50-amount-income, sieht man, dass es viele Kreditnehmer mit einem Einkommen unter \$100.000 auf der linken Seite des Graphen gibt, während es einige wenige Kreditnehmer mit einem Einkommen über \$250.000 gibt.
 
 ```{r}
 #| label: fig-median-hh-income-poverty
@@ -80,13 +80,13 @@ ggplot(county, aes(x = poverty / 100, y = median_hh_income)) +
 \vspace{-5mm}
 
 ::: {.workedexample data-latex=""}
-@fig-median-hh-income-poverty shows a plot of median household income against the poverty rate for `r nrow(county)` counties in the US.
-What can be said about the relationship between these variables?
+@fig-median-hh-income-poverty zeigt einen Graphen des mittleren Haushaltseinkommens gegenüber der Armutsquote für `r nrow(county)` Landkreise in den USA.
+Was lässt sich über die Beziehung zwischen diesen Variablen sagen?
 
 ------------------------------------------------------------------------
 
-The relationship is evidently **nonlinear**\index{nonlinear}, as highlighted by the dashed line.
-This is different from previous scatterplots we have seen, which indicate very little, if any, curvature in the trend.
+Die Beziehung ist offensichtlich **nichtlinear**\index{nonlinear}, wie durch die gestrichelte Linie hervorgehoben.
+Dies unterscheidet sich von den bisherigen Streudiagrammen, die kaum oder keine Krümmung im Trend anzeigen.
 :::
 
 ```{r}
@@ -97,28 +97,28 @@ terms_chp_05 <- c(terms_chp_05, "nonlinear")
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-What do scatterplots reveal about the data, and how are they useful?[^05-explore-numerical-1]
+Was zeigen Streudiagramme über die Daten, und wie sind sie nützlich?[^05-explore-numerical-1]
 :::
 
-[^05-explore-numerical-1]: Answers may vary.
-    Scatterplots are helpful in quickly spotting associations relating variables, whether those associations come in the form of simple trends or whether those relationships are more complex.
+[^05-explore-numerical-1]: Die Antworten können variieren.
+    Streudiagramme helfen dabei, Zusammenhänge zwischen Variablen schnell zu erkennen, unabhängig davon, ob diese Zusammenhänge in Form einfacher Trends oder komplexerer Beziehungen auftreten.
 
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-Describe two variables that would have a horseshoe-shaped association in a scatterplot $(\cap$ or $\frown).$[^05-explore-numerical-2]
+Beschreiben Sie zwei Variablen, die in einem Streudiagramm eine hufeisenförmige Assoziation hätten $(\cap$ oder $\frown).$[^05-explore-numerical-2]
 :::
 
-[^05-explore-numerical-2]: Consider the case where your vertical axis represents something "good" and your horizontal axis represents something that is only good in moderation.
-    Health and water consumption fit this description: we require some water to survive, but consume too much and it becomes toxic and can kill a person.
+[^05-explore-numerical-2]: Denken Sie an den Fall, in dem Ihre vertikale Achse etwas „Gutes" darstellt und Ihre horizontale Achse etwas, das nur in Maßen gut ist.
+    Gesundheit und Wasserkonsum passen zu dieser Beschreibung: Wir benötigen etwas Wasser zum Überleben, aber zu viel davon wird giftig und kann eine Person töten.
 
 \clearpage
 
-## Dot plots and the mean {#sec-dotplots}
+## Punktdiagramme und der Mittelwert {#sec-dotplots}
 
-Sometimes we are interested in the distribution of a single variable.
-In these cases, a dot plot provides the most basic of displays.
-A **dot plot**\index{plot!dot}\index{dot plot} is a one-variable scatterplot; an example using the interest rate of `r nrow(loan50)` loans is shown in @fig-loan-int-rate-dotplot.
+Manchmal interessieren wir uns für die Verteilung einer einzelnen Variable.
+In diesen Fällen bietet ein Punktdiagramm die grundlegendste Darstellung.
+Ein **Punktdiagramm**\index{plot!dot}\index{dot plot} ist ein eindimensionales Streudiagramm; ein Beispiel mit dem Zinssatz von `r nrow(loan50)` Krediten ist in @fig-loan-int-rate-dotplot dargestellt.
 
 ```{r}
 #| include: false
@@ -161,21 +161,21 @@ ggplot(loan50, aes(x = interest_rate)) +
   )
 ```
 
-The **mean**\index{mean}, often called the **average**\index{average} is a common way to measure the center of a **distribution**\index{distribution} of data.
-To compute the mean interest rate, we add up all the interest rates and divide by the number of observations.
+Der **Mittelwert**\index{mean}, oft auch als **Durchschnitt**\index{average} bezeichnet, ist eine gängige Methode, um das Zentrum einer **Verteilung**\index{distribution} von Daten zu messen.
+Um den mittleren Zinssatz zu berechnen, addieren wir alle Zinssätze und dividieren durch die Anzahl der Beobachtungen.
 
 ```{r}
 #| include: false
 terms_chp_05 <- c(terms_chp_05, "mean", "average", "distribution")
 ```
 
-The sample mean is often labeled $\bar{x}.$ The letter $x$ is being used as a generic placeholder for the variable of interest and the bar over the $x$ communicates we are looking at the average interest rate, which for these 50 loans is `r round(loan50_interest_rate_mean, 2)`%.
-It's useful to think of the mean as the balancing point of the distribution, and it's shown as a triangle in @fig-loan-int-rate-dotplot.
+Der Stichprobenmittelwert wird oft mit $\bar{x}$ bezeichnet. Der Buchstabe $x$ dient als allgemeiner Platzhalter für die interessierende Variable, und der Balken über dem $x$ zeigt an, dass wir den durchschnittlichen Zinssatz betrachten, der für diese 50 Kredite `r round(loan50_interest_rate_mean, 2)`% beträgt.
+Es ist nützlich, sich den Mittelwert als den Gleichgewichtspunkt der Verteilung vorzustellen, der in @fig-loan-int-rate-dotplot als Dreieck dargestellt ist.
 
 ::: {.important data-latex=""}
-**Mean.**
+**Mittelwert.**
 
-The sample mean can be calculated as the sum of the observed values divided by the number of observations:
+Der Stichprobenmittelwert kann als die Summe der beobachteten Werte geteilt durch die Anzahl der Beobachtungen berechnet werden:
 
 \vspace{-5mm}
 
@@ -185,51 +185,51 @@ $$ \bar{x} = \frac{x_1 + x_2 + \cdots + x_n}{n} $$
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-Examine the equation for the mean.
-What does $x_1$ correspond to?
-And $x_2$?
-Can you infer a general meaning to what $x_i$ might represent?[^05-explore-numerical-3]
+Betrachten Sie die Gleichung für den Mittelwert.
+Was entspricht $x_1$?
+Und $x_2$?
+Können Sie eine allgemeine Bedeutung dafür ableiten, was $x_i$ darstellen könnte?[^05-explore-numerical-3]
 :::
 
-[^05-explore-numerical-3]: $x_1$ corresponds to the interest rate for the first loan in the sample, $x_2$ to the second loan's interest rate, and $x_i$ corresponds to the interest rate for the $i^{th}$ loan in the dataset.
-    For example, if $i = 4,$ then we are examining $x_4,$ which refers to the fourth observation in the dataset.
+[^05-explore-numerical-3]: $x_1$ entspricht dem Zinssatz für den ersten Kredit in der Stichprobe, $x_2$ dem Zinssatz des zweiten Kredits, und $x_i$ entspricht dem Zinssatz für den $i$-ten Kredit im Datensatz.
+    Wenn zum Beispiel $i = 4$ ist, betrachten wir $x_4$, was sich auf die vierte Beobachtung im Datensatz bezieht.
 
 \vspace{-5mm}
 
 ::: {.guidedpractice data-latex=""}
-What was $n$ in this sample of loans?[^05-explore-numerical-4]
+Was war $n$ in dieser Stichprobe von Krediten?[^05-explore-numerical-4]
 :::
 
-[^05-explore-numerical-4]: The sample size was $n = 50.$
+[^05-explore-numerical-4]: Der Stichprobenumfang war $n = 50.$
 
-The `loan50` dataset represents a sample from a larger population of loans made through Lending Club.
-We could compute a mean for the entire population in the same way as the sample mean.
-However, the population mean has a special label: $\mu.$ The symbol $\mu$ is the Greek letter *mu* and represents the average of all observations in the population.
-Sometimes a subscript, such as $_x,$ is used to represent which variable the population mean refers to, e.g., $\mu_x.$ Oftentimes it is too expensive to measure the population mean precisely, so we often estimate $\mu$ using the sample mean, $\bar{x}.$
+Der Datensatz `loan50` stellt eine Stichprobe aus einer größeren Population von Krediten dar, die über Lending Club vergeben wurden.
+Wir könnten einen Mittelwert für die gesamte Population auf die gleiche Weise berechnen wie den Stichprobenmittelwert.
+Der Populationsmittelwert hat jedoch eine besondere Bezeichnung: $\mu.$ Das Symbol $\mu$ ist der griechische Buchstabe *mu* und stellt den Durchschnitt aller Beobachtungen in der Population dar.
+Manchmal wird ein Tiefstellungsindex, wie $_x$, verwendet, um anzugeben, auf welche Variable sich der Populationsmittelwert bezieht, z.B. $\mu_x.$ Da es oft zu aufwendig ist, den Populationsmittelwert genau zu messen, schätzen wir $\mu$ häufig anhand des Stichprobenmittelwerts $\bar{x}.$
 
 \clearpage
 
 ::: {.content-visible when-format="html"}
 ::: {.pronunciation data-latex=""}
-The Greek letter $\mu$ is pronounced *mu*, listen to the pronunciation [here](https://youtu.be/PStgY5AcEIw?t=47).
+Der griechische Buchstabe $\mu$ wird *mu* ausgesprochen; die Aussprache können Sie [hier](https://youtu.be/PStgY5AcEIw?t=47) anhören.
 :::
 :::
 
 ::: {.content-visible when-format="pdf"}
 ::: {.pronunciation data-latex=""}
-The Greek letter $\mu$ is pronounced *mu*.
+Der griechische Buchstabe $\mu$ wird *mu* ausgesprochen.
 :::
 :::
 
 ::: {.workedexample data-latex=""}
-Although we do not have an ability to *calculate* the average interest rate across all loans in the populations, we can *estimate* the population value using the sample data.
-Based on the sample of 50 loans, what would be a reasonable estimate of $\mu_x,$ the mean interest rate for all loans in the full dataset?
+Obwohl wir den durchschnittlichen Zinssatz über alle Kredite in der Population nicht *berechnen* können, können wir den Populationswert anhand der Stichprobendaten *schätzen*.
+Auf Basis der Stichprobe von 50 Krediten: Was wäre eine vernünftige Schätzung von $\mu_x$, dem mittleren Zinssatz für alle Kredite im vollständigen Datensatz?
 
 ------------------------------------------------------------------------
 
-The sample mean, `r round(loan50_interest_rate_mean, 2)`, provides a rough estimate of $\mu_x.$ While it is not perfect, this is our single best guess **point estimate**\index{point estimate} of the average interest rate of all the loans in the population under study.
-In @sec-foundations-randomization and beyond, we will develop tools to characterize the accuracy of point estimates, like the sample mean.
-As you might have guessed, point estimates based on larger samples tend to be more accurate than those based on smaller samples.
+Der Stichprobenmittelwert `r round(loan50_interest_rate_mean, 2)` liefert eine grobe Schätzung von $\mu_x.$ Obwohl er nicht perfekt ist, ist dies unser bester **Punktschätzer**\index{point estimate} für den durchschnittlichen Zinssatz aller Kredite in der untersuchten Population.
+In @sec-foundations-randomization und darüber hinaus werden wir Werkzeuge entwickeln, um die Genauigkeit von Punktschätzern wie dem Stichprobenmittelwert zu charakterisieren.
+Wie Sie vielleicht vermutet haben, sind Punktschätzer auf der Grundlage größerer Stichproben tendenziell genauer als solche auf der Grundlage kleinerer Stichproben.
 :::
 
 ```{r}
@@ -237,10 +237,10 @@ As you might have guessed, point estimates based on larger samples tend to be mo
 terms_chp_05 <- c(terms_chp_05, "point estimate")
 ```
 
-The mean is useful because it allows us to rescale or standardize a metric into something more easily interpretable and comparable.
-Suppose we would like to understand if a new drug is more effective at treating asthma attacks than the standard drug.
-A trial of 1,500 adults is set up, where 500 receive the new drug, and 1000 receive a standard drug in the control group.
-Results of this trial are summarized in @tbl-drug-asthma-results.
+Der Mittelwert ist nützlich, weil er uns ermöglicht, eine Kennzahl neu zu skalieren oder zu standardisieren, um sie leichter interpretierbar und vergleichbar zu machen.
+Angenommen, wir möchten verstehen, ob ein neues Medikament wirksamer bei der Behandlung von Asthmaanfällen ist als das Standardmedikament.
+Es wird eine Studie mit 1.500 Erwachsenen durchgeführt, bei der 500 das neue Medikament und 1.000 ein Standardmedikament in der Kontrollgruppe erhalten.
+Die Ergebnisse dieser Studie sind in @tbl-drug-asthma-results zusammengefasst.
 
 ```{r}
 #| label: tbl-drug-asthma-results
@@ -265,46 +265,46 @@ drug_asthma |>
   column_spec(2:3, width = "8em")
 ```
 
-Comparing the raw counts of 200 to 300 asthma attacks would make it appear that the new drug is better, but this is an artifact of the imbalanced group sizes.
+Der Vergleich der absoluten Zahlen von 200 zu 300 Asthmaanfällen würde den Anschein erwecken, dass das neue Medikament besser ist, aber dies ist ein Artefakt der ungleichmäßigen Gruppengrößen.
 
-Instead, we should look at the average number of asthma attacks per patient in each group:
+Stattdessen sollten wir die durchschnittliche Anzahl von Asthmaanfällen pro Patient in jeder Gruppe betrachten:
 
--   New drug: $200 / 500 = 0.4$ asthma attacks per patient
--   Standard drug: $300 / 1000 = 0.3$ asthma attacks per patient
+-   Neues Medikament: $200 / 500 = 0{,}4$ Asthmaanfälle pro Patient
+-   Standardmedikament: $300 / 1000 = 0{,}3$ Asthmaanfälle pro Patient
 
-The standard drug has a lower average number of asthma attacks per patient than the average in the treatment group.
+Das Standardmedikament hat eine niedrigere durchschnittliche Anzahl von Asthmaanfällen pro Patient als der Durchschnitt in der Behandlungsgruppe.
 
 ::: {.workedexample data-latex=""}
-Come up with another example where the mean is useful for making comparisons.
+Nennen Sie ein weiteres Beispiel, bei dem der Mittelwert für Vergleiche nützlich ist.
 
 ------------------------------------------------------------------------
 
-Emilio opened a food truck last year where he sells burritos, and his business has stabilized over the last 3 months.
-Over that 3-month period, he has made \$11,000 while working 625 hours.
-Emilio's average hourly earnings provides a useful statistic for evaluating whether his venture is, at least from a financial perspective, worth it:
+Emilio hat letztes Jahr einen Food-Truck eröffnet, auf dem er Burritos verkauft, und sein Geschäft hat sich in den letzten 3 Monaten stabilisiert.
+In diesem 3-Monats-Zeitraum hat er \$11.000 verdient und dabei 625 Stunden gearbeitet.
+Emilios durchschnittlicher Stundenlohn liefert eine nützliche Kennzahl, um zu beurteilen, ob sein Unternehmen – zumindest aus finanzieller Sicht – lohnenswert ist:
 
-$$ \frac{\$11000}{625\text{ hours}} = \$17.60\text{ per hour} $$
+$$ \frac{\$11000}{625\text{ Stunden}} = \$17{,}60\text{ pro Stunde} $$
 
-By knowing his average hourly wage, Emilio now has put his earnings into a standard unit that is easier to compare with many other jobs that he might consider.
+Indem er seinen durchschnittlichen Stundenlohn kennt, hat Emilio sein Einkommen in eine Standardeinheit umgerechnet, die leichter mit vielen anderen Jobs verglichen werden kann, die er in Betracht ziehen könnte.
 :::
 
 \clearpage
 
 ::: {.workedexample data-latex=""}
-Suppose we want to compute the average income per person in the US.
-To do so, we might first think to take the mean of the per capita incomes across the 3,142 counties in the `county` dataset.
-What would be a better approach?
+Angenommen, wir möchten das durchschnittliche Einkommen pro Person in den USA berechnen.
+Dazu könnten wir zunächst daran denken, den Mittelwert der Pro-Kopf-Einkommen über die 3.142 Landkreise im Datensatz `county` zu bilden.
+Was wäre ein besserer Ansatz?
 
 ------------------------------------------------------------------------
 
-The `county` dataset is special in that each county actually represents many individual people.
-If we were to simply average across the `income` variable, we would be treating counties with 5,000 and 5,000,000 residents equally in the calculations.
-Instead, we should compute the total income for each county, add up all the counties' totals, and then divide by the number of people in all the counties.
-If we completed these steps with the `county` data, we would find that the per capita income for the US is \$30,861.
-Had we computed the *simple* mean of per capita income across counties, the result would have been just \$26,093!
+Der Datensatz `county` ist insofern besonders, als jeder Landkreis tatsächlich viele einzelne Menschen repräsentiert.
+Wenn wir einfach den Durchschnitt über die Variable `income` berechnen würden, würden wir Landkreise mit 5.000 und 5.000.000 Einwohnern bei den Berechnungen gleich behandeln.
+Stattdessen sollten wir das Gesamteinkommen für jeden Landkreis berechnen, alle Gesamtbeträge der Landkreise addieren und dann durch die Anzahl der Personen in allen Landkreisen dividieren.
+Wenn wir diese Schritte mit den `county`-Daten durchführen würden, würden wir feststellen, dass das Pro-Kopf-Einkommen in den USA \$30.861 beträgt.
+Hätten wir den *einfachen* Mittelwert des Pro-Kopf-Einkommens über die Landkreise berechnet, wäre das Ergebnis nur \$26.093!
 
-This example used what is called a **weighted mean**\index{weighted mean}.
-For more information on this topic, check out the following online supplement regarding [weighted means](https://www.openintro.org/go/?id=stat_extra_weighted_mean).
+Dieses Beispiel verwendet einen sogenannten **gewichteten Mittelwert**\index{weighted mean}.
+Für weitere Informationen zu diesem Thema besuchen Sie das folgende Online-Supplement über [gewichtete Mittelwerte](https://www.openintro.org/go/?id=stat_extra_weighted_mean).
 :::
 
 ```{r}
@@ -312,15 +312,15 @@ For more information on this topic, check out the following online supplement re
 terms_chp_05 <- c(terms_chp_05, "weighted mean")
 ```
 
-## Histograms and shape {#sec-histograms}
+## Histogramme und Form {#sec-histograms}
 
-Dot plots show the exact value for each observation.
-They are useful for small datasets but can become hard to read with larger samples.
-Rather than showing the value of each observation, we prefer to think of the value as belonging to a *bin*.
-For example, in the `loan50` dataset, we created a table of counts for the number of loans with interest rates between 5.0% and 7.5%, then the number of loans with rates between 7.5% and 10.0%, and so on.
-Observations that fall on the boundary of a bin (e.g., 10.00%) are allocated to the lower bin.
-The tabulation is shown in @tbl-binnedIntRateAmountTable, and the binned counts are plotted as bars in @fig-loan50IntRateHist into what is called a **histogram**\index{plot!histogram}\index{histogram}.
-Note that the histogram resembles a more heavily binned version of the stacked dot plot shown in @fig-loan-int-rate-dotplot.
+Punktdiagramme zeigen den genauen Wert für jede Beobachtung.
+Sie sind für kleine Datensätze nützlich, können aber bei größeren Stichproben schwer lesbar werden.
+Anstatt den Wert jeder Beobachtung anzuzeigen, bevorzugen wir es, den Wert als zu einem *Intervall* gehörend zu betrachten.
+Im Datensatz `loan50` zum Beispiel haben wir eine Häufigkeitstabelle für die Anzahl der Kredite mit Zinssätzen zwischen 5,0% und 7,5%, dann die Anzahl der Kredite mit Zinssätzen zwischen 7,5% und 10,0% usw. erstellt.
+Beobachtungen, die auf die Grenze eines Intervalls fallen (z.B. 10,00%), werden dem unteren Intervall zugeordnet.
+Die Tabellierung ist in @tbl-binnedIntRateAmountTable dargestellt, und die gruppierten Häufigkeiten werden als Balken in @fig-loan50IntRateHist in einem sogenannten **Histogramm**\index{plot!histogram}\index{histogram} dargestellt.
+Beachten Sie, dass das Histogramm einer stärker zusammengefassten Version des gestapelten Punktdiagramms in @fig-loan-int-rate-dotplot ähnelt.
 
 ```{r}
 #| include: false
@@ -371,21 +371,21 @@ ggplot(loan50, aes(x = interest_rate)) +
   )
 ```
 
-Histograms provide a view of the **data density**\index{data density}.
-Higher bars represent where the data are relatively more common.
-For instance, there are many more loans with rates between 5% and 10% than loans with rates between 20% and 25% in the dataset.
-The bars make it easy to see how the density of the data changes relative to the interest rate.
+Histogramme bieten eine Ansicht der **Datendichte**\index{data density}.
+Höhere Balken zeigen an, wo die Daten relativ häufiger vorkommen.
+Zum Beispiel gibt es im Datensatz viel mehr Kredite mit Zinssätzen zwischen 5% und 10% als Kredite mit Zinssätzen zwischen 20% und 25%.
+Die Balken machen es einfach zu erkennen, wie sich die Dichte der Daten im Verhältnis zum Zinssatz verändert.
 
 ```{r}
 #| include: false
 terms_chp_05 <- c(terms_chp_05, "data density")
 ```
 
-Histograms are especially convenient for understanding the shape of the data distribution.
-@fig-loan50IntRateHist suggests that most loans have rates under 15%, while only a handful of loans have rates above 20%.
-When the distribution of a variable trails off to the right in this way and has a longer right **tail**\index{tail}, the shape is said to be **right skewed**\index{right skewed}.[^05-explore-numerical-5]
+Histogramme sind besonders nützlich, um die Form der Datenverteilung zu verstehen.
+@fig-loan50IntRateHist legt nahe, dass die meisten Kredite Zinssätze unter 15% aufweisen, während nur eine Handvoll Kredite Zinssätze über 20% hat.
+Wenn sich die Verteilung einer Variable auf diese Weise nach rechts erstreckt und einen längeren rechten **Schwanz**\index{tail} hat, wird die Form als **rechtsschief**\index{right skewed} bezeichnet.[^05-explore-numerical-5]
 
-[^05-explore-numerical-5]: Other ways to describe data that are right skewed: skewed to the right, skewed to the high end, or skewed to the positive end.
+[^05-explore-numerical-5]: Andere Bezeichnungen für Daten, die rechtsschief sind: schief nach rechts, schief zum hohen Ende hin oder schief zum positiven Ende hin.
 
 ```{r}
 #| label: fig-loan50IntRateDensity
@@ -405,17 +405,17 @@ ggplot(loan50, aes(x = interest_rate)) +
   )
 ```
 
-@fig-loan50IntRateDensity shows a **density plot**\index{plot!density}\index{density plot} which is a smoothed out histogram.
-The technical details for how to draw density plots (precisely how to smooth out the histogram) are beyond the scope of this text, but you will note that the shape, scale, and spread of the observations are displayed similarly in a histogram as in a density plot.
+@fig-loan50IntRateDensity zeigt ein **Dichtediagramm**\index{plot!density}\index{density plot}, das ein geglättetes Histogramm ist.
+Die technischen Details zur Erstellung von Dichtediagrammen (genau genommen wie das Histogramm geglättet wird) gehen über den Rahmen dieses Textes hinaus, aber Sie werden feststellen, dass Form, Skala und Streuung der Beobachtungen in einem Histogramm ähnlich wie in einem Dichtediagramm dargestellt werden.
 
 ```{r}
 #| include: false
 terms_chp_05 <- c(terms_chp_05, "density plot")
 ```
 
-Variables with the reverse characteristic -- a long, thinner tail to the left -- are said to be **left skewed**\index{left skewed}.
-We also say that such a distribution has a long left tail.
-Variables that show roughly equal trailing off in both directions are called **symmetric**\index{symmetric}.
+Variablen mit dem umgekehrten Merkmal – einem langen, dünnen Schwanz nach links – werden als **linksschief**\index{left skewed} bezeichnet.
+Wir sagen auch, dass eine solche Verteilung einen langen linken Schwanz hat.
+Variablen, die in beiden Richtungen ungefähr gleichmäßig auslaufen, werden als **symmetrisch**\index{symmetric} bezeichnet.
 
 ```{r}
 #| include: false
@@ -423,30 +423,30 @@ terms_chp_05 <- c(terms_chp_05, "tail", "right skewed", "left skewed", "symmetri
 ```
 
 ::: {.important data-latex=""}
-When data trail off in one direction, the distribution has a **long tail**\index{tail}.
-If a distribution has a long left tail, it is left skewed.
-If a distribution has a long right tail, it is right skewed.
+Wenn Daten in eine Richtung auslaufen, hat die Verteilung einen **langen Schwanz**\index{tail}.
+Wenn eine Verteilung einen langen linken Schwanz hat, ist sie linksschief.
+Wenn eine Verteilung einen langen rechten Schwanz hat, ist sie rechtsschief.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Besides the mean (since it was labeled), what can you see in the dot plot in @fig-loan-int-rate-dotplot that you cannot see in the histogram in @fig-loan50IntRateHist?[^05-explore-numerical-6]
+Was können Sie im Punktdiagramm in @fig-loan-int-rate-dotplot sehen, das Sie nicht im Histogramm in @fig-loan50IntRateHist sehen können (abgesehen vom Mittelwert, der beschriftet war)?[^05-explore-numerical-6]
 :::
 
-[^05-explore-numerical-6]: The interest rates for individual loans.
+[^05-explore-numerical-6]: Die Zinssätze für einzelne Kredite.
 
-In addition to looking at whether a distribution is skewed or symmetric, histograms can be used to identify modes.
-A **mode** is represented by a prominent peak in the distribution.
-There is only one prominent peak in the histogram of `interest_rate`.
+Neben der Frage, ob eine Verteilung schief oder symmetrisch ist, können Histogramme zur Identifikation von Modalwerten verwendet werden.
+Ein **Modalwert** wird durch einen deutlichen Gipfel in der Verteilung dargestellt.
+Im Histogramm von `interest_rate` gibt es nur einen deutlichen Gipfel.
 
-A definition of *mode* sometimes taught in math classes is the value with the most occurrences in the dataset.
-However, for many real-world datasets, it is common to have *no* observations with the same value in a dataset, making this definition impractical in data analysis.
+Eine Definition von *Modalwert*, die manchmal im Mathematikunterricht gelehrt wird, ist der Wert mit den meisten Vorkommnissen im Datensatz.
+Für viele reale Datensätze ist es jedoch üblich, dass *keine* Beobachtungen denselben Wert haben, was diese Definition in der Datenanalyse unpraktisch macht.
 
 \clearpage
 
-@fig-singleBiMultiModalPlots shows histograms that have one, two, or three prominent peaks.
-Such distributions are called **unimodal**\index{unimodal}, **bimodal**\index{bimodal}, and **multimodal**\index{multimodal}, respectively.
-Any distribution with more than two prominent peaks is called multimodal.
-Notice that there was one prominent peak in the unimodal distribution with a second less prominent peak that was not counted since it only differs from its neighboring bins by a few observations.
+@fig-singleBiMultiModalPlots zeigt Histogramme mit einem, zwei oder drei deutlichen Gipfeln.
+Solche Verteilungen werden als **unimodal**\index{unimodal}, **bimodal**\index{bimodal} bzw. **multimodal**\index{multimodal} bezeichnet.
+Jede Verteilung mit mehr als zwei deutlichen Gipfeln wird als multimodal bezeichnet.
+Beachten Sie, dass es in der unimodalen Verteilung einen deutlichen Gipfel und einen zweiten weniger deutlichen Gipfel gab, der nicht mitgezählt wurde, da er sich von seinen Nachbarklassen nur um wenige Beobachtungen unterscheidet.
 
 ```{r}
 #| include: false
@@ -491,39 +491,39 @@ p_uni + p_bi + p_multi
 ```
 
 ::: {.workedexample data-latex=""}
-@fig-loan50IntRateHist reveals only one prominent mode in the interest rate.
-Is the distribution unimodal, bimodal, or multimodal?
+@fig-loan50IntRateHist zeigt nur einen deutlichen Modalwert beim Zinssatz.
+Ist die Verteilung unimodal, bimodal oder multimodal?
 
 ------------------------------------------------------------------------
 
-Remember that *uni* stands for 1 (think *uni*cycles), and *bi* stands for 2 (think *bi*cycles).
+Denken Sie daran, dass *uni* für 1 steht (wie *Uni*cycle), und *bi* für 2 (wie *Bi*cycle).
 :::
 
 ::: {.guidedpractice data-latex=""}
-Height measurements of young students and adult teachers at an elementary school were taken.
-How many modes would you expect in this height dataset?[^05-explore-numerical-8]
+Körpergrößenmessungen von jungen Schülern und erwachsenen Lehrern an einer Grundschule wurden vorgenommen.
+Wie viele Modalwerte würden Sie in diesem Körpergrößendatensatz erwarten?[^05-explore-numerical-8]
 :::
 
-[^05-explore-numerical-8]: There might be two height groups visible in the dataset: the children (students) and the adults (teachers).
-    That is, the data are probably bimodal.
+[^05-explore-numerical-8]: Im Datensatz könnten zwei Körpergrößengruppen sichtbar sein: die Kinder (Schüler) und die Erwachsenen (Lehrer).
+    Das heißt, die Daten sind wahrscheinlich bimodal.
 
-Looking for modes isn't about finding a clear and correct answer about the number of modes in a distribution, which is why *prominent*\index{prominent} is not rigorously defined in this book.
-The most important part of this examination is to better understand your data.
+Die Suche nach Modalwerten geht nicht darum, eine klare und korrekte Antwort auf die Anzahl der Modalwerte in einer Verteilung zu finden, weshalb *deutlich*\index{prominent} in diesem Buch nicht streng definiert ist.
+Der wichtigste Teil dieser Untersuchung ist es, Ihre Daten besser zu verstehen.
 
-## Variance and standard deviation {#sec-variance-sd}
+## Varianz und Standardabweichung {#sec-variance-sd}
 
-The mean was introduced as a method to describe the center of a variable, and **variability**\index{variability} in the data is also important.
-Here, we introduce two measures of variability: the variance and the standard deviation.
-Both of these are very useful in data analysis, even though their formulas are a bit tedious to calculate by hand.
-The standard deviation is the easier of the two to comprehend, as it roughly describes how far away the typical observation is from the mean.
+Der Mittelwert wurde als Methode zur Beschreibung des Zentrums einer Variable eingeführt, und die **Variabilität**\index{variability} in den Daten ist ebenfalls wichtig.
+Hier stellen wir zwei Maße der Variabilität vor: die Varianz und die Standardabweichung.
+Beide sind in der Datenanalyse sehr nützlich, obwohl ihre Formeln etwas mühsam von Hand zu berechnen sind.
+Die Standardabweichung ist die leichter zu verstehende der beiden, da sie grob beschreibt, wie weit die typische Beobachtung vom Mittelwert entfernt ist.
 
 ```{r}
 #| include: false
 terms_chp_05 <- c(terms_chp_05, "variability")
 ```
 
-We call the distance of an observation from its mean its **deviation**\index{deviation}.
-Below are the deviations for the $1^{st},$ $2^{nd},$ $3^{rd},$ and $50^{th}$ observations in the `interest_rate` variable:
+Wir bezeichnen den Abstand einer Beobachtung von ihrem Mittelwert als ihre **Abweichung**\index{deviation}.
+Im Folgenden sind die Abweichungen für die $1.$, $2.$, $3.$ und $50.$ Beobachtung in der Variable `interest_rate` aufgeführt:
 
 ```{r}
 #| include: false
@@ -550,7 +550,7 @@ $$
 
 \clearpage
 
-If we square these deviations and then take an average, the result is equal to the sample **variance**\index{variance}, denoted by $s^2$:
+Wenn wir diese Abweichungen quadrieren und dann einen Durchschnitt berechnen, ist das Ergebnis gleich der Stichproben-**Varianz**\index{variance}, bezeichnet mit $s^2$:
 
 ```{r}
 #| include: false
@@ -561,28 +561,28 @@ $$
 s^2 = \frac{(`r loan50_interest_rate_deviation[1]`)^2 + (`r loan50_interest_rate_deviation[2]`)^2 + (`r loan50_interest_rate_deviation[3]`)^2 + \cdots + (`r loan50_interest_rate_deviation[50]`)^2}{50 - 1} = \frac{`r loan50_interest_rate_deviation_squared[1]` + `r loan50_interest_rate_deviation_squared[2]` + \cdots + `r loan50_interest_rate_deviation_squared[50]`}{49} = `r round(loan50_interest_rate_var, 2)`
 $$
 
-We divide by $n - 1,$ rather than dividing by $n,$ when computing a sample's variance.
-There's some mathematical nuance here, but the end result is that doing this makes this statistic slightly more reliable and useful.
+Wir dividieren durch $n - 1$ und nicht durch $n$, wenn wir die Varianz einer Stichprobe berechnen.
+Es gibt hier einige mathematische Feinheiten, aber das Ergebnis ist, dass diese Statistik dadurch etwas zuverlässiger und nützlicher wird.
 
-Notice that squaring the deviations does two things.
-First, it makes large values relatively much larger.
-Second, it gets rid of any negative signs.
+Beachten Sie, dass das Quadrieren der Abweichungen zwei Dinge bewirkt.
+Erstens werden große Werte relativ viel größer.
+Zweitens werden alle negativen Vorzeichen beseitigt.
 
 ::: {.important data-latex=""}
-**Standard deviation.**
+**Standardabweichung.**
 
-The sample standard deviation can be calculated as the square root of the sum of the squared distance of each value from the mean divided by the number of observations minus one:
+Die Stichproben-Standardabweichung kann als die Quadratwurzel der Summe der quadrierten Abstände jedes Wertes vom Mittelwert geteilt durch die Anzahl der Beobachtungen minus eins berechnet werden:
 
 \vspace{-5mm}
 
 $$s = \sqrt{\frac{\sum_{i=1}^n (x_i - \bar{x})^2}{n-1}}$$
 :::
 
-The **standard deviation**\index{standard deviation} is defined as the square root of the variance:
+Die **Standardabweichung**\index{standard deviation} ist als die Quadratwurzel der Varianz definiert:
 
 $$s = \sqrt{`r round(loan50_interest_rate_var, 2)`} = `r round(loan50_interest_rate_sd, 2)`$$
 
-While often omitted, a subscript of $_x$ may be added to the variance and standard deviation, i.e., $s_x^2$ and $s_x^{},$ if it is useful as a reminder that these are the variance and standard deviation of the observations represented by $x_1,$ $x_2,$ ..., $x_n.$
+Obwohl oft weggelassen, kann ein Tiefstellungsindex $_x$ zur Varianz und Standardabweichung hinzugefügt werden, d.h. $s_x^2$ und $s_x^{}$, wenn es als Erinnerung nützlich ist, dass dies die Varianz und Standardabweichung der durch $x_1,$ $x_2,$ ..., $x_n$ dargestellten Beobachtungen sind.
 
 ```{r}
 #| include: false
@@ -590,40 +590,40 @@ terms_chp_05 <- c(terms_chp_05, "standard deviation")
 ```
 
 ::: {.important data-latex=""}
-**Variance and standard deviation.**
+**Varianz und Standardabweichung.**
 
-The variance is the average squared distance from the mean.
-The standard deviation is the square root of the variance.
-The standard deviation is useful when considering how far the data are distributed from the mean.
+Die Varianz ist der durchschnittliche quadrierte Abstand vom Mittelwert.
+Die Standardabweichung ist die Quadratwurzel der Varianz.
+Die Standardabweichung ist nützlich, wenn man berücksichtigt, wie weit die Daten vom Mittelwert verteilt sind.
 
-The standard deviation represents the typical deviation of observations from the mean.
-Often about 68% of the data will be within one standard deviation of the mean and about 95% will be within two standard deviations.
-However, these percentages are not strict rules.
+Die Standardabweichung stellt die typische Abweichung der Beobachtungen vom Mittelwert dar.
+Oft werden etwa 68% der Daten innerhalb einer Standardabweichung vom Mittelwert liegen und etwa 95% innerhalb von zwei Standardabweichungen.
+Diese Prozentzahlen sind jedoch keine strengen Regeln.
 :::
 
-Like the mean, the population values for variance and standard deviation have special symbols: $\sigma^2$ for the variance and $\sigma$ for the standard deviation.
+Wie beim Mittelwert haben die Populationswerte für Varianz und Standardabweichung besondere Symbole: $\sigma^2$ für die Varianz und $\sigma$ für die Standardabweichung.
 
 ::: {.content-visible when-format="html"}
 ::: {.pronunciation data-latex=""}
-The Greek letter $\sigma$ is pronounced *sigma*, listen to the pronunciation [here](https://youtu.be/PStgY5AcEIw?t=72).
+Der griechische Buchstabe $\sigma$ wird *sigma* ausgesprochen; die Aussprache können Sie [hier](https://youtu.be/PStgY5AcEIw?t=72) anhören.
 :::
 :::
 
 ::: {.content-visible when-format="pdf"}
 ::: {.pronunciation data-latex=""}
-The Greek letter $\sigma$ is pronounced *sigma*.
+Der griechische Buchstabe $\sigma$ wird *sigma* ausgesprochen.
 :::
 :::
 
 ::: {.guidedpractice data-latex=""}
-A good description of the shape of a distribution should include modality and whether the distribution is symmetric or skewed to one side.
-Using @fig-severalDiffDistWithSdOf1 as an example, explain why such a description is important.[^05-explore-numerical-9]
+Eine gute Beschreibung der Form einer Verteilung sollte die Modalität und die Frage enthalten, ob die Verteilung symmetrisch oder zu einer Seite hin schief ist.
+Erläutern Sie anhand von @fig-severalDiffDistWithSdOf1, warum eine solche Beschreibung wichtig ist.[^05-explore-numerical-9]
 :::
 
-[^05-explore-numerical-9]: @fig-severalDiffDistWithSdOf1 shows three distributions that look quite different, but all have the same mean, variance, and standard deviation.
-    Using modality, we can distinguish between the first plot (bimodal) and the last two (unimodal).
-    Using skewness, we can distinguish between the last plot (right skewed) and the first two.
-    While a picture, like a histogram, tells a more complete story, we can use modality and shape (symmetry/skew) to characterize basic information about a distribution.
+[^05-explore-numerical-9]: @fig-severalDiffDistWithSdOf1 zeigt drei Verteilungen, die recht unterschiedlich aussehen, aber alle denselben Mittelwert, dieselbe Varianz und dieselbe Standardabweichung haben.
+    Mit Hilfe der Modalität können wir zwischen dem ersten Plot (bimodal) und den letzten beiden (unimodal) unterscheiden.
+    Mit Hilfe der Schiefe können wir zwischen dem letzten Plot (rechtsschief) und den ersten beiden unterscheiden.
+    Obwohl ein Bild, wie ein Histogramm, eine vollständigere Geschichte erzählt, können wir Modalität und Form (Symmetrie/Schiefe) verwenden, um grundlegende Informationen über eine Verteilung zu charakterisieren.
 
 \clearpage
 
@@ -743,26 +743,26 @@ ggplot(dists_mean0_sd1, aes(x = x)) +
 ```
 
 ::: {.workedexample data-latex=""}
-Describe the distribution of the `interest_rate` variable using the histogram in @fig-loan50IntRateHist.
-The description should incorporate the center, variability, and shape of the distribution, and it should also be placed in context.
-Also note any especially unusual cases.
+Beschreiben Sie die Verteilung der Variable `interest_rate` anhand des Histogramms in @fig-loan50IntRateHist.
+Die Beschreibung sollte das Zentrum, die Variabilität und die Form der Verteilung einbeziehen und auch im Kontext eingebettet sein.
+Beachten Sie auch besonders ungewöhnliche Fälle.
 
 ------------------------------------------------------------------------
 
-The distribution of interest rates is unimodal and skewed to the high end.
-Many of the rates fall near the mean at 11.57%, and most fall within one standard deviation (5.05%) of the mean.
-There are a few exceptionally large interest rates in the sample that are above 20%.
+Die Verteilung der Zinssätze ist unimodal und schief in Richtung hoher Werte.
+Viele der Zinssätze liegen nahe am Mittelwert von 11,57%, und die meisten liegen innerhalb einer Standardabweichung (5,05%) vom Mittelwert.
+Es gibt einige besonders hohe Zinssätze in der Stichprobe, die über 20% liegen.
 :::
 
-In practice, the variance and standard deviation are sometimes used as a means to an end, where the "end" is being able to accurately estimate the uncertainty associated with a sample statistic.
-For example, in @sec-foundations-mathematical the standard deviation is used in calculations that help us understand how much a sample mean varies from one sample to the next.
+In der Praxis werden Varianz und Standardabweichung manchmal als Mittel zum Zweck verwendet, wobei der „Zweck" darin besteht, die mit einer Stichprobenstatistik verbundene Unsicherheit genau schätzen zu können.
+In @sec-foundations-mathematical wird zum Beispiel die Standardabweichung in Berechnungen verwendet, die uns helfen zu verstehen, wie stark ein Stichprobenmittelwert von einer Stichprobe zur nächsten variiert.
 
 \clearpage
 
-## Box plots, quartiles, and the median {#sec-boxplots}
+## Boxplots, Quartile und der Median {#sec-boxplots}
 
-A **box plot**\index{plot!box}\index{box plot} summarizes a dataset using five statistics while also identifying unusual observations.
-@fig-loan-int-rate-boxplot-dotplot provides a dot plot and a box plot of the `interest_rate` variable from the `loan50` dataset.^[Box plots were introducted by Mary Eleanor Spear who considered them to be a particular type of bar plot, see page 166 of @Spear1952. Mistakenly, box plots are often attributed to John Tukey who was the first person to call them "box-and-whisker plots."]
+Ein **Boxplot**\index{plot!box}\index{box plot} fasst einen Datensatz mit fünf Statistiken zusammen und identifiziert gleichzeitig ungewöhnliche Beobachtungen.
+@fig-loan-int-rate-boxplot-dotplot zeigt ein Punktdiagramm und einen Boxplot der Variable `interest_rate` aus dem Datensatz `loan50`.^[Boxplots wurden von Mary Eleanor Spear eingeführt, die sie als eine besondere Art von Balkendiagramm betrachtete, siehe Seite 166 von @Spear1952. Fälschlicherweise werden Boxplots oft John Tukey zugeschrieben, der als Erster den Begriff „Box-and-Whisker-Plot" verwendete.]
 
 ```{r}
 #| include: false
@@ -807,11 +807,11 @@ ggplot(loan50, aes(x = interest_rate)) +
   )
 ```
 
-The dark line inside the box represents the **median**\index{median}, which splits the data in half.
-50% of the data fall below this value and 50% fall above it.
-Since in the `loan50` dataset there are `r nrow(loan50)` observations (an even number), the median is defined as the average of the two observations closest to the $50^{th}$ percentile.
-@tbl-loan50-int-rate-sorted shows all interest rates, arranged in ascending order.
-We can see that the $25^{th}$ and the $26^{th}$ values are both `r sort(loan50$interest_rate)[25]`, which corresponds to the thick line in  @fig-loan-int-rate-boxplot-dotplot-2.
+Die dunkle Linie in der Box stellt den **Median**\index{median} dar, der die Daten in zwei Hälften teilt.
+50% der Daten liegen unter diesem Wert und 50% darüber.
+Da der Datensatz `loan50` `r nrow(loan50)` Beobachtungen enthält (eine gerade Zahl), wird der Median als der Durchschnitt der zwei Beobachtungen definiert, die dem $50.$ Perzentil am nächsten liegen.
+@tbl-loan50-int-rate-sorted zeigt alle Zinssätze in aufsteigender Reihenfolge.
+Wir können sehen, dass der $25.$ und der $26.$ Wert beide `r sort(loan50$interest_rate)[25]` sind, was der dicken Linie in @fig-loan-int-rate-boxplot-dotplot-2 entspricht.
 
 ```{r}
 #| label: tbl-loan50-int-rate-sorted
@@ -841,7 +841,7 @@ matrix(
   )
 ```
 
-When there are an odd number of observations, there will be exactly one observation that splits the data into two halves, and in such a case that observation is the median (no average needed).
+Wenn es eine ungerade Anzahl von Beobachtungen gibt, gibt es genau eine Beobachtung, die die Daten in zwei Hälften teilt, und in diesem Fall ist diese Beobachtung der Median (kein Durchschnitt erforderlich).
 
 ```{r}
 #| include: false
@@ -849,19 +849,19 @@ terms_chp_05 <- c(terms_chp_05, "median")
 ```
 
 ::: {.important data-latex=""}
-**Median: the number in the middle.**
+**Median: die mittlere Zahl.**
 
-If the data are ordered from smallest to largest, the **median** is the observation right in the middle.
-If there are an even number of observations, there will be two values in the middle, and the median is taken as their average.
+Wenn die Daten vom kleinsten zum größten geordnet sind, ist der **Median** die Beobachtung genau in der Mitte.
+Wenn es eine gerade Anzahl von Beobachtungen gibt, gibt es zwei Werte in der Mitte, und der Median wird als ihr Durchschnitt genommen.
 :::
 
 \clearpage
 
-The second step in building a box plot is drawing a rectangle to represent the middle 50% of the data.
-The length of the box is called the **interquartile range**\index{interquartile range}, or **IQR**\index{IQR} for short.
-It, like the standard deviation, is a measure of \index{variability}variability in data.
-The more variable the data, the larger the standard deviation and IQR tend to be.
-The two boundaries of the box are called the **first quartile**\index{first quartile} (the $25^{th}$ percentile, i.e., 25% of the data fall below this value) and the **third quartile**\index{third quartile} (the $75^{th}$ percentile, i.e., 75% of the data fall below this value), and these are often labeled $Q_1$ and $Q_3,$ respectively.
+Der zweite Schritt beim Erstellen eines Boxplots besteht darin, ein Rechteck zu zeichnen, das die mittleren 50% der Daten darstellt.
+Die Länge der Box wird als **Interquartilsabstand**\index{interquartile range}, kurz **IQR**\index{IQR}, bezeichnet.
+Er ist wie die Standardabweichung ein Maß für die \index{variability}Variabilität in den Daten.
+Je variabler die Daten, desto größer sind Standardabweichung und IQR in der Regel.
+Die beiden Grenzen der Box werden als **erstes Quartil**\index{first quartile} (das $25.$ Perzentil, d.h. 25% der Daten liegen unter diesem Wert) und **drittes Quartil**\index{third quartile} (das $75.$ Perzentil, d.h. 75% der Daten liegen unter diesem Wert) bezeichnet, und diese werden oft mit $Q_1$ bzw. $Q_3$ bezeichnet.
 
 ```{r}
 #| include: false
@@ -869,29 +869,29 @@ terms_chp_05 <- c(terms_chp_05, "interquartile range", "IQR", "first quartile", 
 ```
 
 ::: {.important data-latex=""}
-**Interquartile range (IQR).**
+**Interquartilsabstand (IQR).**
 
-The IQR interquartile range is the length of the box in a box plot.
-It is computed as $IQR = Q_3 - Q_1,$ where $Q_1$ and $Q_3$ are the $25^{th}$ and $75^{th}$ percentiles, respectively.
+Der IQR (Interquartilsabstand) ist die Länge der Box in einem Boxplot.
+Er wird berechnet als $IQR = Q_3 - Q_1,$ wobei $Q_1$ und $Q_3$ das $25.$ bzw. $75.$ Perzentil sind.
 
-A $\alpha$ **percentile**\index{percentile} is a number with $\alpha$% of the observations below and $100-\alpha$% of the observations above.
-For example, the $90^{th}$ percentile of SAT scores is the value of the SAT score with 90% of students below that value and 10% of students above that value.
+Ein $\alpha$-**Perzentil**\index{percentile} ist eine Zahl, bei der $\alpha$% der Beobachtungen darunter und $100-\alpha$% darüber liegen.
+Zum Beispiel ist das $90.$ Perzentil der SAT-Scores der SAT-Score-Wert, bei dem 90% der Schüler darunter und 10% der Schüler darüber liegen.
 :::
 
 ::: {.guidedpractice data-latex=""}
-What percent of the data fall between $Q_1$ and the median?
-What percent is between the median and $Q_3$?[^05-explore-numerical-10]
+Welcher Prozentsatz der Daten liegt zwischen $Q_1$ und dem Median?
+Welcher Prozentsatz liegt zwischen dem Median und $Q_3$?[^05-explore-numerical-10]
 :::
 
-[^05-explore-numerical-10]: Since $Q_1$ and $Q_3$ capture the middle 50% of the data and the median splits the data in the middle, 25% of the data fall between $Q_1$ and the median, and another 25% falls between the median and $Q_3.$
+[^05-explore-numerical-10]: Da $Q_1$ und $Q_3$ die mittleren 50% der Daten erfassen und der Median die Daten in der Mitte teilt, liegen 25% der Daten zwischen $Q_1$ und dem Median, und weitere 25% liegen zwischen dem Median und $Q_3.$
 
-Extending out from the box, the **whiskers**\index{whisker} attempt to capture the data outside of the box.
-The whiskers of a box plot reach to the minimum and the maximum values in the data, unless there are points that are considered unusually high or unusually low, which are identified as potential **outliers**\index{outlier} by the box plot.
-These are labeled with a dot on the box plot.
-The purpose of labeling the outlying points -- instead of extending the whiskers to the minimum and maximum observed values -- is to help identify any observations that appear to be unusually distant from the rest of the data.
-There are a variety of formulas for determining whether a particular data point is considered an outlier, and different statistical software use different formulas.
-A commonly used formula is that any observation beyond $1.5\times IQR$ away from the first or the third quartile is considered an outlier.
-In a sense, the box is like the body of the box plot and the whiskers are like its arms trying to reach the rest of the data, up to the outliers.
+Ausgehend von der Box versuchen die **Antennen**\index{whisker} (auch Whisker genannt), die Daten außerhalb der Box zu erfassen.
+Die Antennen eines Boxplots reichen bis zu den minimalen und maximalen Werten in den Daten, es sei denn, es gibt Punkte, die als ungewöhnlich hoch oder niedrig eingestuft werden, die vom Boxplot als potenzielle **Ausreißer**\index{outlier} identifiziert werden.
+Diese werden mit einem Punkt im Boxplot markiert.
+Der Zweck der Markierung dieser Ausreißerpunkte – anstatt die Antennen bis zu den minimalen und maximalen beobachteten Werten zu verlängern – besteht darin, Beobachtungen zu identifizieren, die ungewöhnlich weit vom Rest der Daten entfernt erscheinen.
+Es gibt verschiedene Formeln, um zu bestimmen, ob ein bestimmter Datenpunkt als Ausreißer gilt, und verschiedene statistische Softwareprogramme verwenden unterschiedliche Formeln.
+Eine häufig verwendete Formel legt fest, dass jede Beobachtung, die mehr als $1{,}5\times IQR$ vom ersten oder dritten Quartil entfernt ist, als Ausreißer gilt.
+In gewissem Sinne ist die Box wie der Körper des Boxplots und die Antennen sind wie seine Arme, die versuchen, die restlichen Daten bis zu den Ausreißern zu erreichen.
 
 ```{r}
 #| include: false
@@ -899,32 +899,32 @@ terms_chp_05 <- c(terms_chp_05, "outlier", "whiskers")
 ```
 
 ::: {.important data-latex=""}
-**Outliers are extreme.**
+**Ausreißer sind extrem.**
 
-An **outlier** is an observation that appears extreme relative to the rest of the data.
-Examining data for outliers serves many useful purposes, including
+Ein **Ausreißer** ist eine Beobachtung, die im Vergleich zum Rest der Daten extrem erscheint.
+Die Untersuchung von Daten auf Ausreißer dient vielen nützlichen Zwecken, darunter
 
--   identifying strong skew \index{strong skew} in the distribution,
--   identifying possible data collection or data entry errors, and
--   providing insight into interesting properties of the data.
+-   die Identifizierung starker Schiefe \index{strong skew} in der Verteilung,
+-   die Identifizierung möglicher Fehler bei der Datenerfassung oder -eingabe, und
+-   die Gewinnung von Erkenntnissen über interessante Eigenschaften der Daten.
 
-Keep in mind, however, that some datasets have a naturally long skew and outlying points do **not** represent any sort of problem in the dataset.
+Denken Sie jedoch daran, dass einige Datensätze eine natürlich lange Schiefe aufweisen und Ausreißerpunkte **kein** Problem im Datensatz darstellen.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Using the box plot in @fig-loan-int-rate-boxplot-dotplot-2, estimate the values of the $Q_1,$ $Q_3,$ and IQR for `interest_rate` in the `loan50` dataset.[^05-explore-numerical-11]
+Schätzen Sie anhand des Boxplots in @fig-loan-int-rate-boxplot-dotplot-2 die Werte von $Q_1,$ $Q_3$ und IQR für `interest_rate` im Datensatz `loan50`.[^05-explore-numerical-11]
 :::
 
-[^05-explore-numerical-11]: These visual estimates will vary a little from one person to the next: $Q_1 \approx$ 8%, $Q_3 \approx$ 14%, IQR $\approx$ 14 - 8 = 6%.
+[^05-explore-numerical-11]: Diese visuellen Schätzungen variieren von Person zu Person leicht: $Q_1 \approx$ 8%, $Q_3 \approx$ 14%, IQR $\approx$ 14 - 8 = 6%.
 
 \clearpage
 
-## Robust statistics
+## Robuste Statistiken
 
-How are the **sample statistics** \index{sample statistic} of the `interest_rate` dataset affected by the observation, 26.3%?
-What would have happened if this loan had instead been only 15%?
-What would happen to these summary statistics \index{summary statistic} if the observation at 26.3% had been even larger, say 35%?
-The three conjectured scenarios are plotted alongside the original data in @fig-loan-int-rate-robust-ex, and sample statistics are computed under each scenario in @tbl-robustOrNotTable.
+Wie werden die **Stichprobenstatistiken** \index{sample statistic} des Datensatzes `interest_rate` durch die Beobachtung 26,3% beeinflusst?
+Was wäre passiert, wenn dieser Kredit stattdessen nur 15% betragen hätte?
+Was würde mit diesen zusammenfassenden Statistiken \index{summary statistic} passieren, wenn die Beobachtung bei 26,3% noch größer gewesen wäre, sagen wir 35%?
+Die drei vermuteten Szenarien werden neben den Originaldaten in @fig-loan-int-rate-robust-ex dargestellt, und die Stichprobenstatistiken werden für jedes Szenario in @tbl-robustOrNotTable berechnet.
 
 ```{r}
 #| label: tbl-robustOrNotTable
@@ -1040,15 +1040,15 @@ ggplot(loan50_35, aes(x = interest_rate)) +
 \clearpage
 
 ::: {.guidedpractice data-latex=""}
-Which is more affected by extreme observations, the mean or median?
-Is the standard deviation or IQR more affected by extreme observations?[^05-explore-numerical-12]
+Was wird stärker von extremen Beobachtungen beeinflusst, der Mittelwert oder der Median?
+Wird die Standardabweichung oder der IQR stärker von extremen Beobachtungen beeinflusst?[^05-explore-numerical-12]
 :::
 
-[^05-explore-numerical-12]: Mean is affected more than the median.
-    Standard deviation is affected more than the IQR.
+[^05-explore-numerical-12]: Der Mittelwert wird stärker beeinflusst als der Median.
+    Die Standardabweichung wird stärker beeinflusst als der IQR.
 
-The median and IQR are called **robust statistics**\index{robust statistic} because extreme observations have little effect on their values: moving the most extreme value generally has little influence on these statistics.
-On the other hand, the mean and standard deviation are more heavily influenced by changes in extreme observations, which can be important in some situations.
+Median und IQR werden als **robuste Statistiken**\index{robust statistic} bezeichnet, weil extreme Beobachtungen nur geringen Einfluss auf ihre Werte haben: Das Verschieben des extremsten Wertes hat in der Regel kaum Einfluss auf diese Statistiken.
+Andererseits werden Mittelwert und Standardabweichung stärker durch Änderungen in extremen Beobachtungen beeinflusst, was in manchen Situationen wichtig sein kann.
 
 ```{r}
 #| include: false
@@ -1056,50 +1056,50 @@ terms_chp_05 <- c(terms_chp_05, "robust statistics")
 ```
 
 ::: {.workedexample data-latex=""}
-The median and IQR did not change under the three scenarios in @tbl-robustOrNotTable.
-Why might this be the case?
+Median und IQR haben sich unter den drei Szenarien in @tbl-robustOrNotTable nicht verändert.
+Warum könnte das so sein?
 
 ------------------------------------------------------------------------
 
-The median and IQR are only sensitive to numbers near $Q_1,$ the median, and $Q_3.$ Since values in these regions are stable in the three datasets, the median and IQR estimates are also stable.
+Median und IQR reagieren nur empfindlich auf Zahlen in der Nähe von $Q_1,$ dem Median und $Q_3.$ Da die Werte in diesen Bereichen in den drei Datensätzen stabil sind, sind auch die Schätzungen für Median und IQR stabil.
 :::
 
-You might not be surprised that the answer to the question "which is better, the mean or the median?" is: *it depends*. The two statistics measure different things, and so their use is dependent on the context in the analysis. Consider the following scenarios:
+Es mag Sie nicht überraschen, dass die Antwort auf die Frage „Was ist besser, Mittelwert oder Median?" lautet: *Es kommt darauf an*. Die beiden Statistiken messen unterschiedliche Dinge, und ihre Verwendung hängt daher vom Kontext der Analyse ab. Betrachten Sie die folgenden Szenarien:
 
-* Is it better to measure the average profit per customer or the median profit per customer?
-  - If concern is about the overall profit margin of the company, the mean is a better measure to assess what is happening across the company. The company could have a positive median profit per customer and still be unprofitable.
-  - If concern is around understanding the profit per typical customer, possibly to understand the growth headroom for the company's profit, the median profit per customer would tell you more about individual customer profits.
+* Ist es besser, den durchschnittlichen Gewinn pro Kunde oder den Mediangewinn pro Kunde zu messen?
+  - Wenn es um die gesamte Gewinnmarge des Unternehmens geht, ist der Mittelwert ein besseres Maß, um zu beurteilen, was im gesamten Unternehmen passiert. Das Unternehmen könnte einen positiven Mediangewinn pro Kunde haben und dennoch unrentabel sein.
+  - Wenn es darum geht, den Gewinn pro typischem Kunden zu verstehen, möglicherweise um das Wachstumspotenzial des Unternehmensgewinns zu verstehen, würde der Mediangewinn pro Kunde mehr über individuelle Kundengewinne aussagen.
   
-* If you operate an app and want to know how long it takes for the app to open on your customers' phones, do you want the mean amount of time or the median amount of time?
-  - The mean leads to an understanding of the overall amount of time being wasted in opening the app.
-  - The median tells you about the typical user experience.
-  - However, if the app takes less than 5 milliseconds to launch for 50% of the users but more than 10 seconds to launch for 10% of the users, the median doesn't give the information you need. In that scenario, you might want an upper percentile, like the 95th percentile.
+* Wenn Sie eine App betreiben und wissen möchten, wie lange es dauert, bis die App auf den Telefonen Ihrer Kunden geöffnet wird, möchten Sie die mittlere Zeit oder die mediane Zeit?
+  - Der Mittelwert führt zu einem Verständnis der insgesamt verschwendeten Zeit beim Öffnen der App.
+  - Der Median sagt etwas über die typische Nutzererfahrung aus.
+  - Wenn die App jedoch für 50% der Nutzer in weniger als 5 Millisekunden startet, aber für 10% der Nutzer mehr als 10 Sekunden benötigt, liefert der Median nicht die benötigten Informationen. In diesem Szenario möchten Sie möglicherweise ein oberes Perzentil, wie das 95. Perzentil.
 
 ::: {.guidedpractice data-latex=""}
-The distribution of loan amounts in the `loan50` dataset is right skewed, with a few large loans lingering out into the right tail.
-If you were wanting to understand the typical loan size, should you be more interested in the mean or median?[^05-explore-numerical-13]
+Die Verteilung der Kreditbeträge im Datensatz `loan50` ist rechtsschief, mit einigen großen Krediten, die in den rechten Schwanz hineinragen.
+Wenn Sie die typische Kreditgröße verstehen möchten, sollten Sie sich mehr für Mittelwert oder Median interessieren?[^05-explore-numerical-13]
 :::
 
-[^05-explore-numerical-13]: If we are looking to simply understand what a typical individual loan looks like, the median is probably more useful.
-    However, if the goal is to understand something that scales well, such as the total amount of money we might need to have on hand if we were to offer 1,000 loans, then the mean would be more useful.
+[^05-explore-numerical-13]: Wenn wir einfach verstehen wollen, wie ein typischer einzelner Kredit aussieht, ist der Median wahrscheinlich nützlicher.
+    Wenn das Ziel jedoch darin besteht, etwas zu verstehen, das gut skalierbar ist, wie z.B. den Gesamtbetrag, den wir möglicherweise auf der Hand haben müssten, wenn wir 1.000 Kredite anbieten würden, wäre der Mittelwert nützlicher.
 
-Regardless of the choice of centrality statistic (either mean or median), for most analyses, it is important to consider more than just the centrality. Other statistics like upper and lower percentiles, IQR, or standard deviation provide information about the variability of the observations. And visualizing the data through a graphical representation will typically provide a wealth of information necessary for understanding the full data picture associated with the research question.
+Unabhängig von der Wahl der Zentralitätsstatistik (Mittelwert oder Median) ist es für die meisten Analysen wichtig, mehr als nur die Zentralität zu berücksichtigen. Andere Statistiken wie obere und untere Perzentile, IQR oder Standardabweichung liefern Informationen über die Variabilität der Beobachtungen. Und die Visualisierung der Daten durch eine grafische Darstellung liefert in der Regel eine Fülle von Informationen, die zum Verständnis des vollständigen Datenbildes im Zusammenhang mit der Forschungsfrage erforderlich sind.
 
 \clearpage
 
-## Transforming data {#sec-transforming-data}
+## Datentransformationen {#sec-transforming-data}
 
-When data are very strongly skewed, we sometimes transform them, so they are easier to model.
-@fig-county-unemployed-pop-transform-1 and @fig-county-unemployed-pop-transform-2 show right-skewed distributions: distribution of the percentage of unemployed people and the distribution of the population in all counties in the United States.
-The distribution of population is more strongly skewed than the distribution of percentage unemployed, hence the log transformation results in a much bigger change in the shape of the distribution.
+Wenn Daten sehr stark schief sind, transformieren wir sie manchmal, damit sie leichter zu modellieren sind.
+@fig-county-unemployed-pop-transform-1 und @fig-county-unemployed-pop-transform-2 zeigen rechtschiefe Verteilungen: die Verteilung des Anteils der Arbeitslosen und die Verteilung der Bevölkerung in allen Landkreisen der Vereinigten Staaten.
+Die Verteilung der Bevölkerung ist stärker schief als die Verteilung des Arbeitslosenanteils, weshalb die logarithmische Transformation zu einer viel größeren Veränderung in der Form der Verteilung führt.
 
 ::: {.workedexample data-latex=""}
-Consider the histogram of county populations shown in  @fig-county-unemployed-pop-transform-3, which shows extreme skew.
-What characteristics of the plot keep it from being useful?
+Betrachten Sie das Histogramm der Landkreispopulationen in @fig-county-unemployed-pop-transform-3, das eine extreme Schiefe zeigt.
+Welche Eigenschaften des Plots machen ihn wenig nützlich?
 
 ------------------------------------------------------------------------
 
-Nearly all of the data fall into the left-most bin, and the extreme skew obscures many of the potentially interesting details at the low values.
+Fast alle Daten fallen in das am weitesten links liegende Intervall, und die extreme Schiefe verdeckt viele der potenziell interessanten Details bei den niedrigen Werten.
 :::
 
 ```{r}
@@ -1159,22 +1159,22 @@ ggplot(county_complete, aes(x = log(pop_2019, base = 10))) +
   )
 ```
 
-There are some standard transformations that may be useful for strongly right skewed data where much of the data is positive but clustered near zero.
-A **transformation**\index{transformation} is a rescaling of the data using a function.
-For instance, a plot of the logarithm (base 10) of unemployment rates and county populations results in the new histograms in @fig-county-unemployed-pop-transform-2.
-The transformed data are symmetric, and any potential outliers appear much less extreme than in the original dataset.
-By reigning in the outliers and extreme skew, transformations often make it easier to build statistical models for the data.
+Es gibt einige standardmäßige Transformationen, die für stark rechtsschiefe Daten nützlich sein können, bei denen ein Großteil der Daten positiv ist, aber nahe Null konzentriert.
+Eine **Transformation**\index{transformation} ist eine Neuskalierung der Daten mithilfe einer Funktion.
+Zum Beispiel führt ein Plot des Logarithmus (Basis 10) von Arbeitslosenraten und Landkreispopulationen zu den neuen Histogrammen in @fig-county-unemployed-pop-transform-2.
+Die transformierten Daten sind symmetrisch, und eventuelle Ausreißer erscheinen viel weniger extrem als im ursprünglichen Datensatz.
+Indem Transformationen Ausreißer und extreme Schiefe zähmen, erleichtern sie oft das Erstellen statistischer Modelle für die Daten.
 
 ```{r}
 #| include: false
 terms_chp_05 <- c(terms_chp_05, "transformation")
 ```
 
-Transformations can also be applied to one or both variables in a scatterplot.
-A scatterplot of the population change from 2010 to 2017 against the population in 2010 is shown in @fig-county-pop-change-transform-1.
-It's difficult to decipher any interesting patterns because the population variable is so strongly skewed.
-However, if we apply a log$_{10}$ transformation to the population variable, as shown in @fig-county-pop-change-transform-2, a positive association between the variables is revealed.
-In fact, we may be interested in fitting a trend line to the data when we explore methods around fitting regression lines in @sec-model-slr.
+Transformationen können auch auf eine oder beide Variablen in einem Streudiagramm angewendet werden.
+Ein Streudiagramm der Bevölkerungsveränderung von 2010 bis 2017 gegenüber der Bevölkerung im Jahr 2010 ist in @fig-county-pop-change-transform-1 dargestellt.
+Es ist schwierig, interessante Muster zu erkennen, weil die Bevölkerungsvariable so stark schief ist.
+Wenn wir jedoch eine log$_{10}$-Transformation auf die Bevölkerungsvariable anwenden, wie in @fig-county-pop-change-transform-2 gezeigt, wird eine positive Assoziation zwischen den Variablen erkennbar.
+Tatsächlich könnte uns das Anpassen einer Trendlinie an die Daten interessieren, wenn wir in @sec-model-slr Methoden zur Anpassung von Regressionsgeraden untersuchen.
 
 \clearpage
 
@@ -1213,17 +1213,17 @@ ggplot(county, aes(y = pop_change, x = log(pop2010, base = 10))) +
   )
 ```
 
-Transformations other than the logarithm can be useful, too.
-For instance, the square root $(\sqrt{\text{original observation}})$ and inverse $\bigg ( \frac{1}{\text{original observation}} \bigg )$ are commonly used by data scientists.
-Common goals in transforming data are to see the data structure differently, reduce skew, assist in modeling, or straighten a nonlinear relationship in a scatterplot.
+Auch andere Transformationen als der Logarithmus können nützlich sein.
+Beispielsweise werden die Quadratwurzel $(\sqrt{\text{ursprüngliche Beobachtung}})$ und der Kehrwert $\bigg ( \frac{1}{\text{ursprüngliche Beobachtung}} \bigg )$ häufig von Datenwissenschaftlern verwendet.
+Häufige Ziele bei der Datentransformation sind, die Datenstruktur anders zu sehen, Schiefe zu reduzieren, die Modellierung zu unterstützen oder eine nichtlineare Beziehung in einem Streudiagramm zu begradigen.
 
-## Mapping data
+## Kartierung von Daten
 
-The `county` dataset offers many numerical variables that we could plot using dot plots, scatterplots, or box plots, but they can miss the true nature of the data as geographic.
-When we encounter geographic data, we should create an **intensity map**\index{plot!intensity map}\index{intensity map}, where colors are used to show higher and lower values of a variable.
-@fig-county-intensity-maps shows intensity maps for poverty rate in percent (`poverty`), unemployment rate in percent (`unemployment_rate`), homeownership rate in percent (`homeownership`), and median household income in \$1000s (`median_hh_income`).
-The color key indicates which colors correspond to which values.
-The intensity maps are not generally very helpful for getting precise values in any given county, but they are very helpful for seeing geographic trends and generating interesting research questions or hypotheses.
+Der Datensatz `county` bietet viele numerische Variablen, die wir mit Punktdiagrammen, Streudiagrammen oder Boxplots darstellen könnten, aber diese können die wahre geografische Natur der Daten verfehlen.
+Wenn wir auf geografische Daten stoßen, sollten wir eine **Intensitätskarte**\index{plot!intensity map}\index{intensity map} erstellen, bei der Farben verwendet werden, um höhere und niedrigere Werte einer Variable anzuzeigen.
+@fig-county-intensity-maps zeigt Intensitätskarten für die Armutsquote in Prozent (`poverty`), die Arbeitslosenquote in Prozent (`unemployment_rate`), die Wohneigentumsquote in Prozent (`homeownership`) und das mittlere Haushaltseinkommen in \$1000 (`median_hh_income`).
+Die Farbskala zeigt an, welche Farben welchen Werten entsprechen.
+Intensitätskarten sind im Allgemeinen nicht sehr hilfreich, um genaue Werte für einen bestimmten Landkreis zu erhalten, aber sie sind sehr hilfreich, um geografische Trends zu erkennen und interessante Forschungsfragen oder Hypothesen zu generieren.
 
 ```{r}
 #| include: false
@@ -1231,26 +1231,26 @@ terms_chp_05 <- c(terms_chp_05, "intensity map")
 ```
 
 ::: {.workedexample data-latex=""}
-What interesting features are evident in the poverty and unemployment rate intensity maps in @fig-county-intensity-maps-1 and @fig-county-intensity-maps-2?
+Welche interessanten Merkmale sind in den Intensitätskarten für Armutsquote und Arbeitslosenquote in @fig-county-intensity-maps-1 und @fig-county-intensity-maps-2 erkennbar?
 
 ------------------------------------------------------------------------
 
-Poverty rates are evidently higher in a few locations.
-Notably, the deep south shows higher poverty rates, as does much of Arizona and New Mexico.
-High poverty rates are evident in the Mississippi flood plains a little north of New Orleans and in a large section of Kentucky.
+Die Armutsquoten sind in einigen Regionen offensichtlich höher.
+Insbesondere der tiefe Süden zeigt höhere Armutsquoten, ebenso wie weite Teile von Arizona und New Mexico.
+Hohe Armutsquoten sind in den Mississippi-Überschwemmungsgebieten etwas nördlich von New Orleans und in einem großen Teil von Kentucky erkennbar.
 
-The unemployment rate follows similar trends, and we can see correspondence between the two variables.
-In fact, it makes sense for higher rates of unemployment to be closely related to poverty rates.
-One observation that stands out when comparing the two maps: the poverty rate is much higher than the unemployment rate, meaning while many people may be working, they are not making enough to break out of poverty.
+Die Arbeitslosenquote folgt ähnlichen Trends, und wir können eine Korrespondenz zwischen den beiden Variablen erkennen.
+Tatsächlich ist es sinnvoll, dass höhere Arbeitslosenraten eng mit Armutsquoten zusammenhängen.
+Eine Beobachtung, die beim Vergleich der beiden Karten auffällt: Die Armutsquote ist viel höher als die Arbeitslosenquote, was bedeutet, dass viele Menschen zwar arbeiten, aber nicht genug verdienen, um der Armut zu entkommen.
 :::
 
 ::: {.guidedpractice data-latex=""}
-What interesting features are evident in the median household income intensity map in @fig-county-intensity-maps-4?[^05-explore-numerical-14]
+Welche interessanten Merkmale sind in der Intensitätskarte des mittleren Haushaltseinkommens in @fig-county-intensity-maps-4 erkennbar?[^05-explore-numerical-14]
 :::
 
-[^05-explore-numerical-14]: Answers will vary.
-    There is some correspondence between high earning and metropolitan areas, where we can see darker spots (higher median household income), though there are several exceptions.
-    You might look for large cities you are familiar with and try to spot them on the map as dark spots.
+[^05-explore-numerical-14]: Die Antworten variieren.
+    Es gibt eine gewisse Entsprechung zwischen hohen Einkommen und Ballungsräumen, wo wir dunklere Flecken (höheres mittleres Haushaltseinkommen) sehen können, obwohl es einige Ausnahmen gibt.
+    Sie könnten nach großen Städten suchen, die Ihnen bekannt sind, und versuchen, sie auf der Karte als dunkle Flecken zu entdecken.
 
 \clearpage
 
@@ -1369,21 +1369,21 @@ ggplot(map_county, aes(x = long, y = lat, group = group)) +
 
 \clearpage
 
-## Chapter review {#sec-chp5-review}
+## Kapitelrückblick {#sec-chp5-review}
 
-### Summary
+### Zusammenfassung
 
-Fluently working with numerical variables is an important skill for data analysts.
-In this chapter we have introduced different visualizations and numerical summaries applied to numeric variables.
-The graphical visualizations are even more descriptive when two variables are presented simultaneously.
-We presented scatterplots, dot plots, histograms, and box plots.
-Numerical variables can be summarized using the mean, median, quartiles, standard deviation, and variance.
+Der sichere Umgang mit numerischen Variablen ist eine wichtige Fähigkeit für Datenanalysten.
+In diesem Kapitel haben wir verschiedene Visualisierungen und numerische Zusammenfassungen eingeführt, die auf numerische Variablen angewendet werden.
+Die grafischen Visualisierungen sind noch aussagekräftiger, wenn zwei Variablen gleichzeitig dargestellt werden.
+Wir haben Streudiagramme, Punktdiagramme, Histogramme und Boxplots vorgestellt.
+Numerische Variablen können mit Mittelwert, Median, Quartilen, Standardabweichung und Varianz zusammengefasst werden.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-05.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-05 aufgeführt.
+Wenn Sie sich nicht sicher sind, was einige dieser Begriffe bedeuten, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-05
@@ -1394,9 +1394,9 @@ make_terms_table(terms_chp_05)
 
 \clearpage
 
-## Exercises {#sec-chp5-exercises}
+## Übungen {#sec-chp5-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-05].
+Antworten auf Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-05].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_05-ex-explore-numerical.qmd >}}

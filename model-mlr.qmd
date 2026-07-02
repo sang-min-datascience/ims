@@ -1,4 +1,4 @@
-# Linear regression with multiple predictors {#sec-model-mlr}
+# Lineare Regression mit mehreren Prädiktoren {#sec-model-mlr}
 
 ```{r}
 #| include: false
@@ -6,14 +6,14 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-Building on the ideas of one predictor variable in a linear regression model (from [Chapter -@sec-model-slr]), a multiple linear regression model is now fit to two or more predictor variables.
-By considering how different explanatory variables interact, we can uncover complicated relationships between the predictor variables and the response variable.
-One challenge to working with multiple variables is that it is sometimes difficult to know which variables are most important to include in the model.
-Model building is an extensive topic, and we scratch the surface here by defining and utilizing the adjusted $R^2$ value.
+Aufbauend auf den Ideen einer Prädiktorvariable in einem linearen Regressionsmodell (aus [Kapitel -@sec-model-slr]) wird nun ein multiples lineares Regressionsmodell an zwei oder mehr Prädiktorvariablen angepasst.
+Indem wir untersuchen, wie verschiedene erklärende Variablen interagieren, können wir komplizierte Beziehungen zwischen den Prädiktorvariablen und der Antwortvariable aufdecken.
+Eine Herausforderung bei der Arbeit mit mehreren Variablen besteht darin, dass es manchmal schwierig ist zu wissen, welche Variablen am wichtigsten im Modell sind.
+Die Modellbildung ist ein umfangreiches Thema, und wir kratzen hier nur an der Oberfläche, indem wir den angepassten $R^2$-Wert definieren und verwenden.
 :::
 
-Multiple regression extends single predictor variable regression to the case that still has one response but many predictors (denoted $x_1$, $x_2$, $x_3$, ...).
-The method is motivated by scenarios where many variables may be simultaneously connected to an output.
+Die multiple Regression erweitert die Regression mit einer Prädiktorvariable auf den Fall, der immer noch eine Antwortvariable hat, aber viele Prädiktoren (bezeichnet als $x_1$, $x_2$, $x_3$, ...).
+Die Methode wird durch Szenarien motiviert, in denen viele Variablen gleichzeitig mit einem Ergebnis verbunden sein können.
 
 ```{r}
 #| label: loans-prep
@@ -28,12 +28,12 @@ loans <- loans_full_schema |>
   select(interest_rate, verified_income, debt_to_income, credit_util, bankruptcy, term, credit_checks, issue_month)
 ```
 
-We will consider data about loans from the peer-to-peer lender, Lending Club, which is a dataset we first encountered in [Chapter -@sec-data-hello].
-The loan data includes terms of the loan as well as information about the borrower.
-The outcome variable we would like to better understand is the interest rate assigned to the loan.
-For instance, all other characteristics held constant, does it matter how much debt someone already has?
-Does it matter if their income has been verified?
-Multiple regression will help us answer these and other questions.
+Wir werden Daten über Kredite des Peer-to-Peer-Kreditgebers Lending Club betrachten, einen Datensatz, dem wir zuerst in [Kapitel -@sec-data-hello] begegnet sind.
+Die Kreditdaten umfassen Kreditbedingungen sowie Informationen über den Kreditnehmer.
+Die Ergebnisvariable, die wir besser verstehen möchten, ist der dem Kredit zugewiesene Zinssatz.
+Spielt es zum Beispiel bei sonst gleichen Merkmalen eine Rolle, wie viel Schulden jemand bereits hat?
+Spielt es eine Rolle, ob sein Einkommen verifiziert wurde?
+Multiple Regression wird uns helfen, diese und andere Fragen zu beantworten.
 
 ```{r}
 #| label: loans-n-rows-to-show
@@ -42,16 +42,16 @@ n_rows_to_show <- 6
 n_rows_to_show_string <- "six"
 ```
 
-The dataset includes information on `r nrow(loans)` loans, and we'll be looking at a subset of the available variables, some of which will be new from those we saw in earlier chapters.
-The first `r n_rows_to_show_string` observations in the dataset are shown in @tbl-loans-data-matrix, and descriptions for each variable are shown in @tbl-loans-variables.
-Notice that the past bankruptcy variable (`bankruptcy`) is an indicator variable, where it takes the value 1 if the borrower had a past bankruptcy in their record and 0 if not.
-Using an indicator variable in place of a category name allows for these variables to be directly used in regression.
-Two of the other variables are categorical (`verified_income` and `issue_month`), each of which can take one of a few different non-numerical values; we'll discuss how these are handled in the model in @sec-ind-and-cat-predictors.
+Der Datensatz enthält Informationen zu `r nrow(loans)` Krediten, und wir werden uns eine Teilmenge der verfügbaren Variablen ansehen, von denen einige neu sind im Vergleich zu denen, die wir in früheren Kapiteln gesehen haben.
+Die ersten `r n_rows_to_show_string` Beobachtungen im Datensatz sind in @tbl-loans-data-matrix dargestellt, und Beschreibungen für jede Variable sind in @tbl-loans-variables zu finden.
+Beachten Sie, dass die Variable für frühere Insolvenz (`bankruptcy`) eine Indikatorvariable ist, die den Wert 1 annimmt, wenn der Kreditnehmer eine frühere Insolvenz in seiner Akte hat, und 0, wenn nicht.
+Die Verwendung einer Indikatorvariable anstelle eines Kategorienamens ermöglicht es, diese Variablen direkt in der Regression zu verwenden.
+Zwei der anderen Variablen sind kategorial (`verified_income` und `issue_month`), jede davon kann einen von wenigen verschiedenen nicht-numerischen Werten annehmen; wir werden in @sec-ind-and-cat-predictors besprechen, wie diese im Modell behandelt werden.
 
 ::: {.data data-latex=""}
-The [`loans_full_schema`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
-Based on the data in this dataset we have created two new variables: `credit_util` which is calculated as the total credit utilized divided by the total credit limit and `bankruptcy` which turns the number of bankruptcies to an indicator variable (0 for no bankruptcies and 1 for at least 1 bankruptcy).
-We will refer to this modified dataset as `loans`.
+Die Daten [`loans_full_schema`](http://openintrostat.github.io/openintro/reference/loans_full_schema.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
+Basierend auf den Daten in diesem Datensatz haben wir zwei neue Variablen erstellt: `credit_util`, das als die gesamte genutzte Kreditlinie geteilt durch das gesamte Kreditlimit berechnet wird, und `bankruptcy`, das die Anzahl der Insolvenzen in eine Indikatorvariable umwandelt (0 für keine Insolvenzen und 1 für mindestens 1 Insolvenz).
+Wir bezeichnen diesen modifizierten Datensatz als `loans`.
 :::
 
 ```{r}
@@ -101,15 +101,15 @@ loans_var_def |>
   column_spec(2, width = "30em")
 ```
 
-## Indicator and categorical predictors {#sec-ind-and-cat-predictors}
+## Indikator- und kategoriale Prädiktoren {#sec-ind-and-cat-predictors}
 
-Let's start by fitting a linear regression model for interest rate with a single predictor indicating whether a person has a bankruptcy in their record:
+Beginnen wir damit, ein lineares Regressionsmodell für den Zinssatz mit einem einzelnen Prädiktor anzupassen, der angibt, ob eine Person eine Insolvenz in ihrer Akte hat:
 
 $$
-\widehat{\texttt{interest\_rate}} = 12.34 + 0.74 \times \texttt{bankruptcy}
+\widehat{\texttt{interest\_rate}} = 12{,}34 + 0{,}74 \times \texttt{bankruptcy}
 $$
 
-Results of this model are shown in @tbl-int-rate-bankruptcy.
+Die Ergebnisse dieses Modells sind in @tbl-int-rate-bankruptcy dargestellt.
 
 ```{r}
 #| label: tbl-int-rate-bankruptcy
@@ -136,21 +136,21 @@ m_bankruptcy |>
 ```
 
 ::: {.workedexample data-latex=""}
-Interpret the coefficient for the past bankruptcy variable in the model.
+Interpretieren Sie den Koeffizienten der Variablen für frühere Insolvenz im Modell.
 
 ------------------------------------------------------------------------
 
-The variable takes one of two values: 1 when the borrower has a bankruptcy in their history and 0 otherwise.
-A slope of 0.74 means that the model predicts a 0.74% higher interest rate for those borrowers with a bankruptcy in their record.
-(See @sec-categorical-predictor-two-levels for a review of the interpretation for two-level categorical predictor variables.)
+Die Variable nimmt einen von zwei Werten an: 1, wenn der Kreditnehmer eine Insolvenz in seiner Geschichte hat, und 0 sonst.
+Eine Steigung von 0,74 bedeutet, dass das Modell einen um 0,74 % höheren Zinssatz für Kreditnehmer mit einer Insolvenz in ihrer Akte vorhersagt.
+(Lesen Sie @sec-categorical-predictor-two-levels zur Überprüfung der Interpretation von zweistufigen kategorialen Prädiktorvariablen.)
 :::
 
-Suppose we had fit a model using a 3-level categorical variable, such as `verified_income`.
-The output from software is shown in @tbl-int-rate-ver-income.
-This regression output provides multiple rows for the variable.
-Each row represents the relative difference for each level of `verified_income`.
-However, we are missing one of the levels: `Not Verified`.
-The missing level is called the **reference level**\index{reference level} and it represents the default level that other levels are measured against.
+Angenommen, wir hätten ein Modell mit einer 3-stufigen kategorialen Variable wie `verified_income` angepasst.
+Die Ausgabe aus der Software ist in @tbl-int-rate-ver-income dargestellt.
+Diese Regressionsausgabe bietet mehrere Zeilen für die Variable.
+Jede Zeile stellt den relativen Unterschied für jede Stufe von `verified_income` dar.
+Eine Stufe fehlt jedoch: `Not Verified`.
+Die fehlende Stufe wird als **Referenzlevel**\index{reference level} bezeichnet und stellt das Standardlevel dar, gegen das andere Levels gemessen werden.
 
 ```{r}
 #| include: false
@@ -161,7 +161,7 @@ terms_chp_08 <- c("reference level")
 #| label: tbl-int-rate-ver-income
 #| tbl-cap: |
 #|   Summary of a linear model for predicting `interest_rate` from
-#|   the borrower’s income source and amount verification. 
+#|   the borrower's income source and amount verification. 
 #|   This predictor has three levels, which results in 2
 #|   rows in the regression output.
 #| tbl-pos: H
@@ -183,107 +183,107 @@ m_verified_income |>
 ```
 
 ::: {.workedexample data-latex=""}
-How would we write an equation for this regression model?
+Wie würden wir eine Gleichung für dieses Regressionsmodell schreiben?
 
 ------------------------------------------------------------------------
 
-The equation for the regression model may be written as a model with two predictors:
+Die Gleichung für das Regressionsmodell kann als Modell mit zwei Prädiktoren geschrieben werden:
 
 \vspace{-5mm}
 
 $$
 \begin{aligned}
-\widehat{\texttt{interest\_rate}} &= 11.10 \\
-&+ 1.42 \times \texttt{verified\_income}_{\texttt{Source Verified}} \\
-&+ 3.25 \times \texttt{verified\_income}_{\texttt{Verified}}
+\widehat{\texttt{interest\_rate}} &= 11{,}10 \\
+&+ 1{,}42 \times \texttt{verified\_income}_{\texttt{Source Verified}} \\
+&+ 3{,}25 \times \texttt{verified\_income}_{\texttt{Verified}}
 \end{aligned}
 $$
 
-We use the notation $\texttt{variable}_{\texttt{level}}$ to represent indicator variables for when the categorical variable takes a particular value.
-For example, $\texttt{verified\_income}_{\texttt{Source Verified}}$ would take a value of 1 if it was for a borrower that was source verified, and it would take a value of 0 otherwise.
-Likewise, $\texttt{verified\_income}_{\texttt{Verified}}$ would take a value of 1 if it was for a borrower that was verified, and 0 if it took any other value.
+Wir verwenden die Notation $\texttt{variable}_{\texttt{level}}$, um Indikatorvariablen darzustellen, wenn die kategoriale Variable einen bestimmten Wert annimmt.
+Zum Beispiel würde $\texttt{verified\_income}_{\texttt{Source Verified}}$ den Wert 1 annehmen, wenn es sich um einen Kreditnehmer handelt, dessen Einkommensquelle verifiziert wurde, und den Wert 0 sonst.
+Ebenso würde $\texttt{verified\_income}_{\texttt{Verified}}$ den Wert 1 annehmen, wenn es sich um einen verifizierten Kreditnehmer handelt, und 0, wenn er einen anderen Wert annimmt.
 :::
 
-The notation $\texttt{variable}_{\texttt{level}}$ may feel a bit confusing.
-Let's figure out how to use the equation for each level of the `verified_income` variable.
+Die Notation $\texttt{variable}_{\texttt{level}}$ mag etwas verwirrend erscheinen.
+Lassen Sie uns herausfinden, wie die Gleichung für jede Stufe der Variablen `verified_income` verwendet wird.
 
 ::: {.workedexample data-latex=""}
-Using the model for predicting interest rate from income verification type, compute the average interest rate for borrowers whose income source and amount are both *unverified*.
+Berechnen Sie mit dem Modell zur Vorhersage des Zinssatzes aus dem Einkommensverifizierungstyp den durchschnittlichen Zinssatz für Kreditnehmer, deren Einkommensquelle und -betrag beide *nicht verifiziert* sind.
 
 ------------------------------------------------------------------------
 
-When `verified_income` takes a value of `Not Verified`, then both indicator functions in the equation for the linear model are set to 0:
+Wenn `verified_income` den Wert `Not Verified` annimmt, werden beide Indikatorfunktionen in der Gleichung für das lineare Modell auf 0 gesetzt:
 
 $$
-\widehat{\texttt{interest\_rate}} = 11.10 + 1.42 \times 0 + 3.25 \times 0 = 11.10
+\widehat{\texttt{interest\_rate}} = 11{,}10 + 1{,}42 \times 0 + 3{,}25 \times 0 = 11{,}10
 $$
 
-The average interest rate for these borrowers is 11.1%.
-Because the level does not have its own coefficient and it is the reference value, the indicators for the other levels for this variable all drop out.
+Der durchschnittliche Zinssatz für diese Kreditnehmer beträgt 11,1 %.
+Da die Stufe keinen eigenen Koeffizienten hat und der Referenzwert ist, fallen die Indikatoren für die anderen Stufen dieser Variablen alle heraus.
 :::
 
 ::: {.workedexample data-latex=""}
-Using the model for predicting interest rate from income verification type, compute the average interest rate for borrowers whose income source is *source verified*.
+Berechnen Sie mit dem Modell zur Vorhersage des Zinssatzes aus dem Einkommensverifizierungstyp den durchschnittlichen Zinssatz für Kreditnehmer, deren Einkommensquelle *quellverifiziert* ist.
 
 ------------------------------------------------------------------------
 
-When `verified_income` takes a value of `Source Verified`, then the corresponding variable takes a value of 1 while the other is 0:
+Wenn `verified_income` den Wert `Source Verified` annimmt, nimmt die entsprechende Variable den Wert 1 an, während die andere 0 ist:
 
 $$
-\widehat{\texttt{interest\_rate}} = 11.10 + 1.42 \times 1 + 3.25 \times 0 = 12.52
+\widehat{\texttt{interest\_rate}} = 11{,}10 + 1{,}42 \times 1 + 3{,}25 \times 0 = 12{,}52
 $$
 
-The average interest rate for these borrowers is 12.52%.
+Der durchschnittliche Zinssatz für diese Kreditnehmer beträgt 12,52 %.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Compute the average interest rate for borrowers whose income source and amount are both *verified*.[^08-model-mlr-1]
+Berechnen Sie den durchschnittlichen Zinssatz für Kreditnehmer, deren Einkommensquelle und -betrag beide *verifiziert* sind.[^08-model-mlr-1]
 :::
 
-[^08-model-mlr-1]: When `verified_income` takes a value of `Verified`, then the corresponding variable takes a value of 1 while the other is 0: $11.10 + 1.42 \times 0 + 3.25 \times 1 = 14.35.$ The average interest rate for these borrowers is 14.35%.
+[^08-model-mlr-1]: Wenn `verified_income` den Wert `Verified` annimmt, nimmt die entsprechende Variable den Wert 1 an, während die andere 0 ist: $11{,}10 + 1{,}42 \times 0 + 3{,}25 \times 1 = 14{,}35.$ Der durchschnittliche Zinssatz für diese Kreditnehmer beträgt 14,35 %.
 
 ::: {.important data-latex=""}
-**Predictors with several categories.**
+**Prädiktoren mit mehreren Kategorien.**
 
-When fitting a regression model with a categorical variable that has $k$ levels where $k > 2$, software will provide a coefficient for $k - 1$ of those levels.
-For the last level that does not receive a coefficient, this is the reference level, and the coefficients listed for the other levels are all considered relative to this reference level.
+Wenn ein Regressionsmodell mit einer kategorialen Variable mit $k$ Stufen angepasst wird, wobei $k > 2$, stellt die Software einen Koeffizienten für $k - 1$ dieser Stufen bereit.
+Für die letzte Stufe, die keinen Koeffizienten erhält, ist dies das Referenzlevel, und die für die anderen Stufen aufgeführten Koeffizienten sind alle relativ zu diesem Referenzlevel zu betrachten.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Interpret the coefficients from the model above.[^08-model-mlr-2]
+Interpretieren Sie die Koeffizienten aus dem obigen Modell.[^08-model-mlr-2]
 :::
 
-[^08-model-mlr-2]: Each of the coefficients gives the incremental interest rate for the corresponding level relative to the `Not Verified` level, which is the reference level.
-    For example, for a borrower whose income source and amount have been verified, the model predicts that they will have a 3.25% higher interest rate than a borrower who has not had their income source or amount verified.
+[^08-model-mlr-2]: Jeder der Koeffizienten gibt den inkrementellen Zinssatz für die entsprechende Stufe relativ zur Stufe `Not Verified` an, die das Referenzlevel ist.
+    Zum Beispiel sagt das Modell für einen Kreditnehmer, dessen Einkommensquelle und -betrag verifiziert wurden, voraus, dass er einen um 3,25 % höheren Zinssatz haben wird als ein Kreditnehmer, dessen Einkommensquelle oder -betrag nicht verifiziert wurde.
 
-The higher interest rate for borrowers who have verified their income source or amount is surprising.
-Intuitively, we would think that a loan would look *less* risky if the borrower's income has been verified.
-However, note that the situation may be more complex, and there may be confounding variables that we didn't account for.
-For example, perhaps lenders require borrowers with poor credit to verify their income.
-That is, verifying income in our dataset might be a signal of some concerns about the borrower rather than a reassurance that the borrower will pay back the loan.
-For this reason, the borrower could be deemed higher risk, resulting in a higher interest rate.
-(What other confounding variables might explain this counter-intuitive relationship suggested by the model?)
+Der höhere Zinssatz für Kreditnehmer, die ihre Einkommensquelle oder ihren Betrag verifiziert haben, ist überraschend.
+Intuitiv würden wir denken, dass ein Kredit *weniger* riskant erscheint, wenn das Einkommen des Kreditnehmers verifiziert wurde.
+Beachten Sie jedoch, dass die Situation komplexer sein kann und möglicherweise Störvariablen vorhanden sind, die wir nicht berücksichtigt haben.
+Zum Beispiel könnten Kreditgeber Kreditnehmer mit schlechter Bonität dazu verpflichten, ihr Einkommen zu verifizieren.
+Das heißt, die Einkommensverifizierung in unserem Datensatz könnte ein Signal für Bedenken bezüglich des Kreditnehmers sein, anstatt eine Beruhigung, dass der Kreditnehmer den Kredit zurückzahlen wird.
+Aus diesem Grund könnte der Kreditnehmer als risikoreich eingestuft werden, was zu einem höheren Zinssatz führt.
+(Welche anderen Störvariablen könnten diese kontraintuitive Beziehung erklären, die das Modell nahelegt?)
 
 ::: {.guidedpractice data-latex=""}
-How much larger of an interest rate would we expect for a borrower who has verified their income source and amount vs a borrower whose income source has only been verified?[^08-model-mlr-3]
+Wie viel höher würden wir einen Zinssatz für einen Kreditnehmer erwarten, der seine Einkommensquelle und seinen Betrag verifiziert hat, im Vergleich zu einem Kreditnehmer, dessen Einkommensquelle nur verifiziert wurde?[^08-model-mlr-3]
 :::
 
-[^08-model-mlr-3]: Relative to the `Not Verified` category, the `Verified` category has an interest rate of 3.25% higher, while the `Source Verified` category is only 1.42% higher.
-    Thus, `Verified` borrowers will tend to get an interest rate about $3.25\% - 1.42\% = 1.83\%$ higher than `Source Verified` borrowers.
+[^08-model-mlr-3]: Im Vergleich zur Kategorie `Not Verified` hat die Kategorie `Verified` einen um 3,25 % höheren Zinssatz, während die Kategorie `Source Verified` nur um 1,42 % höher ist.
+    Damit werden `Verified`-Kreditnehmer tendenziell einen um $3{,}25\% - 1{,}42\% = 1{,}83\%$ höheren Zinssatz als `Source Verified`-Kreditnehmer erhalten.
 
-## Many predictors in a model
+## Viele Prädiktoren in einem Modell
 
-The world is complex, and it can be helpful to consider many factors at once in statistical modeling.
-For example, we might like to use the full context of borrowers to predict the interest rate they receive rather than using a single variable.
-This is the strategy used in **multiple regression**\index{multiple regression}.
-While we remain cautious about making any causal interpretations using multiple regression on observational data, such models are a common first step in gaining insights or providing some evidence of a causal connection.
+Die Welt ist komplex, und es kann hilfreich sein, bei der statistischen Modellierung viele Faktoren gleichzeitig zu berücksichtigen.
+Zum Beispiel möchten wir möglicherweise den gesamten Kontext der Kreditnehmer verwenden, um den Zinssatz vorherzusagen, den sie erhalten, anstatt eine einzelne Variable zu verwenden.
+Dies ist die Strategie, die bei der **multiplen Regression**\index{multiple regression} verwendet wird.
+Obwohl wir bei der Verwendung multipler Regression mit Beobachtungsdaten vorsichtig sind, kausale Interpretationen zu machen, sind solche Modelle ein häufiger erster Schritt, um Einblicke zu gewinnen oder gewisse Hinweise auf eine kausale Verbindung zu liefern.
 
 ```{r}
 #| include: false
 terms_chp_08 <- c(terms_chp_08, "multiple regression")
 ```
 
-We want to construct a model that accounts not only for any past bankruptcy or whether the borrower had their income source or amount verified, but simultaneously accounts for all the variables in the `loans` dataset: `verified_income`, `debt_to_income`, `credit_util`, `bankruptcy`, `term`, `issue_month`, and `credit_checks`.
+Wir möchten ein Modell erstellen, das nicht nur frühere Insolvenz oder ob der Kreditnehmer seine Einkommensquelle oder seinen Betrag verifiziert hat berücksichtigt, sondern gleichzeitig alle Variablen im `loans`-Datensatz berücksichtigt: `verified_income`, `debt_to_income`, `credit_util`, `bankruptcy`, `term`, `issue_month` und `credit_checks`.
 
 $$
 \begin{aligned}
@@ -296,22 +296,22 @@ $$
 \end{aligned}
 $$
 
-This equation represents a holistic approach for modeling all of the variables simultaneously.
-Notice that there are two coefficients for `verified_income` and two coefficients for `issue_month`, since both are 3-level categorical variables.
+Diese Gleichung stellt einen ganzheitlichen Ansatz zur gleichzeitigen Modellierung aller Variablen dar.
+Beachten Sie, dass es zwei Koeffizienten für `verified_income` und zwei Koeffizienten für `issue_month` gibt, da beide 3-stufige kategoriale Variablen sind.
 
-We calculate $b_0$, $b_1$, $b_2$, $\cdots$, $b_9$ the same way as we did in the case of a model with a single predictor -- we select values that minimize the sum of the squared residuals:
+Wir berechnen $b_0$, $b_1$, $b_2$, $\cdots$, $b_9$ auf die gleiche Weise wie im Fall eines Modells mit einem einzelnen Prädiktor -- wir wählen Werte, die die Summe der quadrierten Residuen minimieren:
 
 $$
 SSE = e_1^2 + e_2^2 + \dots + e_{10000}^2 = \sum_{i=1}^{10000} e_i^2 = \sum_{i=1}^{10000} \left(y_i - \hat{y}_i\right)^2
 $$
 
-where $y_i$ and $\hat{y}_i$ represent the observed interest rates and their estimated values according to the model, respectively.
-10,000 residuals are calculated, one for each observation.
-Note that these values are sample statistics and in the case where the observed data is a random sample from a target population that we are interested in making inferences about, they are estimates of the population parameters $\beta_0$, $\beta_1$, $\beta_2$, $\cdots$, $\beta_9$.
-We will discuss inference based on linear models in [Chapter -@sec-inf-model-mlr], for now we will focus on calculating sample statistics $b_i$.
+wobei $y_i$ und $\hat{y}_i$ die beobachteten Zinssätze und ihre geschätzten Werte gemäß dem Modell darstellen.
+Es werden 10.000 Residuen berechnet, eines für jede Beobachtung.
+Beachten Sie, dass diese Werte Stichprobenstatistiken sind und, wenn die beobachteten Daten eine Zufallsstichprobe aus einer Zielpopulation darstellen, für die wir Schlussfolgerungen ziehen möchten, Schätzungen der Populationsparameter $\beta_0$, $\beta_1$, $\beta_2$, $\cdots$, $\beta_9$ sind.
+Wir werden Inferenz basierend auf linearen Modellen in [Kapitel -@sec-inf-model-mlr] besprechen, jetzt konzentrieren wir uns auf die Berechnung von Stichprobenstatistiken $b_i$.
 
-We typically use a computer to minimize the sum of squares and compute point estimates, as shown in the sample output in @tbl-loans-full.
-Using this output, we identify $b_i,$ just as we did in the one-predictor case.
+Wir verwenden typischerweise einen Computer, um die Summe der Quadrate zu minimieren und Punktschätzungen zu berechnen, wie in der Beispielausgabe in @tbl-loans-full gezeigt.
+Anhand dieser Ausgabe identifizieren wir $b_i,$ genauso wie wir es im Fall mit einem Prädiktor getan haben.
 
 ```{r}
 #| label: tbl-loans-full
@@ -335,75 +335,75 @@ m_full |>
 ```
 
 ::: {.important data-latex=""}
-**Multiple regression model.**
+**Multiples Regressionsmodell.**
 
-A multiple regression model is a linear model with many predictors.
-In general, we write the model as
+Ein multiples Regressionsmodell ist ein lineares Modell mit vielen Prädiktoren.
+Im Allgemeinen schreiben wir das Modell als
 
 $$
 \hat{y} = b_0 + b_1 x_1 + b_2 x_2 + \cdots + b_k x_k
 $$
 
-when there are $k$ predictors.
-We always calculate $b_i$ using statistical software.
+wenn es $k$ Prädiktoren gibt.
+Wir berechnen $b_i$ immer mit statistischer Software.
 :::
 
 ::: {.workedexample data-latex=""}
-Write out the regression model using the regression output from @tbl-loans-full.
-How many predictors are there in this model?
+Schreiben Sie das Regressionsmodell anhand der Regressionsausgabe aus @tbl-loans-full auf.
+Wie viele Prädiktoren hat dieses Modell?
 
 ------------------------------------------------------------------------
 
-The fitted model for the interest rate is given by:
+Das angepasste Modell für den Zinssatz lautet:
 
 $$
 \begin{aligned}
-\widehat{\texttt{interest\_rate}} &= 1.89 \\
-&+ 1.00 \times \texttt{verified\_income}_{\texttt{Source Verified}} + 2.56 \times \texttt{verified\_income}_{\texttt{Verified}} \\
-&+ 0.02 \times \texttt{debt\_to\_income} + 4.90 \times \texttt{credit\_util} \\
-&+ 0.39 \times \texttt{bankruptcy} + 0.15 \times \texttt{term} \\
-&+ 0.23 \times \texttt{credit\_checks} + 0.05 \times \texttt{issue\_month}_{\texttt{Jan-2018}} \\
-&- 0.04 \times \texttt{issue\_month}_{\texttt{Mar-2018}}
+\widehat{\texttt{interest\_rate}} &= 1{,}89 \\
+&+ 1{,}00 \times \texttt{verified\_income}_{\texttt{Source Verified}} + 2{,}56 \times \texttt{verified\_income}_{\texttt{Verified}} \\
+&+ 0{,}02 \times \texttt{debt\_to\_income} + 4{,}90 \times \texttt{credit\_util} \\
+&+ 0{,}39 \times \texttt{bankruptcy} + 0{,}15 \times \texttt{term} \\
+&+ 0{,}23 \times \texttt{credit\_checks} + 0{,}05 \times \texttt{issue\_month}_{\texttt{Jan-2018}} \\
+&- 0{,}04 \times \texttt{issue\_month}_{\texttt{Mar-2018}}
 \end{aligned}
 $$
 
-If we count up the number of predictor coefficients, we get the *effective* number of predictors in the model; there are nine of those.
-Notice that the categorical predictor counts as two, once for each of the two levels shown in the model.
-In general, a categorical predictor with $p$ different levels will be represented by $p - 1$ terms in a multiple regression model.
-A total of seven variables were used as predictors to fit this model: `verified_income`, `debt_to_income`, `credit_util`, `bankruptcy`, `term`, `credit_checks`, `issue_month`.
+Wenn wir die Anzahl der Prädiktorkoeffizienten zählen, erhalten wir die *effektive* Anzahl der Prädiktoren im Modell; es sind neun davon.
+Beachten Sie, dass der kategoriale Prädiktor als zwei zählt, je einmal für jede der zwei im Modell gezeigten Stufen.
+Im Allgemeinen wird ein kategorialer Prädiktor mit $p$ verschiedenen Stufen durch $p - 1$ Terme in einem multiplen Regressionsmodell dargestellt.
+Insgesamt wurden sieben Variablen als Prädiktoren zur Anpassung dieses Modells verwendet: `verified_income`, `debt_to_income`, `credit_util`, `bankruptcy`, `term`, `credit_checks`, `issue_month`.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Interpret the coefficient of the variable `credit_checks`.[^08-model-mlr-4]
+Interpretieren Sie den Koeffizienten der Variablen `credit_checks`.[^08-model-mlr-4]
 :::
 
-[^08-model-mlr-4]: All else held constant, for each additional inquiry into the applicant's credit during the last 12 months, we would expect the interest rate for the loan to be higher, on average, by 0.23 points.
+[^08-model-mlr-4]: Bei sonst gleichen Bedingungen würden wir für jede zusätzliche Kreditanfrage beim Antragsteller in den letzten 12 Monaten erwarten, dass der Zinssatz für den Kredit im Durchschnitt um 0,23 Punkte höher ist.
 
 ::: {.guidedpractice data-latex=""}
-Compute the residual of the first observation in @tbl-loans-data-matrix using the full model.[^08-model-mlr-5]
+Berechnen Sie das Residuum der ersten Beobachtung in @tbl-loans-data-matrix mit dem vollständigen Modell.[^08-model-mlr-5]
 :::
 
-[^08-model-mlr-5]: To compute the residual, we first need the predicted value, which we compute by plugging values into the equation from earlier.
-    For example, $\texttt{verified\_income}_{\texttt{Source Verified}}$ takes a value of 0, $\texttt{verified\_income}_{\texttt{Verified}}$ takes a value of 1 (since the borrower's income source and amount were verified), $\texttt{debt\_to\_income}$ was 18.01, and so on.
-    This leads to a prediction of $\widehat{\texttt{interest\_rate}}_1 = 17.84$.
-    The observed interest rate was 14.07%, which leads to a residual of $e_1 = 14.07 - 17.84 = -3.77$.
+[^08-model-mlr-5]: Um das Residuum zu berechnen, benötigen wir zunächst den vorhergesagten Wert, den wir berechnen, indem wir Werte in die frühere Gleichung einsetzen.
+    Zum Beispiel nimmt $\texttt{verified\_income}_{\texttt{Source Verified}}$ den Wert 0 an, $\texttt{verified\_income}_{\texttt{Verified}}$ nimmt den Wert 1 an (da die Einkommensquelle und der Betrag des Kreditnehmers verifiziert wurden), $\texttt{debt\_to\_income}$ betrug 18,01 und so weiter.
+    Dies führt zu einer Vorhersage von $\widehat{\texttt{interest\_rate}}_1 = 17{,}84$.
+    Der beobachtete Zinssatz betrug 14,07 %, was zu einem Residuum von $e_1 = 14{,}07 - 17{,}84 = -3{,}77$ führt.
 
 ::: {.workedexample data-latex=""}
-We calculated a slope coefficient of 0.74 for `bankruptcy` in @sec-ind-and-cat-predictors while the coefficient is 0.39 here.
-Why is there a difference between the coefficient values between the models with single and multiple predictors?
+Wir haben einen Steigungskoeffizienten von 0,74 für `bankruptcy` in @sec-ind-and-cat-predictors berechnet, während der Koeffizient hier 0,39 beträgt.
+Warum gibt es einen Unterschied zwischen den Koeffizientenwerten zwischen den Modellen mit einem und mehreren Prädiktoren?
 
 ------------------------------------------------------------------------
 
-If we examined the data carefully, we would see that some predictors are correlated.
-For instance, when we modeled the relationship of the outcome `interest_rate` and predictor `bankruptcy` using linear regression, we were unable to control for other variables like whether the borrower had their income verified, the borrower's debt-to-income ratio, and other variables.
-That original model was constructed in a vacuum and did not consider the full context of everything that is considered when an interest rate is decided.
-When we include all of the variables, underlying and unintentional bias that was missed by not including these other variables is reduced or eliminated.
-Of course, bias can still exist from other confounding variables.
+Wenn wir die Daten sorgfältig untersuchen, würden wir sehen, dass einige Prädiktoren korreliert sind.
+Zum Beispiel waren wir, als wir die Beziehung des Ergebnisses `interest_rate` und des Prädiktors `bankruptcy` mit linearer Regression modellierten, nicht in der Lage, andere Variablen zu kontrollieren, wie z. B. ob der Kreditnehmer sein Einkommen verifiziert hatte, das Schulden-Einkommens-Verhältnis des Kreditnehmers und andere Variablen.
+Dieses ursprüngliche Modell wurde im Vakuum konstruiert und berücksichtigte nicht den vollständigen Kontext von allem, was bei der Entscheidung über einen Zinssatz berücksichtigt wird.
+Wenn wir alle Variablen einbeziehen, wird die zugrundeliegende und unbeabsichtigte Verzerrung, die durch das Nicht-Einbeziehen dieser anderen Variablen entstanden ist, reduziert oder eliminiert.
+Natürlich können immer noch Verzerrungen durch andere Störvariablen vorhanden sein.
 :::
 
-The previous example describes a common issue in multiple regression: correlation among predictor variables.
-We say the two predictor variables are **collinear** (pronounced as *co-linear*\index{collinear}) when they are correlated, and this **multicollinearity**\index{multicollinearity} complicates model estimation.
-While it is impossible to prevent multicollinearity from arising in observational data, experiments are usually designed to prevent predictors from being multicollinear.
+Das vorherige Beispiel beschreibt ein häufiges Problem in der multiplen Regression: Korrelation zwischen Prädiktorvariablen.
+Wir sagen, die zwei Prädiktorvariablen sind **kollinear** (*co-linear*\index{collinear} ausgesprochen), wenn sie korreliert sind, und diese **Multikollinearität**\index{multicollinearity} erschwert die Modellschätzung.
+Während es bei Beobachtungsdaten unmöglich ist, Multikollinearität zu verhindern, werden Experimente in der Regel so konzipiert, dass Prädiktoren nicht multikollinear sind.
 
 ```{r}
 #| include: false
@@ -411,44 +411,44 @@ terms_chp_08 <- c(terms_chp_08, "multicollinearity", "collinear")
 ```
 
 ::: {.guidedpractice data-latex=""}
-The estimated value of the intercept is 1.89, and one might be tempted to make some interpretation of this coefficient, such as, it is the model's predicted interest rate when each of the variables take value zero: income source is not verified, the borrower has no debt (debt-to-income and credit utilization are zero), and so on.
-Is this reasonable?
-Is there any value gained by making this interpretation?[^08-model-mlr-6]
+Der geschätzte Wert des Achsenabschnitts beträgt 1,89, und man könnte versucht sein, diesen Koeffizienten zu interpretieren, zum Beispiel als den vorhergesagten Zinssatz des Modells, wenn jede der Variablen den Wert null annimmt: Die Einkommensquelle ist nicht verifiziert, der Kreditnehmer hat keine Schulden (Schulden-Einkommens-Verhältnis und Kreditauslastung sind null) usw.
+Ist das vernünftig?
+Wird durch diese Interpretation ein Mehrwert gewonnen?[^08-model-mlr-6]
 :::
 
-[^08-model-mlr-6]: Many of the variables do take a value 0 for at least one data point, and for those variables, it is reasonable.
-    However, one variable never takes a value of zero: `term`, which describes the length of the loan, in months.
-    If `term` is set to zero, then the loan must be paid back immediately; the borrower must give the money back as soon as they receive it, which means it is not a real loan.
-    Ultimately, the interpretation of the intercept in this setting is not insightful.
+[^08-model-mlr-6]: Viele der Variablen nehmen für mindestens einen Datenpunkt den Wert 0 an, und für diese Variablen ist es vernünftig.
+    Eine Variable nimmt jedoch nie den Wert null an: `term`, der die Laufzeit des Kredits in Monaten beschreibt.
+    Wenn `term` auf null gesetzt wird, muss der Kredit sofort zurückgezahlt werden; der Kreditnehmer muss das Geld zurückgeben, sobald er es erhalten hat, was bedeutet, dass es kein echter Kredit ist.
+    Letztendlich ist die Interpretation des Achsenabschnitts in dieser Einstellung nicht aufschlussreich.
 
-## Adjusted R-squared
+## Angepasstes R-Quadrat
 
-We first used $R^2$ in @sec-r-squared to determine the amount of variability in the response that was explained by the model:
+Wir haben $R^2$ zuerst in @sec-r-squared verwendet, um den Anteil der Variabilität in der Antwortvariable zu bestimmen, der durch das Modell erklärt wird:
 
 $$
-R^2 = 1 - \frac{\text{variability in residuals}}{\text{variability in the outcome}}
+R^2 = 1 - \frac{\text{Variabilität der Residuen}}{\text{Variabilität des Ergebnisses}}
     = 1 - \frac{Var(e_i)}{Var(y_i)}
 $$ 
 
-where $e_i$ represents the residuals of the model and $y_i$ the outcomes.
-This equation remains valid in the multiple regression framework, but a small enhancement can make it even more informative when comparing models.
+wobei $e_i$ die Residuen des Modells und $y_i$ die Ergebnisse darstellt.
+Diese Gleichung bleibt im multiplen Regressionsrahmen gültig, aber eine kleine Verbesserung kann sie noch informativer machen, wenn Modelle verglichen werden.
 
 ::: {.guidedpractice data-latex=""}
-The variance of the residuals for the model given in the earlier Guided Practice is 18.53, and the variance of the total price in all the auctions is 25.01.
-Calculate $R^2$ for this model.[^08-model-mlr-7]
+Die Varianz der Residuen für das in der früheren Geführten Übung angegebene Modell beträgt 18,53, und die Varianz des Gesamtpreises in allen Auktionen beträgt 25,01.
+Berechnen Sie $R^2$ für dieses Modell.[^08-model-mlr-7]
 :::
 
-[^08-model-mlr-7]: $R^2 = 1 - \frac{18.53}{25.01} = 0.2591$.
+[^08-model-mlr-7]: $R^2 = 1 - \frac{18{,}53}{25{,}01} = 0{,}2591$.
 
-This strategy for estimating $R^2$ works when there is a single predictor.
-However, it becomes less helpful when there are many variables.
-The regular $R^2$ is a biased estimate of the amount of variability explained by the model when applied to model with more than one predictor.
-To get a better estimate, we use the adjusted $R^2$.
+Diese Strategie zur Schätzung von $R^2$ funktioniert, wenn es einen einzelnen Prädiktor gibt.
+Bei vielen Variablen wird sie jedoch weniger hilfreich.
+Das reguläre $R^2$ ist eine verzerrte Schätzung des durch das Modell erklärten Variabilitätsanteils, wenn es auf ein Modell mit mehr als einem Prädiktor angewendet wird.
+Um eine bessere Schätzung zu erhalten, verwenden wir das angepasste $R^2$.
 
 ::: {.important data-latex=""}
-**Adjusted R-squared as a tool for model assessment.**
+**Angepasstes R-Quadrat als Werkzeug zur Modellbewertung.**
 
-The **adjusted R-squared**\index{adjusted R-squared} is computed as
+Das **angepasste R-Quadrat**\index{adjusted R-squared} wird berechnet als
 
 \vspace{-5mm}
 
@@ -461,8 +461,8 @@ $$
 \end{aligned}
 $$
 
-where $n$ is the number of observations used to fit the model and $k$ is the number of predictor variables in the model.
-Remember that a categorical predictor with $p$ levels will contribute $p - 1$ to the number of variables in the model.
+wobei $n$ die Anzahl der zur Modellsanpassung verwendeten Beobachtungen und $k$ die Anzahl der Prädiktorvariablen im Modell ist.
+Denken Sie daran, dass ein kategorialer Prädiktor mit $p$ Stufen $p - 1$ zur Anzahl der Variablen im Modell beiträgt.
 :::
 
 ```{r}
@@ -470,9 +470,9 @@ Remember that a categorical predictor with $p$ levels will contribute $p - 1$ to
 terms_chp_08 <- c(terms_chp_08, "adjusted R-squared")
 ```
 
-Because $k$ is never negative, the adjusted $R^2$ will be smaller -- often times just a little smaller -- than the unadjusted $R^2$.
-The reasoning behind the adjusted $R^2$ lies in the **degrees of freedom**\index{degrees of freedom} associated with each variance, which is equal to $n - k - 1$ in the multiple regression context.
-If we were to make predictions for *new data* using our current model, we would find that the unadjusted $R^2$ would tend to be slightly overly optimistic, while the adjusted $R^2$ formula helps correct this bias.
+Da $k$ nie negativ ist, ist das angepasste $R^2$ kleiner -- oft nur ein wenig kleiner -- als das nicht-angepasste $R^2$.
+Die Begründung hinter dem angepassten $R^2$ liegt in den **Freiheitsgraden**\index{degrees of freedom}, die mit jeder Varianz verbunden sind, was im multiplen Regressionskontext gleich $n - k - 1$ ist.
+Wenn wir Vorhersagen für *neue Daten* mit unserem aktuellen Modell machen würden, würden wir feststellen, dass das nicht-angepasste $R^2$ tendenziell etwas zu optimistisch ist, während die Formel des angepassten $R^2$ hilft, diese Verzerrung zu korrigieren.
 
 ```{r}
 #| include: false
@@ -480,48 +480,48 @@ terms_chp_08 <- c(terms_chp_08, "degrees of freedom")
 ```
 
 ::: {.guidedpractice data-latex=""}
-There were n = 10,000 auctions in the dataset and $k=9$ predictor variables in the model.
-Use $n$, $k$, and the variances from the earlier Guided Practice to calculate adjusted $R^2$ for the interest rate model.[^08-model-mlr-8]
+Im Datensatz gab es n = 10.000 Auktionen und $k=9$ Prädiktorvariablen im Modell.
+Verwenden Sie $n$, $k$ und die Varianzen aus der früheren Geführten Übung, um das angepasste $R^2$ für das Zinssatzmodell zu berechnen.[^08-model-mlr-8]
 :::
 
-[^08-model-mlr-8]: $R_{adj}^2 = 1 - \frac{18.53}{25.01}\times \frac{10000-1}{10000-9-1} = 0.2584$.
-    While the difference is very small, it will be important when we fine tune the model in the next section.
+[^08-model-mlr-8]: $R_{adj}^2 = 1 - \frac{18{,}53}{25{,}01}\times \frac{10000-1}{10000-9-1} = 0{,}2584$.
+    Obwohl der Unterschied sehr gering ist, wird er wichtig sein, wenn wir das Modell im nächsten Abschnitt feinabstimmen.
 
 ::: {.guidedpractice data-latex=""}
-Suppose you added another predictor to the model, but the variance of the errors $Var(e_i)$ didn't go down.
-What would happen to the $R^2$?
-What would happen to the adjusted $R^2$?[^08-model-mlr-9]
+Angenommen, Sie fügen dem Modell einen weiteren Prädiktor hinzu, aber die Varianz der Fehler $Var(e_i)$ sinkt nicht.
+Was würde mit $R^2$ passieren?
+Was würde mit dem angepassten $R^2$ passieren?[^08-model-mlr-9]
 :::
 
-[^08-model-mlr-9]: The unadjusted $R^2$ would stay the same and the adjusted $R^2$ would go down.
+[^08-model-mlr-9]: Das nicht-angepasste $R^2$ würde gleich bleiben und das angepasste $R^2$ würde sinken.
 
-Adjusted $R^2$ could also have been used in [Chapter -@sec-model-slr] where we introduced regression models with a single predictor.
-However, when there is only $k = 1$ predictors, adjusted $R^2$ is very close to regular $R^2$, so this nuance isn't typically important when the model has only one predictor.
+Das angepasste $R^2$ hätte auch in [Kapitel -@sec-model-slr] verwendet werden können, wo wir Regressionsmodelle mit einem einzelnen Prädiktor eingeführt haben.
+Wenn es jedoch nur $k = 1$ Prädiktoren gibt, ist das angepasste $R^2$ dem regulären $R^2$ sehr ähnlich, sodass diese Nuance typischerweise nicht wichtig ist, wenn das Modell nur einen Prädiktor hat.
 
-## Model selection {#sec-model-selection}
+## Modellauswahl {#sec-model-selection}
 
-The best model is not always the most complicated.
-Sometimes including predictors that are not evidently important can actually reduce the accuracy of predictions.
-In this section, we discuss model selection strategies, which will help us eliminate predictors from the model that are found to be less important.
-It's common (and hip, at least in the statistical world) to refer to models that have undergone such predictor pruning as **parsimonious**\index{parsimonious}.
+Das beste Modell ist nicht immer das komplizierteste.
+Manchmal kann das Einbeziehen von Prädiktoren, die nicht offensichtlich wichtig sind, die Genauigkeit von Vorhersagen tatsächlich verringern.
+In diesem Abschnitt besprechen wir Modellauswahlstrategien, die uns helfen, Prädiktoren aus dem Modell zu eliminieren, die als weniger wichtig befunden werden.
+Es ist üblich (und in der statistischen Welt modisch), Modelle, die eine solche Prädiktor-Bereinigung durchlaufen haben, als **parsimonious**\index{parsimonious} (sparsam) zu bezeichnen.
 
 ```{r}
 #| include: false
 terms_chp_08 <- c(terms_chp_08, "parsimonious")
 ```
 
-In practice, the model that includes all available predictors is often referred to as the **full model**\index{full model}.
-The full model may not be the best model, and if it isn't, we want to identify a smaller model that is preferable.
+In der Praxis wird das Modell, das alle verfügbaren Prädiktoren enthält, oft als **volles Modell**\index{full model} bezeichnet.
+Das volle Modell ist möglicherweise nicht das beste Modell, und wenn es das nicht ist, möchten wir ein kleineres Modell identifizieren, das vorzuziehen ist.
 
 ```{r}
 #| include: false
 terms_chp_08 <- c(terms_chp_08, "full model")
 ```
 
-### Stepwise selection
+### Schrittweise Auswahl
 
-Two common strategies for adding or removing predictors in a multiple regression model are called backward elimination and forward selection.
-These techniques are often referred to as **stepwise selection**\index{stepwise selection} strategies, because they add or delete one variable at a time as they "step" through the candidate predictors.
+Zwei gängige Strategien zum Hinzufügen oder Entfernen von Prädiktoren in einem multiplen Regressionsmodell werden als Rückwärtseliminierung und Vorwärtsauswahl bezeichnet.
+Diese Techniken werden oft als **schrittweise Auswahlstrategien**\index{stepwise selection} bezeichnet, weil sie jeweils eine Variable hinzufügen oder löschen, während sie durch die Kandidatenprädiktoren „schreiten".
 
 ```{r}
 #| include: false
@@ -530,24 +530,24 @@ terms_chp_08 <- c(terms_chp_08, "stepwise selection")
 
 \clearpage
 
-**Backward elimination**\index{backward elimination} starts with the full model -- the model that includes all potential predictor variables. Predictors are eliminated one-at-a-time from the model until we cannot improve the model any further.
+**Rückwärtseliminierung**\index{backward elimination} beginnt mit dem vollständigen Modell -- dem Modell, das alle potenziellen Prädiktorvariablen enthält. Prädiktoren werden nacheinander aus dem Modell eliminiert, bis wir das Modell nicht mehr verbessern können.
 
-**Forward selection**\index{forward selection} is the reverse of the backward elimination technique.
-Instead, of eliminating predictors one-at-a-time, we add predictors one-at-a-time until we cannot find any predictors that improve the model any further.
+**Vorwärtsauswahl**\index{forward selection} ist das Gegenteil der Rückwärtseliminierungstechnik.
+Anstatt Prädiktoren nacheinander zu eliminieren, fügen wir Prädiktoren nacheinander hinzu, bis wir keine Prädiktoren mehr finden können, die das Modell weiter verbessern.
 
 ```{r}
 #| include: false
 terms_chp_08 <- c(terms_chp_08, "backward elimination", "forward selection")
 ```
 
-An important consideration in implementing either of these stepwise selection strategies is the criterion used to decide whether to eliminate or add a predictors.
-One commonly used decision criterion is adjusted $R^2$.
-When using adjusted $R^2$ as the decision criterion, we seek to eliminate or add predictors depending on whether they lead to the largest improvement in adjusted $R^2$ and we stop when adding or elimination of another predictor does not lead to further improvement in adjusted $R^2$.
+Eine wichtige Überlegung bei der Implementierung beider schrittweiser Auswahlstrategien ist das Kriterium, das zur Entscheidung verwendet wird, ob Prädiktoren eliminiert oder hinzugefügt werden sollen.
+Ein häufig verwendetes Entscheidungskriterium ist das angepasste $R^2$.
+Bei Verwendung des angepassten $R^2$ als Entscheidungskriterium suchen wir danach, Prädiktoren zu eliminieren oder hinzuzufügen, abhängig davon, ob sie zur größten Verbesserung des angepassten $R^2$ führen, und wir hören auf, wenn das Hinzufügen oder Eliminieren eines weiteren Prädiktors zu keiner weiteren Verbesserung des angepassten $R^2$ führt.
 
-Adjusted $R^2$ describes the strength of a model fit, and it is a useful tool for evaluating which predictors are adding value to the model, where *adding value* means they are (likely) improving the accuracy in predicting future outcomes.
+Das angepasste $R^2$ beschreibt die Stärke einer Modellanpassung und ist ein nützliches Werkzeug zur Bewertung, welche Prädiktoren dem Modell Wert hinzufügen, wobei *Wert hinzufügen* bedeutet, dass sie (wahrscheinlich) die Genauigkeit bei der Vorhersage zukünftiger Ergebnisse verbessern.
 
-Let's consider two models, which are shown in @tbl-loans-full-for-model-selection and @tbl-loans-full-except-issue-month.
-The first table summarizes the full model since it includes all predictors, while the second does not include the `issue_month` variable.
+Betrachten wir zwei Modelle, die in @tbl-loans-full-for-model-selection und @tbl-loans-full-except-issue-month dargestellt sind.
+Die erste Tabelle fasst das vollständige Modell zusammen, da es alle Prädiktoren enthält, während die zweite die Variable `issue_month` nicht enthält.
 
 ```{r}
 #| label: tbl-loans-full-for-model-selection
@@ -619,158 +619,158 @@ m_full_minus_issue_month_w_rsq |>
 ```
 
 ::: {.workedexample data-latex=""}
-Which of the two models is better?
+Welches der beiden Modelle ist besser?
 
 ------------------------------------------------------------------------
 
-We compare the adjusted $R^2$ of each model to determine which to choose.
-Since the second model has a higher adjusted $R^2$ compared to the first model, we prefer the second model to the first.
-We cannot know for sure, but based on the adjusted $R^2$, this is our best assessment.
+Wir vergleichen das angepasste $R^2$ jedes Modells, um zu entscheiden.
+Da das zweite Modell im Vergleich zum ersten ein höheres angepasstes $R^2$ hat, bevorzugen wir das zweite Modell gegenüber dem ersten.
+Wir können es nicht mit Sicherheit wissen, aber basierend auf dem angepassten $R^2$ ist dies unsere beste Einschätzung.
 :::
 
 ::: {.workedexample data-latex=""}
-Results corresponding to the full model for the `loans` data are shown in @tbl-loans-full-for-model-selection.
-How should we proceed under the backward elimination strategy?
+Die Ergebnisse für das vollständige Modell der `loans`-Daten sind in @tbl-loans-full-for-model-selection dargestellt.
+Wie sollten wir nach der Rückwärtseliminierungsstrategie vorgehen?
 
 ------------------------------------------------------------------------
 
-Our baseline adjusted $R^2$ from the full model is 0.2597, and we need to determine whether dropping a predictor will improve the adjusted $R^2$.
-To check, we fit models that each drop a different predictor, and we record the adjusted $R^2$:
+Unser Ausgangswert für das angepasste $R^2$ aus dem vollständigen Modell beträgt 0,2597, und wir müssen bestimmen, ob das Entfernen eines Prädiktors das angepasste $R^2$ verbessern würde.
+Um dies zu überprüfen, passen wir Modelle an, bei denen jeweils ein anderer Prädiktor entfernt wird, und halten das angepasste $R^2$ fest:
 
--   Excluding `verified_income`: 0.2238
--   Excluding `debt_to_income`: 0.2557
--   Excluding `credit_util`: 0.1916
--   Excluding `bankruptcy`: 0.2589
--   Excluding `term`: 0.1468
--   Excluding `credit_checks`: 0.2484
--   Excluding `issue_month`: 0.2598
+-   Ohne `verified_income`: 0,2238
+-   Ohne `debt_to_income`: 0,2557
+-   Ohne `credit_util`: 0,1916
+-   Ohne `bankruptcy`: 0,2589
+-   Ohne `term`: 0,1468
+-   Ohne `credit_checks`: 0,2484
+-   Ohne `issue_month`: 0,2598
 
-The model without `issue_month` has the highest adjusted $R^2$ of 0.2598, higher than the adjusted $R^2$ for the full model; therefore, we drop `issue_month` from the model.
+Das Modell ohne `issue_month` hat das höchste angepasste $R^2$ von 0,2598, das höher ist als das angepasste $R^2$ des vollständigen Modells; daher entfernen wir `issue_month` aus dem Modell.
 
-Since we eliminated a predictor from the model in the first step, we see whether we should eliminate any additional predictors.
-Our baseline adjusted $R^2$ is now $R^2_{adj} = 0.2598$.
-We now fit new models, which consider eliminating each of the remaining predictors in addition to `issue_month`:
+Da wir einen Prädiktor im ersten Schritt aus dem Modell entfernt haben, prüfen wir, ob wir weitere Prädiktoren entfernen sollten.
+Unser Ausgangswert für das angepasste $R^2$ beträgt jetzt $R^2_{adj} = 0{,}2598$.
+Wir passen nun neue Modelle an, die das Entfernen jedes der verbleibenden Prädiktoren zusätzlich zu `issue_month` berücksichtigen:
 
--   Excluding `issue_month` and `verified_income`: 0.22395
--   Excluding `issue_month` and `debt_to_income`: 0.25579
--   Excluding `issue_month` and `credit_util`: 0.19174
--   Excluding `issue_month` and `bankruptcy`: 0.25898
--   Excluding `issue_month` and `term`: 0.14692
--   Excluding `issue_month` and `credit_checks`: 0.24801
+-   Ohne `issue_month` und `verified_income`: 0,22395
+-   Ohne `issue_month` und `debt_to_income`: 0,25579
+-   Ohne `issue_month` und `credit_util`: 0,19174
+-   Ohne `issue_month` und `bankruptcy`: 0,25898
+-   Ohne `issue_month` und `term`: 0,14692
+-   Ohne `issue_month` und `credit_checks`: 0,24801
 
-None of these models lead to an improvement in adjusted $R^2$, so we do not eliminate any of the remaining predictors.
-That is, after backward elimination, we are left with the model that keeps all predictors except `issue_month`, which we can summarize using the coefficients from @tbl-loans-full-except-issue-month.
+Keines dieser Modelle führt zu einer Verbesserung des angepassten $R^2$, sodass wir keinen der verbleibenden Prädiktoren entfernen.
+Das heißt, nach der Rückwärtseliminierung verbleibt das Modell, das alle Prädiktoren außer `issue_month` beibehält, das wir anhand der Koeffizienten aus @tbl-loans-full-except-issue-month zusammenfassen können.
 
 \vspace{-5mm}
 
 $$
 \begin{aligned}
-\widehat{\texttt{interest\_rate}} &= 1.90 \\
-&+ 1.00 \times \texttt{verified\_income}_\texttt{Source only} + 2.56 \times \texttt{verified\_income}_\texttt{Verified} \\
-&+ 0.02 \times \texttt{debt\_to\_income} + 4.90 \times \texttt{credit\_util} \\
-&+ 0.39 \times \texttt{bankruptcy} + 0.15 \times \texttt{term} \\
-&+ 0.23 \times \texttt{credit\_checks}
+\widehat{\texttt{interest\_rate}} &= 1{,}90 \\
+&+ 1{,}00 \times \texttt{verified\_income}_\texttt{Source only} + 2{,}56 \times \texttt{verified\_income}_\texttt{Verified} \\
+&+ 0{,}02 \times \texttt{debt\_to\_income} + 4{,}90 \times \texttt{credit\_util} \\
+&+ 0{,}39 \times \texttt{bankruptcy} + 0{,}15 \times \texttt{term} \\
+&+ 0{,}23 \times \texttt{credit\_checks}
 \end{aligned}
 $$
 :::
 
 ::: {.workedexample data-latex=""}
-Construct a model for predicting `interest_rate` from the `loans` data using forward selection.
+Erstellen Sie ein Modell zur Vorhersage von `interest_rate` aus den `loans`-Daten mithilfe der Vorwärtsauswahl.
 
 ------------------------------------------------------------------------
 
-We start with the model that includes no predictors.
-Then we fit each of the possible models with just one predictor.
-Then we examine the adjusted $R^2$ for each of these models:
+Wir beginnen mit dem Modell, das keine Prädiktoren enthält.
+Dann passen wir jedes der möglichen Modelle mit nur einem Prädiktor an.
+Dann untersuchen wir das angepasste $R^2$ für jedes dieser Modelle:
 
--   Including `verified_income`: 0.05926
--   Including `debt_to_income`: 0.01946
--   Including `credit_util`: 0.06452
--   Including `bankruptcy`: 0.00222
--   Including `term`: 0.12855
--   Including `credit_checks`: -0.0001
--   Including `issue_month`: 0.01711
+-   Mit `verified_income`: 0,05926
+-   Mit `debt_to_income`: 0,01946
+-   Mit `credit_util`: 0,06452
+-   Mit `bankruptcy`: 0,00222
+-   Mit `term`: 0,12855
+-   Mit `credit_checks`: -0,0001
+-   Mit `issue_month`: 0,01711
 
-In this first step, we compare the adjusted $R^2$ against a baseline model that has no predictors, which always has $R_{adj}^2 = 0$.
-The model with one predictor that has the largest adjusted $R^2$ is the model with the `term` predictor, so we will add this variable to our model.
+In diesem ersten Schritt vergleichen wir das angepasste $R^2$ mit einem Basismodell ohne Prädiktoren, das immer $R_{adj}^2 = 0$ hat.
+Das Modell mit einem Prädiktor, das das höchste angepasste $R^2$ hat, ist das Modell mit dem Prädiktor `term`, sodass wir diese Variable zu unserem Modell hinzufügen.
 
-We repeat the process again, this time considering 2-predictor models where one of the predictors is `term` and with a new baseline of $R^2_{adj} = 0.12855:$
+Wir wiederholen den Prozess erneut, diesmal in Betracht ziehend 2-Prädiktor-Modelle, bei denen einer der Prädiktoren `term` ist und mit einer neuen Basis von $R^2_{adj} = 0{,}12855:$
 
--   Including `term` and `verified_income`: 0.16851
--   Including `term` and `debt_to_income`: 0.14368
--   Including `term` and `credit_util`: 0.20046
--   Including `term` and `bankruptcy`: 0.13070
--   Including `term` and `credit_checks`: 0.12840
--   Including `term` and `issue_month`: 0.14294
+-   Mit `term` und `verified_income`: 0,16851
+-   Mit `term` und `debt_to_income`: 0,14368
+-   Mit `term` und `credit_util`: 0,20046
+-   Mit `term` und `bankruptcy`: 0,13070
+-   Mit `term` und `credit_checks`: 0,12840
+-   Mit `term` und `issue_month`: 0,14294
 
-The model including `credit_util` has the largest increase in adjusted $R^2$ (0.20046) from the baseline (0.12855),
-Thus, we will also add `credit_util` to the model as a predictor.
+Das Modell mit `credit_util` hat den größten Anstieg im angepassten $R^2$ (0,20046) von der Basis (0,12855).
+Daher fügen wir `credit_util` ebenfalls als Prädiktor zum Modell hinzu.
 
-Now we have a new baseline adjusted $R^2$ of 0.20046.
-We can continue on and see whether it would be beneficial to add a third predictor:
+Jetzt haben wir einen neuen Ausgangswert für das angepasste $R^2$ von 0,20046.
+Wir können fortfahren und sehen, ob es sinnvoll wäre, einen dritten Prädiktor hinzuzufügen:
 
--   Including `term`, `credit_util`, and `verified_income`: 0.24183
--   Including `term`, `credit_util`, and `debt_to_income`: 0.20810
--   Including `term`, `credit_util`, and `bankruptcy`: 0.20169
--   Including `term`, `credit_util`, and `credit_checks`: 0.20031
--   Including `term`, `credit_util`, and `issue_month`: 0.21629
+-   Mit `term`, `credit_util` und `verified_income`: 0,24183
+-   Mit `term`, `credit_util` und `debt_to_income`: 0,20810
+-   Mit `term`, `credit_util` und `bankruptcy`: 0,20169
+-   Mit `term`, `credit_util` und `credit_checks`: 0,20031
+-   Mit `term`, `credit_util` und `issue_month`: 0,21629
 
-The model including `verified_income` has the largest increase in adjusted $R^2$ (0.24183) from the baseline (0.20046), so we add `verified_income` to the model as a predictor as well.
+Das Modell mit `verified_income` hat den größten Anstieg im angepassten $R^2$ (0,24183) von der Basis (0,20046), daher fügen wir `verified_income` ebenfalls als Prädiktor zum Modell hinzu.
 
-We continue in this way, next adding `debt_to_income`, then `credit_checks`, and `bankruptcy`.
-At this point, we come again to the `issue_month` variable: adding this as a predictor leads to $R_{adj}^2 = 0.25843$, while keeping all the other predictors but excluding `issue_month` has a higher $R_{adj}^2 = 0.25854$.
-This means we do not add `issue_month` to the model as a predictor.
-In this example, we have arrived at the same model that we identified with backward elimination.
+Wir fahren auf diese Weise fort und fügen als nächstes `debt_to_income`, dann `credit_checks` und `bankruptcy` hinzu.
+An diesem Punkt kommen wir wieder zur Variablen `issue_month`: Das Hinzufügen dieser als Prädiktor führt zu $R_{adj}^2 = 0{,}25843$, während das Behalten aller anderen Prädiktoren, aber Ausschluss von `issue_month`, ein höheres $R_{adj}^2 = 0{,}25854$ hat.
+Das bedeutet, wir fügen `issue_month` nicht als Prädiktor zum Modell hinzu.
+In diesem Beispiel sind wir zu demselben Modell gelangt, das wir mit der Rückwärtseliminierung identifiziert haben.
 :::
 
 ::: {.important data-latex=""}
-**Stepwise selection strategies.**
+**Schrittweise Auswahlstrategien.**
 
-Backward elimination begins with the model having the largest number of predictors and eliminates predictors one-by-one until we are satisfied that all remaining predictors are important to the model.
-Forward selection starts with no predictors included in the model, then it adds in predictors according to their importance until no other important predictors are found.
-Notice that, for both methods, we have always chosen to retain the model with the largest adjusted $R^2$ value, even if the difference is less than half a percent (e.g., 0.2597 versus 0.2598).
-One could argue that the difference between these two models is negligible, as they both explain nearly the same amount of variability in the `interest_rate`.
-These negligible differences are an important aspect to model selection.
-It is highly advised that *before* you begin the model selection process, you decide what a "meaningful" difference in adjusted $R^2$ is for the context of your data.
-Maybe this difference is 1% or maybe it is 5%.
-This "threshold" is what you will then use to decide if one model is "better" than another model.
-Using meaningful thresholds in model selection requires more critical thinking about what the adjusted $R^2$ values mean.
+Die Rückwärtseliminierung beginnt mit dem Modell mit der größten Anzahl von Prädiktoren und eliminiert Prädiktoren einzeln, bis wir zufrieden sind, dass alle verbleibenden Prädiktoren für das Modell wichtig sind.
+Die Vorwärtsauswahl beginnt ohne im Modell enthaltene Prädiktoren und fügt dann Prädiktoren entsprechend ihrer Wichtigkeit hinzu, bis keine weiteren wichtigen Prädiktoren gefunden werden.
+Beachten Sie, dass wir bei beiden Methoden immer das Modell mit dem größten angepassten $R^2$-Wert behalten haben, selbst wenn der Unterschied kleiner als ein halbes Prozent ist (z. B. 0,2597 versus 0,2598).
+Man könnte argumentieren, dass der Unterschied zwischen diesen zwei Modellen vernachlässigbar ist, da beide annähernd die gleiche Menge an Variabilität im `interest_rate` erklären.
+Diese vernachlässigbaren Unterschiede sind ein wichtiger Aspekt der Modellauswahl.
+Es wird dringend empfohlen, dass Sie *bevor* Sie den Modellauswahlprozess beginnen, entscheiden, was ein „bedeutsamer" Unterschied im angepassten $R^2$ für den Kontext Ihrer Daten ist.
+Vielleicht ist dieser Unterschied 1 % oder vielleicht 5 %.
+Dieser „Schwellenwert" ist es, den Sie dann verwenden werden, um zu entscheiden, ob ein Modell „besser" ist als ein anderes Modell.
+Die Verwendung bedeutsamer Schwellenwerte bei der Modellauswahl erfordert mehr kritisches Denken darüber, was die angepassten $R^2$-Werte bedeuten.
 
-Additionally, backward elimination and forward selection can arrive at different final models, because the decision for whether to include a given predictor or not depends on the other predictors that are already in the model.
-With forward selection, you start with a model that includes no predictors, and add predictors one at a time.
-In backward elimination, you start with a model that includes all of the potential predictors, and remove predictors one at a time.
-How much a given predictor changes the percentage of the variability in the outcome that is explained by the model depends on the other predictors in the model, particularly if the predictor variables are correlated with each other.
+Darüber hinaus können Rückwärtseliminierung und Vorwärtsauswahl zu verschiedenen Endmodellen gelangen, da die Entscheidung, ob ein bestimmter Prädiktor einbezogen werden soll oder nicht, von den anderen Prädiktoren abhängt, die bereits im Modell sind.
+Mit Vorwärtsauswahl beginnen Sie mit einem Modell ohne Prädiktoren und fügen Prädiktoren einen nach dem anderen hinzu.
+Bei der Rückwärtseliminierung beginnen Sie mit einem Modell, das alle potenziellen Prädiktoren enthält, und entfernen Prädiktoren einen nach dem anderen.
+Wie viel ein bestimmter Prädiktor den Prozentsatz der Variabilität im Ergebnis verändert, der durch das Modell erklärt wird, hängt von den anderen Prädiktoren im Modell ab, insbesondere wenn die Prädiktorvariablen miteinander korreliert sind.
 :::
 
-There is no "one size fits all" model selection strategy, which is why there are so many different model selection methods.
-We hope you walk away from this exploration understanding how stepwise selection is carried out and the considerations that should be made when using stepwise selection with regression models.
+Es gibt keine „Einheitslösung" für die Modellauswahlstrategie, weshalb es so viele verschiedene Modellauswahlmethoden gibt.
+Wir hoffen, dass Sie aus dieser Untersuchung verstehen, wie die schrittweise Auswahl durchgeführt wird und welche Überlegungen bei der Verwendung der schrittweisen Auswahl mit Regressionsmodellen berücksichtigt werden sollten.
 
-### Other model selection strategies
+### Andere Modellauswahlstrategien
 
-Stepwise selection using adjusted $R^2$ as the decision criteria is one of many commonly used model selection strategies.
-Stepwise selection can also be carried out with decision criteria other than adjusted $R^2$, such as p-values, which you'll learn about in @sec-inf-model-slr onward, or AIC (Akaike information criterion) or BIC (Bayesian information criterion), which you might learn about in more advanced courses.
+Die schrittweise Auswahl mit dem angepassten $R^2$ als Entscheidungskriterium ist eine von vielen häufig verwendeten Modellauswahlstrategien.
+Die schrittweise Auswahl kann auch mit anderen Entscheidungskriterien als dem angepassten $R^2$ durchgeführt werden, wie z. B. p-Werten, die Sie in @sec-inf-model-slr und darüber hinaus kennenlernen werden, oder AIC (Akaike-Informationskriterium) oder BIC (Bayes-Informationskriterium), die Sie möglicherweise in fortgeschritteneren Kursen kennenlernen.
 
-Alternatively, one could choose to include or exclude predictors from a model based on expert opinion or due to research focus.
-In fact, many statisticians discourage the use of stepwise regression *alone* for model selection and advocate, instead, for a more thoughtful approach that carefully considers the research focus and features of the data.
+Alternativ könnte man entscheiden, Prädiktoren basierend auf Expertenmeinungen oder aufgrund von Forschungsschwerpunkten in ein Modell aufzunehmen oder auszuschließen.
+Tatsächlich raten viele Statistiker von der ausschließlichen Verwendung der schrittweisen Regression *allein* für die Modellauswahl ab und befürworten stattdessen einen bedachteren Ansatz, der den Forschungsschwerpunkt und die Merkmale der Daten sorgfältig berücksichtigt.
 
 \clearpage
 
-## Chapter review {#sec-chp8-review}
+## Kapitelzusammenfassung {#sec-chp8-review}
 
-### Summary
+### Zusammenfassung
 
-With real data, there is often a need to describe how multiple variables can be modeled together.
-In this chapter, we have presented one approach using multiple linear regression.
-Each coefficient represents how the model predicts the outcome might change with one unit increase of that predictor *given* the rest of the predictor variables in the model.
-Working with and interpreting multivariable models can be tricky, especially when the predictor variables show multicollinearity.
-There is often no perfect or "right" final model, however, using the adjusted $R^2$ value is one way to identify important predictor variables for a final regression model.
-In later chapters we will generalize multiple linear regression models to a larger population of interest from which the dataset was sampled.
+Mit realen Daten besteht oft die Notwendigkeit zu beschreiben, wie mehrere Variablen gemeinsam modelliert werden können.
+In diesem Kapitel haben wir einen Ansatz mit multipler linearer Regression vorgestellt.
+Jeder Koeffizient stellt dar, wie das Modell vorhersagt, dass das Ergebnis sich mit einer Einheitssteigerung dieses Prädiktors ändern könnte, *gegeben* den Rest der Prädiktorvariablen im Modell.
+Die Arbeit mit und Interpretation von multivariaten Modellen kann schwierig sein, insbesondere wenn die Prädiktorvariablen Multikollinearität aufweisen.
+Es gibt oft kein perfektes oder „richtiges" Endmodell, aber die Verwendung des angepassten $R^2$-Werts ist eine Möglichkeit, wichtige Prädiktorvariablen für ein finales Regressionsmodell zu identifizieren.
+In späteren Kapiteln werden wir multiple lineare Regressionsmodelle auf eine größere Grundgesamtheit verallgemeinern, aus der der Datensatz abgetastet wurde.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-08.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe werden in @tbl-terms-chp-08 vorgestellt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-08
@@ -781,9 +781,9 @@ make_terms_table(terms_chp_08)
 
 \clearpage
 
-## Exercises {#sec-chp8-exercises}
+## Übungen {#sec-chp8-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-08].
+Antworten auf Übungen mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-08].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_08-ex-model-mlr.qmd >}}

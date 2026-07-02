@@ -1,4 +1,4 @@
-# Inference for comparing many means {#sec-inference-many-means}
+# Inferenz beim Vergleich vieler Mittelwerte {#sec-inference-many-means}
 
 ```{r}
 #| include: false
@@ -6,74 +6,74 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-In [Chapter -@sec-inference-two-means] analysis was done to compare the average population value across two different groups.
-An important aspect of the analysis was to look at the difference in sample means as an estimate for the difference in population means.
-When comparing more than two groups, the difference (i.e., subtraction) will not fully capture the nuance in variation across the three or more groups.
-As with two groups, the research question will focus on whether the group membership is independent of the numerical response variable.
-Here, independence across groups means that knowledge of the observations in one group does not change what we would expect to happen in the other group.
-But what happens if the groups are **dependent**?
-In this section we focus on a new statistic which incorporates differences in means across more than two groups.
-Although the ideas in this chapter are quite similar to the t-test, they have earned themselves their own name: **AN**alysis **O**f **VA**riance\index{Analysis of Variance}, or ANOVA\index{ANOVA}.
+In [Kapitel -@sec-inference-two-means] wurde eine Analyse durchgeführt, um den durchschnittlichen Populationswert über zwei verschiedene Gruppen hinweg zu vergleichen.
+Ein wichtiger Aspekt der Analyse war es, die Differenz der Stichprobenmittelwerte als Schätzung für die Differenz der Populationsmittelwerte zu betrachten.
+Beim Vergleich von mehr als zwei Gruppen erfasst die Differenz (d.h. die Subtraktion) die Nuancen der Variation über drei oder mehr Gruppen hinweg nicht vollständig.
+Wie bei zwei Gruppen wird sich die Forschungsfrage darauf konzentrieren, ob die Gruppenzugehörigkeit unabhängig von der numerischen Antwortvariable ist.
+Unabhängigkeit zwischen den Gruppen bedeutet hier, dass das Wissen über die Beobachtungen in einer Gruppe nichts daran ändert, was wir in der anderen Gruppe erwarten würden.
+Aber was passiert, wenn die Gruppen **abhängig** sind?
+In diesem Abschnitt konzentrieren wir uns auf eine neue Statistik, die Unterschiede in Mittelwerten über mehr als zwei Gruppen hinweg berücksichtigt.
+Obwohl die Ideen in diesem Kapitel dem t-Test sehr ähnlich sind, haben sie sich einen eigenen Namen verdient: **AN**alyse **O**f **VA**riance\index{Varianzanalyse}, oder ANOVA\index{ANOVA}.
 :::
 
 \index{analysis of variance (ANOVA)}
 
-Sometimes we want to compare means across many groups.
-We might initially think to do pairwise comparisons.
-For example, if there were three groups, we might be tempted to compare the first mean with the second, then with the third, and then finally compare the second and third means for a total of three comparisons.
-However, this strategy can be treacherous.
-If we have many groups and do many comparisons, it is likely that we will eventually find a difference just by chance, even if there is no difference in the populations.
-Instead, we should apply a holistic test to check whether there is evidence that at least one pair of groups are in fact different, which is where **ANOVA** saves the day.
+Manchmal möchten wir Mittelwerte über viele Gruppen hinweg vergleichen.
+Zunächst könnte man paarweise Vergleiche durchführen.
+Wenn es zum Beispiel drei Gruppen gäbe, könnte man versucht sein, den ersten Mittelwert mit dem zweiten zu vergleichen, dann mit dem dritten, und schließlich den zweiten und dritten Mittelwert für insgesamt drei Vergleiche.
+Diese Strategie kann jedoch trügerisch sein.
+Wenn wir viele Gruppen haben und viele Vergleiche durchführen, ist es wahrscheinlich, dass wir schließlich zufällig einen Unterschied finden, selbst wenn es in den Populationen keinen Unterschied gibt.
+Stattdessen sollten wir einen ganzheitlichen Test anwenden, um zu prüfen, ob es Hinweise darauf gibt, dass mindestens ein Paar von Gruppen tatsächlich unterschiedlich ist – das ist der Punkt, an dem **ANOVA** die Situation rettet.
 
 ```{r}
 #| include: false
 terms_chp_22 <- c("ANOVA", "analysis of variance")
 ```
 
-In this section, we will learn a new method called **analysis of variance (ANOVA)** and a new test statistic called an $F$-statistic (which we will introduce in our discussion of mathematical models).
-ANOVA uses a single hypothesis test to check whether the means across many groups are equal:
+In diesem Abschnitt werden wir eine neue Methode namens **Varianzanalyse (ANOVA)** und eine neue Teststatistik namens $F$-Statistik kennenlernen (die wir in unserer Diskussion mathematischer Modelle einführen werden).
+ANOVA verwendet einen einzigen Hypothesentest, um zu prüfen, ob die Mittelwerte über viele Gruppen hinweg gleich sind:
 
--   $H_0:$ The mean outcome is the same across all groups, i.e., $\mu_1 = \mu_2 = \cdots = \mu_k$ where $\mu_j$ represents the mean of the outcome for observations in category $j.$
--   $H_A:$ At least one mean is different.
+-   $H_0:$ Das mittlere Ergebnis ist über alle Gruppen gleich, d.h. $\mu_1 = \mu_2 = \cdots = \mu_k$, wobei $\mu_j$ den Mittelwert des Ergebnisses für Beobachtungen in Kategorie $j$ darstellt.
+-   $H_A:$ Mindestens ein Mittelwert ist unterschiedlich.
 
-Generally we must check three conditions on the data before performing ANOVA:
+Im Allgemeinen müssen wir drei Bedingungen für die Daten prüfen, bevor wir eine ANOVA durchführen:
 
--   the observations are independent within and between groups,
--   the responses within each group are nearly normal, and
--   the variability across the groups is about equal.
+-   die Beobachtungen sind innerhalb und zwischen den Gruppen unabhängig,
+-   die Antworten innerhalb jeder Gruppe sind annähernd normalverteilt, und
+-   die Variabilität zwischen den Gruppen ist ungefähr gleich.
 
-When the three technical conditions are met, we may perform an ANOVA to determine whether the data provide convincing evidence against the null hypothesis that all the $\mu_j$ are equal.
+Wenn die drei technischen Bedingungen erfüllt sind, können wir eine ANOVA durchführen, um festzustellen, ob die Daten überzeugende Beweise gegen die Nullhypothese liefern, dass alle $\mu_j$ gleich sind.
 
 ::: {.workedexample data-latex=""}
-College departments commonly run multiple sections of the same introductory course each semester because of high demand.
-Consider a statistics department that runs three sections of an introductory statistics course.
-We might like to determine whether there are substantial differences in first exam scores in these three classes (Section A, Section B, and Section C).
-Describe appropriate hypotheses to determine whether there are any differences between the three classes.
+Universitätsfachbereiche führen aufgrund der hohen Nachfrage häufig mehrere Abschnitte desselben Einführungskurses in jedem Semester durch.
+Betrachten wir einen Statistikfachbereich, der drei Abschnitte eines einführenden Statistikkurses anbietet.
+Vielleicht möchten wir feststellen, ob es wesentliche Unterschiede bei den Ergebnissen der ersten Prüfung in diesen drei Klassen (Abschnitt A, Abschnitt B und Abschnitt C) gibt.
+Beschreiben Sie geeignete Hypothesen, um festzustellen, ob es Unterschiede zwischen den drei Klassen gibt.
 
 ------------------------------------------------------------------------
 
-The hypotheses may be written in the following form:
+Die Hypothesen können in folgender Form geschrieben werden:
 
--   $H_0:$ The average score is identical in all sections, $\mu_A = \mu_B = \mu_C$. Assuming each class is equally difficult, the observed difference in the exam scores is due to chance.
--   $H_A:$ The average score varies by class. We would reject the null hypothesis in favor of the alternative hypothesis if there were larger differences among the class averages than what we might expect from chance alone.
+-   $H_0:$ Die durchschnittliche Punktzahl ist in allen Abschnitten identisch, $\mu_A = \mu_B = \mu_C$. Unter der Annahme, dass jede Klasse gleich schwierig ist, ist der beobachtete Unterschied in den Prüfungspunktzahlen auf Zufall zurückzuführen.
+-   $H_A:$ Die durchschnittliche Punktzahl variiert je nach Klasse. Wir würden die Nullhypothese zugunsten der Alternativhypothese ablehnen, wenn es größere Unterschiede zwischen den Klassendurchschnittswerten gäbe, als wir allein durch Zufall erwarten würden.
 :::
 
-Strong evidence favoring the alternative hypothesis in ANOVA is described by unusually large differences among the group means.
-We will soon learn that assessing the variability of the group means relative to the variability among individual observations within each group is key to ANOVA's success.
+Starke Hinweise zugunsten der Alternativhypothese bei der ANOVA werden durch ungewöhnlich große Unterschiede zwischen den Gruppenmittelwerten beschrieben.
+Wir werden bald erfahren, dass die Bewertung der Variabilität der Gruppenmittelwerte im Verhältnis zur Variabilität unter den einzelnen Beobachtungen innerhalb jeder Gruppe der Schlüssel zum Erfolg der ANOVA ist.
 
 ::: {.workedexample data-latex=""}
-Examine @fig-toyANOVA.
-Compare groups I, II, and III.
-Can you visually determine if the differences in the group centers is unlikely to have occurred if there were no differences in the groups?
-Now compare groups IV, V, and VI.
-Do these differences appear to be unlikely to have occurred if there were no differences in the groups?
+Betrachten Sie @fig-toyANOVA.
+Vergleichen Sie die Gruppen I, II und III.
+Können Sie visuell feststellen, ob die Unterschiede in den Gruppenmitten unwahrscheinlich aufgetreten wären, wenn es keine Unterschiede zwischen den Gruppen gäbe?
+Vergleichen Sie nun die Gruppen IV, V und VI.
+Scheinen diese Unterschiede unwahrscheinlich aufgetreten zu sein, wenn es keine Unterschiede zwischen den Gruppen gäbe?
 
 ------------------------------------------------------------------------
 
-Any real difference in the means of groups I, II, and III is difficult to discern, because the data within each group are very volatile relative to any differences in the average outcome.
-On the other hand, it appears there are differences in the centers of groups IV, V, and VI.
-For instance, group V appears to have a higher mean than that of the other two groups.
-Investigating groups IV, V, and VI, we see the differences in the groups' centers are noticeable because those differences are large *relative to the variability in the individual observations within each group*.
+Jeder reale Unterschied in den Mittelwerten der Gruppen I, II und III ist schwer zu erkennen, da die Daten innerhalb jeder Gruppe im Verhältnis zu eventuellen Unterschieden im durchschnittlichen Ergebnis sehr volatil sind.
+Andererseits scheint es Unterschiede in den Mittelpunkten der Gruppen IV, V und VI zu geben.
+Zum Beispiel scheint Gruppe V einen höheren Mittelwert zu haben als die anderen beiden Gruppen.
+Bei der Untersuchung der Gruppen IV, V und VI stellen wir fest, dass die Unterschiede in den Gruppenmittelpunkten auffällig sind, weil diese Unterschiede *im Verhältnis zur Variabilität der einzelnen Beobachtungen innerhalb jeder Gruppe* groß sind.
 :::
 
 ```{r}
@@ -99,16 +99,16 @@ toy_anova |>
   theme(strip.text = element_blank())
 ```
 
-## Case study: Batting
+## Fallstudie: Schlagstatistik
 
-We would like to discern whether there are real differences between the batting performance of baseball players according to their position: outfielder (OF), infielder (IF), and catcher (C).
-We will use a dataset called `mlb_players_18`, which includes batting records of 429 Major League Baseball (MLB) players from the 2018 season who had at least 100 at bats.
-Six of the 429 cases represented in `mlb_players_18` are shown in @tbl-mlbBat18DataFrame, and descriptions for each variable are provided in @tbl-mlbBat18Variables.
-The measure we will use for the player batting performance (the outcome variable) is on-base percentage (`OBP`).
-The on-base percentage roughly represents the fraction of the time a player successfully gets on base or hits a home run.
+Wir möchten feststellen, ob es reale Unterschiede in der Schlagleistung von Baseballspielern entsprechend ihrer Position gibt: Außenfeldspieler (OF), Infieldspieler (IF) und Fänger (C).
+Wir verwenden einen Datensatz namens `mlb_players_18`, der die Schlagstatistiken von 429 Major League Baseball (MLB) Spielern aus der Saison 2018 enthält, die mindestens 100 Schlagversuche hatten.
+Sechs der 429 Fälle aus `mlb_players_18` sind in @tbl-mlbBat18DataFrame dargestellt, und Beschreibungen für jede Variable sind in @tbl-mlbBat18Variables angegeben.
+Das Maß, das wir für die Schlagleistung des Spielers verwenden (die Ergebnisvariable), ist die On-Base-Prozentzahl (`OBP`).
+Die On-Base-Prozentzahl gibt ungefähr den Bruchteil der Zeit an, in der ein Spieler erfolgreich auf eine Base gelangt oder einen Homerun trifft.
 
 ::: {.data data-latex=""}
-The [`mlb_players_18`](http://openintrostat.github.io/openintro/reference/mlb_players_18.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`mlb_players_18`](http://openintrostat.github.io/openintro/reference/mlb_players_18.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -177,30 +177,30 @@ mlb_players_18_vars |>
 ```
 
 ::: {.guidedpractice data-latex=""}
-The null hypothesis under consideration is the following: $\mu_{OF} = \mu_{IF} = \mu_{C} % = \mu_{DH}.$ Write the null and corresponding alternative hypotheses in plain language.[^22-inference-many-means-1]
+Die zu prüfende Nullhypothese lautet: $\mu_{OF} = \mu_{IF} = \mu_{C} % = \mu_{DH}.$ Formulieren Sie die Null- und die entsprechende Alternativhypothese in einfacher Sprache.[^22-inference-many-means-1]
 :::
 
-[^22-inference-many-means-1]: $H_0:$ The average on-base percentage is equal across the four positions.
-    $H_A:$ The average on-base percentage varies across some (or all) groups.
+[^22-inference-many-means-1]: $H_0:$ Die durchschnittliche On-Base-Prozentzahl ist über alle vier Positionen gleich.
+    $H_A:$ Die durchschnittliche On-Base-Prozentzahl variiert über einige (oder alle) Gruppen.
 
 \vspace{-5mm}
 
 ::: {.workedexample data-latex=""}
-The player positions have been divided into three groups: outfield (OF), infield (IF), and catcher (C).
-What would be an appropriate point estimate of the on-base percentage by outfielders, $\mu_{OF}$?
+Die Spielerpositionen wurden in drei Gruppen unterteilt: Außenfeld (OF), Infield (IF) und Fänger (C).
+Was wäre ein geeigneter Punktschätzer für die On-Base-Prozentzahl der Außenfeldspieler, $\mu_{OF}$?
 
 ------------------------------------------------------------------------
 
-A good estimate of the on-base percentage by outfielders would be the sample average of `OBP` for just those players whose position is outfield: $\bar{x}_{OF} = 0.320.$
+Ein guter Schätzer für die On-Base-Prozentzahl der Außenfeldspieler wäre der Stichprobendurchschnitt von `OBP` für genau jene Spieler, deren Position Außenfeld ist: $\bar{x}_{OF} = 0.320.$
 :::
 
 \clearpage
 
-## Randomization test for comparing many means {#sec-randANOVA}
+## Randomisierungstest zum Vergleich vieler Mittelwerte {#sec-randANOVA}
 
-@tbl-mlbHRPerABSummaryTable provides summary statistics for each group.
-A side-by-side box plots for the on-base percentage is shown in @fig-mlbANOVABoxPlot.
-Notice that the variability appears to be approximately constant across groups; nearly constant variance across groups is an important assumption that must be satisfied before we consider the ANOVA approach.
+@tbl-mlbHRPerABSummaryTable liefert zusammenfassende Statistiken für jede Gruppe.
+Ein Nebeneinander-Boxplot für die On-Base-Prozentzahl ist in @fig-mlbANOVABoxPlot dargestellt.
+Beachten Sie, dass die Variabilität über die Gruppen hinweg ungefähr konstant erscheint; nahezu konstante Varianz zwischen den Gruppen ist eine wichtige Voraussetzung, die erfüllt sein muss, bevor wir den ANOVA-Ansatz in Betracht ziehen.
 
 ```{r}
 #| label: tbl-mlbHRPerABSummaryTable
@@ -248,27 +248,27 @@ ggplot(mlb_players_18, aes(x = position, y = OBP)) +
 ```
 
 ::: {.workedexample data-latex=""}
-The largest difference between the sample means is between the catcher and the outfielder positions.
-Consider again the original hypotheses:
+Der größte Unterschied zwischen den Stichprobenmittelwerten besteht zwischen der Fänger- und der Außenfeldposition.
+Betrachten Sie erneut die ursprünglichen Hypothesen:
 
 -   $H_0:$ $\mu_{OF} = \mu_{IF} = \mu_{C}$
--   $H_A:$ The average on-base percentage $(\mu_j)$ varies across some (or all) groups.
+-   $H_A:$ Die durchschnittliche On-Base-Prozentzahl $(\mu_j)$ variiert über einige (oder alle) Gruppen.
 
-Why might it be inappropriate to run the test by simply estimating whether the difference of $\mu_{C}$ and $\mu_{OF}$ is "statistically discernible" at a 0.05 discernibility level?
+Warum könnte es unangemessen sein, den Test durchzuführen, indem man einfach schätzt, ob der Unterschied von $\mu_{C}$ und $\mu_{OF}$ auf einem Unterscheidungsniveau von 0.05 „statistisch erkennbar" ist?
 
 ------------------------------------------------------------------------
 
-The primary issue here is that we are inspecting the data before picking the groups that will be compared.
-It is inappropriate to examine all data by eye (informal testing) and only afterwards decide which parts to formally test.
-This is called **data snooping**\index{data snooping} or **data fishing**\index{data fishing}.
-Naturally, we would pick the groups with the large differences for the formal test, and this would lead to an inflation in the Type I error rate.
-To understand inflated Type I error rates better, let's consider a slightly different problem.
+Das Hauptproblem besteht hier darin, dass wir die Daten vor der Auswahl der zu vergleichenden Gruppen inspizieren.
+Es ist unangemessen, alle Daten mit dem Auge zu begutachten (informelles Testen) und erst danach zu entscheiden, welche Teile formell getestet werden sollen.
+Dies wird als **Datenschnüffeln**\index{data snooping} oder **Datenfischen**\index{data fishing} bezeichnet.
+Natürlich würden wir die Gruppen mit den größten Unterschieden für den formellen Test auswählen, und dies würde zu einer Erhöhung der Fehlerrate des Typs I führen.
+Um höhere Fehlerraten des Typs I besser zu verstehen, betrachten wir ein etwas anderes Problem.
 
-Suppose we are to measure the aptitude for students in 20 classes in a large elementary school at the beginning of the year.
-In this school, all students are randomly assigned to classrooms, so any differences we observe between the classes at the start of the year are completely due to chance.
-However, with so many groups, we will probably observe a few groups that look rather different from each other.
-If we select only the classes that look different and then perform a formal test, we will probably make the wrong conclusion that the assignment wasn't random.
-While we might only formally test differences for a few pairs of classes, we informally evaluated the other classes by eye before choosing the most extreme cases for a comparison.
+Angenommen, wir sollen zu Beginn des Jahres die Eignung von Schülern in 20 Klassen einer großen Grundschule messen.
+In dieser Schule werden alle Schüler zufällig den Klassenräumen zugeteilt, sodass alle Unterschiede, die wir zu Beginn des Jahres zwischen den Klassen beobachten, vollständig auf Zufall zurückzuführen sind.
+Mit so vielen Gruppen werden wir jedoch wahrscheinlich einige Gruppen beobachten, die sich voneinander recht unterschiedlich verhalten.
+Wenn wir nur die Klassen auswählen, die unterschiedlich aussehen, und dann einen formellen Test durchführen, werden wir wahrscheinlich den falschen Schluss ziehen, dass die Zuordnung nicht zufällig war.
+Während wir vielleicht nur formell Unterschiede für einige Paare von Klassen testen, haben wir die anderen Klassen informell mit dem Auge bewertet, bevor wir die extremsten Fälle für einen Vergleich ausgewählt haben.
 :::
 
 <!--
@@ -284,73 +284,73 @@ For additional information on the ideas expressed above, we recommend reading ab
 terms_chp_22 <- c(terms_chp_22, "data snooping", "data fishing")
 ```
 
-### Observed data
+### Beobachtete Daten
 
-In the next section we will learn how to use the $F$ statistic to test whether observed differences in sample means could have happened just by chance even if there was no difference in the respective population means.
+Im nächsten Abschnitt werden wir lernen, wie man die $F$-Statistik verwendet, um zu testen, ob beobachtete Unterschiede in Stichprobenmittelwerten allein durch Zufall hätten entstehen können, selbst wenn es keinen Unterschied in den jeweiligen Populationsmittelwerten gäbe.
 
-The method of analysis of variance in this context focuses on answering one question: is the variability in the sample means so large that it seems unlikely to be from chance alone?
-This question is different from earlier testing procedures since we will *simultaneously* consider many groups, and evaluate whether their sample means differ more than we would expect from natural variation.
-We call this variability the **mean square between groups (MSG)**\index{mean square between groups} $(MSG)$, and it has an associated degrees of freedom, $df_{G} = k - 1$ when there are $k$ groups.
-The $MSG$ can be thought of as a scaled variance formula for means.
-If the null hypothesis is true, any variation in the sample means is due to chance and shouldn't be too large.
-Details of $MSG$ calculations are provided in the footnote.[^22-inference-many-means-3]
-However, we typically use software for these computations.
+Die Methode der Varianzanalyse in diesem Kontext konzentriert sich auf die Beantwortung einer Frage: Ist die Variabilität der Stichprobenmittelwerte so groß, dass sie unwahrscheinlich allein durch Zufall entstanden ist?
+Diese Frage unterscheidet sich von früheren Testverfahren, da wir *gleichzeitig* viele Gruppen berücksichtigen und bewerten, ob ihre Stichprobenmittelwerte stärker abweichen, als wir durch natürliche Variation erwarten würden.
+Wir nennen diese Variabilität das **mittlere Quadrat zwischen den Gruppen (MSG)**\index{mean square between groups} $(MSG)$, und es hat einen zugehörigen Freiheitsgrad, $df_{G} = k - 1$ bei $k$ Gruppen.
+Der $MSG$ kann als skalierte Varianzformel für Mittelwerte betrachtet werden.
+Wenn die Nullhypothese wahr ist, ist jede Variation in den Stichprobenmittelwerten auf Zufall zurückzuführen und sollte nicht zu groß sein.
+Details zu den $MSG$-Berechnungen sind in der Fußnote angegeben.[^22-inference-many-means-3]
+Wir verwenden jedoch in der Regel Software für diese Berechnungen.
 \index{degrees of freedom}\index{degrees of freedom!ANOVA}\index{ANOVA!degrees of freedom}
 
-[^22-inference-many-means-3]: Let $\bar{x}$ represent the mean of outcomes across all groups.
-    Then the mean square between groups is computed as $MSG = \frac{1}{df_{G}}SSG = \frac{1}{k-1}\sum_{j=1}^{k} n_{j} \left(\bar{x}_{j} - \bar{x}\right)^2$ where $SSG$ is called the **sum of squares between groups** $(SSG)$\index{sum of squares between groups} and $n_{j}$ is the sample size of group $j.$
+[^22-inference-many-means-3]: Sei $\bar{x}$ der Mittelwert der Ergebnisse über alle Gruppen hinweg.
+    Dann wird das mittlere Quadrat zwischen den Gruppen berechnet als $MSG = \frac{1}{df_{G}}SSG = \frac{1}{k-1}\sum_{j=1}^{k} n_{j} \left(\bar{x}_{j} - \bar{x}\right)^2$, wobei $SSG$ als **Quadratsumme zwischen den Gruppen** $(SSG)$\index{sum of squares between groups} bezeichnet wird und $n_{j}$ die Stichprobengröße der Gruppe $j$ ist.
 
 ```{r}
 #| include: false
 terms_chp_22 <- c(terms_chp_22, "mean square between groups (MSG)", "degrees of freedom", "sum of squares between groups (SSG)", "mean square error (MSE)", "sum of squares total (SST)", "sum of squared error (SSE)")
 ```
 
-The mean square between the groups is, on its own, quite useless in a hypothesis test.
-We need a benchmark value for how much variability should be expected among the sample means if the null hypothesis is true.
-To this end, we compute a pooled variance estimate, often abbreviated as the **mean square error** $(MSE)$\index{mean square error}, which has an associated degrees of freedom value $df_E = n - k.$ It is helpful to think of $MSE$ as a measure of the variability within the groups.
-Details of the computations of the $MSE$ and a link to an extra online section for ANOVA calculations are provided in the footnote.[^22-inference-many-means-4]
+Das mittlere Quadrat zwischen den Gruppen ist für sich allein in einem Hypothesentest ziemlich nutzlos.
+Wir benötigen einen Referenzwert dafür, wie viel Variabilität bei den Stichprobenmittelwerten erwartet werden sollte, wenn die Nullhypothese wahr ist.
+Zu diesem Zweck berechnen wir eine gepoolte Varianzschätzung, häufig als **mittlerer quadratischer Fehler** $(MSE)$\index{mean square error} abgekürzt, die einen zugehörigen Freiheitsgradwert $df_E = n - k$ hat. Es ist hilfreich, $MSE$ als Maß für die Variabilität innerhalb der Gruppen zu betrachten.
+Details zu den Berechnungen des $MSE$ und ein Link zu einem zusätzlichen Online-Abschnitt für ANOVA-Berechnungen sind in der Fußnote angegeben.[^22-inference-many-means-4]
 
-[^22-inference-many-means-4]: See [additional details on ANOVA calculations](https://www.openintro.org/download.php?file=stat_extra_anova_calculations) for interested readers.
-    Let $\bar{x}$ represent the mean of outcomes across all groups.
-    Then the **sum of squares total** $(SST)$\index{sum of squares total} is computed as $$SST = \sum_{i=1}^{n} \left(x_{i} - \bar{x}\right)^2$$ where the sum is over all observations in the dataset.
-    Then we compute the **sum of squared errors** $(SSE)$\index{sum of squared errors} in one of two equivalent ways: $SSE = SST - SSG = (n_1-1)s_1^2 + (n_2-1)s_2^2 + \cdots + (n_k-1)s_k^2$ where $s_j^2$ is the sample variance (square of the standard deviation) of the residuals in group $j.$ Then the $MSE$ is the standardized form of $SSE: MSE = \frac{1}{df_{E}}SSE.$
+[^22-inference-many-means-4]: Weitere Informationen unter [additional details on ANOVA calculations](https://www.openintro.org/download.php?file=stat_extra_anova_calculations) für interessierte Leser.
+    Sei $\bar{x}$ der Mittelwert der Ergebnisse über alle Gruppen hinweg.
+    Dann wird die **Gesamtquadratsumme** $(SST)$\index{sum of squares total} berechnet als $$SST = \sum_{i=1}^{n} \left(x_{i} - \bar{x}\right)^2$$ wobei die Summe über alle Beobachtungen im Datensatz geht.
+    Dann berechnen wir die **Summe der quadrierten Fehler** $(SSE)$\index{sum of squared errors} auf eine von zwei äquivalenten Weisen: $SSE = SST - SSG = (n_1-1)s_1^2 + (n_2-1)s_2^2 + \cdots + (n_k-1)s_k^2$, wobei $s_j^2$ die Stichprobenvarianz (Quadrat der Standardabweichung) der Residuen in Gruppe $j$ ist. Dann ist $MSE$ die standardisierte Form von $SSE: MSE = \frac{1}{df_{E}}SSE.$
 
-When the null hypothesis is true, any differences among the sample means are only due to chance, and the $MSG$ and $MSE$ should be about equal.
-As a test statistic for ANOVA, we examine the fraction of $MSG$ and $MSE:$
+Wenn die Nullhypothese wahr ist, sind etwaige Unterschiede zwischen den Stichprobenmittelwerten nur auf Zufall zurückzuführen, und $MSG$ und $MSE$ sollten ungefähr gleich sein.
+Als Teststatistik für ANOVA betrachten wir den Quotienten von $MSG$ und $MSE:$
 
 $$F = \frac{MSG}{MSE}$$
 
-The $MSG$ represents a measure of the between-group variability, and $MSE$ measures the variability within each of the groups.
+Der $MSG$ stellt ein Maß für die Variabilität zwischen den Gruppen dar, und $MSE$ misst die Variabilität innerhalb jeder Gruppe.
 
 ::: {.important data-latex=""}
-**The test statistic for three or more means is an F.**
+**Die Teststatistik für drei oder mehr Mittelwerte ist ein F.**
 
-The F statistic is a ratio of how the groups differ (MSG) as compared to how the observations within a group vary (MSE).
+Die F-Statistik ist ein Verhältnis, das angibt, wie sehr die Gruppen voneinander abweichen (MSG) im Vergleich dazu, wie sehr die Beobachtungen innerhalb einer Gruppe variieren (MSE).
 
 $$F = \frac{MSG}{MSE}$$
 
-When the null hypothesis is true and the conditions are met, F has an F-distribution with $df_1 = k-1$ and $df_2 = n-k.$
+Wenn die Nullhypothese wahr ist und die Bedingungen erfüllt sind, folgt F einer F-Verteilung mit $df_1 = k-1$ und $df_2 = n-k.$
 
-Conditions:
+Bedingungen:
 
--   independent observations, both within and across groups
--   large samples and no extreme outliers
+-   unabhängige Beobachtungen, sowohl innerhalb als auch zwischen den Gruppen
+-   große Stichproben und keine extremen Ausreißer
 :::
 
 \clearpage
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-We recall the exams from @sec-rand2mean which demonstrated a two-sample randomization test for a comparison of means.
-Suppose now that the teacher had had such an extremely large class that three different exams were given: A, B, and C.
-@tbl-summaryStatsForThreeVersionsOfExams and @fig-boxplotThreeVersionsOfExams provide a summary of the data including exam C.
-Again, we would like to investigate whether the difficulty of the exams is the same across the three exams, so the test is
+Wir erinnern uns an die Prüfungen aus @sec-rand2mean, die einen Zweistichproben-Randomisierungstest für einen Mittelwertvergleich demonstrierten.
+Angenommen, der Lehrer hatte eine so extrem große Klasse, dass drei verschiedene Prüfungen ausgegeben wurden: A, B und C.
+@tbl-summaryStatsForThreeVersionsOfExams und @fig-boxplotThreeVersionsOfExams liefern eine Zusammenfassung der Daten einschließlich Prüfung C.
+Wieder möchten wir untersuchen, ob der Schwierigkeitsgrad der Prüfungen über die drei Prüfungen hinweg gleich ist, der Test lautet also
 
--   $H_0: \mu_A = \mu_B = \mu_C.$ The inherent average difficulty is the same across the three exams.
--   $H_A:$ not $H_0.$ At least one of the exams is inherently more (or less) difficult than the others.
+-   $H_0: \mu_A = \mu_B = \mu_C.$ Der inhärente durchschnittliche Schwierigkeitsgrad ist über die drei Prüfungen gleich.
+-   $H_A:$ nicht $H_0.$ Mindestens eine der Prüfungen ist inhärent schwieriger (oder leichter) als die anderen.
 
 ::: {.data data-latex=""}
-The [`classdata`](http://openintrostat.github.io/openintro/reference/classdata.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`classdata`](http://openintrostat.github.io/openintro/reference/classdata.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -400,11 +400,11 @@ classdata |>
   )
 ```
 
-@fig-randANOVA shows the process of randomizing the three different exams to the observed exam scores.
-If the null hypothesis is true, then the score on each exam should represent the true student ability on that material.
-It shouldn't matter whether they were given exam A or exam B or exam C.
-By reallocating which student got which exam, we are able to understand how the difference in average exam scores changes due only to natural variability.
-There is only one iteration of the randomization process in @fig-randANOVA, leading to three different randomized sample means (computed assuming the null hypothesis is true).
+@fig-randANOVA zeigt den Prozess der Randomisierung der drei verschiedenen Prüfungen auf die beobachteten Prüfungspunktzahlen.
+Wenn die Nullhypothese wahr ist, sollte die Punktzahl jeder Prüfung die wahre Fähigkeit des Schülers in diesem Stoff widerspiegeln.
+Es sollte keine Rolle spielen, ob sie Prüfung A, Prüfung B oder Prüfung C erhalten haben.
+Durch die Neuverteilung, welcher Schüler welche Prüfung erhalten hat, können wir verstehen, wie sich der Unterschied in den durchschnittlichen Prüfungspunktzahlen allein durch natürliche Variabilität verändert.
+In @fig-randANOVA gibt es nur eine Iteration des Randomisierungsprozesses, was zu drei verschiedenen randomisierten Stichprobenmittelwerten führt (berechnet unter der Annahme, dass die Nullhypothese wahr ist).
 
 ```{r}
 #| label: fig-randANOVA
@@ -429,13 +429,13 @@ There is only one iteration of the randomization process in @fig-randANOVA, lead
 include_graphics("images/randANOVA.png")
 ```
 
-In the two-sample case, the null hypothesis was investigated using the difference in the sample means.
-However, as noted above, with three groups (three different exams), the comparison of the three sample means gets slightly more complicated.
-We have already derived the F-statistic which is exactly the way to compare the averages across three or more groups!
-Recall, the F statistic is a ratio of how the groups differ (MSG) as compared to how the observations within a group vary (MSE).
+Im Zwei-Stichproben-Fall wurde die Nullhypothese mithilfe der Differenz der Stichprobenmittelwerte untersucht.
+Wie oben jedoch angemerkt, wird der Vergleich der drei Stichprobenmittelwerte bei drei Gruppen (drei verschiedene Prüfungen) etwas komplizierter.
+Wir haben die F-Statistik bereits hergeleitet, die genau die Methode ist, um die Mittelwerte über drei oder mehr Gruppen hinweg zu vergleichen!
+Zur Erinnerung: Die F-Statistik ist ein Verhältnis, das angibt, wie sehr die Gruppen voneinander abweichen (MSG) im Vergleich dazu, wie sehr die Beobachtungen innerhalb einer Gruppe variieren (MSE).
 
-Building on @fig-randANOVA, @fig-rand3exams shows the values of the simulated $F$ statistics over 1,000 random simulations.
-We see that, just by chance, the F statistic can be as large as 7.
+Aufbauend auf @fig-randANOVA zeigt @fig-rand3exams die Werte der simulierten $F$-Statistiken über 1.000 zufällige Simulationen.
+Wir sehen, dass allein durch Zufall die F-Statistik so groß wie 7 sein kann.
 
 ```{r}
 #| label: fig-rand3exams
@@ -460,7 +460,7 @@ classdata |>
   )
 ```
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
 ```{r}
 #| label: fig-rand3examspval
@@ -498,53 +498,53 @@ classdata |>
   )
 ```
 
-Using statistical software, we can calculate that 3.6% of the randomized F test statistics were at or above the observed test statistic of $F= 3.48.$ That is, the p-value of the test is 0.036.
-Assuming that we had set the level of discernibility to be $\alpha = 0.05,$ the p-value is smaller than the level of discernibility which would lead us to reject the null hypothesis.
-We claim that the difficulty level (i.e., the true average score, $\mu)$ is different for at least one of the exams.
+Mithilfe statistischer Software können wir berechnen, dass 3,6 % der randomisierten F-Teststatistiken bei oder über der beobachteten Teststatistik von $F= 3.48$ lagen. Das heißt, der p-Wert des Tests beträgt 0.036.
+Unter der Annahme, dass wir das Unterscheidungsniveau auf $\alpha = 0.05$ gesetzt hatten, ist der p-Wert kleiner als das Unterscheidungsniveau, was uns dazu veranlassen würde, die Nullhypothese abzulehnen.
+Wir behaupten, dass der Schwierigkeitsgrad (d.h. die wahre durchschnittliche Punktzahl, $\mu$) bei mindestens einer der Prüfungen unterschiedlich ist.
 
-While it is temping to say that exam C is harder than the other two (given the inability to differentiate between exam A and exam B in @sec-rand2mean), we must be very careful about conclusions made using different techniques on the same data.
+Auch wenn es verlockend ist zu sagen, dass Prüfung C schwieriger ist als die anderen beiden (angesichts der Unmöglichkeit, zwischen Prüfung A und Prüfung B in @sec-rand2mean zu unterscheiden), müssen wir bei Schlussfolgerungen, die verschiedene Techniken auf denselben Daten anwenden, sehr vorsichtig sein.
 
-When the null hypothesis is true, random variability that exists in nature sometimes produces data with p-values less than 0.05.
-How often does that happen?
-5% of the time.
-That is to say, if you use 20 different models applied to the same data where there is no signal (i.e., the null hypothesis is true), you are reasonably likely to get a p-value less than 0.05 in one of the tests you run.
-The details surrounding the ideas of this problem, called a **multiple comparisons test** or **multiple comparisons problem**, are outside the scope of this textbook, but should be something that you keep in the back of your head.
-To best mitigate any extra Type I errors, we suggest that you set up your hypotheses and testing protocol before running any analyses.
-Once the conclusions have been reached, you should report your findings instead of running a different type of test on the same data.
+Wenn die Nullhypothese wahr ist, erzeugt die zufällige Variabilität, die in der Natur existiert, manchmal Daten mit p-Werten unter 0.05.
+Wie oft passiert das?
+5 % der Zeit.
+Das bedeutet: Wenn Sie 20 verschiedene Modelle auf dieselben Daten anwenden, bei denen kein Signal vorhanden ist (d.h. die Nullhypothese wahr ist), ist es recht wahrscheinlich, dass Sie bei einem der durchgeführten Tests einen p-Wert unter 0.05 erhalten.
+Die Details rund um die Ideen dieses Problems, das als **Mehrfachvergleichstest** oder **Mehrfachvergleichsproblem** bezeichnet wird, liegen außerhalb des Umfangs dieses Lehrbuchs, sollten jedoch im Hinterkopf behalten werden.
+Um zusätzliche Fehler des Typs I bestmöglich zu minimieren, empfehlen wir, Hypothesen und Testprotokoll vor der Durchführung von Analysen festzulegen.
+Sobald die Schlussfolgerungen gezogen wurden, sollten Sie Ihre Ergebnisse berichten, anstatt einen anderen Testtyp auf denselben Daten durchzuführen.
 
-## Mathematical model for test for comparing many means {#sec-mathANOVA}
+## Mathematisches Modell für den Test zum Vergleich vieler Mittelwerte {#sec-mathANOVA}
 
-As seen with many of the tests and statistics from previous sections, the randomization test on the F statistic has corresponding mathematical theory to describe the distribution that can be used without using a computational approach.
+Wie bei vielen Tests und Statistiken aus früheren Abschnitten gibt es für den Randomisierungstest der F-Statistik entsprechende mathematische Theorie, die die Verteilung beschreibt, ohne einen rechnerischen Ansatz verwenden zu müssen.
 
-We return to the baseball example from @tbl-mlbHRPerABSummaryTable to demonstrate the mathematical model applied to the ANOVA setting.
+Wir kehren zum Baseballbeispiel aus @tbl-mlbHRPerABSummaryTable zurück, um das mathematische Modell im ANOVA-Kontext zu demonstrieren.
 
 \clearpage
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-The larger the observed variability in the sample means $(MSG)$ relative to the within-group observations $(MSE)$, the larger $F$-statistic will be and the stronger the evidence against the null hypothesis.
-Because larger $F$-statistics represent stronger evidence against the null hypothesis, we use the upper tail of the distribution to compute a p-value.
+Je größer die beobachtete Variabilität der Stichprobenmittelwerte $(MSG)$ im Verhältnis zu den gruppeninternen Beobachtungen $(MSE)$ ist, desto größer ist die $F$-Statistik und desto stärker ist der Beweis gegen die Nullhypothese.
+Da größere $F$-Statistiken stärkere Beweise gegen die Nullhypothese darstellen, verwenden wir den oberen Schwanz der Verteilung zur Berechnung eines p-Werts.
 
 ::: {.important data-latex=""}
-**The F statistic and the F-test.**
+**Die F-Statistik und der F-Test.**
 
 \index{F-test}
 
-Analysis of variance (ANOVA) is used to test whether the mean outcome differs across two or more groups.
-ANOVA uses a test statistic, the $F$-statistic, which represents a standardized ratio of variability in the sample means relative to the variability within the groups.
-If $H_0$ is true and the model conditions are satisfied, an $F$-statistic follows an $F$ distribution with parameters $df_{1} = k - 1$ and $df_{2} = n - k.$ The upper tail of the $F$ distribution is used to represent the p-value.
+Die Varianzanalyse (ANOVA) wird verwendet, um zu testen, ob sich der mittlere Ausgang über zwei oder mehr Gruppen unterscheidet.
+ANOVA verwendet eine Teststatistik, die $F$-Statistik, die ein standardisiertes Verhältnis der Variabilität der Stichprobenmittelwerte im Verhältnis zur Variabilität innerhalb der Gruppen darstellt.
+Wenn $H_0$ wahr ist und die Modellbedingungen erfüllt sind, folgt eine $F$-Statistik einer $F$-Verteilung mit den Parametern $df_{1} = k - 1$ und $df_{2} = n - k.$ Der obere Schwanz der $F$-Verteilung wird verwendet, um den p-Wert darzustellen.
 :::
 
 ::: {.guidedpractice data-latex=""}
-For the baseball data, $MSG = 0.00803$ and $MSE=0.00158$. Identify the degrees of freedom associated with MSG and MSE and verify the $F$-statistic is approximately 5.077.[^22-inference-many-means-5]
+Für die Baseballdaten gilt $MSG = 0.00803$ und $MSE=0.00158$. Identifizieren Sie die Freiheitsgrade, die mit MSG und MSE verbunden sind, und überprüfen Sie, dass die $F$-Statistik ungefähr 5.077 beträgt.[^22-inference-many-means-5]
 :::
 
-[^22-inference-many-means-5]: There are $k = 3$ groups, so $df_{G} = k - 1 = 2.$ There are $n = n_1 + n_2 + n_3 = 429$ total observations, so $df_{E} = n - k = 426.$ Then the $F$-statistic is computed as the ratio of $MSG$ and $MSE:$ $F = \frac{MSG}{MSE} = \frac{0.00803}{0.00158} = 5.082 \approx 5.077.$ $(F = 5.077$ was computed by using values for $MSG$ and $MSE$ that were not rounded.)
+[^22-inference-many-means-5]: Es gibt $k = 3$ Gruppen, also $df_{G} = k - 1 = 2.$ Es gibt $n = n_1 + n_2 + n_3 = 429$ Gesamtbeobachtungen, also $df_{E} = n - k = 426.$ Dann wird die $F$-Statistik als Verhältnis von $MSG$ und $MSE$ berechnet: $F = \frac{MSG}{MSE} = \frac{0.00803}{0.00158} = 5.082 \approx 5.077.$ $(F = 5.077$ wurde durch Verwendung von nicht gerundeten Werten für $MSG$ und $MSE$ berechnet.)
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
-We can use the $F$-statistic to evaluate the hypotheses in what is called an F-test.
-A p-value can be computed from the $F$ statistic using an $F$ distribution, which has two associated parameters: $df_{1}$ and $df_{2}.$ For the $F$-statistic in ANOVA, $df_{1} = df_{G}$ and $df_{2} = df_{E}.$ An $F$ distribution with 2 and 426 degrees of freedom, corresponding to the $F$ statistic for the baseball hypothesis test, is shown in @fig-fDist2And423Shaded.
+Wir können die $F$-Statistik verwenden, um die Hypothesen in einem sogenannten F-Test zu bewerten.
+Ein p-Wert kann aus der $F$-Statistik mithilfe einer $F$-Verteilung berechnet werden, die zwei zugehörige Parameter hat: $df_{1}$ und $df_{2}.$ Für die $F$-Statistik in der ANOVA gilt $df_{1} = df_{G}$ und $df_{2} = df_{E}.$ Eine $F$-Verteilung mit 2 und 426 Freiheitsgraden, entsprechend der $F$-Statistik für den Baseball-Hypothesentest, ist in @fig-fDist2And423Shaded dargestellt.
 
 ```{r}
 #| include: false
@@ -580,34 +580,34 @@ text(6.3, 0.3, "Small tail area", pos = 3)
 ```
 
 ::: {.workedexample data-latex=""}
-The p-value corresponding to the shaded area in @fig-fDist2And423Shaded is equal to about 0.0066.
-Does this provide strong evidence against the null hypothesis?
+Der p-Wert, der dem schattierten Bereich in @fig-fDist2And423Shaded entspricht, beträgt etwa 0.0066.
+Liefert dies starke Beweise gegen die Nullhypothese?
 
 ------------------------------------------------------------------------
 
-The p-value is smaller than 0.05, indicating the evidence is strong enough to reject the null hypothesis at a discernibility level of 0.05.
-That is, the data provide strong evidence that the average on-base percentage varies by player's primary field position.
+Der p-Wert ist kleiner als 0.05, was darauf hindeutet, dass die Beweise stark genug sind, um die Nullhypothese auf einem Unterscheidungsniveau von 0.05 abzulehnen.
+Das heißt, die Daten liefern starke Beweise dafür, dass die durchschnittliche On-Base-Prozentzahl je nach primärer Feldposition des Spielers variiert.
 :::
 
-Note that the small p-value indicates that there is a notable difference between the mean batting averages of the different positions.
-However, the ANOVA test does not provide a mechanism for knowing *which* group is driving the differences.
-If we move forward with all possible two mean comparisons, we run the risk of a high Type I error rate.
-As we saw at the end of @sec-randANOVA, the follow-up questions surrounding individual group comparisons is called a problem of **multiple comparisons**\index{multiple comparisons} and is outside the scope of this text.
-We encourage you to learn more about multiple comparisons, however, so that additional comparisons, after you have rejected the null hypothesis in an ANOVA test, do not lead to undue false positive conclusions.
+Beachten Sie, dass der kleine p-Wert darauf hindeutet, dass es einen bemerkenswerten Unterschied zwischen den mittleren Schlagdurchschnitten der verschiedenen Positionen gibt.
+Der ANOVA-Test liefert jedoch keinen Mechanismus, um zu erkennen, *welche* Gruppe die Unterschiede antreibt.
+Wenn wir alle möglichen Zwei-Mittelwert-Vergleiche durchführen, riskieren wir eine hohe Fehlerrate des Typs I.
+Wie wir am Ende von @sec-randANOVA gesehen haben, wird das Folgeproblem rund um individuelle Gruppenvergleiche als **Mehrfachvergleichsproblem**\index{multiple comparisons} bezeichnet und liegt außerhalb des Rahmens dieses Textes.
+Wir ermutigen Sie jedoch, mehr über Mehrfachvergleiche zu lernen, damit zusätzliche Vergleiche nach der Ablehnung der Nullhypothese in einem ANOVA-Test nicht zu unberechtigten falsch positiven Schlussfolgerungen führen.
 
 ```{r}
 #| include: false
 terms_chp_22 <- c(terms_chp_22, "multiple comparisons")
 ```
 
-### Reading an ANOVA table from software
+### Lesen einer ANOVA-Tabelle aus Software
 
-The calculations required to perform an ANOVA by hand are tedious and prone to human error.
-For these reasons, it is common to use statistical software to calculate the $F$-statistic and p-value.
+Die Berechnungen, die für eine manuelle ANOVA erforderlich sind, sind mühsam und fehleranfällig.
+Aus diesen Gründen ist es üblich, statistische Software zur Berechnung der $F$-Statistik und des p-Werts zu verwenden.
 
-An ANOVA analysis can be summarized in a table very similar to that of a regression summary, which we saw in @sec-model-slr and @sec-model-mlr.
-@tbl-anovaSummaryTableForOBPAgainstPosition shows an ANOVA summary to test whether the mean of on-base percentage varies by player positions in the MLB.
-Many of these values should look familiar; in particular, the $F$-statistic and p-value can be retrieved from the last two columns.
+Eine ANOVA-Analyse kann in einer Tabelle zusammengefasst werden, die der Zusammenfassung einer Regression sehr ähnlich ist, wie wir sie in @sec-model-slr und @sec-model-mlr gesehen haben.
+@tbl-anovaSummaryTableForOBPAgainstPosition zeigt eine ANOVA-Zusammenfassung, um zu testen, ob der Mittelwert der On-Base-Prozentzahl je nach Spielerposition in der MLB variiert.
+Viele dieser Werte sollten vertraut erscheinen; insbesondere können die $F$-Statistik und der p-Wert aus den letzten beiden Spalten entnommen werden.
 
 ```{r}
 #| label: tbl-anovaSummaryTableForOBPAgainstPosition
@@ -632,28 +632,28 @@ anova(mod) |>
   column_spec(2:6, width = "5em")
 ```
 
-### Conditions for an ANOVA analysis
+### Bedingungen für eine ANOVA-Analyse
 
-There are three conditions we must check for an ANOVA analysis: all observations must be independent, the data in each group must be nearly normal (or each group must have reasonably large sample sizes), and the variance within each group must be approximately equal.
+Es gibt drei Bedingungen, die wir für eine ANOVA-Analyse prüfen müssen: Alle Beobachtungen müssen unabhängig sein, die Daten in jeder Gruppe müssen annähernd normalverteilt sein (oder jede Gruppe muss ausreichend große Stichprobengrößen haben), und die Varianz innerhalb jeder Gruppe muss ungefähr gleich sein.
 
--   **Independence.** If the data are a simple random sample, this condition can be assumed to be satisfied.
-    For processes and experiments, carefully consider whether the data may be independent (e.g., no pairing).
-    For example, in the MLB data, the data were not sampled.
-    However, there are not obvious reasons why independence would not hold for most or all observations.
+-   **Unabhängigkeit.** Wenn die Daten eine einfache Zufallsstichprobe sind, kann diese Bedingung als erfüllt angesehen werden.
+    Bei Prozessen und Experimenten ist sorgfältig zu überlegen, ob die Daten unabhängig sein könnten (z.B. keine Paarbildung).
+    Im MLB-Datensatz zum Beispiel wurden die Daten nicht aus einer Stichprobe erhoben.
+    Es gibt jedoch keine offensichtlichen Gründe, warum Unabhängigkeit für die meisten oder alle Beobachtungen nicht gelten würde.
 
--   **Approximately normal.** As with one- and two-sample testing for means, the normality assumption is especially important when the sample size is quite small when it is ironically difficult to check for non-normality.
-    A histogram of the observations from each group is shown in @fig-mlbANOVADiagNormalityGroups.
-    Since each of the groups we are considering have relatively large sample sizes, what we are looking for are major outliers.
-    None are apparent, so this conditions is reasonably met.
+-   **Annähernde Normalverteilung.** Wie bei ein- und zweistichprobenbasierten Tests für Mittelwerte ist die Normalitätsannahme besonders wichtig, wenn die Stichprobengröße recht klein ist, wenn es ironischerweise schwierig ist, Nicht-Normalität zu überprüfen.
+    Ein Histogramm der Beobachtungen aus jeder Gruppe ist in @fig-mlbANOVADiagNormalityGroups dargestellt.
+    Da jede der betrachteten Gruppen relativ große Stichprobengrößen hat, suchen wir nach wesentlichen Ausreißern.
+    Es sind keine erkennbar, daher ist diese Bedingung vernünftigerweise erfüllt.
 
--   **Constant variance.** The last assumption is that the variance in the groups is about equal from one group to the next. This assumption can be checked by examining side-by-side box plots of the outcomes across the groups, as in @fig-mlbANOVABoxPlot. In this case, the variability is similar in the four groups but not identical. We see in @tbl-mlbHRPerABSummaryTable that the standard deviation does not vary much from one group to the next.
+-   **Konstante Varianz.** Die letzte Annahme ist, dass die Varianz in den Gruppen von einer Gruppe zur nächsten ungefähr gleich ist. Diese Annahme kann durch Untersuchung von nebeneinander platzierten Boxplots der Ergebnisse über die Gruppen hinweg überprüft werden, wie in @fig-mlbANOVABoxPlot. In diesem Fall ist die Variabilität in den vier Gruppen ähnlich, aber nicht identisch. Wir sehen in @tbl-mlbHRPerABSummaryTable, dass die Standardabweichung von einer Gruppe zur nächsten nicht stark variiert.
 
 ::: {.important data-latex=""}
-**Diagnostics for an ANOVA analysis.**
+**Diagnostik für eine ANOVA-Analyse.**
 
-Independence is always important to an ANOVA analysis.
-The normality condition is important when the sample sizes for each group are relatively small (if the group sizes are large, the observations do not need to be normal but should also not contain any large outliers).
-The constant variance condition is especially important when the sample sizes differ between groups.
+Unabhängigkeit ist immer wichtig für eine ANOVA-Analyse.
+Die Normalitätsbedingung ist wichtig, wenn die Stichprobengrößen für jede Gruppe relativ klein sind (wenn die Gruppengrößen groß sind, müssen die Beobachtungen nicht normalverteilt sein, sollten aber auch keine großen Ausreißer enthalten).
+Die Bedingung konstanter Varianz ist besonders wichtig, wenn sich die Stichprobengrößen zwischen den Gruppen unterscheiden.
 :::
 
 ```{r}
@@ -685,21 +685,21 @@ mlb_players_18 |>
 
 \clearpage
 
-## Chapter review {#sec-chp22-review}
+## Kapitelzusammenfassung {#sec-chp22-review}
 
-### Summary
+### Zusammenfassung
 
-In this chapter we have provided both the randomization test and the mathematical model appropriate for addressing questions of equality of means across two or more groups.
-Note that there were important technical conditions required for confirming that the F distribution appropriately modeled the ANOVA test statistic.
-Also, you may have noticed that there was no discussion of creating confidence intervals.
-That is because the ANOVA statistic does not have a direct analogue parameter to estimate.
-If there is interest in comparisons of mean differences (across each set of two groups), then the methods from @sec-inference-two-means comparing two independent means should be applied.
+In diesem Kapitel haben wir sowohl den Randomisierungstest als auch das mathematische Modell vorgestellt, das für die Beantwortung von Fragen zur Gleichheit von Mittelwerten über zwei oder mehr Gruppen hinweg geeignet ist.
+Beachten Sie, dass es wichtige technische Bedingungen gab, die bestätigen, dass die F-Verteilung die ANOVA-Teststatistik angemessen modelliert.
+Vielleicht haben Sie auch bemerkt, dass es keine Diskussion über die Erstellung von Konfidenzintervallen gab.
+Das liegt daran, dass die ANOVA-Statistik keinen direkten analogen Parameter zur Schätzung hat.
+Wenn Interesse an Vergleichen von Mittelwertdifferenzen (über jeden Satz von zwei Gruppen) besteht, sollten die Methoden aus @sec-inference-two-means zum Vergleich zweier unabhängiger Mittelwerte angewendet werden.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-22.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-22 aufgeführt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und deren Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-22
@@ -710,9 +710,9 @@ make_terms_table(terms_chp_22)
 
 \clearpage
 
-## Exercises {#sec-chp22-exercises}
+## Übungen {#sec-chp22-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-22].
+Antworten auf Aufgaben mit ungerader Nummerierung sind in [Anhang -@sec-exercise-solutions-22] zu finden.
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_22-ex-inference-many-means.qmd >}}

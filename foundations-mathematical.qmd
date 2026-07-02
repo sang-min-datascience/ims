@@ -1,4 +1,4 @@
-# Inference with mathematical models {#sec-foundations-mathematical}
+# Inferenz mit mathematischen Modellen {#sec-foundations-mathematical}
 
 ```{r}
 #| include: false
@@ -12,21 +12,21 @@ par(mar = c(2, 0, 0, 0))
 ```
 
 ::: {.chapterintro data-latex=""}
-In [Chapter -@sec-foundations-randomization] and [Chapter -@sec-foundations-bootstrapping] questions about population parameters were addressed using computational techniques.
-With randomization tests, the data were permuted assuming the null hypothesis.
-With bootstrapping, the data were resampled in order to measure the variability.
-In many cases (indeed, with sample proportions), the variability of the statistic can be described by the computational method (as in previous chapters) or by a mathematical formula (as in this chapter).
+In [Kapitel -@sec-foundations-randomization] und [Kapitel -@sec-foundations-bootstrapping] wurden Fragen zu Populationsparametern mithilfe computergestützter Techniken beantwortet.
+Bei Randomisierungstests wurden die Daten unter Annahme der Nullhypothese permutiert.
+Beim Bootstrapping wurden die Daten neu gesampelt, um die Variabilität zu messen.
+In vielen Fällen (tatsächlich bei Stichprobenanteilen) kann die Variabilität der Statistik durch die computergestützte Methode (wie in vorherigen Kapiteln) oder durch eine mathematische Formel (wie in diesem Kapitel) beschrieben werden.
 
-The normal distribution is presented here to describe the variability associated with sample proportions which are taken from either repeated samples or repeated experiments.
-The normal distribution is quite powerful in that it describes the variability of many different statistics, and we will encounter the normal distribution throughout the remainder of the book.
+Die Normalverteilung wird hier vorgestellt, um die Variabilität zu beschreiben, die mit Stichprobenanteilen verbunden ist, die aus wiederholten Stichproben oder wiederholten Experimenten entnommen werden.
+Die Normalverteilung ist insofern sehr leistungsfähig, als sie die Variabilität vieler verschiedener Statistiken beschreibt, und wir werden der Normalverteilung im weiteren Verlauf des Buches immer wieder begegnen.
 
-For now, however, focus is on the parallels between how data can provide insight about a research question either through computational methods or through mathematical models.
+Konzentrieren Sie sich jedoch zunächst auf die Parallelen dazu, wie Daten entweder durch computergestützte Methoden oder durch mathematische Modelle Einblick in eine Forschungsfrage geben können.
 :::
 
-## Central Limit Theorem {#sec-CLTsection}
+## Zentraler Grenzwertsatz {#sec-CLTsection}
 
-In recent chapters, we have encountered four case studies.
-While they differ in the settings, in their outcomes, and in the technique we have used to analyze the data, they all have something in common: the general shape of the distribution of the statistics (called the **sampling distribution**).\index{sampling distribution} You may have noticed that the distributions were symmetric and bell-shaped.
+In den letzten Kapiteln haben wir vier Fallstudien kennengelernt.
+Obwohl sie sich in den Rahmenbedingungen, ihren Ergebnissen und der Technik, die wir zur Datenanalyse verwendet haben, unterscheiden, haben sie alle etwas gemeinsam: die allgemeine Form der Verteilung der Statistiken (die sogenannte **Stichprobenverteilung**).\index{sampling distribution} Vielleicht ist Ihnen aufgefallen, dass die Verteilungen symmetrisch und glockenförmig waren.
 
 ```{r}
 #| include: false
@@ -34,20 +34,20 @@ terms_chp_13 <- c("sampling distribution", "null distribution")
 ```
 
 ::: {.important data-latex=""}
-**Sampling distribution.**
+**Stichprobenverteilung.**
 
-A sampling distribution is the distribution of all possible values of a *sample statistic* from samples of a given sample size from a given population.
-We can think about the sample distribution as describing how sample statistics (e.g., the sample proportion $\hat{p}$ or the sample mean $\bar{x}$) varies from one study to another.
-A sampling distribution is contrasted with a data distribution which shows the variability of the *observed* data values.
-The data distribution can be visualized from the observations themselves.
-However, because a sampling distribution describes sample statistics computed from many studies, it cannot be visualized directly from a single dataset.
-Instead, we use either computational or mathematical structures to estimate the sampling distribution and hence to describe the expected variability of the sample statistic in repeated studies.
+Eine Stichprobenverteilung ist die Verteilung aller möglichen Werte einer *Stichprobenstatistik* aus Stichproben eines gegebenen Stichprobenumfangs aus einer gegebenen Population.
+Wir können uns die Stichprobenverteilung als Beschreibung vorstellen, wie Stichprobenstatistiken (z.B. der Stichprobenanteil $\hat{p}$ oder der Stichprobenmittelwert $\bar{x}$) von einer Studie zur nächsten variieren.
+Eine Stichprobenverteilung steht im Gegensatz zu einer Datenverteilung, die die Variabilität der *beobachteten* Datenwerte zeigt.
+Die Datenverteilung kann anhand der Beobachtungen selbst visualisiert werden.
+Da eine Stichprobenverteilung jedoch Stichprobenstatistiken beschreibt, die aus vielen Studien berechnet wurden, kann sie nicht direkt aus einem einzelnen Datensatz visualisiert werden.
+Stattdessen verwenden wir entweder computergestützte oder mathematische Strukturen, um die Stichprobenverteilung zu schätzen und damit die erwartete Variabilität der Stichprobenstatistik in wiederholten Studien zu beschreiben.
 :::
 
-@fig-FourCaseStudies shows the null distributions in each of the four case studies where we ran 10,000 simulations.
-Note that the **null distribution**\index{null distribution} is the sampling distribution of the statistic created under the setting where the null hypothesis is true.
-Therefore, the null distribution will always be centered at the value of the parameter given by the null hypothesis.
-In the case of the opportunity cost study, which originally had just 1,000 simulations, we have included an additional 9,000 simulations.
+@fig-FourCaseStudies zeigt die Nullverteilungen in jeder der vier Fallstudien, bei denen wir 10.000 Simulationen durchgeführt haben.
+Beachten Sie, dass die **Nullverteilung**\index{null distribution} die Stichprobenverteilung der Statistik ist, die unter der Annahme erstellt wird, dass die Nullhypothese wahr ist.
+Daher wird die Nullverteilung immer beim Wert des Parameters zentriert sein, der durch die Nullhypothese angegeben wird.
+Im Fall der Opportunitätskostenstudie, die ursprünglich nur 1.000 Simulationen hatte, haben wir weitere 9.000 Simulationen hinzugefügt.
 
 ```{r}
 #| include: false
@@ -137,22 +137,22 @@ p_tl <- ggplot(tappers_listeners_sim_dist, aes(x = stat)) +
 ```
 
 ::: {.guidedpractice data-latex=""}
-Describe the shape of the distributions and note anything that you find interesting.[^13-foundations-mathematical-1]
+Beschreiben Sie die Form der Verteilungen und notieren Sie alles, was Ihnen interessant erscheint.[^13-foundations-mathematical-1]
 :::
 
-[^13-foundations-mathematical-1]: In general, the distributions are reasonably symmetric.
-    The case study for the medical consultant is the only distribution with any evident skew (the distribution is skewed right).
+[^13-foundations-mathematical-1]: Im Allgemeinen sind die Verteilungen ziemlich symmetrisch.
+    Die Fallstudie zum medizinischen Berater ist die einzige Verteilung mit einer erkennbaren Schiefe (die Verteilung ist rechtsschief).
 
-The case study for the medical consultant is the only distribution with any evident skew.
-As we observed in [Chapter -@sec-data-hello], it's common for distributions to be skewed or contain outliers.
-However, the null distributions we have so far encountered have all looked somewhat similar and, for the most part, symmetric.
-They all resemble a bell-shaped curve.
-The bell-shaped curve similarity is not a coincidence, but rather, is guaranteed by mathematical theory.
+Die Fallstudie zum medizinischen Berater ist die einzige Verteilung mit einer erkennbaren Schiefe.
+Wie wir in [Kapitel -@sec-data-hello] beobachtet haben, ist es üblich, dass Verteilungen schief sind oder Ausreißer enthalten.
+Die Nullverteilungen, die wir bisher betrachtet haben, sahen jedoch alle etwas ähnlich und größtenteils symmetrisch aus.
+Sie ähneln alle einer glockenförmigen Kurve.
+Die Ähnlichkeit mit der Glockenkurve ist kein Zufall, sondern durch mathematische Theorie garantiert.
 
 ::: {.important data-latex=""}
-**Central Limit Theorem for proportions.**\index{Central Limit Theorem}
+**Zentraler Grenzwertsatz für Anteile.**\index{Central Limit Theorem}
 
-If we look at a proportion (or difference in proportions) and the scenario satisfies certain conditions, then the sample proportion (or difference in proportions) will appear to follow a bell-shaped curve called the *normal distribution*.
+Wenn wir einen Anteil (oder einen Unterschied in Anteilen) betrachten und das Szenario bestimmte Bedingungen erfüllt, dann scheint der Stichprobenanteil (oder der Unterschied in Anteilen) einer glockenförmigen Kurve zu folgen, die als *Normalverteilung* bezeichnet wird.
 :::
 
 ```{r}
@@ -160,9 +160,9 @@ If we look at a proportion (or difference in proportions) and the scenario satis
 terms_chp_13 <- c(terms_chp_13, "Central Limit Theorem")
 ```
 
-An example of a perfect normal distribution is shown in @fig-simpleNormal.
-Imagine laying a normal curve over each of the four null distributions in @fig-FourCaseStudies.
-While the mean (center) and standard deviation (width or spread) may change for each plot, the general shape remains roughly intact.
+Ein Beispiel für eine perfekte Normalverteilung ist in @fig-simpleNormal dargestellt.
+Stellen Sie sich vor, eine Normalverteilungskurve über jede der vier Nullverteilungen in @fig-FourCaseStudies zu legen.
+Während sich Mittelwert (Zentrum) und Standardabweichung (Breite oder Streuung) für jeden Plot ändern können, bleibt die allgemeine Form ungefähr erhalten.
 
 ```{r}
 #| label: fig-simpleNormal
@@ -175,43 +175,43 @@ par(mar = c(0, 0, 0, 0))
 normTail(axes = FALSE)
 ```
 
-Mathematical theory guarantees that if repeated samples are taken a sample proportion or a difference in sample proportions will follow something that resembles a normal distribution when certain conditions are met.
-(Note: we typically only take **one** sample, but the mathematical model lets us know what to expect if we *had* taken repeated samples.) These conditions fall into two general categories describing the independence between observations and the need to take a sufficiently large sample size.
+Die mathematische Theorie garantiert, dass bei wiederholten Stichproben ein Stichprobenanteil oder ein Unterschied in Stichprobenanteilen einer Normalverteilung ähnelt, wenn bestimmte Bedingungen erfüllt sind.
+(Hinweis: Wir entnehmen typischerweise nur **eine** Stichprobe, aber das mathematische Modell lässt uns wissen, was zu erwarten wäre, wenn wir *wiederholt* Stichproben entnommen hätten.) Diese Bedingungen fallen in zwei allgemeine Kategorien, die die Unabhängigkeit zwischen Beobachtungen und die Notwendigkeit eines ausreichend großen Stichprobenumfangs beschreiben.
 
-1.  Observations in the sample are **independent**.
-    Independence is guaranteed when we take a random sample from a population.
-    Independence can also be guaranteed if we randomly divide individuals into treatment and control groups.
+1.  Beobachtungen in der Stichprobe sind **unabhängig**.
+    Unabhängigkeit ist gewährleistet, wenn wir eine Zufallsstichprobe aus einer Population ziehen.
+    Unabhängigkeit kann auch gewährleistet sein, wenn wir Personen zufällig in Behandlungs- und Kontrollgruppen aufteilen.
 
-2.  The sample is **large enough**.
-    The sample size cannot be too small.
-    What qualifies as "small" differs from one context to the next, and we'll provide suitable guidelines for proportions in [Chapter -@sec-inference-one-prop].
+2.  Die Stichprobe ist **groß genug**.
+    Der Stichprobenumfang darf nicht zu klein sein.
+    Was als „klein" gilt, unterscheidet sich von einem Kontext zum nächsten, und wir werden geeignete Richtlinien für Anteile in [Kapitel -@sec-inference-one-prop] bereitstellen.
 
-So far we have had no need for the normal distribution.
-We've been able to answer our questions somewhat easily using simulation techniques.
-However, soon this will change.
-Simulating data can be non-trivial.
-For example, some of the scenarios encountered in [Chapter -@sec-model-mlr] where we introduced regression models with multiple predictors would require complex simulations in order to make inferential conclusions.
-Instead, the normal distribution and other distributions like it offer a general framework for statistical inference that applies to a very large number of settings.
+Bisher hatten wir keinen Bedarf an der Normalverteilung.
+Wir konnten unsere Fragen einigermaßen einfach mithilfe von Simulationstechniken beantworten.
+Das wird sich jedoch bald ändern.
+Das Simulieren von Daten kann nicht trivial sein.
+Einige der in [Kapitel -@sec-model-mlr] eingeführten Szenarien, in denen wir Regressionsmodelle mit mehreren Prädiktoren vorgestellt haben, würden beispielsweise komplexe Simulationen erfordern, um Inferenzschlussfolgerungen zu ziehen.
+Stattdessen bieten die Normalverteilung und ähnliche Verteilungen einen allgemeinen Rahmen für statistische Inferenz, der auf eine sehr große Anzahl von Einstellungen angewendet werden kann.
 
 ::: {.important data-latex=""}
-**Technical Conditions.**
+**Technische Bedingungen.**
 
-In order for the normal approximation to describe the sampling distribution of the sample proportion as it varies from sample to sample, two conditions must hold.
-If these conditions do not hold, it is unwise to use the normal distribution (and related concepts like Z scores, probabilities from the normal curve, etc.) for inferential analyses.
+Damit die Normalverteilung die Stichprobenverteilung des Stichprobenanteils beschreiben kann, wenn sie von Stichprobe zu Stichprobe variiert, müssen zwei Bedingungen erfüllt sein.
+Wenn diese Bedingungen nicht erfüllt sind, ist es unklug, die Normalverteilung (und verwandte Konzepte wie Z-Werte, Wahrscheinlichkeiten aus der Normalverteilungskurve usw.) für Inferenzanalysen zu verwenden.
 
-1.  **Independent observations**
-2.  **Large enough sample:** For proportions, at least 10 expected successes and 10 expected failures in the sample.
+1.  **Unabhängige Beobachtungen**
+2.  **Ausreichend großer Stichprobenumfang:** Bei Anteilen mindestens 10 erwartete Erfolge und 10 erwartete Misserfolge in der Stichprobe.
 :::
 
-## Normal Distribution {#sec-normalDist}
+## Normalverteilung {#sec-normalDist}
 
-Among all the distributions we see in statistics, one is overwhelmingly the most common.
-The symmetric, unimodal, bell curve is ubiquitous throughout statistics.
-It is so common that people know it as a variety of names including the **normal curve**\index{normal curve}, **normal model**\index{normal model}, or **normal distribution**\index{normal distribution}.[^13-foundations-mathematical-2]
-Under certain conditions, sample proportions, sample means, and sample differences can be modeled using the normal distribution.
-Additionally, some variables such as SAT scores and heights of US adult males closely follow the normal distribution.
+Unter allen Verteilungen, die wir in der Statistik sehen, ist eine mit Abstand am häufigsten.
+Die symmetrische, eingipflige Glockenkurve ist in der Statistik allgegenwärtig.
+Sie ist so verbreitet, dass sie unter verschiedenen Namen bekannt ist, darunter **Normalkurve**\index{normal curve}, **Normalmodell**\index{normal model} oder **Normalverteilung**\index{normal distribution}.[^13-foundations-mathematical-2]
+Unter bestimmten Bedingungen können Stichprobenanteile, Stichprobenmittelwerte und Stichprobenunterschiede mithilfe der Normalverteilung modelliert werden.
+Darüber hinaus folgen einige Variablen wie SAT-Ergebnisse und Körpergrößen von erwachsenen US-Männern annähernd der Normalverteilung.
 
-[^13-foundations-mathematical-2]: It is also introduced as the Gaussian distribution after Frederic Gauss, the first person to formalize its mathematical expression.
+[^13-foundations-mathematical-2]: Sie wird auch als Gaußsche Verteilung nach Frederic Gauß bezeichnet, dem Ersten, der ihren mathematischen Ausdruck formalisierte.
 
 ```{r}
 #| include: false
@@ -219,26 +219,26 @@ terms_chp_13 <- c(terms_chp_13, "normal curve", "normal model", "normal distribu
 ```
 
 ::: {.important data-latex=""}
-**Normal distribution facts.**
+**Fakten zur Normalverteilung.**
 
-Distributions of many variables are nearly normal, but none are exactly normal.
-Thus, the normal distribution, while not perfect for any single problem, is very useful for a variety of problems.
+Verteilungen vieler Variablen sind annähernd normal, aber keine ist exakt normal.
+Daher ist die Normalverteilung zwar für kein einzelnes Problem perfekt, aber für eine Vielzahl von Problemen sehr nützlich.
 :::
 
 \vspace{-2mm}
 
-In this section, we will discuss the normal distribution in the context of data to become familiar with normal distribution techniques.
-In the following sections and beyond, we'll move our discussion to focus on applying the normal distribution and other related distributions to model point estimates for hypothesis tests and for constructing confidence intervals.
+In diesem Abschnitt werden wir die Normalverteilung im Kontext von Daten besprechen, um uns mit den Techniken der Normalverteilung vertraut zu machen.
+In den folgenden Abschnitten und darüber hinaus werden wir unsere Diskussion darauf konzentrieren, die Normalverteilung und andere verwandte Verteilungen auf die Modellierung von Punktschätzungen für Hypothesentests und zur Konstruktion von Konfidenzintervallen anzuwenden.
 
-### Normal distribution model
+### Normalverteilungsmodell
 
-The normal distribution always describes a symmetric, unimodal, bell-shaped curve.
-However, normal curves can look different depending on the details of the model.
-Specifically, the normal model can be adjusted using two parameters: mean and standard deviation.
-As you can probably guess, changing the mean shifts the bell curve to the left or right, while changing the standard deviation stretches or constricts the curve.
-@fig-twoSampleNormals-1 shows the normal distribution with mean $0$ and standard deviation $1$ (which is commonly referred to as the **standard normal distribution**\index{standard normal distribution}).
-A normal distribution with mean $19$ and standard deviation $4$ is shown on the right.
-@fig-twoSampleNormalsStacked shows the same two normal distributions on the same axis.
+Die Normalverteilung beschreibt immer eine symmetrische, eingipflige, glockenförmige Kurve.
+Normalverteilungskurven können jedoch je nach den Details des Modells unterschiedlich aussehen.
+Insbesondere kann das Normalmodell mithilfe zweier Parameter angepasst werden: Mittelwert und Standardabweichung.
+Wie Sie sich wahrscheinlich vorstellen können, verschiebt eine Änderung des Mittelwerts die Glockenkurve nach links oder rechts, während eine Änderung der Standardabweichung die Kurve streckt oder verengt.
+@fig-twoSampleNormals-1 zeigt die Normalverteilung mit Mittelwert $0$ und Standardabweichung $1$ (die gemeinhin als **Standardnormalverteilung**\index{standard normal distribution} bezeichnet wird).
+Rechts ist eine Normalverteilung mit Mittelwert $19$ und Standardabweichung $4$ dargestellt.
+@fig-twoSampleNormalsStacked zeigt dieselben zwei Normalverteilungen auf derselben Achse.
 
 \vspace{-3mm}
 
@@ -316,11 +316,11 @@ ggplot(normals, aes(x = x)) +
 
 \clearpage
 
-If a normal distribution has mean $\mu$ and standard deviation $\sigma,$ we may write the distribution as $N(\mu, \sigma).$ The two distributions in @fig-twoSampleNormalsStacked can be written as
+Wenn eine Normalverteilung den Mittelwert $\mu$ und die Standardabweichung $\sigma$ hat, können wir die Verteilung als $N(\mu, \sigma)$ schreiben. Die beiden Verteilungen in @fig-twoSampleNormalsStacked können geschrieben werden als
 
 $$ N(\mu = 0, \sigma = 1)\quad\text{and}\quad N(\mu = 19, \sigma = 4) $$
 
-Because the mean and standard deviation describe a normal distribution exactly, they are called the distribution's **parameters**\index{parameter}.
+Da Mittelwert und Standardabweichung eine Normalverteilung genau beschreiben, werden sie als **Parameter**\index{parameter} der Verteilung bezeichnet.
 
 ```{r}
 #| include: false
@@ -328,11 +328,11 @@ terms_chp_13 <- c(terms_chp_13, "parameter")
 ```
 
 ::: {.workedexample data-latex=""}
-Write down the short-hand for a normal distribution with the following parameters.
+Schreiben Sie die Kurzform für eine Normalverteilung mit folgenden Parametern.
 
-a.  mean 5 and standard deviation 3
-b.  mean -100 and standard deviation 10
-c.  mean 2 and standard deviation 9
+a.  Mittelwert 5 und Standardabweichung 3
+b.  Mittelwert -100 und Standardabweichung 10
+c.  Mittelwert 2 und Standardabweichung 9
 
 ------------------------------------------------------------------------
 
@@ -341,17 +341,17 @@ b.  $N(\mu = -100, \sigma = 10)$
 c.  $N(\mu = 2, \sigma = 9)$
 :::
 
-### Standardizing with Z scores
+### Standardisierung mit Z-Werten
 
 ::: {.guidedpractice data-latex=""}
-SAT scores follow a nearly normal distribution with a mean of 1500 points and a standard deviation of 300 points.
-ACT scores also follow a nearly normal distribution with mean of 21 points and a standard deviation of 5 points.
-Suppose Nel scored 1800 points on their SAT and Sian scored 24 points on their ACT.
-Who performed better?[^13-foundations-mathematical-3]
+SAT-Ergebnisse folgen einer annähernd normalen Verteilung mit einem Mittelwert von 1500 Punkten und einer Standardabweichung von 300 Punkten.
+ACT-Ergebnisse folgen ebenfalls einer annähernd normalen Verteilung mit einem Mittelwert von 21 Punkten und einer Standardabweichung von 5 Punkten.
+Angenommen, Nel erzielte 1800 Punkte im SAT und Sian erzielte 24 Punkte im ACT.
+Wer hat besser abgeschnitten?[^13-foundations-mathematical-3]
 :::
 
-[^13-foundations-mathematical-3]: We use the standard deviation as a guide.
-    Nel is 1 standard deviation above average on the SAT: $1500 + 300 = 1800.$ Sian is 0.6 standard deviations above the mean on the ACT: $21+0.6 \times 5 = 24.$ In @fig-satActNormals, we can see that Nel did better compared to other test takers than Sian did, so their score was better.
+[^13-foundations-mathematical-3]: Wir verwenden die Standardabweichung als Orientierung.
+    Nel liegt 1 Standardabweichung über dem Durchschnitt im SAT: $1500 + 300 = 1800.$ Sian liegt 0,6 Standardabweichungen über dem Mittelwert im ACT: $21+0{,}6 \times 5 = 24.$ In @fig-satActNormals können wir sehen, dass Nel im Vergleich zu anderen Prüfungsteilnehmern besser abgeschnitten hat als Sian, sodass ihr Ergebnis besser war.
 
 ```{r}
 #| label: fig-satActNormals
@@ -419,11 +419,11 @@ p_sat /
 
 \clearpage
 
-The solution to the previous example relies on a standardization technique called a Z score, a method most commonly employed for nearly normal observations (but that may be used with any distribution).
-The **Z score**\index{Z score} of an observation is defined as the number of standard deviations it falls above or below the mean.
-If the observation is one standard deviation above the mean, its Z score is 1.
-If it is 1.5 standard deviations *below* the mean, then its Z score is -1.5.
-If $x$ is an observation from a distribution $N(\mu, \sigma),$ we define the Z score mathematically as
+Die Lösung des vorherigen Beispiels basiert auf einer Standardisierungstechnik namens Z-Wert, einer Methode, die am häufigsten bei annähernd normalverteilten Beobachtungen eingesetzt wird (die aber bei jeder Verteilung verwendet werden kann).
+Der **Z-Wert**\index{Z score} einer Beobachtung ist definiert als die Anzahl der Standardabweichungen, die sie über oder unter dem Mittelwert liegt.
+Wenn die Beobachtung eine Standardabweichung über dem Mittelwert liegt, ist ihr Z-Wert 1.
+Wenn sie 1,5 Standardabweichungen *unter* dem Mittelwert liegt, dann ist ihr Z-Wert -1,5.
+Wenn $x$ eine Beobachtung aus einer Verteilung $N(\mu, \sigma)$ ist, definieren wir den Z-Wert mathematisch als
 
 ```{r}
 #| include: false
@@ -432,69 +432,69 @@ terms_chp_13 <- c(terms_chp_13, "Z score")
 
 $$ Z = \frac{x-\mu}{\sigma} $$
 
-Using $\mu_{SAT}=1500,$ $\sigma_{SAT}=300,$ and $x_{Nel}=1800,$ we find Nel's Z score:
+Mit $\mu_{SAT}=1500,$ $\sigma_{SAT}=300$ und $x_{Nel}=1800$ berechnen wir Nels Z-Wert:
 
 $$ Z_{Nel} = \frac{x_{Nel} - \mu_{SAT}}{\sigma_{SAT}} = \frac{1800-1500}{300} = 1 $$
 
 ::: {.important data-latex=""}
-**The Z score.**
+**Der Z-Wert.**
 
-The Z score of an observation is the number of standard deviations it falls above or below the mean.
-We compute the Z score for an observation $x$ that follows a distribution with mean $\mu$ and standard deviation $\sigma$ using
+Der Z-Wert einer Beobachtung ist die Anzahl der Standardabweichungen, die sie über oder unter dem Mittelwert liegt.
+Wir berechnen den Z-Wert für eine Beobachtung $x$, die einer Verteilung mit Mittelwert $\mu$ und Standardabweichung $\sigma$ folgt, mithilfe von
 
 $$Z = \frac{x-\mu}{\sigma}$$
 
-If the observation $x$ comes from a *normal* distribution centered at $\mu$ with standard deviation of $\sigma$, then the Z score will be distributed according to a *normal* distribution with a center of 0 and a standard deviation of 1.
-That is, the normality remains when transforming from $x$ to $Z$ with a shift in both the center as well as the spread.
+Wenn die Beobachtung $x$ aus einer *Normalverteilung* mit Zentrum $\mu$ und Standardabweichung $\sigma$ stammt, dann ist der Z-Wert gemäß einer *Normalverteilung* mit einem Zentrum von 0 und einer Standardabweichung von 1 verteilt.
+Das heißt, die Normalität bleibt erhalten, wenn man von $x$ zu $Z$ transformiert, mit einer Verschiebung sowohl des Zentrums als auch der Streuung.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Use Sian's ACT score, 24, along with the ACT mean and standard deviation to compute their Z score.[^13-foundations-mathematical-4]
+Verwenden Sie Sians ACT-Ergebnis, 24, zusammen mit dem ACT-Mittelwert und der Standardabweichung, um ihren Z-Wert zu berechnen.[^13-foundations-mathematical-4]
 :::
 
-[^13-foundations-mathematical-4]: $Z_{Sian} = \frac{x_{Sian} - \mu_{ACT}}{\sigma_{ACT}} = \frac{24 - 21}{5} = 0.6$
+[^13-foundations-mathematical-4]: $Z_{Sian} = \frac{x_{Sian} - \mu_{ACT}}{\sigma_{ACT}} = \frac{24 - 21}{5} = 0{,}6$
 
-Observations above the mean always have positive Z scores while those below the mean have negative Z scores.
-If an observation is equal to the mean (e.g., SAT score of 1500), then the Z score is $0.$
+Beobachtungen über dem Mittelwert haben immer positive Z-Werte, während solche unter dem Mittelwert negative Z-Werte haben.
+Wenn eine Beobachtung gleich dem Mittelwert ist (z.B. SAT-Ergebnis von 1500), ist der Z-Wert $0.$
 
 ::: {.workedexample data-latex=""}
-Let $X$ represent a random variable from $N(\mu=3, \sigma=2),$ and suppose we observe $x=5.19.$ Find the Z score of $x.$ Then, use the Z score to determine how many standard deviations above or below the mean $x$ falls.
+Sei $X$ eine Zufallsvariable aus $N(\mu=3, \sigma=2),$ und nehmen wir an, wir beobachten $x=5{,}19.$ Finden Sie den Z-Wert von $x.$ Verwenden Sie dann den Z-Wert, um zu bestimmen, wie viele Standardabweichungen über oder unter dem Mittelwert $x$ liegt.
 
 ------------------------------------------------------------------------
 
-Its Z score is given by $Z = \frac{x-\mu}{\sigma} = \frac{5.19 - 3}{2} = 2.19/2 = 1.095.$ The observation $x$ is 1.095 standard deviations *above* the mean.
-We know it must be above the mean since $Z$ is positive.
+Sein Z-Wert ist gegeben durch $Z = \frac{x-\mu}{\sigma} = \frac{5{,}19 - 3}{2} = 2{,}19/2 = 1{,}095.$ Die Beobachtung $x$ liegt 1,095 Standardabweichungen *über* dem Mittelwert.
+Wir wissen, dass sie über dem Mittelwert liegen muss, da $Z$ positiv ist.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Head lengths of brushtail possums follow a nearly normal distribution with mean 92.6 mm and standard deviation 3.6 mm.
-Compute the Z scores for possums with head lengths of 95.4 mm and 85.8 mm.[^13-foundations-mathematical-5]
+Die Kopflängen von Pinselschweif-Opossums folgen einer annähernd normalen Verteilung mit einem Mittelwert von 92,6 mm und einer Standardabweichung von 3,6 mm.
+Berechnen Sie die Z-Werte für Opossums mit Kopflängen von 95,4 mm und 85,8 mm.[^13-foundations-mathematical-5]
 :::
 
-[^13-foundations-mathematical-5]: For $x_1=95.4$ mm: $Z_1 = \frac{x_1 - \mu}{\sigma} = \frac{95.4 - 92.6}{3.6} = 0.78.$ For $x_2=85.8$ mm: $Z_2 = \frac{85.8 - 92.6}{3.6} = -1.89.$
+[^13-foundations-mathematical-5]: Für $x_1=95{,}4$ mm: $Z_1 = \frac{x_1 - \mu}{\sigma} = \frac{95{,}4 - 92{,}6}{3{,}6} = 0{,}78.$ Für $x_2=85{,}8$ mm: $Z_2 = \frac{85{,}8 - 92{,}6}{3{,}6} = -1{,}89.$
 
-We can use Z scores to roughly identify which observations are more unusual than others.
-One observation $x_1$ is said to be more unusual than another observation $x_2$ if the absolute value of its Z score is larger than the absolute value of the other observation's Z score: $|Z_1| > |Z_2|.$ This technique is especially insightful when a distribution is symmetric.
+Wir können Z-Werte verwenden, um grob zu identifizieren, welche Beobachtungen ungewöhnlicher sind als andere.
+Eine Beobachtung $x_1$ gilt als ungewöhnlicher als eine andere Beobachtung $x_2$, wenn der Absolutwert ihres Z-Werts größer ist als der Absolutwert des Z-Werts der anderen Beobachtung: $|Z_1| > |Z_2|.$ Diese Technik ist besonders aufschlussreich, wenn eine Verteilung symmetrisch ist.
 
 ::: {.guidedpractice data-latex=""}
-Which of the two brushtail possum observations in the previous guided practice is more *unusual*?[^13-foundations-mathematical-6]
+Welche der beiden Opossum-Beobachtungen in der vorherigen geführten Übung ist *ungewöhnlicher*?[^13-foundations-mathematical-6]
 :::
 
-[^13-foundations-mathematical-6]: Because the *absolute value* of Z score for the second observation is larger than that of the first, the second observation has a more unusual head length.
+[^13-foundations-mathematical-6]: Da der *Absolutwert* des Z-Werts der zweiten Beobachtung größer ist als der der ersten, hat die zweite Beobachtung eine ungewöhnlichere Kopflänge.
 
 \vspace{-5mm}
 
-### Normal probability calculations
+### Normalwahrscheinlichkeitsberechnungen
 
 ::: {.workedexample data-latex=""}
-Nel from the SAT Guided Practice earned a score of 1800 on their SAT with a corresponding $Z=1.$ They would like to know what percentile they fall in among all SAT test-takers.
+Nel aus der geführten SAT-Übung erzielte ein Ergebnis von 1800 bei seinem SAT mit entsprechendem $Z=1.$ Er möchte wissen, in welchem Perzentil er unter allen SAT-Prüfungsteilnehmern liegt.
 
 ------------------------------------------------------------------------
 
-Nel's **percentile**\index{percentile} is the percentage of people who earned a lower SAT score than Nel.
-We shade the area representing those individuals in @fig-satBelow1800.
-The total area under the normal curve is always equal to 1, and the proportion of people who scored below Nel on the SAT is equal to the *area* shaded in @fig-satBelow1800: 0.8413.
-In other words, Nel is in the $84^{th}$ percentile of SAT takers.
+Nels **Perzentil**\index{percentile} ist der Prozentsatz der Personen, die beim SAT eine niedrigere Punktzahl als Nel erzielt haben.
+Wir schattieren den Bereich, der diese Personen in @fig-satBelow1800 repräsentiert.
+Die Gesamtfläche unter der Normalverteilungskurve ist immer gleich 1, und der Anteil der Personen, die beim SAT schlechter als Nel abgeschnitten haben, ist gleich der *Fläche*, die in @fig-satBelow1800 schattiert ist: 0,8413.
+Mit anderen Worten: Nel befindet sich im $84.$ Perzentil der SAT-Teilnehmer.
 :::
 
 ```{r}
@@ -519,20 +519,20 @@ par(mar = c(2, 0, 0, 0))
 normTail(m = 1500, s = 300, L = 1800, col = IMSCOL["blue", "full"])
 ```
 
-We can use the normal model to find percentiles or probabilities.
-A **normal probability table**\index{normal probability table}, which lists Z scores and corresponding percentiles, can be used to identify a percentile based on the Z score (and vice versa).
-Statistical software can also be used.
+Wir können das Normalmodell verwenden, um Perzentile oder Wahrscheinlichkeiten zu finden.
+Eine **Normalwahrscheinlichkeitstabelle**\index{normal probability table}, die Z-Werte und entsprechende Perzentile auflistet, kann verwendet werden, um ein Perzentil basierend auf dem Z-Wert (und umgekehrt) zu ermitteln.
+Statistische Software kann ebenfalls verwendet werden.
 
 ```{r}
 #| include: false
 terms_chp_13 <- c(terms_chp_13, "normal probability table")
 ```
 
-Normal probabilities are most commonly found using statistical software which we will show here using R.
-We use the software to identify the percentile corresponding to any particular Z score.
-For instance, the percentile of $Z=0.43$ is 0.6664, or the $66.64^{th}$ percentile.
-The `pnorm()` function is available in default R and will provide the percentile associated with any cutoff on a normal curve.
-The `normTail()` function is available in the [**openintro**](http://openintrostat.github.io/openintro/) R package and will draw the associated normal distribution curve.
+Normalwahrscheinlichkeiten werden am häufigsten mit statistischer Software gefunden, die wir hier mit R zeigen.
+Wir verwenden die Software, um das Perzentil zu ermitteln, das einem bestimmten Z-Wert entspricht.
+Das Perzentil von $Z=0{,}43$ beträgt zum Beispiel 0,6664 oder das $66{,}64.$ Perzentil.
+Die Funktion `pnorm()` ist im Standard-R verfügbar und liefert das mit jedem Grenzwert auf einer Normalverteilungskurve verbundene Perzentil.
+Die Funktion `normTail()` ist im R-Paket [**openintro**](http://openintrostat.github.io/openintro/) verfügbar und zeichnet die zugehörige Normalverteilungskurve.
 
 ```{r}
 #| echo: true
@@ -543,11 +543,11 @@ pnorm(0.43, mean = 0, sd = 1)
 openintro::normTail(m = 0, s = 1, L = 0.43)
 ```
 
-We can also find the Z score associated with a percentile.
-For example, to identify Z for the $80^{th}$ percentile, we use `qnorm()` which identifies the **quantile** for a given percentage.
-The quantile represents the cutoff value.
-(To remember the function `qnorm()` as providing a cutoff, notice that both `qnorm()` and "cutoff" start with the sound "kuh".
-To remember the `pnorm()` function as providing a probability from a given cutoff, notice that both `pnorm()` and probability start with the sound "puh".) We determine the Z score for the $80^{th}$ percentile using `qnorm()`: 0.84.
+Wir können auch den Z-Wert finden, der einem Perzentil entspricht.
+Um zum Beispiel Z für das $80.$ Perzentil zu ermitteln, verwenden wir `qnorm()`, das den **Quantilwert** für einen gegebenen Prozentsatz identifiziert.
+Der Quantilwert stellt den Grenzwert dar.
+(Um sich die Funktion `qnorm()` als Grenzwertgeber zu merken, beachten Sie, dass sowohl `qnorm()` als auch „Quantil" mit dem Buchstaben „q" beginnen.
+Um sich die Funktion `pnorm()` als Lieferant einer Wahrscheinlichkeit aus einem gegebenen Grenzwert zu merken, beachten Sie, dass sowohl `pnorm()` als auch „Prozent" mit dem Buchstaben „p" beginnen.) Wir bestimmen den Z-Wert für das $80.$ Perzentil mit `qnorm()`: 0,84.
 
 ```{r}
 #| echo: true
@@ -559,38 +559,38 @@ openintro::normTail(m = 0, s = 1, L = 0.842)
 ```
 
 ::: {.guidedpractice data-latex=""}
-Determine the proportion of SAT test takers who scored better than Nel on the SAT.[^13-foundations-mathematical-7]
+Bestimmen Sie den Anteil der SAT-Prüfungsteilnehmer, die beim SAT besser als Nel abgeschnitten haben.[^13-foundations-mathematical-7]
 :::
 
-[^13-foundations-mathematical-7]: If 84% had lower scores than Nel, the number of people who had better scores must be 16%.
-    (Generally ties are ignored when the normal model, or any other continuous distribution, is used.)
+[^13-foundations-mathematical-7]: Wenn 84% niedrigere Ergebnisse als Nel hatten, müssen 16% der Personen besser als Nel abgeschnitten haben.
+    (Im Allgemeinen werden Gleichstände ignoriert, wenn das Normalmodell oder eine andere stetige Verteilung verwendet wird.)
 
-### Normal probability examples
+### Normalwahrscheinlichkeitsbeispiele
 
-Cumulative SAT scores are approximated well by a normal model, $N(\mu=1500, \sigma=300).$
+Kumulative SAT-Ergebnisse werden gut durch ein Normalmodell, $N(\mu=1500, \sigma=300)$, approximiert.
 
 ::: {.workedexample data-latex=""}
-Shannon is a randomly selected SAT taker, and nothing is known about Shannon's SAT aptitude.
-What is the probability that Shannon scores at least 1630 on their SATs?
+Shannon ist ein zufällig ausgewählter SAT-Teilnehmer, und es ist nichts über Shannons SAT-Eignung bekannt.
+Wie hoch ist die Wahrscheinlichkeit, dass Shannon beim SAT mindestens 1630 Punkte erreicht?
 
 ------------------------------------------------------------------------
 
-First, always draw and label a picture of the normal distribution.
-(Drawings need not be exact to be useful.) We are interested in the chance they score above 1630, so we shade the upper tail.
-See the normal curve below.
+Zeichnen Sie zunächst immer ein Bild der Normalverteilung und beschriften Sie es.
+(Zeichnungen müssen nicht exakt sein, um nützlich zu sein.) Wir interessieren uns für die Wahrscheinlichkeit, dass sie über 1630 Punkte erreichen, also schattieren wir den oberen Schwanz.
+Siehe die Normalverteilungskurve unten.
 
-The $x$-axis identifies the mean and the values at 2 standard deviations above and below the mean.
-The simplest way to find the shaded area under the curve makes use of the Z score of the cutoff value.
-With $\mu=1500,$ $\sigma=300,$ and the cutoff value $x=1630,$ the Z score is computed as
+Die $x$-Achse identifiziert den Mittelwert und die Werte bei 2 Standardabweichungen über und unter dem Mittelwert.
+Die einfachste Möglichkeit, die schattierte Fläche unter der Kurve zu finden, nutzt den Z-Wert des Grenzwerts.
+Mit $\mu=1500,$ $\sigma=300$ und dem Grenzwert $x=1630$ wird der Z-Wert berechnet als
 
-$$ Z = \frac{x - \mu}{\sigma} = \frac{1630 - 1500}{300} = \frac{130}{300} = 0.43 $$
+$$ Z = \frac{x - \mu}{\sigma} = \frac{1630 - 1500}{300} = \frac{130}{300} = 0{,}43 $$
 
-We use software to find the percentile of $Z=0.43,$ which yields 0.6664.
-However, the percentile describes those who had a Z score *lower* than 0.43.
-To find the area *above* $Z=0.43,$ we compute one minus the area of the lower tail, as seen below.
+Wir verwenden Software, um das Perzentil von $Z=0{,}43$ zu finden, was 0,6664 ergibt.
+Das Perzentil beschreibt jedoch diejenigen, die einen Z-Wert *unterhalb* von 0,43 hatten.
+Um die Fläche *oberhalb* von $Z=0{,}43$ zu finden, berechnen wir eins minus die Fläche des unteren Schwanzes, wie unten zu sehen ist.
 
-The probability Shannon scores at least 1630 on the SAT is 0.3336.
-This calculation is visualized in @fig-subtractingArea.
+Die Wahrscheinlichkeit, dass Shannon beim SAT mindestens 1630 Punkte erreicht, beträgt 0,3336.
+Diese Berechnung ist in @fig-subtractingArea visualisiert.
 :::
 
 ```{r}
@@ -644,31 +644,31 @@ par(par_og) # restore original par
 ```
 
 ::: {.tip data-latex=""}
-**Always draw a picture first, and find the Z score second.**
+**Zeichnen Sie immer zuerst ein Bild und bestimmen Sie dann den Z-Wert.**
 
-For any normal probability situation, *always always always* draw and label the normal curve and shade the area of interest first.
-The picture will provide an estimate of the probability.
+Zeichnen und beschriften Sie für jede Normalwahrscheinlichkeitssituation *immer immer immer* die Normalverteilungskurve und schattieren Sie zuerst den interessierenden Bereich.
+Das Bild gibt eine Schätzung der Wahrscheinlichkeit.
 
-After drawing a figure to represent the situation, identify the Z score for the observation of interest.
+Ermitteln Sie nach dem Zeichnen einer Abbildung, die die Situation darstellt, den Z-Wert für die interessierende Beobachtung.
 :::
 
 ::: {.guidedpractice data-latex=""}
-If the probability of Shannon scoring at least 1630 is 0.3336, then what is the probability they score less than 1630?
-Draw the normal curve representing this exercise, shading the lower region instead of the upper one.[^13-foundations-mathematical-8]
+Wenn die Wahrscheinlichkeit, dass Shannon mindestens 1630 erreicht, 0,3336 beträgt, wie hoch ist dann die Wahrscheinlichkeit, dass er weniger als 1630 erreicht?
+Zeichnen Sie die Normalverteilungskurve für diese Übung und schattieren Sie den unteren Bereich anstelle des oberen.[^13-foundations-mathematical-8]
 :::
 
-[^13-foundations-mathematical-8]: We found the probability to be 0.6664.
-    A picture for this exercise is represented by the shaded area below "0.6664".
+[^13-foundations-mathematical-8]: Wir haben die Wahrscheinlichkeit als 0,6664 gefunden.
+    Ein Bild für diese Übung wird durch die schattierte Fläche unter „0,6664" dargestellt.
 
 ::: {.workedexample data-latex=""}
-Edward earned a 1400 on their SAT.
-What is their percentile?
+Edward erzielte beim SAT 1400 Punkte.
+In welchem Perzentil befinden sie sich?
 
 ------------------------------------------------------------------------
 
-First, a picture is needed.
-Edward's percentile is the proportion of people who do not get as high as a 1400.
-These are the scores to the left of 1400, as shown below.
+Zunächst ist ein Bild nötig.
+Edwards Perzentil ist der Anteil der Personen, die keine 1400 Punkte erreichen.
+Das sind die Ergebnisse links von 1400, wie unten gezeigt.
 
 ```{r}
 #| label: edward-percentile
@@ -685,21 +685,21 @@ par(mar = c(2, 0, 0, 0))
 normTail(m = 1500, s = 300, L = 1400, col = IMSCOL["blue", "full"])
 ```
 
-The mean $\mu=1500,$ the standard deviation $\sigma=300,$ and the cutoff for the tail area $x=1400$ are used to compute the Z score:
+Der Mittelwert $\mu=1500,$ die Standardabweichung $\sigma=300$ und der Grenzwert für die Schwanzfläche $x=1400$ werden verwendet, um den Z-Wert zu berechnen:
 
-$$ Z = \frac{x - \mu}{\sigma} = \frac{1400 - 1500}{300} = -0.33$$
+$$ Z = \frac{x - \mu}{\sigma} = \frac{1400 - 1500}{300} = -0{,}33$$
 
-Statistical software can be used to find the proportion of the $N(0,1)$ curve to the left of $-0.33$ which is 0.3707.
-Edward is at the $37^{th}$ percentile.
+Statistische Software kann verwendet werden, um den Anteil der $N(0,1)$-Kurve links von $-0{,}33$ zu finden, der 0,3707 beträgt.
+Edward befindet sich im $37.$ Perzentil.
 :::
 
 ::: {.workedexample data-latex=""}
-Use the results of the previous example to compute the proportion of SAT takers who did better than Edward.
-Also draw a new picture.
+Verwenden Sie die Ergebnisse des vorherigen Beispiels, um den Anteil der SAT-Teilnehmer zu berechnen, die besser als Edward abgeschnitten haben.
+Zeichnen Sie auch ein neues Bild.
 
 ------------------------------------------------------------------------
 
-If Edward did better than 37% of SAT takers, then about 63% must have done better than them, as shown below.
+Wenn Edward besser als 37% der SAT-Teilnehmer war, dann müssen etwa 63% besser als sie abgeschnitten haben, wie unten gezeigt.
 
 ```{r}
 #| label: edward-percentile-better
@@ -717,48 +717,48 @@ normTail(m = 1500, s = 300, U = 1400, col = IMSCOL["blue", "full"])
 :::
 
 ::: {.tip data-latex=""}
-**Areas to the right.**
+**Flächen rechts.**
 
-Most statistical software, as well as normal probability tables in most books, give the area to the left.
-If you would like the area to the right, first find the area to the left and then subtract the amount from one.
+Die meisten statistischen Software sowie Normalwahrscheinlichkeitstabellen in den meisten Büchern geben die Fläche links an.
+Wenn Sie die Fläche rechts möchten, finden Sie zunächst die Fläche links und subtrahieren dann den Betrag von eins.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Stuart earned an SAT score of 2100.
-Draw a picture for each part.
-(a) What is their percentile?
-(b) What percent of SAT takers did better than Stuart?[^13-foundations-mathematical-9]
+Stuart erzielte beim SAT 2100 Punkte.
+Zeichnen Sie für jeden Teil ein Bild.
+(a) In welchem Perzentil befinden sie sich?
+(b) Welcher Prozentsatz der SAT-Teilnehmer schnitt besser ab als Stuart?[^13-foundations-mathematical-9]
 :::
 
-[^13-foundations-mathematical-9]: Numerical answers: (a) 0.9772.
-    (b) 0.0228.
+[^13-foundations-mathematical-9]: Numerische Antworten: (a) 0,9772.
+    (b) 0,0228.
 
-Based on a sample of 100 men,[^13-foundations-mathematical-10] the heights of adults who identify as male, between the ages 20 and 62 in the US is nearly normal with mean 70.0" and standard deviation 3.3".
+Basierend auf einer Stichprobe von 100 Männern,[^13-foundations-mathematical-10] ist die Körpergröße erwachsener Männer zwischen 20 und 62 Jahren in den USA annähernd normal mit Mittelwert 70,0 Zoll und Standardabweichung 3,3 Zoll.
 
-[^13-foundations-mathematical-10]: This sample was taken from the USDA Food Commodity Intake Database.
+[^13-foundations-mathematical-10]: Diese Stichprobe wurde aus der USDA Food Commodity Intake Database entnommen.
 
 ::: {.workedexample data-latex=""}
-Kamron is 5'7" (67 inches) and Adrian is 6'4" (76 inches).
-(a) What is Kamron's height percentile?
-(b) What is Adrian's height percentile?
-Also draw one picture for each part.
+Kamron ist 5'7" (67 Zoll) und Adrian ist 6'4" (76 Zoll).
+(a) In welchem Körpergrößen-Perzentil befindet sich Kamron?
+(b) In welchem Körpergrößen-Perzentil befindet sich Adrian?
+Zeichnen Sie auch für jeden Teil ein Bild.
 
 ------------------------------------------------------------------------
 
-Numerical answers, calculated using statistical software (e.g., `pnorm()` in R): (a) `r round(pnorm(67, mean = 70, sd = 3.3), 4) * 100`th percentile.
-(b) `r round(pnorm(76, mean = 70, sd = 3.3), 4) * 100`th percentile.
+Numerische Antworten, berechnet mit statistischer Software (z.B. `pnorm()` in R): (a) `r round(pnorm(67, mean = 70, sd = 3.3), 4) * 100`. Perzentil.
+(b) `r round(pnorm(76, mean = 70, sd = 3.3), 4) * 100`. Perzentil.
 :::
 
-The last several problems have focused on finding the probability or percentile for a particular observation.
-What if you would like to know the observation corresponding to a particular percentile?
+Die letzten mehreren Aufgaben haben sich darauf konzentriert, die Wahrscheinlichkeit oder das Perzentil für eine bestimmte Beobachtung zu finden.
+Was, wenn Sie die Beobachtung kennen möchten, die einem bestimmten Perzentil entspricht?
 
 ::: {.workedexample data-latex=""}
-Yousef's height is at the $40^{th}$ percentile.
-How tall are they?
+Yousefs Körpergröße liegt im $40.$ Perzentil.
+Wie groß sind sie?
 
 ------------------------------------------------------------------------
 
-As always, first draw the picture.
+Zeichnen Sie wie immer zunächst das Bild.
 
 ```{r}
 #| fig-asp: 0.4
@@ -770,46 +770,46 @@ normTail(70, 3.3, L = qnorm(0.4, 70, 3.3), col = IMSCOL["blue", "full"])
 text(67, 0.03, "40%\n(0.40)", cex = 1, col = IMSCOL["black", "full"])
 ```
 
-In this case, the lower tail probability is known (0.40), which can be shaded on the diagram.
-We want to find the observation that corresponds to the known probability of 0.4.
-We can find the observation in two different ways: using the height curve seen above or using the Z score associated with the standard normal curve centered at zero with a standard deviation of one.
+In diesem Fall ist die untere Schwanzwahrscheinlichkeit bekannt (0,40), die im Diagramm schattiert werden kann.
+Wir möchten die Beobachtung finden, die der bekannten Wahrscheinlichkeit von 0,4 entspricht.
+Wir können die Beobachtung auf zwei verschiedene Weisen finden: mithilfe der oben gezeigten Körpergrößenkurve oder mithilfe des Z-Werts, der mit der Standardnormalverteilungskurve mit Zentrum bei null und einer Standardabweichung von eins verbunden ist.
 
-If you have access to software (like R, code seen below) that allows you to specify the mean and standard deviation of the normal curve, you can calculate the observed value on the curve (i.e., Yousef's height) directly.
+Wenn Sie Zugang zu Software (wie R, Code unten) haben, die es Ihnen ermöglicht, den Mittelwert und die Standardabweichung der Normalverteilungskurve anzugeben, können Sie den beobachteten Wert auf der Kurve (d.h. Yousefs Körpergröße) direkt berechnen.
 
 ```{r}
 qnorm(0.4, mean = 70, sd = 3.3)
 ```
 
-Yousef is 69.2 inches tall.
-That is, Yousef is about 5'9" (this is notation for 5-feet, 9-inches).
+Yousef ist 69,2 Zoll groß.
+Das heißt, Yousef ist etwa 5'9" (das ist eine Notation für 5 Fuß und 9 Zoll).
 
-Without access to flexible software, you will need the information given by a standard normal curve (a normal curve centered at zero with a standard deviation of one).
-First, determine the Z score associated with the $40^{th}$ percentile.
+Ohne Zugang zu flexibler Software benötigen Sie die Informationen, die von einer Standardnormalverteilungskurve gegeben werden (eine Normalverteilungskurve mit Zentrum bei null und einer Standardabweichung von eins).
+Bestimmen Sie zunächst den Z-Wert, der dem $40.$ Perzentil entspricht.
 
-Because the percentile is below 50%, we know $Z$ will be negative.
-Statistical software provides the $Z$ value to be $-0.25.$
+Da das Perzentil unter 50% liegt, wissen wir, dass $Z$ negativ sein wird.
+Die statistische Software liefert den $Z$-Wert als $-0{,}25.$
 
 ```{r}
 #| echo: true
 qnorm(0.4, mean = 0, sd = 1)
 ```
 
-Knowing $Z_{Yousef}=-0.25$ and the population parameters $\mu=70$ and $\sigma=3.3$ inches, the Z score formula can be set up to determine Yousef's unknown height, labeled $x_{Yousef}$:
+Mit $Z_{Yousef}=-0{,}25$ und den Populationsparametern $\mu=70$ und $\sigma=3{,}3$ Zoll kann die Z-Wert-Formel aufgestellt werden, um Yousefs unbekannte Körpergröße zu bestimmen, beschriftet als $x_{Yousef}$:
 
 $$ -0.253 = Z_{Yousef} = \frac{x_{Yousef} - \mu}{\sigma} = \frac{x_{Yousef} - 70}{3.3} $$
 
-Solving for $x_{Yousef}$ yields the height 69.2 inches.
-Again, Yousef is about 5'9".
+Die Lösung für $x_{Yousef}$ ergibt eine Körpergröße von 69,2 Zoll.
+Wieder ist Yousef etwa 5'9".
 :::
 
 ::: {.workedexample data-latex=""}
-What is the adult male height at the $82^{nd}$ percentile?
+Wie groß ist die Körpergröße eines erwachsenen Mannes im $82.$ Perzentil?
 
 ------------------------------------------------------------------------
 
-In order to practice using Z scores, we will use the standard normal curve to solve the problem.
+Um die Verwendung von Z-Werten zu üben, werden wir die Standardnormalverteilungskurve zur Lösung des Problems verwenden.
 
-Again, we draw the figure first.
+Wir zeichnen zunächst wieder die Abbildung.
 
 ```{r}
 #| label: height82Perc
@@ -823,50 +823,50 @@ text(70, 0.04, "82%\n(0.82)", cex = 1, col = IMSCOL["black", "full"])
 text(74.3, 0.02, "18%\n(0.18)", cex = 1, col = IMSCOL["black", "full"])
 ```
 
-And calculate the Z value associated with the $82^{nd}$ percentile:
+Und berechnen Sie den Z-Wert, der dem $82.$ Perzentil entspricht:
 
 ```{r}
 #| echo: true
 qnorm(0.82, mean = 0, sd = 1)
 ```
 
-Next, we want to find the Z score at the $82^{nd}$ percentile, which will be a positive value (because the percentile is bigger than 50%).
-Using `qnorm()`, the $82^{nd}$ percentile corresponds to $Z=0.92.$ Finally, the height $x$ is found using the Z score formula with the known mean $\mu,$ standard deviation $\sigma,$ and Z score $Z=0.92$:
+Als nächstes möchten wir den Z-Wert beim $82.$ Perzentil finden, der positiv sein wird (da das Perzentil größer als 50% ist).
+Mit `qnorm()` entspricht das $82.$ Perzentil $Z=0{,}92.$ Schließlich wird die Körpergröße $x$ mithilfe der Z-Wert-Formel mit dem bekannten Mittelwert $\mu,$ der Standardabweichung $\sigma$ und dem Z-Wert $Z=0{,}92$ gefunden:
 
-$$ 0.92 = Z = \frac{x-\mu}{\sigma} = \frac{x - 70}{3.3} $$
+$$ 0{,}92 = Z = \frac{x-\mu}{\sigma} = \frac{x - 70}{3{,}3} $$
 
-This yields 73.04 inches or about 6'1" as the height at the $82^{nd}$ percentile.
+Das ergibt 73,04 Zoll oder etwa 6'1" als Körpergröße im $82.$ Perzentil.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Using Z scores, answer the following questions.
+Beantworten Sie die folgenden Fragen mithilfe von Z-Werten.
 
-(a) What is the $95^{th}$ percentile for SAT scores?\
-(b) What is the $97.5^{th}$ percentile of the male heights? As always with normal probability problems, first draw a picture.[^13-foundations-mathematical-11]
+(a) Was ist das $95.$ Perzentil für SAT-Ergebnisse?\
+(b) Was ist das $97{,}5.$ Perzentil der männlichen Körpergrößen? Zeichnen Sie wie immer bei Normalwahrscheinlichkeitsproblemen zuerst ein Bild.[^13-foundations-mathematical-11]
 :::
 
-[^13-foundations-mathematical-11]: Remember: draw a picture first, then find the Z score.
-    (We leave the pictures to you.) The Z score can be found by using the percentiles and the normal probability table.
-    (a) We look for 0.95 in the probability portion (middle part) of the normal probability table, which leads us to row 1.6 and (about) column 0.05, i.e., $Z_{95}=1.65.$ Knowing $Z_{95}=1.65,$ $\mu = 1500,$ and $\sigma = 300,$ we setup the Z score formula: $1.65 = \frac{x_{95} - 1500}{300}.$ We solve for $x_{95}$: $x_{95} = 1995.$ (b) Similarly, we find $Z_{97.5} = 1.96,$ again setup the Z score formula for the heights, and calculate $x_{97.5} = 76.5.$
+[^13-foundations-mathematical-11]: Denken Sie daran: Zeichnen Sie zuerst ein Bild, dann finden Sie den Z-Wert.
+    (Wir überlassen Ihnen die Bilder.) Der Z-Wert kann mithilfe der Perzentile und der Normalwahrscheinlichkeitstabelle gefunden werden.
+    (a) Wir suchen 0,95 im Wahrscheinlichkeitsteil (mittlerer Teil) der Normalwahrscheinlichkeitstabelle, was uns zu Zeile 1,6 und (etwa) Spalte 0,05 führt, d.h. $Z_{95}=1{,}65.$ Mit $Z_{95}=1{,}65,$ $\mu = 1500$ und $\sigma = 300$ setzen wir die Z-Wert-Formel auf: $1{,}65 = \frac{x_{95} - 1500}{300}.$ Wir lösen für $x_{95}$: $x_{95} = 1995.$ (b) Ähnlich finden wir $Z_{97{,}5} = 1{,}96,$ setzen die Z-Wert-Formel für die Körpergrößen auf und berechnen $x_{97{,}5} = 76{,}5.$
 
 ::: {.guidedpractice data-latex=""}
-Using Z scores, answer the following questions.
+Beantworten Sie die folgenden Fragen mithilfe von Z-Werten.
 
-(a) What is the probability that a randomly selected male adult is at least 6'2" (74 inches)?\
-(b) What is the probability that a male adult is shorter than 5'9" (69 inches)?[^13-foundations-mathematical-12]
+(a) Wie hoch ist die Wahrscheinlichkeit, dass ein zufällig ausgewählter erwachsener Mann mindestens 6'2" (74 Zoll) groß ist?\
+(b) Wie hoch ist die Wahrscheinlichkeit, dass ein erwachsener Mann kleiner als 5'9" (69 Zoll) ist?[^13-foundations-mathematical-12]
 :::
 
-[^13-foundations-mathematical-12]: Numerical answers: (a) 0.1131.
-    (b) 0.3821.
+[^13-foundations-mathematical-12]: Numerische Antworten: (a) 0,1131.
+    (b) 0,3821.
 
 ::: {.workedexample data-latex=""}
-What is the probability that a randomly selected adult male is between 5'9" and 6'2"?
+Wie hoch ist die Wahrscheinlichkeit, dass ein zufällig ausgewählter erwachsener Mann zwischen 5'9" und 6'2" groß ist?
 
 ------------------------------------------------------------------------
 
-These heights correspond to 69 inches and 74 inches.
-First, draw the figure.
-The area of interest is no longer an upper or lower tail.
+Diese Körpergrößen entsprechen 69 Zoll und 74 Zoll.
+Zeichnen Sie zunächst die Abbildung.
+Der interessierende Bereich ist kein oberer oder unterer Schwanz mehr.
 
 ```{r}
 #| fig-asp: 0.4
@@ -877,8 +877,8 @@ par(mar = c(2, 0, 0, 0))
 normTail(70, 3.3, M = c(69, 74), col = IMSCOL["blue", "full"])
 ```
 
-The total area under the curve is 1.
-If we find the area of the two tails that are not shaded (from the previous Guided Practice, these areas are $0.3821$ and $0.1131$), then we can find the middle area:
+Die Gesamtfläche unter der Kurve beträgt 1.
+Wenn wir die Fläche der beiden nicht schattierten Schwänze finden (aus der vorherigen geführten Übung betragen diese Flächen $0{,}3821$ und $0{,}1131$), können wir die mittlere Fläche finden:
 
 ```{r}
 #| fig-asp: 0.25
@@ -917,34 +917,34 @@ text(16, 0.53, "0.1131")
 text(24, 0.53, "0.5048")
 ```
 
-That is, the probability of being between 5'9" and 6'2" is 0.5048.
+Das heißt, die Wahrscheinlichkeit, zwischen 5'9" und 6'2" groß zu sein, beträgt 0,5048.
 :::
 
 ::: {.guidedpractice data-latex=""}
-Find the percent of SAT takers who earn between 1500 and 2000.[^13-foundations-mathematical-13]
+Finden Sie den Prozentsatz der SAT-Teilnehmer, die zwischen 1500 und 2000 Punkte erzielen.[^13-foundations-mathematical-13]
 :::
 
-[^13-foundations-mathematical-13]: This is an abbreviated solution.
-    (Be sure to draw a figure!) First find the percent who get below 1500 and the percent that get above 2000: $Z_{1500} = 0.00 \to 0.5000$ (area below), $Z_{2000} = 1.67 \to 0.0475$ (area above).
-    Final answer: $1.0000-0.5000 - 0.0475 = 0.4525.$
+[^13-foundations-mathematical-13]: Das ist eine abgekürzte Lösung.
+    (Zeichnen Sie unbedingt eine Abbildung!) Finden Sie zunächst den Prozentsatz, der unter 1500 liegt, und den Prozentsatz, der über 2000 liegt: $Z_{1500} = 0{,}00 \to 0{,}5000$ (Fläche unten), $Z_{2000} = 1{,}67 \to 0{,}0475$ (Fläche oben).
+    Endantwort: $1{,}0000-0{,}5000 - 0{,}0475 = 0{,}4525.$
 
 ::: {.guidedpractice data-latex=""}
-What percent of adult males are between 5'5" and 5'7"?[^13-foundations-mathematical-14]
+Welcher Prozentsatz der erwachsenen Männer ist zwischen 5'5" und 5'7" groß?[^13-foundations-mathematical-14]
 :::
 
-[^13-foundations-mathematical-14]: 5'5" is 65 inches.
-    5'7" is 67 inches.
-    Numerical solution: $1.000 - 0.0649 - 0.8183 = 0.1168,$ i.e., 11.68%.
+[^13-foundations-mathematical-14]: 5'5" sind 65 Zoll.
+    5'7" sind 67 Zoll.
+    Numerische Lösung: $1{,}000 - 0{,}0649 - 0{,}8183 = 0{,}1168,$ d.h. 11,68%.
 
-## Quantifying the variability of a statistic
+## Quantifizierung der Variabilität einer Statistik
 
-As seen in later chapters, it turns out that many of the statistics used to summarize data (e.g., the sample proportion, the sample mean, differences in two sample proportions, differences in two sample means, the sample slope from a linear model, etc.) vary according to the normal distribution seen above.
-The mathematical models are derived from the normal theory, but even the computational methods (and the intuitive thinking behind both approaches) use the general bell-shaped variability seen in most of the distributions constructed so far.
+Wie in späteren Kapiteln zu sehen ist, folgen viele der Statistiken, die zur Zusammenfassung von Daten verwendet werden (z.B. der Stichprobenanteil, der Stichprobenmittelwert, Unterschiede in zwei Stichprobenanteilen, Unterschiede in zwei Stichprobenmittelwerten, der Stichprobenkoeffizient aus einem linearen Modell usw.), der oben beschriebenen Normalverteilung.
+Die mathematischen Modelle leiten sich aus der Normaltheorie ab, aber selbst die computergestützten Methoden (und das intuitive Denken hinter beiden Ansätzen) verwenden die allgemeine glockenförmige Variabilität, die in den meisten bisher konstruierten Verteilungen zu sehen ist.
 
-### 68-95-99.7 rule
+### 68-95-99,7-Regel
 
-Here, we present a useful general rule for the probability of falling within 1, 2, and 3 standard deviations of the mean in the normal distribution.
-The rule will be useful in a wide range of practical settings, especially when trying to make a quick estimate without a calculator or Z table.
+Hier stellen wir eine nützliche allgemeine Regel für die Wahrscheinlichkeit vor, innerhalb von 1, 2 und 3 Standardabweichungen vom Mittelwert in der Normalverteilung zu liegen.
+Die Regel wird in einer Vielzahl von praktischen Einstellungen nützlich sein, insbesondere wenn man versucht, eine schnelle Schätzung ohne Taschenrechner oder Z-Tabelle vorzunehmen.
 
 ```{r}
 #| label: fig-er6895997
@@ -989,89 +989,89 @@ abline(h = 0, col = "#AAAAAA")
 ```
 
 ::: {.guidedpractice data-latex=""}
-Use `pnorm()` (or a Z table) to confirm that about 68%, 95%, and 99.7% of observations fall within 1, 2, and 3, standard deviations of the mean in the normal distribution, respectively.
-For instance, first find the area that falls between $Z=-1$ and $Z=1,$ which should have an area of about 0.68.
-Similarly there should be an area of about 0.95 between $Z=-2$ and $Z=2.$[^13-foundations-mathematical-15]
+Verwenden Sie `pnorm()` (oder eine Z-Tabelle), um zu bestätigen, dass etwa 68%, 95% und 99,7% der Beobachtungen innerhalb von 1, 2 bzw. 3 Standardabweichungen vom Mittelwert in der Normalverteilung liegen.
+Finden Sie zum Beispiel zunächst die Fläche, die zwischen $Z=-1$ und $Z=1$ liegt, was etwa 0,68 betragen sollte.
+Ähnlich sollte es eine Fläche von etwa 0,95 zwischen $Z=-2$ und $Z=2$ geben.[^13-foundations-mathematical-15]
 :::
 
-[^13-foundations-mathematical-15]: First draw the pictures.
-    To find the area between $Z=-1$ and $Z=1,$ use `pnorm()` or the normal probability table to determine the areas below $Z=-1$ and above $Z=1.$ Next verify the area between $Z=-1$ and $Z=1$ is about 0.68.
-    Repeat this for $Z=-2$ to $Z=2$ and for $Z=-3$ to $Z=3.$
+[^13-foundations-mathematical-15]: Zeichnen Sie zunächst die Bilder.
+    Um die Fläche zwischen $Z=-1$ und $Z=1$ zu finden, verwenden Sie `pnorm()` oder die Normalwahrscheinlichkeitstabelle, um die Flächen unterhalb von $Z=-1$ und oberhalb von $Z=1$ zu bestimmen. Überprüfen Sie dann, dass die Fläche zwischen $Z=-1$ und $Z=1$ etwa 0,68 beträgt.
+    Wiederholen Sie dies für $Z=-2$ bis $Z=2$ und für $Z=-3$ bis $Z=3.$
 
-It is possible for a normal random variable to fall 4, 5, or even more standard deviations from the mean.
-However, these occurrences are very rare if the data are nearly normal.
-The probability of being further than 4 standard deviations from the mean is about 1-in-30,000.
-For 5 and 6 standard deviations, it is about 1-in-3.5 million and 1-in-1 billion, respectively.
+Es ist möglich, dass eine normalverteilte Zufallsvariable 4, 5 oder sogar mehr Standardabweichungen vom Mittelwert entfernt liegt.
+Diese Vorkommnisse sind jedoch sehr selten, wenn die Daten annähernd normal sind.
+Die Wahrscheinlichkeit, mehr als 4 Standardabweichungen vom Mittelwert entfernt zu sein, beträgt etwa 1-zu-30.000.
+Für 5 und 6 Standardabweichungen ist es etwa 1-zu-3,5 Millionen bzw. 1-zu-1 Milliarde.
 
 ::: {.guidedpractice data-latex=""}
-SAT scores closely follow the normal model with mean $\mu = 1500$ and standard deviation $\sigma = 300.$ About what percent of test takers score 900 to 2100?
-What percent score between 1500 and 2100 ?[^13-foundations-mathematical-16]
+SAT-Ergebnisse folgen eng dem Normalmodell mit Mittelwert $\mu = 1500$ und Standardabweichung $\sigma = 300.$ Etwa wie viel Prozent der Prüfungsteilnehmer erzielen zwischen 900 und 2100 Punkte?
+Welcher Prozentsatz erzielt zwischen 1500 und 2100 Punkte?[^13-foundations-mathematical-16]
 :::
 
-[^13-foundations-mathematical-16]: 900 and 2100 represent two standard deviations above and below the mean, which means about 95% of test takers will score between 900 and 2100.
-    Since the normal model is symmetric, then half of the test takers from part (a) ($\frac{95\%}{2} = 47.5\%$ of all test takers) will score 900 to 1500 while 47.5% score between 1500 and 2100.
+[^13-foundations-mathematical-16]: 900 und 2100 repräsentieren zwei Standardabweichungen über und unter dem Mittelwert, was bedeutet, dass etwa 95% der Prüfungsteilnehmer zwischen 900 und 2100 Punkte erzielen werden.
+    Da das Normalmodell symmetrisch ist, wird die Hälfte der Prüfungsteilnehmer aus Teil (a) ($\frac{95\%}{2} = 47{,}5\%$ aller Prüfungsteilnehmer) 900 bis 1500 Punkte erzielen, während 47,5% zwischen 1500 und 2100 Punkte erzielen.
 
-### Standard error {#sec-se}
+### Standardfehler {#sec-se}
 
-Point estimates vary from sample to sample, and we quantify this variability with what is called the **standard error (SE)**\index{standard error}.
-The standard error is equal to the standard deviation associated with the statistic.
-So, for example, to quantify the variability of a point estimate from one sample to the next, the variability is called the standard error of the point estimate.
-Almost always, the standard error is itself an estimate, calculated from the sample of data.
+Punktschätzungen variieren von Stichprobe zu Stichprobe, und wir quantifizieren diese Variabilität mit dem sogenannten **Standardfehler (SE)**\index{standard error}.
+Der Standardfehler ist gleich der Standardabweichung, die mit der Statistik verbunden ist.
+Um beispielsweise die Variabilität einer Punktschätzung von einer Stichprobe zur nächsten zu quantifizieren, wird die Variabilität als Standardfehler der Punktschätzung bezeichnet.
+Fast immer ist der Standardfehler selbst eine Schätzung, die aus der Datenstichprobe berechnet wird.
 
 ```{r}
 #| include: false
 terms_chp_13 <- c(terms_chp_13, "standard error")
 ```
 
-The way we determine the standard error varies from one situation to the next.
-However, typically it is determined using a formula based on the Central Limit Theorem.
+Die Art und Weise, wie wir den Standardfehler bestimmen, variiert von einer Situation zur nächsten.
+Typischerweise wird er jedoch mithilfe einer Formel bestimmt, die auf dem Zentralen Grenzwertsatz basiert.
 
-### Margin of error {#sec-moe}
+### Fehlertoleranz {#sec-moe}
 
-Very related to the standard error is the **margin of error**\index{margin of error}.
-The margin of error describes how far away observations are from their mean.\
-For example, to describe where most (i.e., 95%) observations lie, we say that the margin of error is approximately $2 \times SE$.
-That is, 95% of the observations are within two margins of error of the mean.
+Eng verwandt mit dem Standardfehler ist die **Fehlertoleranz**\index{margin of error}.
+Die Fehlertoleranz beschreibt, wie weit Beobachtungen von ihrem Mittelwert entfernt sind.\
+Um beispielsweise zu beschreiben, wo die meisten (d.h. 95%) Beobachtungen liegen, sagen wir, dass die Fehlertoleranz ungefähr $2 \times SE$ beträgt.
+Das heißt, 95% der Beobachtungen liegen innerhalb von zwei Fehlertoleranzen vom Mittelwert.
 
 ::: {.important data-latex=""}
-**Margin of error for sample proportions.**
+**Fehlertoleranz für Stichprobenanteile.**
 
-The distance given by $z^\star \times SE$ is called the **margin of error**\index{margin of error}.
+Der durch $z^\star \times SE$ gegebene Abstand wird als **Fehlertoleranz**\index{margin of error} bezeichnet.
 
-$z^\star$ is the cutoff value found on the normal distribution.
-The most common value of $z^\star$ is 1.96 (often approximated to be 2) indicating that the margin of error describes the variability associated with 95% of the sampled statistics.
+$z^\star$ ist der auf der Normalverteilung gefundene Grenzwert.
+Der häufigste Wert von $z^\star$ ist 1,96 (oft auf 2 gerundet), was darauf hindeutet, dass die Fehlertoleranz die Variabilität beschreibt, die mit 95% der gesampelten Statistiken verbunden ist.
 :::
 
-Notice that if the spread of the observations goes from some lower bound to some upper bound, a rough approximation of the SE is to divide the range by 4.
-That is, if you notice the sample proportions go from 0.1 to 0.4, the SE can be approximated to be 0.075.
+Beachten Sie, dass wenn die Streuung der Beobachtungen von einer unteren Schranke bis zu einer oberen Schranke geht, eine grobe Annäherung des SE darin besteht, den Bereich durch 4 zu teilen.
+Das heißt, wenn Sie bemerken, dass die Stichprobenanteile von 0,1 bis 0,4 gehen, kann der SE auf 0,075 geschätzt werden.
 
 ```{r}
 #| include: false
 terms_chp_13 <- c(terms_chp_13, "margin of error")
 ```
 
-## Case Study (test): Opportunity cost {#sec-caseopp}
+## Fallstudie (Test): Opportunitätskosten {#sec-caseopp}
 
-The approach for using the normal model in the context of inference is very similar to the practice of applying the model to individual observations that are nearly normal.
-We will replace null distributions we previously obtained using the randomization or simulation techniques and verify the results once again using the normal model.
-When the sample size is sufficiently large, the normal approximation generally provides us with the same conclusions as the simulation model.
+Der Ansatz zur Verwendung des Normalmodells im Kontext der Inferenz ist dem der Anwendung des Modells auf einzelne Beobachtungen, die annähernd normal sind, sehr ähnlich.
+Wir werden die Nullverteilungen, die wir zuvor mithilfe der Randomisierungs- oder Simulationstechniken erhalten haben, ersetzen und die Ergebnisse erneut mithilfe des Normalmodells verifizieren.
+Wenn der Stichprobenumfang ausreichend groß ist, liefert die Normalverteilungsannäherung im Allgemeinen dieselben Schlussfolgerungen wie das Simulationsmodell.
 
-### Observed data
+### Beobachtete Daten
 
-In @sec-caseStudyOpportunityCost we were introduced to the opportunity cost study, which found that students became thriftier when they were reminded that not spending money now means the money can be spent on other things in the future.
-Let's re-analyze the data in the context of the normal distribution and compare the results.
+In @sec-caseStudyOpportunityCost wurden wir mit der Opportunitätskostenstudie bekannt gemacht, die feststellte, dass Studierende sparsamer wurden, wenn sie daran erinnert wurden, dass das Nichtausgeben von Geld jetzt bedeutet, dass das Geld für andere Dinge in der Zukunft ausgegeben werden kann.
+Lassen Sie uns die Daten im Kontext der Normalverteilung neu analysieren und die Ergebnisse vergleichen.
 
 ::: {.data data-latex=""}
-The [`opportunity_cost`](http://openintrostat.github.io/openintro/reference/opportunity_cost.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`opportunity_cost`](http://openintrostat.github.io/openintro/reference/opportunity_cost.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-@fig-OpportunityCostDiffs-w-normal summarizes the null distribution as determined using the randomization method.
-The best fitting normal distribution for the null distribution has a mean of 0.
-We can calculate the standard error of this distribution by borrowing a formula that we will become familiar with in [Chapter -@sec-inference-two-props], but for now let's just take the value $SE = 0.078$ as a given.
-Recall that the point estimate of the difference was 0.20, as shown in @fig-OpportunityCostDiffs-w-normal.
-Next, we'll use the normal distribution approach to compute the p-value.
+@fig-OpportunityCostDiffs-w-normal fasst die Nullverteilung zusammen, die mithilfe der Randomisierungsmethode bestimmt wurde.
+Die am besten passende Normalverteilung für die Nullverteilung hat einen Mittelwert von 0.
+Wir können den Standardfehler dieser Verteilung berechnen, indem wir eine Formel aus [Kapitel -@sec-inference-two-props] ausleihen, aber für jetzt nehmen wir den Wert $SE = 0{,}078$ als gegeben.
+Erinnern Sie sich, dass die Punktschätzung des Unterschieds 0,20 betrug, wie in @fig-OpportunityCostDiffs-w-normal dargestellt.
+Als nächstes werden wir den Normalverteilungsansatz verwenden, um den p-Wert zu berechnen.
 
 ```{r}
 #| label: fig-OpportunityCostDiffs-w-normal
@@ -1104,10 +1104,10 @@ ggplot(opportunity_cost_sim_dist, aes(x = stat)) +
   annotate("text", x = 0.2, y = 2.8, label = "observed\ndifference")
 ```
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Null-Statistiken
 
-As we learned in @sec-normalDist, it is helpful to draw and shade a picture of the normal distribution so we know precisely what we want to calculate.
-Here we want to find the area of the tail beyond 0.2, representing the p-value.
+Wie wir in @sec-normalDist gelernt haben, ist es hilfreich, ein Bild der Normalverteilung zu zeichnen und zu schattieren, damit wir genau wissen, was wir berechnen wollen.
+Hier möchten wir die Fläche des Schwanzes jenseits von 0,2 finden, die den p-Wert darstellt.
 
 ```{r}
 #| label: OpportunityCostDiffs_normal_only
@@ -1119,40 +1119,40 @@ par(mar = c(2, 0, 0, 0))
 normTail(m = 0, s = 0.078, U = 0.2, col = IMSCOL["blue", "full"])
 ```
 
-Next, we can calculate the Z score using the observed difference, 0.20, and the two model parameters.
-The standard error, $SE = 0.078,$ is the equivalent of the model's standard deviation.
+Als nächstes können wir den Z-Wert mithilfe des beobachteten Unterschieds, 0,20, und der zwei Modellparameter berechnen.
+Der Standardfehler, $SE = 0{,}078,$ ist das Äquivalent der Standardabweichung des Modells.
 
-$$Z = \frac{\text{observed difference} - 0}{SE} = \frac{0.20 - 0}{0.078} = 2.56$$
+$$Z = \frac{\text{beobachteter Unterschied} - 0}{SE} = \frac{0{,}20 - 0}{0{,}078} = 2{,}56$$
 
-We can either use statistical software or look up $Z = 2.56$ in the normal probability table to determine the right tail area: 0.0052, which is about the same as what we got for the right tail using the randomization approach (0.006).
-Using this area as the p-value, we see that the p-value is less than 0.05, we conclude that the treatment did indeed impact students' spending.
+Wir können entweder statistische Software verwenden oder $Z = 2{,}56$ in der Normalwahrscheinlichkeitstabelle nachschlagen, um die rechte Schwanzfläche zu bestimmen: 0,0052, was ungefähr dem entspricht, was wir für den rechten Schwanz mit dem Randomisierungsansatz erhalten haben (0,006).
+Da dieser Bereich als p-Wert verwendet wird und der p-Wert kleiner als 0,05 ist, schlussfolgern wir, dass die Behandlung tatsächlich das Ausgabeverhalten der Studierenden beeinflusst hat.
 
 ::: {.important data-latex=""}
-**Z score in a hypothesis test.**
+**Z-Wert in einem Hypothesentest.**
 
-In the context of a hypothesis test, the Z score for a point estimate is
+Im Kontext eines Hypothesentests ist der Z-Wert für eine Punktschätzung
 
-$$Z = \frac{\text{point estimate} - \text{null value}}{SE}$$
+$$Z = \frac{\text{Punktschätzung} - \text{Nullwert}}{SE}$$
 
-The standard error in this case is the equivalent of the standard deviation of the point estimate, and the null value comes from the claim made in the null hypothesis.
+Der Standardfehler in diesem Fall ist das Äquivalent der Standardabweichung der Punktschätzung, und der Nullwert kommt aus der in der Nullhypothese gemachten Behauptung.
 :::
 
-We have confirmed that the randomization approach we used earlier and the normal distribution approach provide almost identical p-values and conclusions in the opportunity cost case study.
-Next, let's turn our attention to the medical consultant case study.
+Wir haben bestätigt, dass der Randomisierungsansatz, den wir früher verwendet haben, und der Normalverteilungsansatz in der Opportunitätskostenfallstudie fast identische p-Werte und Schlussfolgerungen liefern.
+Als nächstes wenden wir unsere Aufmerksamkeit der Fallstudie des medizinischen Beraters zu.
 
-## Case study (test): Medical consultant {#sec-casemed}
+## Fallstudie (Test): Medizinischer Berater {#sec-casemed}
 
-### Observed data
+### Beobachtete Daten
 
-In @sec-case-study-med-consult we learned about a medical consultant who reported that only 3 of their 62 clients who underwent a liver transplant had complications, which is less than the more common complication rate of 0.10.
-In that work, we did not model a null scenario, but we will discuss a simulation method for a one proportion null distribution in @sec-one-prop-null-boot, such a distribution is provided in @fig-MedConsNullSim-w-normal.
-We have added the best-fitting normal curve to the figure, which has a mean of 0.10.
-Borrowing a formula that we'll encounter in [Chapter -@sec-inference-one-prop], the standard error of this distribution was also computed: $SE = 0.038.$
+In @sec-case-study-med-consult erfuhren wir von einem medizinischen Berater, der berichtete, dass nur 3 seiner 62 Klienten, die eine Lebertransplantation unterzogen wurden, Komplikationen hatten, was weniger als die häufigere Komplikationsrate von 0,10 ist.
+In dieser Arbeit haben wir kein Null-Szenario modelliert, aber wir werden eine Simulationsmethode für eine Ein-Anteil-Nullverteilung in @sec-one-prop-null-boot besprechen, eine solche Verteilung ist in @fig-MedConsNullSim-w-normal bereitgestellt.
+Wir haben die am besten passende Normalverteilungskurve zur Abbildung hinzugefügt, die einen Mittelwert von 0,10 hat.
+Unter Verwendung einer Formel aus [Kapitel -@sec-inference-one-prop] wurde der Standardfehler dieser Verteilung ebenfalls berechnet: $SE = 0{,}038.$
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-Before we begin, we want to point out a simple detail that is easy to overlook: the null distribution we generated from the simulation is slightly skewed, and the histogram is not particularly smooth.
-In fact, the normal distribution only sort-of fits this model.
+Bevor wir beginnen, möchten wir auf ein einfaches Detail hinweisen, das leicht übersehen werden kann: Die Nullverteilung, die wir aus der Simulation generiert haben, ist leicht schief, und das Histogramm ist nicht besonders glatt.
+Tatsächlich passt die Normalverteilung dieses Modell nur halbwegs gut.
 
 ```{r}
 #| label: fig-MedConsNullSim-w-normal
@@ -1188,10 +1188,10 @@ ggplot(medical_consultant_sim_dist, aes(x = stat)) +
   annotate("text", x = 0.05, y = 9, label = "observed\nvalue")
 ```
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Null-Statistiken
 
-As always, we'll draw a picture before finding the normal probabilities.
-Below is a normal distribution centered at 0.10 with a standard error of 0.038.
+Wie immer zeichnen wir ein Bild, bevor wir die Normalwahrscheinlichkeiten finden.
+Unten ist eine Normalverteilung mit Zentrum bei 0,10 und einem Standardfehler von 0,038.
 
 ```{r}
 #| label: MedConsNullSim-normal-only
@@ -1203,57 +1203,57 @@ par(mar = c(2, 0, 0, 0))
 normTail(m = 0.1, s = 0.038, L = 0.048, col = IMSCOL["blue", "full"])
 ```
 
-Next, we can calculate the Z score using the observed complication rate, $\hat{p} = 0.048$ along with the mean and standard deviation of the normal model.
-Here again, we use the standard error for the standard deviation.
+Als nächstes können wir den Z-Wert mithilfe der beobachteten Komplikationsrate, $\hat{p} = 0{,}048$, zusammen mit dem Mittelwert und der Standardabweichung des Normalmodells berechnen.
+Hier verwenden wir wieder den Standardfehler für die Standardabweichung.
 
-$$Z = \frac{\hat{p} - p_0}{SE_{\hat{p}}} = \frac{0.048 - 0.10}{0.038} = -1.37$$
+$$Z = \frac{\hat{p} - p_0}{SE_{\hat{p}}} = \frac{0{,}048 - 0{,}10}{0{,}038} = -1{,}37$$
 
-Identifying $Z = -1.37$ using statistical software or in the normal probability table, we can determine that the left tail area is 0.0853 which is the estimated p-value for the hypothesis test.
-There is a small problem: the p-value of 0.0853 is almost 30% smaller than the simulation p-value of 0.1222 which will be calculated in @sec-one-prop-null-boot.
+Durch Identifizierung von $Z = -1{,}37$ mithilfe statistischer Software oder in der Normalwahrscheinlichkeitstabelle können wir bestimmen, dass die linke Schwanzfläche 0,0853 beträgt, was der geschätzte p-Wert für den Hypothesentest ist.
+Es gibt ein kleines Problem: Der p-Wert von 0,0853 ist fast 30% kleiner als der Simulations-p-Wert von 0,1222, der in @sec-one-prop-null-boot berechnet wird.
 
-The discrepancy is explained by the normal model's poor representation of the null distribution in @fig-MedConsNullSim-w-normal.
-As noted earlier, the null distribution from the simulations is not very smooth, and the distribution itself is slightly skewed.
-That's the bad news.
-The good news is that we can foresee these problems using some simple checks.
-We'll learn more about these checks in the following chapters.
+Die Diskrepanz wird durch die schlechte Darstellung der Nullverteilung durch das Normalmodell in @fig-MedConsNullSim-w-normal erklärt.
+Wie bereits erwähnt, ist die Nullverteilung aus den Simulationen nicht sehr glatt, und die Verteilung selbst ist leicht schief.
+Das sind die schlechten Nachrichten.
+Die guten Nachrichten sind, dass wir diese Probleme mithilfe einiger einfacher Überprüfungen vorhersehen können.
+Wir werden in den folgenden Kapiteln mehr über diese Überprüfungen erfahren.
 
-In @sec-CLTsection we noted that the two common requirements to apply the Central Limit Theorem are (1) the observations in the sample must be independent, and (2) the sample must be sufficiently large.
-The guidelines for this particular situation -- which we will learn in [Chapter -@sec-inference-one-prop] -- would have alerted us that the normal model was a poor approximation.
+In @sec-CLTsection haben wir darauf hingewiesen, dass die zwei häufigen Anforderungen zur Anwendung des Zentralen Grenzwertsatzes sind: (1) Die Beobachtungen in der Stichprobe müssen unabhängig sein, und (2) die Stichprobe muss ausreichend groß sein.
+Die Richtlinien für diese spezielle Situation – die wir in [Kapitel -@sec-inference-one-prop] erlernen werden – hätten uns gewarnt, dass das Normalmodell eine schlechte Approximation war.
 
-### Conditions for applying the normal model
+### Bedingungen für die Anwendung des Normalmodells
 
-The success story in this section was the application of the normal model in the context of the opportunity cost data.
-However, the biggest lesson comes from the less successful attempt to use the normal approximation in the medical consultant case study.
+Die Erfolgsgeschichte in diesem Abschnitt war die Anwendung des Normalmodells im Kontext der Opportunitätskostendaten.
+Die wichtigste Lehre ergibt sich jedoch aus dem weniger erfolgreichen Versuch, die Normalverteilungsannäherung in der Fallstudie des medizinischen Beraters zu verwenden.
 
-Statistical techniques are like a carpenter's tools.
-When used responsibly, they can produce amazing and precise results.
-However, if the tools are applied irresponsibly or under inappropriate conditions, they will produce unreliable results.
-For this reason, with every statistical method that we introduce in future chapters, we will carefully outline conditions when the method can reasonably be used.
-These conditions should be checked in each application of the technique.
+Statistische Techniken sind wie die Werkzeuge eines Tischlers.
+Wenn sie verantwortungsbewusst eingesetzt werden, können sie erstaunliche und präzise Ergebnisse liefern.
+Wenn die Werkzeuge jedoch unverantwortlich oder unter ungeeigneten Bedingungen angewendet werden, liefern sie unzuverlässige Ergebnisse.
+Aus diesem Grund werden wir bei jeder statistischen Methode, die wir in zukünftigen Kapiteln vorstellen, sorgfältig die Bedingungen beschreiben, unter denen die Methode sinnvoll verwendet werden kann.
+Diese Bedingungen sollten bei jeder Anwendung der Technik überprüft werden.
 
-After covering the introductory topics in this course, advanced study may lead to working with complex models which, for example, bring together many variables with different variability structure.
-Working with data that come from normal populations makes higher-order models easier to estimate and interpret.
-There are times when simulation, randomization, or bootstrapping are unwieldy in either structure or computational demand.
-Normality can often lead to excellent approximations of the data using straightforward modeling techniques.
+Nach der Behandlung der einführenden Themen in diesem Kurs kann ein fortgeschrittenes Studium dazu führen, mit komplexen Modellen zu arbeiten, die beispielsweise viele Variablen mit unterschiedlicher Variabilitätsstruktur zusammenbringen.
+Das Arbeiten mit Daten, die aus normalen Populationen stammen, macht Modelle höherer Ordnung einfacher zu schätzen und zu interpretieren.
+Es gibt Zeiten, in denen Simulation, Randomisierung oder Bootstrapping in Struktur oder rechnerischem Aufwand unhandlich sind.
+Die Normalität kann oft zu hervorragenden Approximationen der Daten mithilfe unkomplizierter Modellierungstechniken führen.
 
-## Case study (interval): Stents {#sec-casestent}
+## Fallstudie (Intervall): Stents {#sec-casestent}
 
-A point estimate is our best guess for the value of the parameter, so it makes sense to build the confidence interval around that value.
-The standard error, which is a measure of the uncertainty associated with the point estimate, provides a guide for how large we should make the confidence interval.
-The 68-95-99.7 rule tells us that, in general, 95% of observations are within 2 standard errors of the mean.
-Here, we use the value 1.96 to be slightly more precise.
+Eine Punktschätzung ist unsere beste Schätzung für den Wert des Parameters, daher ist es sinnvoll, das Konfidenzintervall um diesen Wert zu konstruieren.
+Der Standardfehler, der ein Maß für die mit der Punktschätzung verbundene Unsicherheit ist, gibt eine Orientierung, wie groß wir das Konfidenzintervall machen sollten.
+Die 68-95-99,7-Regel sagt uns, dass im Allgemeinen 95% der Beobachtungen innerhalb von 2 Standardfehlern vom Mittelwert liegen.
+Hier verwenden wir den Wert 1,96, um etwas präziser zu sein.
 
 ::: {.important data-latex=""}
-**Constructing a 95% confidence interval.**
+**Konstruktion eines 95%-Konfidenzintervalls.**
 
-When the sampling distribution of a point estimate can reasonably be modeled as normal, the point estimate we observe will be within 1.96 standard errors of the true value of interest about 95% of the time.
-Thus, a **95% confidence interval**\index{95\% confidence interval}\index{confidence interval} for such a point estimate can be constructed:
+Wenn die Stichprobenverteilung einer Punktschätzung vernünftigerweise als normal modelliert werden kann, liegt die beobachtete Punktschätzung etwa 95% der Zeit innerhalb von 1,96 Standardfehlern des wahren interessierenden Werts.
+Daher kann ein **95%-Konfidenzintervall**\index{95\% confidence interval}\index{confidence interval} für eine solche Punktschätzung konstruiert werden:
 
 \vspace{-5mm}
 
-$$\text{point estimate} \pm 1.96 \times SE$$
+$$\text{Punktschätzung} \pm 1{,}96 \times SE$$
 
-We can be **95% confident**\index{95\% confident} this interval captures the true value.
+Wir können zu **95% sicher**\index{95\% confident} sein, dass dieses Intervall den wahren Wert erfasst.
 :::
 
 \vspace{-3mm}
@@ -1264,38 +1264,38 @@ terms_chp_13 <- c(terms_chp_13, "95% confidence interval", "95% confident")
 ```
 
 ::: {.guidedpractice data-latex=""}
-Compute the area between -1.96 and 1.96 for a normal distribution with mean 0 and standard deviation 1.[^13-foundations-mathematical-17]
+Berechnen Sie die Fläche zwischen -1,96 und 1,96 für eine Normalverteilung mit Mittelwert 0 und Standardabweichung 1.[^13-foundations-mathematical-17]
 :::
 
-[^13-foundations-mathematical-17]: We will leave it to you to draw a picture.
-    The Z scores are $Z_{left} = -1.96$ and $Z_{right} = 1.96.$ The area between these two Z scores is $0.9750 - 0.0250 = 0.9500.$ This is where "1.96" comes from in the 95% confidence interval formula.
+[^13-foundations-mathematical-17]: Wir überlassen Ihnen das Zeichnen des Bilds.
+    Die Z-Werte sind $Z_{links} = -1{,}96$ und $Z_{rechts} = 1{,}96.$ Die Fläche zwischen diesen beiden Z-Werten beträgt $0{,}9750 - 0{,}0250 = 0{,}9500.$ Daher kommt die „1,96" in der 95%-Konfidenzintervallformel.
 
 ::: {.workedexample data-latex=""}
-The point estimate in the opportunity cost study was that 20% fewer students would buy a video if they were reminded that money not spent now could be spent later on something else.
-This point estimate can reasonably be modeled with a normal distribution with a standard error of $SE = 0.078.$ Construct a 95% confidence interval for the point estimate.
+Die Punktschätzung in der Opportunitätskostenstudie war, dass 20% weniger Studierende ein Video kaufen würden, wenn sie daran erinnert wurden, dass Geld, das jetzt nicht ausgegeben wird, später für etwas anderes ausgegeben werden könnte.
+Diese Punktschätzung kann vernünftigerweise mit einer Normalverteilung mit einem Standardfehler von $SE = 0{,}078$ modelliert werden. Konstruieren Sie ein 95%-Konfidenzintervall für die Punktschätzung.
 
 ------------------------------------------------------------------------
 
-Since we're told the point estimate can be modeled with a normal distribution:
+Da uns gesagt wird, dass die Punktschätzung mit einer Normalverteilung modelliert werden kann:
 
 \vspace{-5mm}
 
-$$\text{point estimate} \pm 1.96 \times SE = 0.20 \pm 1.96 \times 0.078 = (0.047, 0.353)$$
+$$\text{Punktschätzung} \pm 1{,}96 \times SE = 0{,}20 \pm 1{,}96 \times 0{,}078 = (0{,}047; 0{,}353)$$
 
-We are 95% confident that the video purchase rate resulting from the treatment is between 4.7% and 35.3% lower than in the control group.
-Since this confidence interval does not contain 0, it is consistent with our earlier hypothesis test where we rejected the notion of "no difference".
+Wir sind zu 95% sicher, dass die Videokaufrate, die aus der Behandlung resultiert, zwischen 4,7% und 35,3% niedriger ist als in der Kontrollgruppe.
+Da dieses Konfidenzintervall die 0 nicht enthält, stimmt es mit unserem früheren Hypothesentest überein, bei dem wir die Annahme „kein Unterschied" abgelehnt haben.
 
-Note that we have used SE = 0.078 from the last section.
-However, it would more generally be appropriate to recompute the SE slightly differently for this confidence interval using sample proportions.
-Don't worry about this detail for now since the two resulting standard errors are, in this case, almost identical.
+Beachten Sie, dass wir $SE = 0{,}078$ aus dem letzten Abschnitt verwendet haben.
+Im Allgemeinen wäre es jedoch geeigneter, den SE für dieses Konfidenzintervall mithilfe von Stichprobenanteilen etwas anders neu zu berechnen.
+Machen Sie sich jetzt keine Sorgen um dieses Detail, da die beiden resultierenden Standardfehler in diesem Fall fast identisch sind.
 :::
 
-### Observed data
+### Beobachtete Daten
 
-Consider an experiment that examined whether implanting a stent in the brain of a patient at risk for a stroke helps reduce the risk of a stroke.
-The results from the first 30 days of this study, which included 451 patients, are summarized in @tbl-stentStudyResultsCIsection.
-These results are surprising!
-The point estimate suggests that patients who received stents may have a *higher* risk of stroke: $p_{trmt} - p_{ctrl} = 0.090.$
+Betrachten Sie ein Experiment, das untersuchte, ob das Implantieren eines Stents im Gehirn eines Patienten, der einem Schlaganfall gefährdet ist, hilft, das Schlaganfallrisiko zu reduzieren.
+Die Ergebnisse der ersten 30 Tage dieser Studie, die 451 Patienten umfasste, sind in @tbl-stentStudyResultsCIsection zusammengefasst.
+Diese Ergebnisse sind überraschend!
+Die Punktschätzung deutet darauf hin, dass Patienten, die Stents erhielten, möglicherweise ein *höheres* Schlaganfallrisiko haben: $p_{trmt} - p_{ctrl} = 0{,}090.$
 
 ```{r}
 #| label: tbl-stentStudyResultsCIsection
@@ -1317,31 +1317,31 @@ stent30 |>
 ```
 
 ::: {.data data-latex=""}
-The [`stent30`](http://openintrostat.github.io/openintro/reference/stent30.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`stent30`](http://openintrostat.github.io/openintro/reference/stent30.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
-### Variability of the statistic
+### Variabilität der Statistik
 
 ::: {.workedexample data-latex=""}
-Consider the stent study and results.
-The conditions necessary to ensure the point estimate $p_{trmt} - p_{ctrl} = 0.090$ is nearly normal have been verified for you, and the estimate's standard error is $SE = 0.028.$ Construct a 95% confidence interval for the change in 30-day stroke rates from usage of the stent.
+Betrachten Sie die Stent-Studie und ihre Ergebnisse.
+Die notwendigen Bedingungen, um sicherzustellen, dass die Punktschätzung $p_{trmt} - p_{ctrl} = 0{,}090$ annähernd normal ist, wurden für Sie überprüft, und der Standardfehler der Schätzung beträgt $SE = 0{,}028.$ Konstruieren Sie ein 95%-Konfidenzintervall für die Änderung der 30-Tage-Schlaganfallraten durch die Verwendung des Stents.
 
 ------------------------------------------------------------------------
 
-The conditions for applying the normal model have already been verified, so we can proceed to the construction of the confidence interval:
+Die Bedingungen für die Anwendung des Normalmodells wurden bereits überprüft, daher können wir mit der Konstruktion des Konfidenzintervalls fortfahren:
 
-$$\text{point estimate} \pm 1.96 \times SE = 0.090 \pm 1.96 \times 0.028 = (0.035, 0.145)$$
+$$\text{Punktschätzung} \pm 1{,}96 \times SE = 0{,}090 \pm 1{,}96 \times 0{,}028 = (0{,}035; 0{,}145)$$
 
-We are 95% confident that implanting a stent in a stroke patient's brain increased the risk of stroke within 30 days by a rate of 0.035 to 0.145.
-This confidence interval can also be used in a way analogous to a hypothesis test: since the interval does not contain 0 (is completely above 0), it means the data provide convincing evidence that the stent used in the study changed the risk of stroke within 30 days.
+Wir sind zu 95% sicher, dass das Implantieren eines Stents im Gehirn eines Schlaganfallpatienten das Schlaganfallrisiko innerhalb von 30 Tagen um eine Rate von 0,035 bis 0,145 erhöht hat.
+Dieses Konfidenzintervall kann auch analog zu einem Hypothesentest verwendet werden: Da das Intervall die 0 nicht enthält (vollständig über 0 liegt), bedeutet dies, dass die Daten überzeugende Belege dafür liefern, dass der in der Studie verwendete Stent das Schlaganfallrisiko innerhalb von 30 Tagen verändert hat.
 :::
 
-As with hypothesis tests, confidence intervals are imperfect.
-About 1-in-20 properly constructed 95% confidence intervals will fail to capture the parameter of interest, simply due to natural variability in the observed data.
-@fig-95PercentConfidenceInterval shows 25 confidence intervals for a proportion that were constructed from 25 different datasets that all came from the same population where the true proportion was $p = 0.3.$ However, 1 of these 25 confidence intervals happened not to include the true value.
-The interval which does not capture $p=0.3$ is not due to bad science.
-Instead, it is due to natural variability, and we should *expect* some of our intervals to miss the parameter of interest.
-Indeed, over a lifetime of creating 95% intervals, you should expect 5% of your reported intervals to miss the parameter of interest (unfortunately, you will not ever know which of your reported intervals captured the parameter and which missed the parameter).
+Wie bei Hypothesentests sind Konfidenzintervalle unvollkommen.
+Etwa 1-zu-20 korrekt konstruierte 95%-Konfidenzintervalle werden den interessierenden Parameter nicht erfassen, einfach aufgrund natürlicher Variabilität in den beobachteten Daten.
+@fig-95PercentConfidenceInterval zeigt 25 Konfidenzintervalle für einen Anteil, die aus 25 verschiedenen Datensätzen konstruiert wurden, die alle aus derselben Population stammten, bei der der wahre Anteil $p = 0{,}3$ war. Jedoch enthielt 1 dieser 25 Konfidenzintervalle den wahren Wert nicht.
+Das Intervall, das $p=0{,}3$ nicht erfasst, liegt nicht an schlechter Wissenschaft.
+Stattdessen liegt es an natürlicher Variabilität, und wir sollten *erwarten*, dass einige unserer Intervalle den interessierenden Parameter verfehlen.
+Über ein Leben von 95%-Intervallen sollten Sie erwarten, dass 5% Ihrer berichteten Intervalle den interessierenden Parameter verfehlen (leider werden Sie nie wissen, welche Ihrer berichteten Intervalle den Parameter erfasst haben und welche ihn verfehlt haben).
 
 ```{r}
 #| label: fig-95PercentConfidenceInterval
@@ -1394,50 +1394,50 @@ for (i in 1:num.sim) {
 ```
 
 ::: {.guidedpractice data-latex=""}
-In @fig-95PercentConfidenceInterval, one interval does not contain the true proportion, $p = 0.3.$ Does this imply that there was a problem with the datasets that were selected?[^13-foundations-mathematical-18]
+In @fig-95PercentConfidenceInterval enthält ein Intervall nicht den wahren Anteil, $p = 0{,}3.$ Bedeutet dies, dass es ein Problem mit den ausgewählten Datensätzen gab?[^13-foundations-mathematical-18]
 :::
 
-[^13-foundations-mathematical-18]: No.
-    Just as some observations occur more than 1.96 standard deviations from the mean, some point estimates will be more than 1.96 standard errors from the parameter.
-    A confidence interval only provides a plausible range of values for a parameter.
-    While we might say other values are implausible based on the data, this does not mean they are impossible.
+[^13-foundations-mathematical-18]: Nein.
+    Genau wie einige Beobachtungen mehr als 1,96 Standardabweichungen vom Mittelwert auftreten, werden einige Punktschätzungen mehr als 1,96 Standardfehler vom Parameter entfernt sein.
+    Ein Konfidenzintervall bietet nur einen plausiblen Wertebereich für einen Parameter.
+    Während wir sagen könnten, dass andere Werte anhand der Daten unplausibel sind, bedeutet dies nicht, dass sie unmöglich sind.
 
-### Interpreting confidence intervals
+### Interpretation von Konfidenzintervallen
 
-A careful eye might have observed the somewhat awkward language used to describe confidence intervals.
+Ein aufmerksames Auge könnte die etwas umständliche Sprache bemerkt haben, die zur Beschreibung von Konfidenzintervallen verwendet wird.
 
 ::: {.important data-latex=""}
-**Correct confidence interval interpretation.**
+**Korrekte Interpretation des Konfidenzintervalls.**
 
-We are XX% confident that the population parameter is between *lower* and *upper* (where *lower* and *upper* are both numerical values).
+Wir sind zu XX% sicher, dass der Populationsparameter zwischen *unten* und *oben* liegt (wobei *unten* und *oben* beide numerische Werte sind).
 
-**Incorrect** language might try to describe the confidence interval as capturing the population parameter with a certain probability.
+**Falsche** Sprache könnte versuchen, das Konfidenzintervall als den Populationsparameter mit einer bestimmten Wahrscheinlichkeit erfassend zu beschreiben.
 
-This is one of the most common errors: while it might be useful to think of it as a probability, the confidence level only quantifies how plausible it is that the parameter is in the interval.
+Dies ist einer der häufigsten Fehler: Obwohl es nützlich sein mag, es als eine Wahrscheinlichkeit zu betrachten, quantifiziert das Konfidenzniveau nur, wie plausibel es ist, dass der Parameter im Intervall liegt.
 :::
 
-Another especially important consideration of confidence intervals is that they *only try to capture the population parameter*.
-Our intervals say nothing about the confidence of capturing individual observations, a proportion of the observations, or about capturing point estimates.
-Confidence intervals provide an interval estimate for and attempt to capture **population parameters**.
+Eine weitere besonders wichtige Überlegung zu Konfidenzintervallen ist, dass sie *nur versuchen, den Populationsparameter zu erfassen*.
+Unsere Intervalle sagen nichts über die Sicherheit der Erfassung einzelner Beobachtungen, eines Anteils der Beobachtungen oder über die Erfassung von Punktschätzungen aus.
+Konfidenzintervalle bieten eine Intervallschätzung und versuchen, **Populationsparameter** zu erfassen.
 
 \index{confidence interval}
 
 \clearpage
 
-## Chapter review {#sec-chp13-review}
+## Kapitelrückblick {#sec-chp13-review}
 
-### Summary
+### Zusammenfassung
 
-We can summarise the process of using the normal model as follows:
+Wir können den Prozess der Verwendung des Normalmodells wie folgt zusammenfassen:
 
--   **Frame the research question.** The mathematical model can be applied to both the hypothesis testing and the confidence interval framework. Make sure that your research question is being addressed by the most appropriate inference procedure.
--   **Collect data with an observational study or experiment.** To address the research question, collect data on the variables of interest. Note that your data may be a random sample from a population or may be part of a randomized experiment.
--   **Model the randomness of the statistic.** In many cases, the normal distribution will be an excellent model for the randomness associated with the statistic of interest. The Central Limit Theorem tells us that if the sample size is large enough, sample averages (which can be calculated as either a proportion or a sample mean) will be approximately normally distributed when describing how the statistics change from sample to sample.
--   **Calculate the variability of the statistic.** Using formulas, come up with the standard deviation (or more typically, an estimate of the standard deviation called the standard error) of the statistic. The SE of the statistic will give information on how far the observed statistic is from the null hypothesized value (if performing a hypothesis test) or from the unknown population parameter (if creating a confidence interval).
--   **Use the normal distribution to quantify the variability.** The normal distribution will provide a probability which measures how likely it is for your observed and hypothesized (or observed and unknown) parameter to differ by the amount measured. The unusualness (or not) of the discrepancy will form the conclusion to the research question.
--   **Form a conclusion.** Using the p-value or the confidence interval from the analysis, report on the research question of interest. Also, be sure to write the conclusion in plain language so casual readers can understand the results.
+-   **Formulieren Sie die Forschungsfrage.** Das mathematische Modell kann sowohl auf den Hypothesentest- als auch auf den Konfidenzintervall-Rahmen angewendet werden. Stellen Sie sicher, dass Ihre Forschungsfrage durch das am besten geeignete Inferenzverfahren adressiert wird.
+-   **Sammeln Sie Daten mit einer Beobachtungsstudie oder einem Experiment.** Um die Forschungsfrage zu beantworten, sammeln Sie Daten zu den interessierenden Variablen. Beachten Sie, dass Ihre Daten eine Zufallsstichprobe aus einer Population sein können oder Teil eines randomisierten Experiments sein können.
+-   **Modellieren Sie die Zufälligkeit der Statistik.** In vielen Fällen wird die Normalverteilung ein ausgezeichnetes Modell für die mit der interessierenden Statistik verbundene Zufälligkeit sein. Der Zentrale Grenzwertsatz sagt uns, dass bei ausreichend großem Stichprobenumfang Stichprobenmittelwerte (die entweder als Anteil oder als Stichprobenmittelwert berechnet werden können) annähernd normal verteilt sein werden, wenn sie beschreiben, wie die Statistiken von Stichprobe zu Stichprobe variieren.
+-   **Berechnen Sie die Variabilität der Statistik.** Erarbeiten Sie mithilfe von Formeln die Standardabweichung (oder typischerweise eine Schätzung der Standardabweichung, die als Standardfehler bezeichnet wird) der Statistik. Der SE der Statistik gibt Informationen darüber, wie weit die beobachtete Statistik vom hypothetisierten Nullwert (bei einem Hypothesentest) oder vom unbekannten Populationsparameter (bei der Erstellung eines Konfidenzintervalls) entfernt ist.
+-   **Verwenden Sie die Normalverteilung, um die Variabilität zu quantifizieren.** Die Normalverteilung liefert eine Wahrscheinlichkeit, die misst, wie wahrscheinlich es ist, dass Ihre beobachteten und hypothetisierten (oder beobachteten und unbekannten) Parameter um den gemessenen Betrag abweichen. Die Ungewöhnlichkeit (oder Nicht-Ungewöhnlichkeit) der Abweichung wird die Schlussfolgerung zur Forschungsfrage bilden.
+-   **Ziehen Sie eine Schlussfolgerung.** Berichten Sie anhand des p-Werts oder des Konfidenzintervalls aus der Analyse über die interessierende Forschungsfrage. Achten Sie auch darauf, die Schlussfolgerung in einfacher Sprache zu formulieren, damit gelegentliche Leser die Ergebnisse verstehen können.
 
-@tbl-chp13-summary is another look at the mathematical model approach to inference.
+@tbl-chp13-summary bietet einen weiteren Blick auf den mathematischen Modellansatz zur Inferenz.
 
 ```{r}
 #| label: tbl-chp13-summary
@@ -1459,11 +1459,11 @@ inference_method_summary_table |>
 
 \clearpage
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-13.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-13 aufgeführt.
+Wenn Sie sich nicht sicher sind, was einige dieser Begriffe bedeuten, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-13
@@ -1474,9 +1474,9 @@ make_terms_table(terms_chp_13)
 
 \clearpage
 
-## Exercises {#sec-chp13-exercises}
+## Übungen {#sec-chp13-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-13].
+Antworten auf Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-13].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_13-ex-foundations-mathematical.qmd >}}

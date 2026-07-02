@@ -1,4 +1,4 @@
-# Inference for comparing paired means {#sec-inference-paired-means}
+# Schlussfolgerungen beim Vergleich gepaarter Mittelwerte {#sec-inference-paired-means}
 
 ```{r}
 #| include: false
@@ -6,18 +6,18 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-In [Chapter -@sec-inference-two-means] analysis was done to compare the average population value across two different groups.
-Recall that one of the important conditions in doing a two-sample analysis is that the two groups are independent.
-Here, independence across groups means that knowledge of the observations in one group does not change what we would expect to happen in the other group.
-But what happens if the groups are **dependent**?
-Sometimes dependency is not something that can be addressed through a statistical method.
-However, a particular dependency, **pairing**, can be modeled quite effectively using many of the same tools we have already covered in this text.
+In [Kapitel -@sec-inference-two-means] wurde eine Analyse durchgeführt, um den durchschnittlichen Populationswert zweier verschiedener Gruppen zu vergleichen.
+Zur Erinnerung: Eine der wichtigen Bedingungen bei einer Zwei-Stichproben-Analyse ist, dass die beiden Gruppen unabhängig sind.
+Hierbei bedeutet Unabhängigkeit zwischen Gruppen, dass die Kenntnis der Beobachtungen in einer Gruppe nichts daran ändert, was wir in der anderen Gruppe erwarten würden.
+Aber was passiert, wenn die Gruppen **abhängig** sind?
+Manchmal lässt sich eine Abhängigkeit nicht durch eine statistische Methode behandeln.
+Eine bestimmte Art von Abhängigkeit, die **Paarung**, lässt sich jedoch sehr effektiv mit vielen der bereits in diesem Lehrbuch vorgestellten Werkzeuge modellieren.
 :::
 
-Paired data represent a particular type of experimental structure where the analysis is somewhat akin to a one-sample analysis (see [Chapter -@sec-inference-one-mean]) but has other features that resemble a two-sample analysis (see [Chapter -@sec-inference-two-means]).
-As with a two-sample analysis, quantitative measurements are made on each of two different levels of the explanatory variable.
-However, because the observational unit is **paired** across the two groups, the two measurements are subtracted such that only the difference is retained.
-@tbl-pairedexamples presents some examples of studies where paired designs were implemented.
+Gepaarte Daten stellen eine besondere Art von Versuchsstruktur dar, bei der die Analyse einer Einstichproben-Analyse ähnelt (siehe [Kapitel -@sec-inference-one-mean]), aber auch Merkmale aufweist, die einer Zweistichproben-Analyse ähneln (siehe [Kapitel -@sec-inference-two-means]).
+Wie bei einer Zweistichproben-Analyse werden quantitative Messungen an jedem von zwei verschiedenen Ausprägungen der erklärenden Variable vorgenommen.
+Da die Beobachtungseinheit jedoch über die beiden Gruppen hinweg **gepaart** ist, werden die beiden Messungen voneinander subtrahiert, sodass nur die Differenz erhalten bleibt.
+@tbl-pairedexamples zeigt einige Beispiele für Studien, bei denen gepaarte Designs eingesetzt wurden.
 
 ```{r}
 #| label: tbl-pairedexamples
@@ -46,41 +46,41 @@ paired_study_examples |>
 ```
 
 ::: {.important data-latex=""}
-**Paired data.**
+**Gepaarte Daten.**
 
 \index{paired data}
 
-Two sets of observations are *paired* if each observation in one set has a special correspondence or connection with exactly one observation in the other dataset.
+Zwei Mengen von Beobachtungen sind *gepaart*, wenn jede Beobachtung in einer Menge eine besondere Entsprechung oder Verbindung mit genau einer Beobachtung im anderen Datensatz hat.
 :::
 
-It is worth noting that if mathematical modeling is chosen as the analysis tool, paired data inference on the difference in measurements will be identical to the one-sample mathematical techniques described in [Chapter -@sec-inference-one-mean].
-However, recall from [Chapter -@sec-inference-one-mean] that with pure one-sample data, the computational tools for hypothesis testing are not easy to implement and were not presented (although the bootstrap was presented as a computational approach for constructing a one sample confidence interval).
-With paired data, the randomization test fits nicely with the structure of the experiment and is presented here.
+Es ist erwähnenswert, dass bei Wahl der mathematischen Modellierung als Analysewerkzeug die gepaarte Datenschlussfolgerung über die Differenz der Messungen identisch mit den Einstichproben-Techniken aus [Kapitel -@sec-inference-one-mean] ist.
+Beachten Sie jedoch aus [Kapitel -@sec-inference-one-mean], dass bei reinen Einstichproben-Daten die Berechnungswerkzeuge für Hypothesentests nicht einfach umzusetzen waren und daher nicht vorgestellt wurden (obwohl das Bootstrap als Rechenansatz zur Konstruktion eines Einstichproben-Konfidenzintervalls präsentiert wurde).
+Bei gepaarten Daten passt der Randomisierungstest gut zur Struktur des Experiments und wird hier vorgestellt.
 
 ```{r}
 #| include: false
 terms_chp_21 <- c("paired data")
 ```
 
-## Randomization test for the mean paired difference
+## Randomisierungstest für die mittlere gepaarte Differenz
 
-Consider an experiment done to measure whether tire brand Smooth Turn or tire brand Quick Spin has longer tread wear (in cm).
-That is, after 1,000 miles on a car, which brand of tires has more tread, on average?
+Betrachten Sie ein Experiment zur Messung, ob die Reifenmarke Smooth Turn oder die Reifenmarke Quick Spin einen längeren Profilabrieb (in cm) aufweist.
+Das heißt, welche Reifenmarke hat nach 1.000 Meilen im Fahrbetrieb durchschnittlich mehr Profil?
 
-### Observed data
+### Beobachtete Daten
 
-The observed data represent 25 tread measurements (in cm) taken on 25 tires of Smooth Turn and 25 tires of Quick Spin.
-The study used a total of 25 cars, so on each car, one tire was of Smooth Turn and one was of Quick Spin.
-The mean tread for the Quick Spin tires was 0.308 cm and the mean tread for the Smooth Turn tires was 0.310 cm.
-@fig-tiredata presents the observed data, calculations on tread remaining (in cm).
+Die beobachteten Daten umfassen 25 Profilmessungen (in cm) an 25 Reifen von Smooth Turn und 25 Reifen von Quick Spin.
+Die Studie verwendete insgesamt 25 Autos, sodass an jedem Auto ein Reifen von Smooth Turn und einer von Quick Spin montiert war.
+Das mittlere Profil der Quick Spin-Reifen betrug 0,308 cm und das der Smooth Turn-Reifen 0,310 cm.
+@fig-tiredata zeigt die beobachteten Daten mit Berechnungen zum verbleibenden Profil (in cm).
 
-The Smooth Turn manufacturer looks at the box plots and says:
+Der Hersteller von Smooth Turn betrachtet die Boxplots und sagt:
 
-> *Clearly the tread on Smooth Turn tires is higher, on average, than the tread on Quick Spin tires after 1,000 miles of driving.*
+> *Das Profil der Smooth Turn-Reifen ist nach 1.000 Meilen Fahrt im Durchschnitt eindeutig höher als das der Quick Spin-Reifen.*
 
-The Quick Spin manufacturer is skeptical and retorts:
+Der Hersteller von Quick Spin ist skeptisch und erwidert:
 
-> *But with only 25 cars, it seems that the variability in road conditions (sometimes one tire hits a pothole, etc.) could be what leads to the small difference in average tread amount.*
+> *Aber bei nur 25 Autos scheint es, dass die Variabilität der Straßenverhältnisse (manchmal fährt ein Reifen in ein Schlagloch usw.) zu dem kleinen Unterschied im durchschnittlichen Profilbetrag führen könnte.*
 
 ```{r}
 #| label: fig-tiredata
@@ -142,26 +142,26 @@ ggplot(tires, aes(
   )
 ```
 
-We'd like to be able to systematically distinguish between what the Smooth Turn manufacturer sees in the plot and what the Quick Spin manufacturer sees in the plot.
-Fortunately for us, we have an excellent way to simulate the natural variability (from road conditions, etc.) that can lead to tires being worn at different rates.
+Wir möchten systematisch unterscheiden können, was der Smooth Turn-Hersteller im Diagramm sieht, und was der Quick Spin-Hersteller sieht.
+Glücklicherweise haben wir eine ausgezeichnete Möglichkeit, die natürliche Variabilität (durch Straßenbedingungen usw.) zu simulieren, die dazu führen kann, dass Reifen unterschiedlich schnell abgenutzt werden.
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-A randomization test will identify whether the differences seen in the box plot of the original data in @fig-tiredata could have happened just by chance variability.
-As before, we will simulate the variability in the study under the assumption that the null hypothesis is true.
-In this study, the null hypothesis is that average tire tread wear is the same across Smooth Turn and Quick Spin tires.
+Ein Randomisierungstest zeigt, ob die im Boxplot der Originaldaten in @fig-tiredata beobachteten Unterschiede allein durch zufällige Variabilität entstanden sein könnten.
+Wie zuvor simulieren wir die Variabilität in der Studie unter der Annahme, dass die Nullhypothese wahr ist.
+In dieser Studie lautet die Nullhypothese, dass der durchschnittliche Reifenprofilabrieb für Smooth Turn und Quick Spin gleich ist.
 
--   $H_0: \mu_{diff} = 0,$ the average tread wear is the same for the two tire brands.
--   $H_A: \mu_{diff} \ne 0,$ the average tread wear is different across the two tire brands.
+-   $H_0: \mu_{diff} = 0,$ der durchschnittliche Profilabrieb ist für beide Reifenmarken gleich.
+-   $H_A: \mu_{diff} \ne 0,$ der durchschnittliche Profilabrieb unterscheidet sich zwischen den beiden Reifenmarken.
 
-When observations are paired, the randomization process randomly assigns the tire brand to each of the observed tread values.
-Note that in the randomization test for the two-sample mean setting (see @sec-rand2mean) the explanatory variable was *also* randomly assigned to the responses.
-The change in the paired setting, however, is that the assignment happens *within* an observational unit (here, a car).
-Remember, if the null hypothesis is true, it will not matter which brand is put on which tire because the overall tread wear will be the same across pairs.
+Wenn Beobachtungen gepaart sind, weist der Randomisierungsprozess jedem der beobachteten Profilwerte zufällig eine Reifenmarke zu.
+Beachten Sie, dass im Randomisierungstest für den Zweistichproben-Mittelwert (siehe @sec-rand2mean) die erklärende Variable *ebenfalls* zufällig den Antworten zugewiesen wurde.
+Die Änderung im gepaarten Umfeld besteht jedoch darin, dass die Zuweisung *innerhalb* einer Beobachtungseinheit (hier: eines Autos) erfolgt.
+Denken Sie daran: Wenn die Nullhypothese wahr ist, spielt es keine Rolle, welche Marke auf welchen Reifen kommt, da der gesamte Profilabrieb über alle Paare hinweg gleich sein wird.
 
-@fig-tiredata4 and @fig-tiredata5 show that the random assignment of group (tire brand) happens within a single car.
-That is, every single car will still have one tire of each type.
-In the first randomization, it just so happens that the 4th car's tire brands were swapped and the 5th car's tire brands were not swapped.
+@fig-tiredata4 und @fig-tiredata5 zeigen, dass die zufällige Zuweisung der Gruppe (Reifenmarke) innerhalb eines einzelnen Autos erfolgt.
+Das heißt, jedes einzelne Auto hat weiterhin jeweils einen Reifen jedes Typs.
+Bei der ersten Randomisierung wurden zufällig die Reifenmarken des 4. Autos vertauscht, aber die des 5. Autos nicht.
 
 ```{r}
 #| label: fig-tiredata4
@@ -295,7 +295,7 @@ shuffbrand5 <- permdata |>
 origplot5 + shuffbrand5
 ```
 
-We can put the shuffled assignments for all the cars into one plot as seen in @fig-tiredataPerm-2.
+Die zufälligen Zuweisungen für alle Autos können wie in @fig-tiredataPerm-2 in einem Diagramm zusammengefasst werden.
 
 ```{r}
 #| label: fig-tiredataPerm
@@ -365,9 +365,9 @@ origplot
 shuffbrand
 ```
 
-The next step in the randomization test is to sort the brands so that the assigned brand value on the x-axis aligns with the assigned group from the randomization.
-@fig-tiredataPermSort-1 shows the same randomized groups, as seen in @fig-tiredataPerm-2 previously.
-However, @fig-tiredataPermSort-2 sorts the randomized groups so that we can measure the variability *across* groups as compared to the variability *within* groups.
+Der nächste Schritt im Randomisierungstest besteht darin, die Marken so zu sortieren, dass der zugewiesene Markenwert auf der x-Achse mit der durch die Randomisierung zugewiesenen Gruppe übereinstimmt.
+@fig-tiredataPermSort-1 zeigt dieselben randomisierten Gruppen wie zuvor in @fig-tiredataPerm-2.
+@fig-tiredataPermSort-2 sortiert jedoch die randomisierten Gruppen, sodass wir die Variabilität *zwischen* den Gruppen im Vergleich zur Variabilität *innerhalb* der Gruppen messen können.
 
 ```{r}
 #| label: fig-tiredataPermSort
@@ -426,8 +426,8 @@ shuffbrand
 shuffbrandfull
 ```
 
-@fig-tiredatarand1 presents a second randomization of the data.
-Notice that the two observations from the same car are linked with a grey line; some of the tread values have been randomly assigned to the other tire brand, while some are still connected to their original tire brands.
+@fig-tiredatarand1 zeigt eine zweite Randomisierung der Daten.
+Beachten Sie, dass die beiden Beobachtungen desselben Autos durch eine graue Linie verbunden sind; einige Profilwerte wurden zufällig der anderen Reifenmarke zugewiesen, während andere noch mit ihren ursprünglichen Reifenmarken verbunden sind.
 
 ```{r}
 #| label: fig-tiredatarand1
@@ -475,8 +475,8 @@ ggplot(
   )
 ```
 
-@fig-tiredatarand2 presents yet another randomization of the data.
-Again, the same observations are linked by a grey line, and some of the tread values have been randomly assigned to the opposite tire brand than they were originally (while some are still connected to their original tire brands).
+@fig-tiredatarand2 zeigt noch eine weitere Randomisierung der Daten.
+Auch hier sind dieselben Beobachtungen durch eine graue Linie verbunden, und einige Profilwerte wurden zufällig der entgegengesetzten Reifenmarke zugewiesen als ursprünglich (während andere noch mit ihren ursprünglichen Reifenmarken verbunden sind).
 
 ```{r}
 #| label: fig-tiredatarand2
@@ -527,13 +527,13 @@ ggplot(
   )
 ```
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
-By repeating the randomization process, we can create a distribution of the average of the differences in tire treads, as seen in @fig-pair-randomize.
-As expected (because the differences were generated under the null hypothesis), the center of the histogram is zero.
-A line has been drawn at the observed difference which is well outside the majority of the null differences simulated from natural variability by mixing up which the tire received Smooth Turn and which received Quick Spin.
-Because the observed statistic is so far away from the natural variability of the randomized differences, we are convinced that there is a difference between Smooth Turn and Quick Spin.
-Our conclusion is that the extra amount of average tire tread in Smooth Turn is due to more than just natural variability: we reject $H_0$ and conclude that $\mu_{ST} \ne \mu_{QS}.$
+Durch Wiederholung des Randomisierungsprozesses können wir eine Verteilung des Mittelwerts der Differenzen im Reifenprofil erstellen, wie in @fig-pair-randomize zu sehen.
+Wie erwartet (weil die Differenzen unter der Nullhypothese erzeugt wurden) liegt das Zentrum des Histogramms bei null.
+Eine Linie wurde an der beobachteten Differenz eingezeichnet, die weit außerhalb der Mehrheit der durch das zufällige Mischen der Reifenzuweisungen simulierten Nulldifferenzen liegt.
+Da die beobachtete Statistik so weit von der natürlichen Variabilität der randomisierten Differenzen entfernt ist, sind wir überzeugt, dass es einen Unterschied zwischen Smooth Turn und Quick Spin gibt.
+Unser Schluss ist, dass der zusätzliche durchschnittliche Reifenprofilbetrag bei Smooth Turn mehr als nur natürliche Variabilität ist: Wir lehnen $H_0$ ab und schließen, dass $\mu_{ST} \ne \mu_{QS}.$
 
 ```{r}
 #| label: fig-pairrandfull
@@ -581,10 +581,10 @@ ggplot(tires_shuffled, aes(x = stat)) +
   )
 ```
 
-## Bootstrap confidence interval for the mean paired difference
+## Bootstrap-Konfidenzintervall für die mittlere gepaarte Differenz
 
-For both the bootstrap and the mathematical models applied to paired data, the analysis is virtually identical to the one-sample approach given in [Chapter -@sec-inference-one-mean].
-The key to working with paired data (for bootstrapping and mathematical approaches) is to consider the measurement of interest to be the difference in measured values across the pair of observations.
+Sowohl beim Bootstrap als auch bei den mathematischen Modellen, die auf gepaarte Daten angewendet werden, ist die Analyse nahezu identisch mit dem Einstichproben-Ansatz aus [Kapitel -@sec-inference-one-mean].
+Der Schlüssel zur Arbeit mit gepaarten Daten (für Bootstrap- und mathematische Ansätze) besteht darin, die interessierende Messung als die Differenz der gemessenen Werte über das Paar von Beobachtungen zu betrachten.
 
 \index{bootstrap!CI paired difference}\index{bootstrap CI paired difference}
 
@@ -593,17 +593,17 @@ The key to working with paired data (for bootstrapping and mathematical approach
 terms_chp_21 <- c(terms_chp_21, "bootstrap CI paired difference")
 ```
 
-### Observed data
+### Beobachtete Daten
 
-In an earlier edition of this textbook, we found that Amazon prices were, on average, lower than those of the UCLA Bookstore for UCLA courses in 2010.
-It's been several years, and many stores have adapted to the online market, so we wondered, how is the UCLA Bookstore doing today?
+In einer früheren Ausgabe dieses Lehrbuchs haben wir festgestellt, dass die Amazon-Preise für UCLA-Kurse im Jahr 2010 im Durchschnitt niedriger waren als die des UCLA Bookstore.
+Seitdem sind einige Jahre vergangen, und viele Geschäfte haben sich dem Online-Markt angepasst. Daher fragen wir uns: Wie steht der UCLA Bookstore heute da?
 
-We sampled 201 UCLA courses.
-Of those, 68 required books could be found on Amazon.
-A portion of the dataset from these courses is shown in @tbl-textbooksDF, where prices are in US dollars.
+Wir haben 201 UCLA-Kurse stichprobenartig untersucht.
+Von diesen waren die erforderlichen Bücher von 68 Kursen auch bei Amazon erhältlich.
+Ein Teil des Datensatzes dieser Kurse ist in @tbl-textbooksDF dargestellt, wobei die Preise in US-Dollar angegeben sind.
 
 ::: {.data data-latex=""}
-The [`ucla_textbooks_f18`](http://openintrostat.github.io/openintro/reference/ucla_textbooks_f18.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die Daten [`ucla_textbooks_f18`](http://openintrostat.github.io/openintro/reference/ucla_textbooks_f18.html) sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) verfügbar.
 :::
 
 ```{r}
@@ -624,34 +624,34 @@ ucla_textbooks_f18 |>
 
 \index{paired data}
 
-Each textbook has two corresponding prices in the dataset: one for the UCLA Bookstore and one for Amazon.
-When two sets of observations have this special correspondence, they are said to be **paired**.
+Jedes Lehrbuch hat zwei entsprechende Preise im Datensatz: einen für den UCLA Bookstore und einen für Amazon.
+Wenn zwei Mengen von Beobachtungen diese besondere Entsprechung aufweisen, werden sie als **gepaart** bezeichnet.
 
 \clearpage
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-Following the example of bootstrapping the one-sample statistic, the observed *differences* can be bootstrapped in order to understand the variability of the average difference from sample to sample.
-Remember, the differences act as a single value to bootstrap.
-That is, the original dataset would include the list of 68 price differences, and each resample will also include 68 price differences (some repeated through the bootstrap resampling process).
-The bootstrap procedure for paired differences is quite similar to the procedure applied to the one-sample statistic case in @sec-boot1mean.
+Nach dem Beispiel des Bootstrap der Einstichproben-Statistik können die beobachteten *Differenzen* mit Bootstrap versehen werden, um die Variabilität der durchschnittlichen Differenz von Stichprobe zu Stichprobe zu verstehen.
+Beachten Sie, dass die Differenzen als einzelner Wert für das Bootstrap fungieren.
+Das heißt, der ursprüngliche Datensatz würde die Liste der 68 Preisdifferenzen enthalten, und jede Stichprobenwiederholung enthält ebenfalls 68 Preisdifferenzen (einige durch den Bootstrap-Wiederholungsprozess wiederholt).
+Das Bootstrap-Verfahren für gepaarte Differenzen ähnelt dem Verfahren, das auf den Einstichproben-Statistikfall in @sec-boot1mean angewendet wurde.
 
-In @fig-pairboot, two 99% confidence intervals for the difference in the cost of a new book at the UCLA bookstore compared with Amazon have been calculated.
-The bootstrap percentile confidence interval is computed using the 0.5 percentile and 99.5 percentile bootstrapped differences and is found to be (\$0.25, \$7.87).
+In @fig-pairboot wurden zwei 99%-Konfidenzintervalle für die Differenz der Kosten eines neuen Buches im UCLA Bookstore im Vergleich zu Amazon berechnet.
+Das Bootstrap-Perzentil-Konfidenzintervall wird mithilfe des 0,5-Perzentils und des 99,5-Perzentils der Bootstrap-Differenzen berechnet und beträgt (\$0,25, \$7,87).
 
 ::: {.guidedpractice data-latex=""}
-Using the histogram of bootstrapped difference in means, estimate the standard error of the mean of the sample differences, $\bar{x}_{diff}.$[^21-inference-paired-means-1]
+Schätzen Sie mithilfe des Histogramms der Bootstrap-Differenz der Mittelwerte den Standardfehler des Mittelwerts der Stichprobendifferenzen, $\bar{x}_{diff}.$[^21-inference-paired-means-1]
 :::
 
-[^21-inference-paired-means-1]: The bootstrapped differences in sample means vary roughly from 0.7 to 7.5, a range of \$6.80.
-    Although the bootstrap distribution is not symmetric, we use the empirical rule (that with bell-shaped distributions, most observations are within two standard errors of the center), the standard error of the mean differences is approximately \$1.70.
-    You might note that the standard error calculation given in @sec-mathpaired is $SE(\bar{x}_{diff}) = \sqrt{s^2_{diff}/n_{diff}} = \sqrt{13.4^2/68} = \$1.62$ (values from @sec-mathpaired), very close to the bootstrap approximation.
+[^21-inference-paired-means-1]: Die Bootstrap-Differenzen der Stichprobenmittelwerte variieren ungefähr zwischen 0,7 und 7,5, ein Bereich von \$6,80.
+    Obwohl die Bootstrap-Verteilung nicht symmetrisch ist, verwenden wir die Faustregel (dass bei glockenförmigen Verteilungen die meisten Beobachtungen innerhalb von zwei Standardfehlern des Zentrums liegen). Der Standardfehler der mittleren Differenzen beträgt ungefähr \$1,70.
+    Möglicherweise bemerken Sie, dass die Standardfehlerberechnung aus @sec-mathpaired $SE(\bar{x}_{diff}) = \sqrt{s^2_{diff}/n_{diff}} = \sqrt{13.4^2/68} = \$1.62$ (Werte aus @sec-mathpaired) sehr nah an der Bootstrap-Näherung liegt.
 
-The bootstrap SE interval is found by computing the SE of the bootstrapped differences $(SE_{\overline{x}_{diff}} = \$1.64)$ and the normal multiplier of $z^{\star} = 2.58.$ The averaged difference is $\bar{x} = \$3.58.$ The 99% confidence interval is: $\$3.58 \pm 2.58 \times \$ 1.64 = (\$-0.65, \$7.81).$
+Das Bootstrap-SE-Intervall wird berechnet, indem der SE der Bootstrap-Differenzen $(SE_{\overline{x}_{diff}} = \$1.64)$ und der normale Multiplikator $z^{\star} = 2.58$ verwendet werden. Die mittlere Differenz beträgt $\bar{x} = \$3.58.$ Das 99%-Konfidenzintervall lautet: $\$3.58 \pm 2.58 \times \$ 1.64 = (\$-0.65, \$7.81).$
 
-The confidence intervals seem to indicate that the UCLA bookstore price is, on average, higher than the Amazon price, as the majority of the confidence interval is positive.
-However, if the analysis required a strong degree of certainty (e.g., 99% confidence), and the bootstrap SE interval was most appropriate (given a second course in statistics the nuances of the methods can be investigated), the results of which bookseller is higher are not well determined (because the bootstrap SE interval overlaps zero).
-That is, the 99% bootstrap SE interval gives potential for UCLA bookstore to be lower, on average, than Amazon (because of the possible negative values for the true mean difference in price).
+Die Konfidenzintervalle deuten darauf hin, dass der UCLA Bookstore-Preis im Durchschnitt höher ist als der Amazon-Preis, da der Großteil des Konfidenzintervalls positiv ist.
+Wenn die Analyse jedoch einen hohen Grad an Gewissheit erfordert (z.B. 99%-Konfidenz) und das Bootstrap-SE-Intervall am geeignetsten wäre (bei einem zweiten Statistikkurs können die Feinheiten der Methoden untersucht werden), sind die Ergebnisse darüber, welcher Buchhändler teurer ist, nicht gut bestimmt (da das Bootstrap-SE-Intervall die Null einschließt).
+Das heißt, das 99%-Bootstrap-SE-Intervall lässt die Möglichkeit zu, dass der UCLA Bookstore im Durchschnitt günstiger als Amazon ist (aufgrund der möglichen negativen Werte für die wahre mittlere Preisdifferenz).
 
 ```{r}
 #| label: fig-pairboot
@@ -731,25 +731,25 @@ boot_diff |>
 
 \clearpage
 
-## Mathematical model for the mean paired difference {#sec-mathpaired}
+## Mathematisches Modell für die mittlere gepaarte Differenz {#sec-mathpaired}
 
-Thinking about the differences as a single observation on an observational unit changes the paired setting into the one-sample setting.
-The mathematical model for the one-sample case is covered in @sec-one-mean-math.
+Die gepaarte Situation wird durch das Betrachten der Differenzen als einzelne Beobachtung einer Beobachtungseinheit in die Einstichproben-Situation überführt.
+Das mathematische Modell für den Einstichprobenfall wird in @sec-one-mean-math behandelt.
 
 \vspace{-2mm}
 
-### Observed data
+### Beobachtete Daten
 
 :::: {layout="[0.55, -0.05, 0.4]"}
 :::{#text}
-To analyze paired data, it is often useful to look at the difference in outcomes of each pair of observations.
-In the textbook data, we look at the differences in prices, which is represented as the `price_difference` variable in the dataset.
-Here the differences are taken as
+Bei der Analyse gepaarter Daten ist es oft nützlich, die Differenz der Ergebnisse jedes Beobachtungspaares zu betrachten.
+In den Lehrbuchdaten betrachten wir die Preisdifferenzen, die im Datensatz als Variable `price_difference` dargestellt werden.
+Hier werden die Differenzen berechnet als
 
-$$\text{UCLA Bookstore price} - \text{Amazon price}$$
+$$\text{UCLA Bookstore-Preis} - \text{Amazon-Preis}$$
 
-It is important that we always subtract using a consistent order; here Amazon prices are always subtracted from UCLA prices.
-The first difference shown in @tbl-textbooksDF is computed as $47.97 - 47.45 = 0.52.$ Similarly, the second difference is computed as $14.26 - 13.55 = 0.71,$ and the third is $13.50 - 12.53 = 0.97.$ A histogram of the differences is shown in @fig-diffInTextbookPricesF18.
+Es ist wichtig, dass wir immer in einer konsistenten Reihenfolge subtrahieren; hier werden die Amazon-Preise immer von den UCLA-Preisen subtrahiert.
+Die erste in @tbl-textbooksDF gezeigte Differenz wird berechnet als $47.97 - 47.45 = 0.52.$ Ähnlich wird die zweite Differenz als $14.26 - 13.55 = 0.71$ berechnet, und die dritte als $13.50 - 12.53 = 0.97.$ Ein Histogramm der Differenzen ist in @fig-diffInTextbookPricesF18 dargestellt.
 :::
 :::{#plot}
 ```{r}
@@ -781,12 +781,12 @@ ggplot(ucla_textbooks_f18, aes(x = price_diff)) +
 :::
 ::::
 
-### Variability of the statistic
+### Variabilität der Statistik
 
-To analyze a paired dataset, we simply analyze the differences.
-@tbl-textbooksSummaryStats provides the data summaries from the textbook data.
-Note that instead of reporting the prices separately for UCLA and Amazon, the summary statistics are given by the mean of the differences, the standard deviation of the differences, and the total number of pairs (i.e., differences).
-The parameter of interest is also a single value, $\mu_{diff},$ so we can use the same $t$-distribution techniques we applied in @sec-one-mean-math directly onto the observed differences.
+Um einen gepaarten Datensatz zu analysieren, analysieren wir einfach die Differenzen.
+@tbl-textbooksSummaryStats enthält die Datenzusammenfassungen aus den Lehrbuchdaten.
+Beachten Sie, dass anstatt die Preise für UCLA und Amazon separat anzugeben, die Zusammenfassungsstatistiken durch den Mittelwert der Differenzen, die Standardabweichung der Differenzen und die Gesamtanzahl der Paare (d.h. Differenzen) gegeben werden.
+Der interessierende Parameter ist ebenfalls ein einzelner Wert, $\mu_{diff},$ sodass wir dieselben $t$-Verteilungstechniken, die wir in @sec-one-mean-math angewendet haben, direkt auf die beobachteten Differenzen anwenden können.
 
 ```{r}
 #| label: tbl-textbooksSummaryStats
@@ -813,45 +813,45 @@ ucla_textbooks_f18 |>
 ```
 
 ::: {.workedexample data-latex=""}
-Set up a hypothesis test to determine whether, on average, there is a difference between Amazon's price for a book and the UCLA bookstore's price.
-Also, check the conditions for whether we can move forward with the test using the $t$-distribution.
+Stellen Sie einen Hypothesentest auf, um zu bestimmen, ob es im Durchschnitt einen Unterschied zwischen dem Amazon-Preis für ein Buch und dem UCLA Bookstore-Preis gibt.
+Überprüfen Sie außerdem die Bedingungen, ob wir mit dem Test mithilfe der $t$-Verteilung fortfahren können.
 
 ------------------------------------------------------------------------
 
-We are considering two scenarios:
+Wir betrachten zwei Szenarien:
 
--   $H_0:$ $\mu_{diff} = 0.$ There is no difference in the average textbook prices.
+-   $H_0:$ $\mu_{diff} = 0.$ Es gibt keinen Unterschied in den durchschnittlichen Lehrbuchpreisen.
 
--   $H_A:$ $\mu_{diff} \neq 0.$ There is a difference in average prices.
+-   $H_A:$ $\mu_{diff} \neq 0.$ Es gibt einen Unterschied in den durchschnittlichen Preisen.
 
-Next, we check the independence and normality conditions.
-This is a simple random sample, so assuming the textbooks are independent seems reasonable.
-While there are some outliers, $n = 68$ and none of the outliers are particularly extreme, so the normality of $\bar{x}$ is satisfied.
-With these conditions satisfied, we can move forward with the $t$-distribution.
+Als nächstes überprüfen wir die Unabhängigkeits- und Normalitätsbedingungen.
+Dies ist eine einfache Zufallsstichprobe, daher erscheint die Annahme, dass die Lehrbücher unabhängig sind, vernünftig.
+Obwohl es einige Ausreißer gibt, gilt $n = 68$ und keiner der Ausreißer ist besonders extrem, sodass die Normalität von $\bar{x}$ erfüllt ist.
+Mit diesen erfüllten Bedingungen können wir mit der $t$-Verteilung fortfahren.
 :::
 
 \clearpage
 
-### Observed statistic vs. null statistics
+### Beobachtete Statistik vs. Nullstatistiken
 
-As mentioned previously, the methods applied to a difference will be identical to the one-sample techniques.
-Therefore, the full hypothesis test framework is presented as guided practices.
+Wie bereits erwähnt, sind die auf eine Differenz angewendeten Methoden identisch mit den Einstichproben-Techniken.
+Daher wird der vollständige Hypothesentest-Rahmen als geführte Übungen präsentiert.
 
 ::: {.important data-latex=""}
-**The test statistic for assessing a paired mean is a T.**
+**Die Teststatistik zur Beurteilung eines gepaarten Mittelwerts ist ein T-Wert.**
 
 \index{T score!paired difference}\index{paired difference!T score}
 
-The T score is a ratio of how the sample mean difference varies from zero as compared to how the observations vary.
+Der T-Wert ist ein Verhältnis dafür, wie der Stichprobenmittelwert der Differenz von null abweicht, verglichen damit, wie die Beobachtungen variieren.
 
 $$T = \frac{\bar{x}_{diff} - 0 }{s_{diff}/\sqrt{n_{diff}}}$$
 
-When the null hypothesis is true and the conditions are met, T has a t-distribution with $df = n_{diff} - 1.$
+Wenn die Nullhypothese wahr ist und die Bedingungen erfüllt sind, folgt T einer t-Verteilung mit $df = n_{diff} - 1.$
 
-Conditions:
+Bedingungen:
 
--   Independently sampled pairs.
--   Large samples and no extreme outliers.
+-   Unabhängig gezogene Paare.
+-   Große Stichproben und keine extremen Ausreißer.
 :::
 
 ```{r}
@@ -860,20 +860,20 @@ terms_chp_21 <- c(terms_chp_21, "T score paired difference")
 ```
 
 ::: {.workedexample data-latex=""}
-Complete the hypothesis test started in the previous Example.
+Vervollständigen Sie den im vorherigen Beispiel begonnenen Hypothesentest.
 
 ------------------------------------------------------------------------
 
-To compute the test compute the standard error associated with $\bar{x}_{diff}$ using the standard deviation of the differences $(s_{diff} = 13.42)$ and the number of differences $(n_{diff} = 68):$
+Um die Teststatistik zu berechnen, bestimmen Sie den Standardfehler von $\bar{x}_{diff}$ mithilfe der Standardabweichung der Differenzen $(s_{diff} = 13.42)$ und der Anzahl der Differenzen $(n_{diff} = 68):$
 
 $$SE_{\bar{x}_{diff}} = \frac{s_{diff}}{\sqrt{n_{diff}}} = \frac{13.42}{\sqrt{68}} = 1.63$$
 
-The test statistic is the T score of $\bar{x}_{diff}$ under the null hypothesis that the true mean difference is 0:
+Die Teststatistik ist der T-Wert von $\bar{x}_{diff}$ unter der Nullhypothese, dass die wahre mittlere Differenz 0 ist:
 
 $$T = \frac{\bar{x}_{diff} - 0}{SE_{\bar{x}_{diff}}} = \frac{3.58 - 0}{1.63} = 2.20$$
 
-To visualize the p-value, the sampling distribution of $\bar{x}_{diff}$ is drawn as though $H_0$ is true, and the p-value is represented by the two shaded tails in the figure below.
-The degrees of freedom is $df = 68 - 1 = 67.$ Using statistical software, we find the one-tail area of 0.0156.
+Um den p-Wert zu visualisieren, wird die Stichprobenverteilung von $\bar{x}_{diff}$ so dargestellt, als ob $H_0$ wahr wäre, und der p-Wert wird durch die beiden schraffierten Schwänze in der folgenden Abbildung dargestellt.
+Die Freiheitsgrade sind $df = 68 - 1 = 67.$ Mit statistischer Software ergibt sich ein einseitiger Bereich von 0,0156.
 
 ```{r}
 #| label: textbooksF18HTTails
@@ -900,60 +900,59 @@ labels <- expression(0, mu[0] * " = 0", bar(x)[diff] * " = 2.98", 0)
 axis(1, at, labels, cex.axis = 0.9)
 ```
 
-Doubling this area gives the p-value: 0.0312.
-Because the p-value is less than 0.05, we reject the null hypothesis.
-The data provide evidence that Amazon prices are different, on average, 
-than the UCLA Bookstore prices for UCLA courses.
+Durch Verdopplung dieses Bereichs ergibt sich der p-Wert: 0,0312.
+Da der p-Wert kleiner als 0,05 ist, lehnen wir die Nullhypothese ab.
+Die Daten liefern Hinweise darauf, dass die Amazon-Preise im Durchschnitt anders sind als die Preise des UCLA Bookstore für UCLA-Kurse.
 :::
 
 \clearpage
 
-Recall that the margin of error is defined by the standard error.
-The margin of error for $\bar{x}_{diff}$ can be directly obtained from $SE(\bar{x}_{diff}).$
+Erinnern Sie sich, dass der Fehlerbereich durch den Standardfehler definiert wird.
+Der Fehlerbereich für $\bar{x}_{diff}$ kann direkt aus $SE(\bar{x}_{diff})$ abgeleitet werden.
 
 ::: {.important data-latex=""}
-**Margin of error for** $\bar{x}_{diff}.$
+**Fehlerbereich für** $\bar{x}_{diff}.$
 
-The margin of error is $t^\star_{df} \times s_{diff}/\sqrt{n_{diff}}$ where $t^\star_{df}$ is calculated from a specified percentile on the t-distribution with *df* degrees of freedom.
+Der Fehlerbereich beträgt $t^\star_{df} \times s_{diff}/\sqrt{n_{diff}},$ wobei $t^\star_{df}$ aus einem bestimmten Perzentil der t-Verteilung mit *df* Freiheitsgraden berechnet wird.
 :::
 
 \index{t-CI!paired difference}
 
 ::: {.workedexample data-latex=""}
-Create a 95% confidence interval for the average price difference between books at the UCLA bookstore and books on Amazon.
+Erstellen Sie ein 95%-Konfidenzintervall für die durchschnittliche Preisdifferenz zwischen Büchern im UCLA Bookstore und Büchern bei Amazon.
 
 ------------------------------------------------------------------------
 
-Conditions have already been verified and the standard error computed in a previous Example.\
-To find the confidence interval, identify $t^{\star}_{67}$ using statistical software or the $t$-table $(t^{\star}_{67} = 2.00),$ and plug it, the point estimate, and the standard error into the confidence interval formula:
+Die Bedingungen wurden bereits überprüft und der Standardfehler in einem früheren Beispiel berechnet.\
+Um das Konfidenzintervall zu finden, bestimmen Sie $t^{\star}_{67}$ mithilfe statistischer Software oder der $t$-Tabelle $(t^{\star}_{67} = 2.00)$ und setzen Sie es zusammen mit dem Punktschätzer und dem Standardfehler in die Konfidenzintervallformel ein:
 
 $$
 \begin{aligned}
-\text{point estimate} \ &\pm \ t^{\star}_{67} \ \times \ SE \\
+\text{Punktschätzer} \ &\pm \ t^{\star}_{67} \ \times \ SE \\
 3.58 \ &\pm \ 2.00 \ \times \ 1.63 \\
 (0.32 \ &, \ 6.84)
 \end{aligned}
 $$
 
-We are 95% confident that the UCLA Bookstore is, on average, between \$0.32 and \$6.84 more expensive than Amazon for UCLA course books.
+Wir sind zu 95% überzeugt, dass der UCLA Bookstore im Durchschnitt zwischen \$0,32 und \$6,84 teurer ist als Amazon für UCLA-Kursbücher.
 :::
 
 ::: {.guidedpractice data-latex=""}
-We have convincing evidence that Amazon is, on average, less expensive.
-How should this conclusion affect UCLA student buying habits?
-Should UCLA students always buy their books on Amazon?[^21-inference-paired-means-2]
+Wir haben überzeugende Belege dafür, dass Amazon im Durchschnitt günstiger ist.
+Wie sollte dieser Schluss das Kaufverhalten der UCLA-Studierenden beeinflussen?
+Sollten UCLA-Studierende ihre Bücher immer bei Amazon kaufen?[^21-inference-paired-means-2]
 :::
 
-[^21-inference-paired-means-2]: The average price difference is only mildly useful for this question.
-    Examine the distribution shown in @fig-diffInTextbookPricesF18.
-    There are certainly a handful of cases where Amazon prices are far below the UCLA Bookstore's, which suggests it is worth checking Amazon (and probably other online sites) before purchasing.
-    However, in many cases the Amazon price is above what the UCLA Bookstore charges, and most of the time the price isn't that different.
-    Ultimately, if getting a book immediately from the bookstore is notably more convenient, e.g., to get started on reading or homework, it's likely a good idea to go with the UCLA Bookstore unless the price difference on a specific book happens to be quite large.
-    For reference, this is a very different result from what we (the authors) had seen in a similar dataset from 2010.
-    At that time, Amazon prices were almost uniformly lower than those of the UCLA Bookstore's and by a large margin, making the case to use Amazon over the UCLA Bookstore quite compelling at that time.
-    Now we frequently check multiple websites to find the best price.
+[^21-inference-paired-means-2]: Die durchschnittliche Preisdifferenz ist für diese Frage nur bedingt nützlich.
+    Betrachten Sie die in @fig-diffInTextbookPricesF18 gezeigte Verteilung.
+    Es gibt durchaus einige Fälle, in denen Amazon-Preise weit unter denen des UCLA Bookstore liegen, was darauf hindeutet, dass es sich lohnt, Amazon (und wahrscheinlich andere Online-Seiten) vor dem Kauf zu prüfen.
+    In vielen Fällen liegt der Amazon-Preis jedoch über dem des UCLA Bookstore, und meistens ist der Preisunterschied nicht allzu groß.
+    Wenn es insgesamt deutlich bequemer ist, ein Buch sofort im Buchladen zu bekommen, z.B. um mit dem Lesen oder den Hausaufgaben zu beginnen, ist es wahrscheinlich eine gute Idee, den UCLA Bookstore zu wählen, es sei denn, der Preisunterschied bei einem bestimmten Buch ist besonders groß.
+    Zum Vergleich: Dies ist ein ganz anderes Ergebnis als das, was wir (die Autoren) in einem ähnlichen Datensatz von 2010 gesehen haben.
+    Zu dieser Zeit waren die Amazon-Preise fast einheitlich niedriger als die des UCLA Bookstore und um eine große Marge, was den Fall für Amazon gegenüber dem UCLA Bookstore sehr überzeugend machte.
+    Heute prüfen wir häufig mehrere Websites, um den besten Preis zu finden.
 
-A small note on the power of the paired t-test (recall the discussion of power in @sec-pow). It turns out that the paired t-test given here is often more powerful than the independent t-test discussed in @sec-math2samp. That said, depending on how the data are collected, we don't always have mechanism for pairing the data and reducing the inherent variability across observations.
+Ein kurzer Hinweis zur Teststärke des gepaarten t-Tests (vergleiche die Diskussion zur Teststärke in @sec-pow). Es zeigt sich, dass der hier gegebene gepaarte t-Test oft leistungsfähiger ist als der unabhängige t-Test aus @sec-math2samp. Allerdings haben wir je nach Datenerhebungsmethode nicht immer die Möglichkeit, die Daten zu paaren und die inhärente Variabilität zwischen Beobachtungen zu reduzieren.
 
 ```{r}
 #| include: false
@@ -962,20 +961,20 @@ terms_chp_21 <- c(terms_chp_21, "paired difference t-test", "paired difference C
 
 \clearpage
 
-## Chapter review {#sec-chp21-review}
+## Kapitelzusammenfassung {#sec-chp21-review}
 
-### Summary
+### Zusammenfassung
 
-Like the two independent sample procedures in [Chapter -@sec-inference-two-means], the paired difference analysis can be done using a t-distribution.
-The randomization test applied to the paired differences is slightly different, however.
-Note that when randomizing under the paired setting, each null statistic is created by randomly assigning the group to a numerical outcome **within** the individual observational unit.
-The procedure for creating a confidence interval for the paired difference is almost identical to the confidence intervals created in [Chapter -@sec-inference-one-mean] for a single mean.
+Wie die Verfahren für zwei unabhängige Stichproben in [Kapitel -@sec-inference-two-means] kann die Analyse der gepaarten Differenz mithilfe einer t-Verteilung durchgeführt werden.
+Der auf gepaarte Differenzen angewendete Randomisierungstest unterscheidet sich jedoch leicht.
+Beachten Sie, dass beim Randomisieren unter dem gepaarten Umfeld jede Nullstatistik erstellt wird, indem die Gruppe einem numerischen Ergebnis **innerhalb** der einzelnen Beobachtungseinheit zufällig zugewiesen wird.
+Das Verfahren zur Erstellung eines Konfidenzintervalls für die gepaarte Differenz ist nahezu identisch mit den Konfidenzintervallen, die in [Kapitel -@sec-inference-one-mean] für einen einzelnen Mittelwert erstellt wurden.
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-21.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-21 aufgeführt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und deren Definitionen zu überprüfen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-21
@@ -986,9 +985,9 @@ make_terms_table(terms_chp_21)
 
 \clearpage
 
-## Exercises {#sec-chp21-exercises}
+## Übungen {#sec-chp21-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-21].
+Antworten auf Aufgaben mit ungerader Nummerierung finden Sie in [Anhang -@sec-exercise-solutions-21].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_21-ex-inference-paired-means.qmd >}}

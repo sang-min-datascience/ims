@@ -1,4 +1,4 @@
-# Inference for logistic regression {#sec-inf-model-logistic}
+# Inferenz für logistische Regression {#sec-inf-model-logistic}
 
 ```{r}
 #| include: false
@@ -6,8 +6,8 @@ source("_common.R")
 ```
 
 ::: {.chapterintro data-latex=""}
-Combining ideas from [Chapter -@sec-model-logistic] on logistic regression, [Chapter -@sec-foundations-mathematical] on inference with mathematical models, and [Chapter -@sec-inf-model-slr] and [Chapter -@sec-inf-model-mlr] which apply inferential techniques to the linear model, we wrap up the book by considering inferential methods applied to a logistic regression model.
-Additionally, we use cross-validation as a method for independent assessment of the logistic regression model.
+Indem wir Ideen aus [Kapitel -@sec-model-logistic] zur logistischen Regression, [Kapitel -@sec-foundations-mathematical] zur Inferenz mit mathematischen Modellen sowie [Kapitel -@sec-inf-model-slr] und [Kapitel -@sec-inf-model-mlr] kombinieren, die Inferenzmethoden auf das lineare Modell anwenden, schließen wir das Buch ab, indem wir Inferenzmethoden betrachten, die auf ein logistisches Regressionsmodell angewendet werden.
+Zusätzlich verwenden wir die Kreuzvalidierung als Methode zur unabhängigen Beurteilung des logistischen Regressionsmodells.
 :::
 
 ```{r}
@@ -15,15 +15,15 @@ Additionally, we use cross-validation as a method for independent assessment of 
 terms_chp_26 <- c("inference on logistic regression")
 ```
 
-As with multiple linear regression, the inference aspect for logistic regression will focus on interpretation of coefficients and relationships between explanatory variables.
-Both p-values and cross-validation will be used for assessing a logistic regression model.
+Wie bei der multiplen linearen Regression wird sich der Inferenzaspekt bei der logistischen Regression auf die Interpretation von Koeffizienten und Beziehungen zwischen erklärenden Variablen konzentrieren.
+Sowohl p-Werte als auch Kreuzvalidierung werden zur Beurteilung eines logistischen Regressionsmodells verwendet.
 
-Consider the `email` data which describes email characteristics which can be used to predict whether a particular incoming email is spam (unsolicited bulk email).
-Without reading every incoming message, it might be nice to have an automated way to identify spam emails.
-Which of the variables describing each email are important for predicting the status of the email?
+Betrachten wir die `email`-Daten, die E-Mail-Merkmale beschreiben, anhand derer vorhergesagt werden kann, ob eine bestimmte eingehende E-Mail Spam (unerwünschte Massen-E-Mail) ist.
+Ohne jede eingehende Nachricht zu lesen, wäre es praktisch, eine automatisierte Möglichkeit zur Identifizierung von Spam-E-Mails zu haben.
+Welche der Variablen, die jede E-Mail beschreiben, sind für die Vorhersage des Status der E-Mail wichtig?
 
 ::: {.data data-latex=""}
-The [`email`](http://openintrostat.github.io/openintro/reference/email.html) data can be found in the [**openintro**](http://openintrostat.github.io/openintro) R package.
+Die [`email`](http://openintrostat.github.io/openintro/reference/email.html)-Daten sind im R-Paket [**openintro**](http://openintrostat.github.io/openintro) zu finden.
 :::
 
 ```{r}
@@ -63,23 +63,23 @@ email_variables |>
   column_spec(2, width = "30em")
 ```
 
-## Model diagnostics
+## Modelldiagnostik
 
-Before looking at the hypothesis tests associated with the coefficients (turns out they are very similar to those in linear regression!), it is valuable to understand the technical conditions that underlie the inference applied to the logistic regression model.
-Generally, as you've seen in the logistic regression modeling examples, it is imperative that the response variable is binary.
-Additionally, the key technical condition for logistic regression has to do with the relationship between the predictor variables ($x_i$ values) and the probability the outcome will be a success.
-It turns out, the relationship is a specific functional form called a logit function, where ${\rm logit}(p) = \log_e(\frac{p}{1-p}).$ The function may feel complicated, and memorizing the formula of the logit is not necessary for understanding logistic regression.
-What you do need to remember is that the probability of the outcome being a success is a function of a linear combination of the explanatory variables.
+Bevor wir uns die Hypothesentests zu den Koeffizienten ansehen (die sich herausstellend sehr ähnlich wie jene in der linearen Regression sind!), ist es wertvoll, die technischen Bedingungen zu verstehen, die der auf das logistische Regressionsmodell angewandten Inferenz zugrunde liegen.
+Im Allgemeinen ist es, wie Sie an den Beispielen zur logistischen Regressionsmodellierung gesehen haben, unbedingt erforderlich, dass die Zielvariable binär ist.
+Zusätzlich hat die wichtigste technische Bedingung für die logistische Regression mit der Beziehung zwischen den Prädiktorvariablen ($x_i$-Werten) und der Wahrscheinlichkeit, dass das Ergebnis ein Erfolg ist, zu tun.
+Es stellt sich heraus, dass die Beziehung eine spezifische Funktionsform ist, die als Logit-Funktion bezeichnet wird, wobei ${\rm logit}(p) = \log_e(\frac{p}{1-p}).$ Die Funktion mag kompliziert erscheinen, und das Auswendiglernen der Formel des Logits ist für das Verständnis der logistischen Regression nicht notwendig.
+Was Sie sich merken müssen, ist, dass die Wahrscheinlichkeit, dass das Ergebnis ein Erfolg ist, eine Funktion einer linearen Kombination der erklärenden Variablen ist.
 
 ::: {.important data-latex=""}
-**Logistic regression conditions.**
+**Bedingungen für die logistische Regression.**
 
 \index{technical conditions logistic regression}
 
-There are two key conditions for fitting a logistic regression model:
+Es gibt zwei wesentliche Bedingungen für die Anpassung eines logistischen Regressionsmodells:
 
-1.  Each outcome $Y_i$ is independent of the other outcomes.
-2.  Each predictor $x_i$ is linearly related to logit$(p_i)$ if all other predictors are held constant.
+1.  Jedes Ergebnis $Y_i$ ist unabhängig von den anderen Ergebnissen.
+2.  Jeder Prädiktor $x_i$ steht in einem linearen Zusammenhang mit logit$(p_i)$, wenn alle anderen Prädiktoren konstant gehalten werden.
 :::
 
 ```{r}
@@ -87,17 +87,17 @@ There are two key conditions for fitting a logistic regression model:
 terms_chp_26 <- c(terms_chp_26, "technical conditions")
 ```
 
-The first logistic regression model condition --- independence of the outcomes --- is reasonable if we can assume that the emails that arrive in an inbox within a few months are independent of each other with respect to whether they're spam or not.
+Die erste Bedingung des logistischen Regressionsmodells – Unabhängigkeit der Ergebnisse – ist vernünftig, wenn wir davon ausgehen können, dass die E-Mails, die innerhalb weniger Monate in einem Posteingang ankommen, unabhängig voneinander sind, ob sie Spam sind oder nicht.
 
-The second condition of the logistic regression model is not easily checked without a fairly sizable amount of data.
-Luckily, we have `r nrow(email)` emails in the dataset!
-Let's first visualize these data by plotting the true classification of the emails against the model's fitted probabilities, as shown in @fig-spam-predict.
+Die zweite Bedingung des logistischen Regressionsmodells lässt sich ohne eine recht beträchtliche Datenmenge nicht leicht überprüfen.
+Glücklicherweise haben wir `r nrow(email)` E-Mails im Datensatz!
+Visualisieren wir diese Daten zunächst, indem wir die wahre Klassifikation der E-Mails gegen die vom Modell geschätzten Wahrscheinlichkeiten aufzeichnen, wie in @fig-spam-predict gezeigt.
 
 ```{r}
 #| label: fig-spam-predict
 #| fig-cap: |
 #|   The predicted probability that each of the 3921 emails are spam. Points
-#|   have been jittered so that those with nearly identical values aren’t plotted 
+#|   have been jittered so that those with nearly identical values aren't plotted
 #|   exactly on top of one another.
 #| fig-alt: |
 #|   Scatterplot with predicted probability of being spam on the x-axis and 
@@ -123,18 +123,18 @@ ggplot(spam_pred, aes(x = .pred_1, y = spam)) +
   scale_y_discrete(labels = c("Not spam (0)", "Spam (1)"))
 ```
 
-We'd like to assess the quality of the model.
-For example, we might ask: if we look at emails that we modeled as having 10% chance of being spam, do we find out 10% of them actually are spam?
-We can check this for groups of the data by constructing a plot as follows:
+Wir möchten die Qualität des Modells beurteilen.
+Zum Beispiel könnten wir fragen: Wenn wir uns E-Mails ansehen, für die wir eine 10%ige Spam-Wahrscheinlichkeit modelliert haben, stellen wir dann fest, dass tatsächlich 10% von ihnen Spam sind?
+Wir können dies für Gruppen der Daten überprüfen, indem wir wie folgt eine Grafik erstellen:
 
-1.  Bucket the observations into groups based on their predicted probabilities.
-2.  Compute the average predicted probability for each group.
-3.  Compute the observed probability for each group, along with a 95% confidence interval for the true probability of success for those individuals.
-4.  Plot the observed probabilities (with 95% confidence intervals) against the average predicted probabilities for each group.
+1.  Teile die Beobachtungen anhand ihrer vorhergesagten Wahrscheinlichkeiten in Gruppen ein.
+2.  Berechne die durchschnittliche vorhergesagte Wahrscheinlichkeit für jede Gruppe.
+3.  Berechne die beobachtete Wahrscheinlichkeit für jede Gruppe zusammen mit einem 95%-Konfidenzintervall für die wahre Erfolgswahrscheinlichkeit dieser Individuen.
+4.  Zeichne die beobachteten Wahrscheinlichkeiten (mit 95%-Konfidenzintervallen) gegen die durchschnittlichen vorhergesagten Wahrscheinlichkeiten für jede Gruppe auf.
 
-If the model does a good job describing the data, the plotted points should fall close to the line $y = x$, since the predicted probabilities should be similar to the observed probabilities.
-We can use the confidence intervals to roughly gauge whether anything might be amiss.
-Such a plot is shown in @fig-logisticModelBucketDiag.
+Wenn das Modell die Daten gut beschreibt, sollten die eingezeichneten Punkte nahe der Geraden $y = x$ liegen, da die vorhergesagten Wahrscheinlichkeiten den beobachteten Wahrscheinlichkeiten ähnlich sein sollten.
+Wir können die Konfidenzintervalle verwenden, um grob abzuschätzen, ob etwas nicht stimmt.
+Eine solche Grafik ist in @fig-logisticModelBucketDiag dargestellt.
 
 ```{r}
 #| label: fig-logisticModelBucketDiag
@@ -251,16 +251,16 @@ par(par_og) # restore original par
 ```
 
 
-A plot like @fig-logisticModelBucketDiag helps to better understand the deviations.
-Additional diagnostics may be created that are similar to those featured in @sec-tech-cond-linmod.
-For instance, we could compute residuals as the observed outcome minus the expected outcome ($e_i = Y_i - \hat{p}_i$), and then we could create plots of these residuals against each predictor.
+Eine Grafik wie @fig-logisticModelBucketDiag hilft, die Abweichungen besser zu verstehen.
+Zusätzliche Diagnosen können erstellt werden, die denen in @sec-tech-cond-linmod ähneln.
+Beispielsweise könnten wir Residuen als beobachtetes Ergebnis minus erwartetem Ergebnis berechnen ($e_i = Y_i - \hat{p}_i$), und dann könnten wir Grafiken dieser Residuen gegen jeden Prädiktor erstellen.
 
 \index{logistic regression}
 
-## Multiple logistic regression output from software {#sec-inf-log-reg-soft}
+## Ausgabe der multiplen logistischen Regression aus Software {#sec-inf-log-reg-soft}
 
-As you learned in @sec-model-mlr, optimization can be used to find the coefficient estimates for the logistic model.
-The unknown population model can be written as:
+Wie Sie in @sec-model-mlr gelernt haben, kann die Optimierung verwendet werden, um die Koeffizientenschätzungen für das logistische Modell zu finden.
+Das unbekannte Populationsmodell kann geschrieben werden als:
 
 $$
 \begin{aligned}
@@ -271,7 +271,7 @@ $$
 \end{aligned}
 $$
 
-The estimated equation for the regression model may be written as a model with four predictor variables, where $\hat{p}$ is the estimated probability of being a spam email message:
+Die geschätzte Gleichung für das Regressionsmodell kann als Modell mit vier Prädiktorvariablen geschrieben werden, wobei $\hat{p}$ die geschätzte Wahrscheinlichkeit ist, eine Spam-E-Mail zu sein:
 
 $$
 \begin{aligned}
@@ -304,56 +304,56 @@ glm(spam ~ to_multiple + cc + dollar + urgent_subj, data = email, family = "bino
   column_spec(2:5, width = "5em")
 ```
 
-Not only does @tbl-emaillogmodel provide the estimates for the coefficients, it also provides information on the inference analysis (i.e., hypothesis testing) which is the focus of this chapter.
+@tbl-emaillogmodel liefert nicht nur die Schätzungen für die Koeffizienten, sondern auch Informationen zur Inferenzanalyse (d. h. Hypothesentests), die der Fokus dieses Kapitels ist.
 
-As in @sec-inf-model-mlr, with **multiple predictors**\index{variable!multiple predictors}\index{multiple predictors}, each hypothesis test (for each of the explanatory variables) is conditioned on each of the other variables remaining in the model.
+Wie in @sec-inf-model-mlr wird bei **mehreren Prädiktoren**\index{variable!multiple predictors}\index{multiple predictors} jeder Hypothesentest (für jede der erklärenden Variablen) unter der Bedingung durchgeführt, dass jede der anderen Variablen im Modell verbleibt.
 
 ```{r}
 #| include: false
 terms_chp_26 <- c(terms_chp_26, "multiple predictors")
 ```
 
-> if multiple predictors $H_0: \beta_i = 0$ given other variables in the model
+> bei mehreren Prädiktoren $H_0: \beta_i = 0$ gegeben andere Variablen im Modell
 
-Using the example above and focusing on each of the variable p-values (here we won't discuss the p-value associated with the intercept), we can write out the four different hypotheses (associated with the p-value corresponding to each of the coefficients / rows in @tbl-emaillogmodel):
+Am obigen Beispiel orientiert und auf die p-Werte der einzelnen Variablen fokussiert (hier werden wir den p-Wert des Achsenabschnitts nicht besprechen), können wir die vier verschiedenen Hypothesen aufschreiben (die den p-Werten der einzelnen Koeffizienten / Zeilen in @tbl-emaillogmodel entsprechen):
 
--   $H_0: \beta_1 = 0$ given `cc`, `dollar`, and `urgent_subj` are included in the model
--   $H_0: \beta_2 = 0$ given `to_multiple`, `dollar`, and `urgent_subj` are included in the model
--   $H_0: \beta_3 = 0$ given `to_multiple`, `cc`, and `urgent_subj` are included in the model
--   $H_0: \beta_4 = 0$ given `to_multiple`, `cc`, and `dollar` are included in the model
+-   $H_0: \beta_1 = 0$ gegeben `cc`, `dollar` und `urgent_subj` sind im Modell enthalten
+-   $H_0: \beta_2 = 0$ gegeben `to_multiple`, `dollar` und `urgent_subj` sind im Modell enthalten
+-   $H_0: \beta_3 = 0$ gegeben `to_multiple`, `cc` und `urgent_subj` sind im Modell enthalten
+-   $H_0: \beta_4 = 0$ gegeben `to_multiple`, `cc` und `dollar` sind im Modell enthalten
 
-The very low p-values from the software output tell us that three of the variables (that is, not `cc`) act as statistically discernible predictors in the model at the discernibility level of 0.05, despite the inclusion of any of the other variables.
-Consider the p-value on $H_0: \beta_1 = 0$.
-The low p-value says that it would be extremely unlikely to observe data that yield a coefficient on `to_multiple` at least as far from 0 as -1.91 (i.e., $|b_1| > 1.91$) if the true relationship between `to_multiple` and `spam` was non-existent (i.e., if $\beta_1 = 0$) **and** the model also included `cc` and `dollar` and `urgent_subj`.
-Note also that the coefficient on `dollar` has a small associated p-value, but the magnitude of the coefficient is also seemingly small (0.07).
-It turns out that in units of standard errors (0.02 here), 0.07 is actually quite far from zero, it's all about context!
-The p-values on the remaining variables are interpreted similarly.
-From the initial output (p-values) in @tbl-emaillogmodel, it seems as though `to_multiple`, `dollar`, and `urgent_subj` are important variables for modeling whether an email is `spam`.
-We remind you that although p-values provide some information about the importance of each of the predictors in the model, there are many, arguably more important, aspects to consider when choosing the best model.
+Die sehr niedrigen p-Werte aus der Software-Ausgabe sagen uns, dass drei der Variablen (d. h. nicht `cc`) trotz der Aufnahme aller anderen Variablen als statistisch erkennbare Prädiktoren im Modell auf dem Signifikanzniveau 0,05 wirken.
+Betrachten wir den p-Wert für $H_0: \beta_1 = 0$.
+Der niedrige p-Wert sagt, dass es äußerst unwahrscheinlich wäre, Daten zu beobachten, die einen Koeffizienten für `to_multiple` ergeben, der mindestens so weit von 0 entfernt ist wie -1,91 (d. h. $|b_1| > 1,91$), wenn die wahre Beziehung zwischen `to_multiple` und `spam` nicht existierte (d. h. wenn $\beta_1 = 0$) **und** das Modell auch `cc` und `dollar` und `urgent_subj` enthielte.
+Beachten Sie auch, dass der Koeffizient für `dollar` einen kleinen zugehörigen p-Wert hat, aber der Betrag des Koeffizienten ist ebenfalls scheinbar klein (0,07).
+Es stellt sich heraus, dass 0,07 in Einheiten von Standardfehlern (hier 0,02) tatsächlich recht weit von null entfernt ist – es kommt immer auf den Kontext an!
+Die p-Werte der verbleibenden Variablen werden ähnlich interpretiert.
+Aus der anfänglichen Ausgabe (p-Werte) in @tbl-emaillogmodel scheint es, dass `to_multiple`, `dollar` und `urgent_subj` wichtige Variablen für die Modellierung sind, ob eine E-Mail `spam` ist.
+Wir erinnern Sie daran, dass p-Werte zwar einige Informationen über die Bedeutung jedes Prädiktors im Modell liefern, es aber viele, wohl wichtigere, Aspekte zu berücksichtigen gibt, wenn das beste Modell ausgewählt wird.
 
-As with linear regression (see @sec-inf-mult-reg-collin), existence of predictors that are correlated with each other can affect both the coefficient estimates and the associated p-values.
-However, investigating multicollinearity in a logistic regression model is saved for a text which provides more detail about logistic regression.
-Next, as a model building alternative (or enhancement) to p-values, we revisit cross-validation within the context of predicting status for each of the individual emails.
+Wie bei der linearen Regression (siehe @sec-inf-mult-reg-collin) kann das Vorhandensein von miteinander korrelierten Prädiktoren sowohl die Koeffizientenschätzungen als auch die zugehörigen p-Werte beeinflussen.
+Die Untersuchung von Multikollinearität in einem logistischen Regressionsmodell wird jedoch einem Text überlassen, der mehr Details zur logistischen Regression bietet.
+Als Alternative (oder Ergänzung) zu p-Werten beim Modellaufbau greifen wir nun auf die Kreuzvalidierung im Kontext der Vorhersage des Status jeder einzelnen E-Mail zurück.
 
-## Cross-validation for prediction error {#sec-inf-log-reg-cv}
+## Kreuzvalidierung für Vorhersagefehler {#sec-inf-log-reg-cv}
 
-The p-value is a probability measure under a setting of no relationship.
-That p-value provides information about the degree of the relationship (e.g., above we measure the relationship between `spam` and `to_multiple` using a p-value), but the p-value does not measure how well the model will predict the individual emails (e.g., the accuracy of the model).
-Depending on the goal of the research project, you might be inclined to focus on variable importance (through p-values) or you might be inclined to focus on prediction accuracy (through cross-validation).
+Der p-Wert ist ein Wahrscheinlichkeitsmaß unter der Annahme keiner Beziehung.
+Dieser p-Wert liefert Informationen über den Grad der Beziehung (z. B. messen wir oben die Beziehung zwischen `spam` und `to_multiple` anhand eines p-Werts), aber der p-Wert misst nicht, wie gut das Modell die einzelnen E-Mails vorhersagen wird (z. B. die Genauigkeit des Modells).
+Je nach Ziel des Forschungsprojekts könnte man sich auf die Variablenbedeutung (durch p-Werte) oder auf die Vorhersagegenauigkeit (durch Kreuzvalidierung) konzentrieren.
 
-Here we present a method for using **cross-validation**\index{cross-validation} **accuracy**\index{accuracy} to determine which variables (if any) should be used in a model which predicts whether an email is spam.
-A full treatment of cross-validation and logistic regression models is beyond the scope of this text.
-Using $k$-fold cross-validation, we can build $k$ different models which are used to predict the observations in each of the $k$ holdout samples.
-As with linear regression (see @sec-inf-mult-reg-cv), we compare a smaller logistic regression model to a larger logistic regression model.
-The smaller model uses only the `to_multiple` variable, see the complete dataset (not cross-validated) model output in @tbl-emaillogmodel1.
-The logistic regression model can be written as follows, where $\hat{p}$ is the estimated probability of being a spam email message.
+Hier stellen wir eine Methode vor, bei der die **Kreuzvalidierungs**\index{cross-validation}**-Genauigkeit**\index{accuracy} verwendet wird, um zu bestimmen, welche Variablen (falls überhaupt) in einem Modell verwendet werden sollen, das vorhersagt, ob eine E-Mail Spam ist.
+Eine vollständige Behandlung der Kreuzvalidierung und logistischer Regressionsmodelle geht über den Rahmen dieses Textes hinaus.
+Mit der $k$-fachen Kreuzvalidierung können wir $k$ verschiedene Modelle erstellen, die verwendet werden, um die Beobachtungen in jeder der $k$ Holdout-Stichproben vorherzusagen.
+Wie bei der linearen Regression (siehe @sec-inf-mult-reg-cv) vergleichen wir ein kleineres logistisches Regressionsmodell mit einem größeren logistischen Regressionsmodell.
+Das kleinere Modell verwendet nur die Variable `to_multiple`; die Modellausgabe für den vollständigen Datensatz (ohne Kreuzvalidierung) ist in @tbl-emaillogmodel1 zu sehen.
+Das logistische Regressionsmodell kann wie folgt geschrieben werden, wobei $\hat{p}$ die geschätzte Wahrscheinlichkeit ist, eine Spam-E-Mail zu sein.
 
 ```{r}
 #| include: false
 terms_chp_26 <- c(terms_chp_26, "cross-validation", "accuracy")
 ```
 
-**The smaller model:**
+**Das kleinere Modell:**
 
 \vspace{-5mm}
 
@@ -381,8 +381,8 @@ glm(spam ~ to_multiple, data = email, family = "binomial") |>
   column_spec(2:5, width = "5em")
 ```
 
-For each cross-validated model, the coefficients change slightly, and the model is used to make independent predictions on the holdout sample.
-The model from the first cross-validation sample is given in @fig-emailCV1 and can be compared to the coefficients in @tbl-emaillogmodel1.
+Bei jedem kreuzvalidierten Modell ändern sich die Koeffizienten leicht, und das Modell wird verwendet, um unabhängige Vorhersagen für die Holdout-Stichprobe zu treffen.
+Das Modell aus dem ersten Kreuzvalidierungsdurchlauf ist in @fig-emailCV1 dargestellt und kann mit den Koeffizienten in @tbl-emaillogmodel1 verglichen werden.
 
 ```{r}
 #| label: fig-emailCV1
@@ -476,19 +476,19 @@ logCV1 |>
   )
 ```
 
-Because the `email` dataset has a ratio of roughly 90% non-spam and 10% spam emails, a model which randomly guessed all non-spam would have an overall accuracy of 90%!
-Clearly, we would like to capture the information with the spam emails, so our interest is in the percent of spam emails which are identified as spam (see @tbl-email-spam).
-Additionally, in the logistic regression model, we use a 10% cutoff to predict whether the email is spam.
-Fortunately, we have done a great job of predicting!
-However, the trade-off was that most of the non-spam emails are now predicted to be spam which is not acceptable for a prediction algorithm.
-Adding more variables to the model may help with both the spam and non-spam predictions.
+Da der `email`-Datensatz ein Verhältnis von etwa 90 % Nicht-Spam- und 10 % Spam-E-Mails aufweist, würde ein Modell, das zufällig alle E-Mails als Nicht-Spam einschätzt, eine Gesamtgenauigkeit von 90 % haben!
+Offensichtlich möchten wir die Informationen aus den Spam-E-Mails erfassen, daher interessiert uns der Prozentsatz der Spam-E-Mails, der als Spam identifiziert wird (siehe @tbl-email-spam).
+Außerdem verwenden wir im logistischen Regressionsmodell einen Schwellenwert von 10 %, um vorherzusagen, ob die E-Mail Spam ist.
+Glücklicherweise haben wir gute Vorhersageleistungen erzielt!
+Der Kompromiss war jedoch, dass die meisten Nicht-Spam-E-Mails nun als Spam vorhergesagt werden, was für einen Vorhersagealgorithmus nicht akzeptabel ist.
+Das Hinzufügen weiterer Variablen zum Modell kann sowohl bei den Spam- als auch bei den Nicht-Spam-Vorhersagen helfen.
 
-The larger model uses `to_multiple`, `attach`, `winner`, `format`, `re_subj`, `exclaim_mess`, and `number` as the set of seven predictor variables, see the complete dataset (not cross-validated) model output in @tbl-emaillogmodel2.
-The logistic regression model can be written as follows, where $\hat{p}$ is the estimated probability of being a spam email message.
+Das größere Modell verwendet `to_multiple`, `attach`, `winner`, `format`, `re_subj`, `exclaim_mess` und `number` als Satz von sieben Prädiktorvariablen; die Modellausgabe für den vollständigen Datensatz (ohne Kreuzvalidierung) ist in @tbl-emaillogmodel2 zu sehen.
+Das logistische Regressionsmodell kann wie folgt geschrieben werden, wobei $\hat{p}$ die geschätzte Wahrscheinlichkeit ist, eine Spam-E-Mail zu sein.
 
 \vspace{5mm}
 
-**The larger model:**
+**Das größere Modell:**
 
 $$
 \begin{aligned}
@@ -607,34 +607,34 @@ logCV2 |>
   )
 ```
 
-Somewhat expected, the larger model (see @tbl-email-spam2) was able to capture more nuance in the emails which lead to better predictions.
-However, it is not true that adding variables will always lead to better predictions, as correlated or noise variables may dampen the signal from the set of variables that truly predict the status.
-We encourage you to learn more about multiple variable models and cross-validation in your future exploration of statistical topics.
+Wie erwartet konnte das größere Modell (siehe @tbl-email-spam2) mehr Nuancen in den E-Mails erfassen, was zu besseren Vorhersagen führte.
+Es ist jedoch nicht wahr, dass das Hinzufügen von Variablen immer zu besseren Vorhersagen führt, da korrelierte oder Rauschvariablen das Signal aus dem Satz von Variablen, die den Status wirklich vorhersagen, abschwächen können.
+Wir ermutigen Sie, in Ihrer zukünftigen Erforschung statistischer Themen mehr über Modelle mit mehreren Variablen und Kreuzvalidierung zu erfahren.
 
 \clearpage
 
-## Chapter review {#sec-chp27-review}
+## Kapitelzusammenfassung {#sec-chp27-review}
 
-### Summary
+### Zusammenfassung
 
-Throughout the text, we have presented a modern view to introduction to statistics.
-Earlier, we presented graphical techniques which communicated relationships across multiple variables.
-We also used modeling to formalize the relationships.
-In @sec-inf-model-logistic we considered inferential claims on models which include many variables used to predict the probability of the outcome being a success.
-We continue to emphasize the importance of experimental design in making conclusions about research claims.
-In particular, recall that variability can come from different sources (e.g., random sampling vs. random allocation, see @fig-randsampValloc).
+Im gesamten Text haben wir eine moderne Sichtweise auf die Einführung in die Statistik präsentiert.
+Zunächst stellten wir grafische Techniken vor, die Beziehungen über mehrere Variablen hinweg vermittelten.
+Wir verwendeten auch Modellierung, um die Beziehungen zu formalisieren.
+In @sec-inf-model-logistic betrachteten wir inferenzielle Aussagen über Modelle, die viele Variablen enthalten, die zur Vorhersage der Wahrscheinlichkeit eines Erfolgs des Ergebnisses verwendet werden.
+Wir betonen weiterhin die Bedeutung des Versuchsdesigns bei der Formulierung von Schlussfolgerungen über Forschungsbehauptungen.
+Erinnern Sie sich insbesondere daran, dass Variabilität aus verschiedenen Quellen stammen kann (z. B. Zufallsstichprobe vs. zufällige Zuweisung, siehe @fig-randsampValloc).
 
-As you might guess, this text has only scratched the surface of the world of statistical analyses that can be applied to different datasets.
-In particular, to do justice to the topic, the linear models and generalized linear models we have introduced can each be covered with their own course or book.
-Hierarchical models, alternative methods for fitting parameters (e.g., Ridge Regression or LASSO), and advanced computational methods applied to multivariable models (e.g., permuting the response variable? one explanatory variable? all the explanatory variables?) are all beyond the scope of this book.
-However, your successful understanding of the ideas we have covered has set you up perfectly to move on to a higher level of statistical modeling and inference.
-Enjoy!
+Wie Sie vielleicht vermuten, hat dieser Text nur an der Oberfläche der Welt statistischer Analysen gekratzt, die auf verschiedene Datensätze angewendet werden können.
+Um dem Thema gerecht zu werden, könnten die linearen Modelle und verallgemeinerten linearen Modelle, die wir eingeführt haben, jeweils mit einem eigenen Kurs oder Buch abgedeckt werden.
+Hierarchische Modelle, alternative Methoden zur Parameterschätzung (z. B. Ridge-Regression oder LASSO) und fortgeschrittene Rechenmethoden, die auf Modelle mit mehreren Variablen angewendet werden (z. B. Permutation der Zielvariablen? einer erklärenden Variablen? aller erklärenden Variablen?), liegen alle außerhalb des Umfangs dieses Buches.
+Ihr erfolgreiches Verständnis der von uns behandelten Ideen hat Sie jedoch perfekt darauf vorbereitet, zu einem höheren Niveau statistischer Modellierung und Inferenz überzugehen.
+Viel Erfolg!
 
-### Terms
+### Begriffe
 
-The terms introduced in this chapter are presented in @tbl-terms-chp-26.
-If you're not sure what some of these terms mean, we recommend you go back in the text and review their definitions.
-You should be able to easily spot them as **bolded text**.
+Die in diesem Kapitel eingeführten Begriffe sind in @tbl-terms-chp-26 aufgeführt.
+Wenn Sie sich bei einigen dieser Begriffe nicht sicher sind, empfehlen wir Ihnen, im Text zurückzugehen und ihre Definitionen zu wiederholen.
+Sie sollten sie leicht als **fett gedruckten Text** erkennen können.
 
 ```{r}
 #| label: tbl-terms-chp-26
@@ -645,9 +645,9 @@ make_terms_table(terms_chp_26)
 
 \clearpage
 
-## Exercises {#sec-chp26-exercises}
+## Übungen {#sec-chp26-exercises}
 
-Answers to odd-numbered exercises can be found in [Appendix -@sec-exercise-solutions-26].
+Antworten auf Aufgaben mit ungeraden Nummern finden Sie in [Anhang -@sec-exercise-solutions-26].
 
 ::: {.exercises data-latex=""}
 {{< include exercises/_26-ex-inf-model-logistic.qmd >}}

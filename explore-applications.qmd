@@ -3,7 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-# Applications: Explore {#sec-explore-applications}
+# Anwendungen: Erkunden {#sec-explore-applications}
 
 ```{r}
 #| include: false
@@ -12,31 +12,31 @@ source("_common.R")
 
 \vspace{10mm}
 
-## Case study: Effective communication of exploratory results {#sec-case-study-effective-comms}
+## Fallstudie: Effektive Kommunikation explorativer Ergebnisse {#sec-case-study-effective-comms}
 
-Graphs can powerfully communicate ideas directly and quickly.
-We all know, after all, that "a picture is worth 1000 words." Unfortunately, however, there are times when an image conveys a message which is inaccurate or misleading.
+Grafiken können Ideen direkt und schnell wirkungsvoll kommunizieren.
+Wir alle wissen schließlich, dass „ein Bild mehr sagt als tausend Worte". Leider gibt es jedoch Zeiten, in denen ein Bild eine Botschaft vermittelt, die ungenau oder irreführend ist.
 
-This chapter focuses on how graphs can best be utilized to present data accurately and effectively.
-Along with data modeling, creative visualization is somewhat of an art.
-However, even with an art, there are recommended guiding principles.
-We provide a few best practices for creating data visualizations.
+Dieses Kapitel befasst sich damit, wie Grafiken am besten genutzt werden können, um Daten genau und effektiv darzustellen.
+Neben der Datenmodellierung ist die kreative Visualisierung gewissermaßen eine Kunst.
+Aber auch bei einer Kunst gibt es empfohlene Leitprinzipien.
+Wir stellen einige Best Practices für die Erstellung von Datenvisualisierungen vor.
 
-### Keep it simple
+### Einfach halten
 
-When creating a graphic, keep in mind what it is that you'd like your reader to see.
-Colors should be used to group items or differentiate levels in meaningful ways.
-Colors can be distracting when they are only used to brighten up the plot.
+Behalten Sie beim Erstellen einer Grafik im Blick, was Sie Ihrem Leser zeigen möchten.
+Farben sollten verwendet werden, um Elemente zu gruppieren oder Ausprägungen auf sinnvolle Weise zu unterscheiden.
+Farben können ablenkend sein, wenn sie nur verwendet werden, um die Grafik aufzuhellen.
 
-Consider a manufacturing company that has summarized its costs into five different categories.
-In the two graphics provided in @fig-pie-to-bar, notice that the magnitudes in the pie chart in @fig-pie-to-bar-1 are difficult for the eye to compare.
-That is, can your eye tell how different "Buildings and administration" is from "Workplace materials" when looking at the slices of pie?
-Additionally, the colors in the pie chart do not mean anything and are therefore distracting.
-Lastly, the three-dimensional aspect of the image does not improve the reader's ability to understand the data presented.
+Stellen Sie sich ein Fertigungsunternehmen vor, das seine Kosten in fünf verschiedene Kategorien zusammengefasst hat.
+Beachten Sie bei den beiden Grafiken in @fig-pie-to-bar, dass die Größen im Kreisdiagramm in @fig-pie-to-bar-1 für das Auge schwer zu vergleichen sind.
+Können Ihre Augen erkennen, wie verschieden „Gebäude und Verwaltung" von „Arbeitsmaterialien" ist, wenn Sie die Tortenstücke betrachten?
+Außerdem bedeuten die Farben im Kreisdiagramm nichts und sind daher ablenkend.
+Schließlich verbessert der dreidimensionale Aspekt des Bildes nicht die Fähigkeit des Lesers, die dargestellten Daten zu verstehen.
 
-As an alternative, a bar plot is been provided in @fig-pie-to-bar-2.
-Notice how much easier it is to identify the magnitude of the differences across categories while not being distracted by other aspects of the image.
-Typically, a bar plot will be easier for the reader to digest than a pie chart, especially if the categorical data being plotted has more than just a few levels.
+Als Alternative wird in @fig-pie-to-bar-2 ein Balkendiagramm bereitgestellt.
+Beachten Sie, wie viel einfacher es ist, die Größe der Unterschiede zwischen den Kategorien zu erkennen, ohne von anderen Aspekten des Bildes abgelenkt zu werden.
+In der Regel ist ein Balkendiagramm für den Leser leichter verständlich als ein Kreisdiagramm, insbesondere wenn die dargestellten kategorialen Daten mehr als nur wenige Ausprägungen haben.
 
 \clearpage
 
@@ -73,15 +73,15 @@ ggplot(expenses, aes(x = fct_infreq(category))) +
   labs(x = NULL, y = NULL)
 ```
 
-### Use color to draw attention
+### Farbe verwenden, um Aufmerksamkeit zu lenken
 
-There are many reasons why you might choose to add **color** to your plots.
-An important principle to keep in mind is to use color to draw attention.
-Of course, you should still think about how visually pleasing your visualization is, and if you're adding color for making it visually pleasing without drawing attention to a particular feature, that might be fine.
-However, you should be critical of default coloring and explicitly decide whether to include color and how.
-Notice that in @fig-red-bar-2 the coloring is done in such a way to draw the reader's attention to one particular piece of information.
-The default coloring in @fig-red-bar-1 can be distracting and makes the reader question, for example, is there something similar about the red and purple bars?
-Also note that not everyone sees color the same way, often it's useful to add color and one more feature (e.g., pattern) so that you can refer to the features you're drawing attention to in multiple ways, as shown in @fig-red-bar-3.
+Es gibt viele Gründe, warum Sie Ihren Grafiken **Farbe** hinzufügen könnten.
+Ein wichtiges Prinzip, das man im Hinterkopf behalten sollte, ist, Farbe einzusetzen, um Aufmerksamkeit zu lenken.
+Natürlich sollten Sie noch immer daran denken, wie visuell ansprechend Ihre Visualisierung ist, und wenn Sie Farbe hinzufügen, um sie optisch ansprechender zu gestalten, ohne die Aufmerksamkeit auf ein bestimmtes Merkmal zu lenken, ist das möglicherweise in Ordnung.
+Sie sollten jedoch die Standardfarben kritisch hinterfragen und explizit entscheiden, ob und wie Farbe eingesetzt werden soll.
+Beachten Sie, dass in @fig-red-bar-2 die Farbgebung so gewählt wurde, dass sie die Aufmerksamkeit des Lesers auf eine bestimmte Information lenkt.
+Die Standardfarbgebung in @fig-red-bar-1 kann ablenkend sein und den Leser fragen lassen, ob es beispielsweise eine Gemeinsamkeit zwischen den roten und lila Balken gibt.
+Beachten Sie auch, dass nicht jeder Farben gleich wahrnimmt; oft ist es nützlich, Farbe und ein weiteres Merkmal (z.B. ein Muster) hinzuzufügen, damit Sie auf die Merkmale, auf die Sie aufmerksam machen möchten, auf verschiedene Weisen hinweisen können, wie in @fig-red-bar-3 dargestellt.
 
 \vspace{-2mm}
 
@@ -131,13 +131,13 @@ expenses |>
 
 \clearpage
 
-### Tell a story
+### Eine Geschichte erzählen
 
-For many graphs, an important aspect is the inclusion of information which is not provided in the dataset that is being plotted.
-The external information serves to contextualize the data and helps communicate the narrative of the research.
+Bei vielen Grafiken ist die Einbeziehung von Informationen, die nicht im dargestellten Datensatz enthalten sind, ein wichtiger Aspekt.
+Die externen Informationen dienen dazu, die Daten in einen Kontext zu stellen und die Geschichte der Forschung zu kommunizieren.
 
-In @fig-duke-hires, the graph on the right is **annotated** with information about the start of the university's fiscal year which contextualizes the information provided by the data.
-Sometimes the additional information may be a diagonal line given by $y = x$, points above the line quickly show the reader which values have a $y$ coordinate larger than the $x$ coordinate; points below the line show the opposite.
+In @fig-duke-hires ist die rechte Grafik mit Informationen über den Beginn des Geschäftsjahres der Universität **kommentiert**, was die durch die Daten bereitgestellten Informationen kontextualisiert.
+Manchmal können die zusätzlichen Informationen auch eine diagonale Linie sein, die durch $y = x$ gegeben ist; Punkte oberhalb der Linie zeigen dem Leser schnell, welche Werte eine $y$-Koordinate haben, die größer ist als die $x$-Koordinate; Punkte unterhalb der Linie zeigen das Gegenteil.
 
 ```{r}
 #| label: fig-duke-hires
@@ -212,27 +212,27 @@ ggplot(duke_hires, aes(x = month, y = n, group = year)) +
   )
 ```
 
-### Order matters
+### Reihenfolge ist wichtig
 
-Most software programs have built in methods for some of the plot details -- some order levels alphabetically, some provide functionality for arranging them in a custom order.
-As seen in @fig-brexit-bars-1, the alphabetical ordering isn't particularly meaningful for describing the data.
-Sometimes it makes sense to **order** the bars from tallest to shortest (or vice versa), as shown in @fig-brexit-bars-2.
-But in this case, the best ordering is probably the one in which the questions were asked, as shown in @fig-brexit-bars-3.
-An ordering which does not make sense in the context of the problem (e.g., alphabetically here), can mislead the reader who might take a quick glance at the axes and not read the bar labels carefully.
+Die meisten Softwareprogramme haben eingebaute Methoden für einige Grafikdetails – manche ordnen Ausprägungen alphabetisch, andere bieten Funktionalitäten zum Anordnen in einer benutzerdefinierten Reihenfolge.
+Wie in @fig-brexit-bars-1 zu sehen ist, ist die alphabetische Anordnung für die Beschreibung der Daten nicht besonders bedeutsam.
+Manchmal ist es sinnvoll, die Balken vom höchsten zum niedrigsten (oder umgekehrt) zu **ordnen**, wie in @fig-brexit-bars-2 dargestellt.
+In diesem Fall ist die beste Anordnung jedoch wahrscheinlich die, in der die Fragen gestellt wurden, wie in @fig-brexit-bars-3 gezeigt.
+Eine Anordnung, die im Kontext des Problems keinen Sinn ergibt (z.B. hier alphabetisch), kann den Leser irreführen, der möglicherweise nur einen kurzen Blick auf die Achsen wirft und die Balkenbeschriftungen nicht sorgfältig liest.
 
-In September 2019, YouGov survey asked 1,639 Great Britain adults the following question[^06-explore-applications-1]:
+Im September 2019 befragte eine YouGov-Umfrage 1.639 Erwachsene in Großbritannien die folgende Frage[^06-explore-applications-1]:
 
-[^06-explore-applications-1]: Source: [YouGov Survey Results](https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/x0msmggx08/YouGov%20-%20Brexit%20and%202019%20election.pdf), retrieved Oct 7, 2019.
+[^06-explore-applications-1]: Quelle: [YouGov Survey Results](https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/x0msmggx08/YouGov%20-%20Brexit%20and%202019%20election.pdf), abgerufen am 7. Oktober 2019.
 
 \vspace{3mm}
 
-> How well or badly do you think the government are doing at handling Britain's exit from the European Union?
+> Wie gut oder schlecht denken Sie, macht die Regierung ihre Arbeit beim Umgang mit dem Austritt Großbritanniens aus der Europäischen Union?
 >
-> -   Very well
-> -   Fairly well
-> -   Fairly badly
-> -   Very badly
-> -   Don't know
+> -   Sehr gut
+> -   Ziemlich gut
+> -   Ziemlich schlecht
+> -   Sehr schlecht
+> -   Weiß nicht
 
 \clearpage
 
@@ -285,14 +285,14 @@ brexit |>
   labs(y = "Opinion", x = "Count")
 ```
 
-### Make the labels as easy to read as possible
+### Beschriftungen so lesbar wie möglich gestalten
 
-The Brexit survey results were additionally broken down by region in Great Britain.
-The stacked bar plot allows for comparison of Brexit opinion across the five regions.
-In @fig-brexit-region-1 the bars are vertical and in @fig-brexit-region-2 they are horizontal. 
-While the quantitative information in the two graphics is identical, flipping the graph and creating horizontal bars provides more space for the **axis labels**.
-The easier the categories are to read, the more the reader will learn from the visualization.
-Remember, the goal is to convey as much information as possible in a succinct and clear manner.
+Die Brexit-Umfrageergebnisse wurden zusätzlich nach Region in Großbritannien aufgeschlüsselt.
+Das gestapelte Balkendiagramm ermöglicht den Vergleich der Brexit-Meinung über die fünf Regionen.
+In @fig-brexit-region-1 sind die Balken vertikal und in @fig-brexit-region-2 horizontal.
+Obwohl die quantitative Information in den beiden Grafiken identisch ist, bietet das Umdrehen der Grafik und das Erstellen horizontaler Balken mehr Platz für die **Achsenbeschriftungen**.
+Je leichter die Kategorien zu lesen sind, desto mehr wird der Leser aus der Visualisierung lernen.
+Denken Sie daran: Das Ziel ist es, so viele Informationen wie möglich auf prägnante und klare Weise zu vermitteln.
 
 ```{r}
 brexit <- brexit |>
@@ -344,23 +344,23 @@ ggplot(brexit, aes(y = region, fill = Opinion)) +
   theme(legend.position = "bottom")
 ```
 
-Stacked bar plots. Horizontal orientation makes the region labels easier to read.
+Gestapelte Balkendiagramme. Die horizontale Ausrichtung macht die Regionsbeschriftungen leichter lesbar.
 
 :::
 
 \clearpage
 
-### Pick a purpose
+### Einen Zweck wählen
 
-Every graphical decision should be made with a **purpose**.
-As previously mentioned, sticking with default options is not always best for conveying the narrative of your data story.
-Stacked bar plots tell one part of a story.
-Depending on your research question, they may not tell the part of the story most important to the research.
+Jede grafische Entscheidung sollte mit einem **Zweck** getroffen werden.
+Wie bereits erwähnt, ist das Festhalten an Standardoptionen nicht immer das Beste, um die Geschichte Ihrer Daten zu erzählen.
+Gestapelte Balkendiagramme erzählen einen Teil einer Geschichte.
+Je nach Forschungsfrage erzählen sie möglicherweise nicht den für die Forschung wichtigsten Teil der Geschichte.
 
-@fig-seg-three-ways provides three different ways of representing the same information.
-If the most important comparison across regions is proportion, you might prefer @fig-seg-three-ways-1. If the most important comparison across regions also considers the total number of individuals in the region, you might prefer @fig-seg-three-ways-2. If a separate bar plot for each region makes the point you'd like, use @fig-seg-three-ways-3, which has been **faceted** by region.
-@fig-seg-three-ways-3 also provides full titles and a succinct URL with the data source.
-Other deliberate decisions to consider include using informative labels and avoiding redundancy.
+@fig-seg-three-ways bietet drei verschiedene Möglichkeiten, dieselben Informationen darzustellen.
+Wenn der wichtigste Vergleich zwischen Regionen der Anteil ist, bevorzugen Sie möglicherweise @fig-seg-three-ways-1. Wenn der wichtigste Vergleich zwischen Regionen auch die Gesamtzahl der Personen in der Region berücksichtigt, bevorzugen Sie möglicherweise @fig-seg-three-ways-2. Wenn ein separates Balkendiagramm für jede Region den Punkt verdeutlicht, den Sie vermitteln möchten, verwenden Sie @fig-seg-three-ways-3, das nach Region **facettiert** wurde.
+@fig-seg-three-ways-3 enthält auch vollständige Titel und eine prägnante URL mit der Datenquelle.
+Weitere bewusste Entscheidungen umfassen die Verwendung informativer Beschriftungen und die Vermeidung von Redundanz.
 
 ::: {#fig-seg-three-ways layout="[[100], [100], [100]]"}
 
@@ -411,18 +411,18 @@ ggplot(brexit, aes(y = Opinion)) +
   theme(plot.title.position = "plot")
 ```
 
-Three different representations of two variables from the survey, region and opinion.
+Drei verschiedene Darstellungen zweier Variablen aus der Umfrage, Region und Meinung.
 :::
 
 \clearpage
 
-### Select meaningful colors
+### Bedeutungsvolle Farben auswählen
 
-One last consideration for building graphs is to consider color choices.
-Default or rainbow colors are not always the choice which will best distinguish the level of your variables.
-Much research has been done to find color combinations which are distinct and which are clear for differently sighted individuals.
-The cividis scale works well with ordinal data.
-[@Nunez:2018] @fig-brexit-viridis shows the same plot with two different color themes.
+Eine letzte Überlegung beim Erstellen von Grafiken ist die Wahl der Farben.
+Standard- oder Regenbogenfarben sind nicht immer die beste Wahl, um die Ausprägungen Ihrer Variablen am deutlichsten zu unterscheiden.
+Es wurde viel Forschung betrieben, um Farbkombinationen zu finden, die unterscheidbar und für Menschen mit unterschiedlichem Farbsehen klar sind.
+Die Cividis-Skala eignet sich gut für ordinale Daten.
+[@Nunez:2018] @fig-brexit-viridis zeigt denselben Plot mit zwei verschiedenen Farbthemen.
 
 \vspace{5mm}
 
@@ -454,20 +454,20 @@ p +
 
 \vspace{5mm}
 
-In this chapter different representations are contrasted to demonstrate best practices in creating graphs.
-The fundamental principle is that your graph should provide maximal information succinctly and clearly.
-Labels should be clear and oriented horizontally for the reader.
-Don't forget titles and, if possible, include the source of the data.
+In diesem Kapitel werden verschiedene Darstellungen gegenübergestellt, um Best Practices bei der Erstellung von Grafiken zu demonstrieren.
+Das grundlegende Prinzip ist, dass Ihre Grafik maximale Informationen prägnant und klar vermitteln sollte.
+Beschriftungen sollten klar und horizontal für den Leser ausgerichtet sein.
+Vergessen Sie keine Titel und fügen Sie wenn möglich die Datenquelle hinzu.
 
 \clearpage
 
-## Interactive R tutorials {#sec-explore-tutorials}
+## Interaktive R-Tutorials {#sec-explore-tutorials}
 
-Navigate the concepts you've learned in this part in R using the following self-paced tutorials.
-All you need is your browser to get started!
+Erkunden Sie die in diesem Teil erlernten Konzepte in R mithilfe der folgenden Selbstlern-Tutorials.
+Sie benötigen lediglich Ihren Browser, um loszulegen!
 
 ::: {.alltutorials data-latex=""}
-[Tutorial 2: Exploratory data analysis](https://openintrostat.github.io/ims-tutorials/02-explore/)
+[Tutorial 2: Explorative Datenanalyse](https://openintrostat.github.io/ims-tutorials/02-explore/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintrostat.github.io/ims-tutorials/02-explore>
@@ -475,7 +475,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 2 - Lesson 1: Visualizing categorical data](https://openintro.shinyapps.io/ims-02-explore-01/)
+[Tutorial 2 – Lektion 1: Visualisierung kategorialer Daten](https://openintro.shinyapps.io/ims-02-explore-01/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-02-explore-01>
@@ -483,7 +483,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 2 - Lesson 2: Visualizing numerical data](https://openintro.shinyapps.io/ims-02-explore-02/)
+[Tutorial 2 – Lektion 2: Visualisierung numerischer Daten](https://openintro.shinyapps.io/ims-02-explore-02/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-02-explore-02>
@@ -491,7 +491,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 2 - Lesson 3: Summarizing with statistics](https://openintro.shinyapps.io/ims-02-explore-03/)
+[Tutorial 2 – Lektion 3: Zusammenfassen mit Statistiken](https://openintro.shinyapps.io/ims-02-explore-03/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-02-explore-03>
@@ -499,7 +499,7 @@ All you need is your browser to get started!
 :::
 
 ::: {.singletutorial data-latex=""}
-[Tutorial 2 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-02-explore-04/)
+[Tutorial 2 – Lektion 4: Fallstudie](https://openintro.shinyapps.io/ims-02-explore-04/)
 
 ::: {.content-hidden unless-format="pdf"}
 <https://openintro.shinyapps.io/ims-02-explore-04>
@@ -507,19 +507,19 @@ All you need is your browser to get started!
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of tutorials supporting this book at <https://openintrostat.github.io/ims-tutorials>.
+Sie können auch auf die vollständige Liste der Tutorials für dieses Buch unter <https://openintrostat.github.io/ims-tutorials> zugreifen.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of tutorials supporting this book [here](https://openintrostat.github.io/ims-tutorials).
+Sie können auch [hier](https://openintrostat.github.io/ims-tutorials) auf die vollständige Liste der Tutorials für dieses Buch zugreifen.
 :::
 
-## R labs {#sec-explore-labs}
+## R-Labs {#sec-explore-labs}
 
-Further apply the concepts you've learned in this part in R with computational labs that walk you through a data analysis case study.
+Wenden Sie die in diesem Teil erlernten Konzepte in R mit computergestützten Labs an, die Sie durch eine Datenanalyse-Fallstudie führen.
 
 ::: {.singlelab data-latex=""}
-[Intro to data - Flight delays](https://www.openintro.org/go?id=ims-r-lab-intro-to-data)\
+[Einführung in Daten – Flugverspätungen](https://www.openintro.org/go?id=ims-r-lab-intro-to-data)\
 
 ::: {.content-hidden unless-format="pdf"}
 <https://www.openintro.org/go?id=ims-r-lab-intro-to-data>
@@ -527,9 +527,9 @@ Further apply the concepts you've learned in this part in R with computational l
 :::
 
 ::: {.content-hidden unless-format="pdf"}
-You can also access the full list of labs supporting this book at <https://www.openintro.org/go?id=ims-r-labs>.
+Sie können auch auf die vollständige Liste der Labs für dieses Buch unter <https://www.openintro.org/go?id=ims-r-labs> zugreifen.
 :::
 
 ::: {.content-visible when-format="html"}
-You can also access the full list of labs supporting this book [here](https://www.openintro.org/go?id=ims-r-labs).
+Sie können auch [hier](https://www.openintro.org/go?id=ims-r-labs) auf die vollständige Liste der Labs für dieses Buch zugreifen.
 :::
